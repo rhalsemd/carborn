@@ -39,7 +39,7 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://rigizer.iptime.org:53306/S08P22D209?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
-    username: root
+    username: ssafy
     password: ssafy123
 
   data:
