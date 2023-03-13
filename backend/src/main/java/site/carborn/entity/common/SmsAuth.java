@@ -2,6 +2,7 @@ package site.carborn.entity.common;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_SMS_AUTH")
 @Getter
 @Setter
+@NoArgsConstructor
 public class SmsAuth {
 
     @Id
