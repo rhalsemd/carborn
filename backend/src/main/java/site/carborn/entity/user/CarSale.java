@@ -1,29 +1,35 @@
-package site.carborn.entity;
+package site.carborn.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.account.Account;
+import site.carborn.entity.car.Car;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "MWS_COMMUNITY_REVIEW")
+@Table(name = "MWS_CAR_SALE")
 @Getter
 @Setter
-public class CommunityReview {
+public class CarSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "COMMUNITY_ID")
-    private Community community;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CAR_ID")
+    private Car car;
+
     private String content;
+
+    private int price;
+
+    private int saleStatus;
 
     private LocalDateTime regDt;
 

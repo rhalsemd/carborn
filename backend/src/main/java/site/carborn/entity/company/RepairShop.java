@@ -1,8 +1,9 @@
-package site.carborn.entity;
+package site.carborn.entity.company;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.account.Account;
 
 @Entity
 @Table(name = "MWS_REPAIR_SHOP")

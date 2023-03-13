@@ -1,16 +1,17 @@
-package site.carborn.entity;
+package site.carborn.entity.company;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.account.Account;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "MWS_REPAIR_BOOK")
+@Table(name = "MWS_REPAIR_SHOP_REVIEW")
 @Getter
 @Setter
-public class RepairBook {
+public class RepairShopReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,9 +26,7 @@ public class RepairBook {
 
     private String content;
 
-    private int bookStatus;
-
-    private LocalDateTime bookDt;
+    private int point;
 
     private LocalDateTime regDt;
 

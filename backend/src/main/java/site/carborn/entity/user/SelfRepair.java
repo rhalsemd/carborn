@@ -1,4 +1,4 @@
-package site.carborn.entity;
+package site.carborn.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

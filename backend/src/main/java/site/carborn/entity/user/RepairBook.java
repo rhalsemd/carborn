@@ -1,40 +1,35 @@
-package site.carborn.entity;
+package site.carborn.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.company.RepairShop;
+import site.carborn.entity.account.Account;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "MWS_CAR")
+@Table(name = "MWS_REPAIR_BOOK")
 @Getter
 @Setter
-public class Car {
+public class RepairBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REPAIR_SHOP_ID")
+    private RepairShop repairShop;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
-    @Column(length = 50)
-    private String maker;
+    private String content;
 
-    @Column(length = 200)
-    private String modelNm;
+    private int bookStatus;
 
-    @Column(length = 50)
-    private String modelYear;
-
-    @Column(length = 50)
-    private String regNm;
-
-    @Column(length = 200)
-    private String vin;
-
-    private int mileage;
+    private LocalDateTime bookDt;
 
     private LocalDateTime regDt;
 

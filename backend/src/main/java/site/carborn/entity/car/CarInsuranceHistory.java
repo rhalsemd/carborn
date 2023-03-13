@@ -1,8 +1,9 @@
-package site.carborn.entity;
+package site.carborn.entity.car;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.company.InsuranceCompany;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package site.carborn.entity;
+package site.carborn.entity.account;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,10 +7,10 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "MWS_CAR_SALE_BOOK")
+@Table(name = "MWS_ACCOUNT_LOGIN_LOG")
 @Getter
 @Setter
-public class CarSaleBook {
+public class AccountLoginLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -19,15 +19,14 @@ public class CarSaleBook {
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CAR_SALE_ID")
-    private CarSale carSale;
+    @Column(length = 50)
+    private String browser;
 
-    private int bookStatus;
+    @Column(length = 50)
+    private String ipAddr;
+
+    @Column(length = 50)
+    private String os;
 
     private LocalDateTime regDt;
-
-    private LocalDateTime uptDt;
-
-    private boolean status;
 }

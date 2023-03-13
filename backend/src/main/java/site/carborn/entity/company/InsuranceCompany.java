@@ -1,14 +1,15 @@
-package site.carborn.entity;
+package site.carborn.entity.company;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.account.Account;
 
 @Entity
-@Table(name = "MWS_COMPANY")
+@Table(name = "MWS_INSURANCE_COM")
 @Getter
 @Setter
-public class Company {
+public class InsuranceCompany {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -17,6 +18,6 @@ public class Company {
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
-    @Column(length = 50)
-    private String brn;
+    @Column(length = 200)
+    private String name;
 }

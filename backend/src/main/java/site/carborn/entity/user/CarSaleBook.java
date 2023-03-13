@@ -1,16 +1,17 @@
-package site.carborn.entity;
+package site.carborn.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import site.carborn.entity.account.Account;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "MWS_COMMUNITY")
+@Table(name = "MWS_CAR_SALE_BOOK")
 @Getter
 @Setter
-public class Community {
+public class CarSaleBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -19,10 +20,11 @@ public class Community {
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
-    @Column(length = 200)
-    private String title;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CAR_SALE_ID")
+    private CarSale carSale;
 
-    private String content;
+    private int bookStatus;
 
     private LocalDateTime regDt;
 
