@@ -6,15 +6,17 @@ import Test from "./routes/Test";
 function App() {
   return (
     // <div className="App"></div>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Test />}></Route>
-        <Route
-          path="/myvehicle/registration"
-          element={<MyVehicleRegistration />}
-        ></Route>
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Test />}></Route>
+          <Route
+            path="/myvehicle/registration"
+            element={<MyVehicleRegistration />}
+          ></Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 
