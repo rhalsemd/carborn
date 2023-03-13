@@ -82,9 +82,8 @@ out/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/java,react
-
-# Created by https://www.toptal.com/developers/gitignore/api/react,node
-# Edit at https://www.toptal.com/developers/gitignore?templates=react,node
+# Created by https://www.toptal.com/developers/gitignore/api/node
+# Edit at https://www.toptal.com/developers/gitignore?templates=node
 
 ### Node ###
 # Logs
@@ -226,17 +225,4 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-### react ###
-.DS_*
-**/*.backup.*
-**/*.back.*
-
-node_modules
-
-*.sublime*
-
-psd
-thumb
-sketch
-
-# End of https://www.toptal.com/developers/gitignore/api/react,node
+# End of https://www.toptal.com/developers/gitignore/api/node
