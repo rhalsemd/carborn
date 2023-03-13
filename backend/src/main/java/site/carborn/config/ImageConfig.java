@@ -9,7 +9,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class ImageConfig implements WebMvcConfigurer {
     @Value("${image.url.linux}")
     public String imageUrlLinux;
 
