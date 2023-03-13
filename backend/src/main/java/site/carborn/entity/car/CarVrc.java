@@ -2,6 +2,7 @@ package site.carborn.entity.car;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.carborn.entity.car.Car;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_CAR_VRC")
 @Getter
 @Setter
+@NoArgsConstructor
 public class CarVrc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

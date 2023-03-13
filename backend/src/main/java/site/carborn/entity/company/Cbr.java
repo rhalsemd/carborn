@@ -2,6 +2,7 @@ package site.carborn.entity.company;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.carborn.entity.account.Company;
 
@@ -9,6 +10,7 @@ import site.carborn.entity.account.Company;
 @Table(name = "MWS_CBR")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Cbr {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

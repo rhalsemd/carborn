@@ -2,6 +2,7 @@ package site.carborn.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.carborn.entity.account.Account;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_COMMUNITY_REVIEW")
 @Getter
 @Setter
+@NoArgsConstructor
 public class CommunityReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
