@@ -3,7 +3,7 @@ import { css, Global } from '@emotion/react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Nav from "./routes/Nav";
 import Login from "./routes/Login";
-import Test from "./routes/Test";
+import Test from "./routes/TestHome";
 
 const globalStyles = css`
   body {
