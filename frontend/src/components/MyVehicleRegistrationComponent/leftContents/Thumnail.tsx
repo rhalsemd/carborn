@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Props } from "../../routes/MyVehicleRegistration";
+import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
 
 const leftContent = css`
   border: 1px solid black;
   width: 40vw;
-  height: 50vh;
-  margin-right: 10vw;
+  height: 90vh;
+  margin-right: 6vw;
 `;
+
 function Thumnail({ registrationInfo }: Pick<Props, "registrationInfo">) {
   return (
     <div css={leftContent}>
