@@ -5,7 +5,6 @@ import CarNumber from "../components/MyVehicleRegistrationComponent/CarNumber";
 import CarYear from "../components/MyVehicleRegistrationComponent/CarYear";
 import DistanceDriven from "../components/MyVehicleRegistrationComponent/DistanceDriven";
 import ManufacturingCompany from "../components/MyVehicleRegistrationComponent/ManufacturingCompany";
-import RegistrationBtn from "../components/MyVehicleRegistrationComponent/RegistrationBtn";
 
 import { useState } from "react";
 
@@ -40,7 +39,7 @@ export interface RegistrationInfo {
   carNumber: string;
   carYear: string;
   distanceDriven: string;
-  additionalSubmissionFiles: string | ArrayBuffer | null;
+  fileList: File[];
 }
 
 function MyVehicleRegistration() {
@@ -49,40 +48,33 @@ function MyVehicleRegistration() {
     carNumber: "",
     carYear: "",
     distanceDriven: "",
-    additionalSubmissionFiles: "",
+    fileList: [],
   });
+
+  console.log(registrationInfo);
 
   return (
     <div css={outer}>
       <div css={content}>
-        <div css={leftContent}>
-          {/* <img
-            src={
-              registrationInfo.additionalSubmissionFiles
-                ? registrationInfo.additionalSubmissionFiles
-                : undefined
-            }
-            alt="올린 이미지"
-          /> */}
-        </div>
+        <div css={leftContent}></div>
+
         <div css={rightContent}>
           <h2 style={{ textAlign: "center" }}>차량 등록</h2>
           <hr />
 
           {/* 제조사 / 차량모델 */}
-          <ManufacturingCompany />
+          <ManufacturingCompany setRegistrationInfo={setRegistrationInfo} />
           {/* 차량번호 */}
-          <CarNumber />
+          <CarNumber setRegistrationInfo={setRegistrationInfo} />
           {/* 연식 */}
-          <CarYear />
+          <CarYear setRegistrationInfo={setRegistrationInfo} />
           {/* 주행거리 */}
-          <DistanceDriven />
+          <DistanceDriven setRegistrationInfo={setRegistrationInfo} />
           {/* 추가 제출 파일 */}
           <AdditionalSubmissionFiles
+            registrationInfo={registrationInfo}
             setRegistrationInfo={setRegistrationInfo}
           />
-          {/* 등록하기 버튼 */}
-          <RegistrationBtn />
         </div>
       </div>
     </div>
