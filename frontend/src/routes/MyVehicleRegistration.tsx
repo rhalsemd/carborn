@@ -7,6 +7,7 @@ import DistanceDriven from "../components/MyVehicleRegistrationComponent/Distanc
 import ManufacturingCompany from "../components/MyVehicleRegistrationComponent/ManufacturingCompany";
 
 import { useState } from "react";
+import Thumnail from "../components/MyVehicleRegistrationComponent/Thumnail";
 
 const outer = css`
   border: 1px solid black;
@@ -21,13 +22,6 @@ const content = css`
   align-items: center;
 `;
 
-const leftContent = css`
-  border: 1px solid black;
-  width: 40vw;
-  height: 400px;
-  margin-right: 10vw;
-`;
-
 const rightContent = css`
   border: 1px solid black;
   width: 40vw;
@@ -39,7 +33,12 @@ export interface RegistrationInfo {
   carNumber: string;
   carYear: string;
   distanceDriven: string;
-  fileList: File[];
+  fileList: any[];
+}
+
+export interface Props {
+  registrationInfo?: RegistrationInfo;
+  setRegistrationInfo: React.Dispatch<React.SetStateAction<RegistrationInfo>>;
 }
 
 function MyVehicleRegistration() {
@@ -56,7 +55,7 @@ function MyVehicleRegistration() {
   return (
     <div css={outer}>
       <div css={content}>
-        <div css={leftContent}></div>
+        <Thumnail registrationInfo={registrationInfo} />
 
         <div css={rightContent}>
           <h2 style={{ textAlign: "center" }}>차량 등록</h2>

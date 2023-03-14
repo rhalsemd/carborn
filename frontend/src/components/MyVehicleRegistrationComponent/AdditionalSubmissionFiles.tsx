@@ -1,12 +1,6 @@
 import axios from "axios";
-import { RegistrationInfo } from "../../routes/MyVehicleRegistration";
 import { useMutation } from "react-query";
-import { useState } from "react";
-
-interface Props {
-  registrationInfo: RegistrationInfo;
-  setRegistrationInfo: React.Dispatch<React.SetStateAction<RegistrationInfo>>;
-}
+import { Props } from "../../routes/MyVehicleRegistration";
 
 const fileUpLoadAPI = (data: FormData) => {
   return axios({
@@ -15,6 +9,7 @@ const fileUpLoadAPI = (data: FormData) => {
     data: data,
   });
 };
+
 // const fileUpLoadAPI = (data: FormData) => {
 //   return axios({
 //     method: "post",
@@ -29,14 +24,12 @@ const fileUpLoadAPI = (data: FormData) => {
 //     },
 //   });
 // };
+const fileList: File[] = []; // 업로드한 파일들을 저장하는 배열
 
 function AdditionalSubmissionFiles({
   registrationInfo,
   setRegistrationInfo,
 }: Props) {
-  // const fileList: File[] = []; // 업로드한 파일들을 저장하는 배열
-  const [fileList, setFileList] = useState<File[]>([]);
-
   const { mutate } = useMutation(fileUpLoadAPI, {
     onSuccess: (data) => {
       console.log("성공", data.data);
@@ -49,13 +42,30 @@ function AdditionalSubmissionFiles({
   const onSaveFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadFiles = Array.prototype.slice.call(e.target.files); // 파일선택창에서 선택한 파일들
 
+    const reader = new FileReader();
+
     uploadFiles.forEach((uploadFile) => {
-      // fileList.push(uploadFile);
-      setFileList((fileList: File[]): File[] => {
-        return [...fileList, uploadFile];
-      });
+      console.log(uploadFile, "업로드");
+      fileList.push(uploadFile);
+
+      reader.onload = () => {
+        console.log("여기 오나");
+        setRegistrationInfo((registrationInfo) => {
+          const newFileListL: any = [
+            ...registrationInfo.fileList,
+            reader.result,
+          ];
+
+          return {
+            ...registrationInfo,
+            fileList: newFileListL,
+          };
+        });
+      };
+      reader.readAsDataURL(uploadFile);
+
+      console.log(reader);
     });
-    console.log(fileList, "업로드파일");
   };
 
   const onFileUpload = () => {
@@ -88,11 +98,14 @@ function AdditionalSubmissionFiles({
       <input
         type="file"
         multiple={true} /* 파일 여러개 선택 가능하게 하기 */
+        accept="image/*"
         onChange={onSaveFiles}
       />
 
-      {/* 등록하기 버튼 */}
-      <button onClick={onFileUpload}>등록하기</button>
+      <div>
+        {/* 등록하기 버튼 */}
+        <button onClick={onFileUpload}>등록하기</button>
+      </div>
     </div>
   );
 }

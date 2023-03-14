@@ -1,8 +1,4 @@
-import { RegistrationInfo } from "../../routes/MyVehicleRegistration";
-
-interface Props {
-  setRegistrationInfo: React.Dispatch<React.SetStateAction<RegistrationInfo>>;
-}
+import { Props } from "../../routes/MyVehicleRegistration";
 
 function DistanceDriven({ setRegistrationInfo }: Props) {
   const inputTyping = (e: React.ChangeEvent<HTMLInputElement>): void => {

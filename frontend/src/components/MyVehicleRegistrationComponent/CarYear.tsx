@@ -1,13 +1,8 @@
-import { RegistrationInfo } from "../../routes/MyVehicleRegistration";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { MuiPickersAdapter } from "@mui/x-date-pickers/internals";
-
-interface Props {
-  setRegistrationInfo: React.Dispatch<React.SetStateAction<RegistrationInfo>>;
-}
+import { Props } from "../../routes/MyVehicleRegistration";
 
 const now = new Date();
 let year = now.getFullYear();
