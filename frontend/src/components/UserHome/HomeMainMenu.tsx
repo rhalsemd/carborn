@@ -12,6 +12,7 @@ const container = css`
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin-bottom: 10px;
   }
 
   .menu > h3 {
@@ -28,27 +29,46 @@ const container = css`
 
 const buttons = css`
   display: flex;
+  align-items: center;
+  flex-direction: column;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  .rectangleBtns {
+    flex-direction: row;
+    margin-bottom: 5vh;
+    padding: 0;
+  }
   .rectangleBtn {
-    height: 40vh;
-    width: 24vw;
+    height: 50vh;
+    width: 20vw;
+    margin: 0 2vw 0 2vw;
+    padding: 0;
+    /* flex-direction: column; */
+  }
+  .squareBtns {
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+  }
+  .squareBtn {
+    height: 28vh;
+    width: 20vw;
+    margin: 0 2vw 0 2vw;
   }
 `;
 
-const squareBtn = css`
-  height: 20vh;
-  width: 24vw;
-`;
-
-interface Test {
+interface btns {
   icon: string;
   name: string;
   description: string;
 }
 
-type Test2 = Test[];
+type btnType = btns[];
 
 export default function HomeMainMenu() {
-  const rectangles: Test2 = [
+  const rectangles: btnType = [
     {
       icon: "icon",
       name: "사기",
@@ -62,24 +82,54 @@ export default function HomeMainMenu() {
     {
       icon: "icon",
       name: "커뮤니티",
-      description: "다양한 사람들과 함께 내 차를 공유해 보세요",
+      description: "다양한 사람들과 함께 내 차를 공유해 보asdfasdf세요",
     },
   ];
+
+  const squares: btnType = [
+    {
+      icon: "icon",
+      name: "사기",
+      description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
+    },
+    {
+      icon: "icon",
+      name: "팔기",
+      description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
+    },
+    {
+      icon: "icon",
+      name: "커뮤니티",
+      description: "다양한 사람들과 함께 내 차를 공유해 보asdfasdf세요",
+    },
+  ];
+
   return (
     <div css={container}>
       <div>
         <div className="menu">
-          <h3>Menu</h3>
+          <h2>Menu</h2>
           <hr />
         </div>
         <div css={buttons}>
-          {rectangles.map((rect: Test, idx: number): any => (
-            <button className="rectangleBtn">
-              {rect.icon}
-              {rect.name}
-              {rect.description}
-            </button>
-          ))}
+          <div className="rectangleBtns">
+            {rectangles.map((rect: btns, idx: number): any => (
+              <button className="rectangleBtn" key={idx}>
+                <div>{rect.icon}</div>
+                <div>{rect.name}</div>
+                <div>{rect.description}</div>
+              </button>
+            ))}
+          </div>
+          <div className="squareBtns">
+            {squares.map((rect: btns, idx: number): any => (
+              <button className="squareBtn" key={idx}>
+                <p>{rect.icon}</p>
+                <p>{rect.name}</p>
+                <p>{rect.description}</p>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
