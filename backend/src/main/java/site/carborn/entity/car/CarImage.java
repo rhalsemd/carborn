@@ -2,6 +2,7 @@ package site.carborn.entity.car;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_CAR_IMG")
 @Getter
 @Setter
+@NoArgsConstructor
 public class CarImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

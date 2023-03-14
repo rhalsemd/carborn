@@ -1,9 +1,21 @@
-function ManufacturingCompany() {
+import { Props } from "../../routes/MyVehicleRegistration";
+
+function ManufacturingCompany({ setRegistrationInfo }: Props) {
+  const inputTyping = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const inputValue = e.target.value;
+    setRegistrationInfo((registrationInfo) => {
+      return {
+        ...registrationInfo,
+        manufacturingCompany: inputValue,
+      };
+    });
+  };
+
   return (
     <div>
       <span>제조사 / 차량모델</span>
       <div>
-        <input type="text" />
+        <input type="text" autoComplete="false" onChange={inputTyping} />
       </div>
     </div>
   );
