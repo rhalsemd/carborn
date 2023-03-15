@@ -29,7 +29,7 @@ const Signup = () => {
   const PERSON = 0;
 
   // 회원구분 세팅 및 전송 데이터 형태 구축
-  const [selectedButton, setSelectedButton] = useState(0);
+  const [selectedButton, setSelectedButton] = useState(PERSON);
   // 회원가입 초기값
   const initialSignupFormData = {
     accountType: PERSON,
@@ -51,7 +51,7 @@ const Signup = () => {
 
   // 이거 나중에 통신할때 급하게 테스트 필요할수도 있으니까 놔둠
   useEffect(() => {
-    // if (selectedButton===0) {
+    // if (selectedButton===PERSON) {
     //   console.log(signupUserFormData)
     // } else {
     //   console.log(signupCompanyFormData)

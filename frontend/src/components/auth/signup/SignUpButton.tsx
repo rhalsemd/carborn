@@ -25,7 +25,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
   const REPAIR = 1
   
   const resetFormData = () => {
-    if(selectedButton === 0) {
+    if(selectedButton === PERSON) {
       setSignupCompanyFormData({
         accountType: REPAIR,
         name: "",
@@ -54,12 +54,12 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
 
   const handleUserSignUp = () => {
     resetFormData();
-    setSelectedButton(0);
+    setSelectedButton(PERSON);
   }
 
   const handleCompanySignUp = () => {
     resetFormData();
-    setSelectedButton(1);
+    setSelectedButton(REPAIR);
   }
 
   return (
