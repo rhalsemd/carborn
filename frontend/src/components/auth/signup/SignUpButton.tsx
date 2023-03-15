@@ -12,8 +12,8 @@ export type SignupFormData = {
 };
 
 export type SignUpButtonProps = {
-  setSelectedButton: React.Dispatch<React.SetStateAction<string>>;
-  selectedButton: string;
+  setSelectedButton: React.Dispatch<React.SetStateAction<number>>;
+  selectedButton: number;
   setSignupUserFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
   setSignupCompanyFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
   initialSignupFormData:SignupFormData
@@ -21,7 +21,7 @@ export type SignUpButtonProps = {
 
 const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData, setSignupCompanyFormData, initialSignupFormData} : SignUpButtonProps) => {
   const resetFormData = () => {
-    if(selectedButton === "user") {
+    if(selectedButton === 0) {
       setSignupCompanyFormData({
         accountType: 1,
         name: "",
@@ -33,7 +33,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
         phonenumber: "",
         FileList: [],
       })
-    } else if (selectedButton === "company") {
+    } else {
       setSignupUserFormData({
         accountType: 0,
         name: "",
@@ -50,12 +50,12 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
 
   const handleUserSignUp = () => {
     resetFormData();
-    setSelectedButton("user");
+    setSelectedButton(0);
   }
 
   const handleCompanySignUp = () => {
     resetFormData();
-    setSelectedButton("company");
+    setSelectedButton(1);
   }
 
   return (

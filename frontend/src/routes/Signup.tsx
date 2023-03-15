@@ -12,15 +12,19 @@ import {
   StyleLoginSignUpDiv,
   StyleLoginSignUpTitle,
 } from "./Login";
+import SignUpUserPassword from "../components/auth/signup/SignUpUserPassword";
+import SignUpCompanyPassword from "../components/auth/signup/SignUpCompanyPassword";
+import SignUpUserPasswordCheck from "../components/auth/signup/SignUpUserPasswordCheck";
+import SignUpCompanyPasswordCheck from "../components/auth/signup/SignUpCompanyPasswordCheck";
 
 // CSS
-export const StyleSignUpUserNameDiv = styled.div`
+export const StyleSignUpInputDiv = styled.div`
   width: 100%;
   padding-left: 2rem;
 `;
 const Signup = () => {
   // 회원구분 세팅 및 전송 데이터 형태 구축
-  const [selectedButton, setSelectedButton] = useState("user");
+  const [selectedButton, setSelectedButton] = useState(0);
   // 회원가입 초기값
   const initialSignupFormData = {
     accountType: 0,
@@ -41,12 +45,12 @@ const Signup = () => {
 
   // 이거 나중에 통신할때 급하게 테스트 필요할수도 있으니까 놔둠
   useEffect(() => {
-    if (selectedButton === "user") {
-      // console.log(signupUserFormData)
-    } else {
-      // console.log(signupCompanyFormData)
-    }
-  }, [selectedButton]);
+    // if (selectedButton===0) {
+    //   console.log(signupUserFormData)
+    // } else {
+    //   console.log(signupCompanyFormData)
+    // }
+  }, [selectedButton, signupUserFormData, signupCompanyFormData]);
 
   return (
     <StyleLoginSignUpDiv>
@@ -62,7 +66,7 @@ const Signup = () => {
           initialSignupFormData={initialSignupFormData}
         />
         <form>
-          {selectedButton === "user" ? (
+          {selectedButton === 0 ? (
             <div>
               <SignUpUserName
                 setSignupUserFormData={setSignupUserFormData}
@@ -70,6 +74,13 @@ const Signup = () => {
               />
               <SignUpUserId
                 setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserPassword 
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserPasswordCheck 
                 signupUserFormData={signupUserFormData}
               />
             </div>
@@ -86,6 +97,13 @@ const Signup = () => {
               <SignUpCompanyId
                 signupCompanyFormData={signupCompanyFormData}
                 setSignupCompanyFormData={setSignupCompanyFormData}
+              />
+              <SignUpCompanyPassword
+                signupCompanyFormData={signupCompanyFormData}
+                setSignupCompanyFormData={setSignupCompanyFormData}
+              />
+              <SignUpCompanyPasswordCheck
+                signupCompanyFormData={signupCompanyFormData}
               />
             </div>
           )}

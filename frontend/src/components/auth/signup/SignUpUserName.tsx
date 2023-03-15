@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { StyleSignUpUserNameDiv } from "../../../routes/Signup"
+import { StyleSignUpInputDiv } from "../../../routes/Signup"
 import { SignupFormData } from "./SignUpButton";
 
 //타입 지정
@@ -40,7 +40,7 @@ const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNa
   };
 
   return (
-    <StyleSignUpUserNameDiv>
+    <StyleSignUpInputDiv>
       <label htmlFor="username">이름</label>
       <br />
       <input
@@ -51,7 +51,7 @@ const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNa
         onKeyDown={(e) => handleKeyPress(e)}
         onChange={(e) => handleUserName(e)}
       />
-    </StyleSignUpUserNameDiv>
+    </StyleSignUpInputDiv>
   )
 }
 

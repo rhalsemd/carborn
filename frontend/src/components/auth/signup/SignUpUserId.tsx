@@ -3,11 +3,10 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
-  useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useridCheck } from "../../../modules/idcheckModule";
-import { StyleSignUpUserNameDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 type SignUpUserIdProps = {
@@ -19,13 +18,12 @@ const SignUpUserId = ({
   setSignupUserFormData,
   signupUserFormData,
 }: SignUpUserIdProps) => {
-  const result = useSelector((state: any) => state.useridcheck);
+  const { useridcheck } = useSelector((state: any) => state.useridcheck);
   const dispatch = useDispatch();
 
   // 입력되는거 formdata에 넘겨주기
   const handleUserId = (e: ChangeEvent<HTMLInputElement>) => {
     // 타이핑하는순간 아이디중복체크 초기화됨
-    setIsAvailable(false);
     setSignupUserFormData({
       ...signupUserFormData,
       id: e.target.value,
@@ -33,7 +31,6 @@ const SignUpUserId = ({
   };
 
   // 아이디 유효성 : 영문자 소문자랑 숫자랑 _ 만 가능가능
-  // 비밀번호 유효성 : 영문자 소문자랑 숫자랑 특수문자(전부가능)
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -67,33 +64,23 @@ const SignUpUserId = ({
   };
 
   // 아이디 중복체크용
-  const [isAvailable, setIsAvailable] = useState(false);
-
   const userIdDuplicateCheck = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
     dispatch(useridCheck(signupUserFormData.id));
-    setIsAvailable(result.useridcheck);
-    // result.payload는 중복되었는지 아닌지 체크하는거
-    if (isAvailable) {
+  };
+  
+  useEffect(() => {
+    if (useridcheck === true) {
       alert("사용 가능한 아이디 입니다.");
-    } else {
+    } else if (useridcheck === false) {
       alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
     }
-    // input창 초기화
-    setSignupUserFormData({
-      ...signupUserFormData,
-      id: "",
-    });
-  };
-
-  useEffect(() => {
-    setIsAvailable(result.useridcheck);
-  }, [result.useridcheck, isAvailable]);
+  }, [useridcheck]);
 
   return (
-    <StyleSignUpUserNameDiv>
+    <StyleSignUpInputDiv>
       <label htmlFor="userid">아이디</label>
       <br />
       <input
@@ -113,7 +100,7 @@ const SignUpUserId = ({
       >
         중복체크
       </button>
-    </StyleSignUpUserNameDiv>
+    </StyleSignUpInputDiv>
   );
 };
 
