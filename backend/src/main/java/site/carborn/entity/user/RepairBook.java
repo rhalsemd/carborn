@@ -1,5 +1,7 @@
 package site.carborn.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +21,14 @@ public class RepairBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REPAIR_SHOP_ID")
+//    @JsonIgnoreProperties({"account", "address", "lat", "lng"}) // 정제할 속성 지정
     private RepairShop repairShop;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ACCOUNT_ID")
+//    @JsonIgnoreProperties({"pwd", "walletHash", "auth"}) // 정제할 속성 지정
     private Account account;
 
     private String content;
@@ -37,5 +41,6 @@ public class RepairBook {
 
     private LocalDateTime uptDt;
 
+//    @JsonIgnore
     private boolean status;
 }
