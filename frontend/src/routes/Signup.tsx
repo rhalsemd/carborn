@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import SignUpButton, { SignupFormData } from "../components/auth/signup/SignUpButton";
+import SignUpButton, {
+  SignupFormData,
+} from "../components/auth/signup/SignUpButton";
 import SignUpCompanyId from "../components/auth/signup/SignUpCompanyId";
 import SignUpCompanyName from "../components/auth/signup/SignUpCompanyName";
 import SignUpCompanyTypeButton from "../components/auth/signup/SignUpCompanyTypeButton";
@@ -23,11 +25,14 @@ export const StyleSignUpInputDiv = styled.div`
   padding-left: 2rem;
 `;
 const Signup = () => {
+  // 상수화
+  const PERSON = 0;
+
   // 회원구분 세팅 및 전송 데이터 형태 구축
   const [selectedButton, setSelectedButton] = useState(0);
   // 회원가입 초기값
   const initialSignupFormData = {
-    accountType: 0,
+    accountType: PERSON,
     name: "",
     id: "",
     password: "",
@@ -38,8 +43,9 @@ const Signup = () => {
     FileList: [],
   };
 
-  const [signupUserFormData, setSignupUserFormData] =
-    useState<SignupFormData>(initialSignupFormData);
+  const [signupUserFormData, setSignupUserFormData] = useState<SignupFormData>(
+    initialSignupFormData
+  );
   const [signupCompanyFormData, setSignupCompanyFormData] =
     useState<SignupFormData>(initialSignupFormData);
 
@@ -66,7 +72,7 @@ const Signup = () => {
           initialSignupFormData={initialSignupFormData}
         />
         <form>
-          {selectedButton === 0 ? (
+          {selectedButton === PERSON ? (
             <div>
               <SignUpUserName
                 setSignupUserFormData={setSignupUserFormData}
@@ -76,11 +82,11 @@ const Signup = () => {
                 setSignupUserFormData={setSignupUserFormData}
                 signupUserFormData={signupUserFormData}
               />
-              <SignUpUserPassword 
+              <SignUpUserPassword
                 setSignupUserFormData={setSignupUserFormData}
                 signupUserFormData={signupUserFormData}
               />
-              <SignUpUserPasswordCheck 
+              <SignUpUserPasswordCheck
                 signupUserFormData={signupUserFormData}
               />
             </div>
