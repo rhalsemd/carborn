@@ -26,13 +26,13 @@ export const StyleSignUpInputDiv = styled.div`
 `;
 const Signup = () => {
   // 상수화
-  const PERSON = 0;
+  const USER = 0;
 
   // 회원구분 세팅 및 전송 데이터 형태 구축
-  const [selectedButton, setSelectedButton] = useState(PERSON);
+  const [selectedButton, setSelectedButton] = useState(USER);
   // 회원가입 초기값
   const initialSignupFormData = {
-    accountType: PERSON,
+    accountType: USER,
     name: "",
     id: "",
     password: "",
@@ -51,7 +51,7 @@ const Signup = () => {
 
   // 이거 나중에 통신할때 급하게 테스트 필요할수도 있으니까 놔둠
   useEffect(() => {
-    // if (selectedButton===PERSON) {
+    // if (selectedButton===USER) {
     //   console.log(signupUserFormData)
     // } else {
     //   console.log(signupCompanyFormData)
@@ -72,7 +72,7 @@ const Signup = () => {
           initialSignupFormData={initialSignupFormData}
         />
         <form>
-          {selectedButton === PERSON ? (
+          {selectedButton === USER ? (
             <div>
               <SignUpUserName
                 setSignupUserFormData={setSignupUserFormData}

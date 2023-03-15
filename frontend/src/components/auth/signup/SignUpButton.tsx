@@ -21,11 +21,11 @@ export type SignUpButtonProps = {
 
 const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData, setSignupCompanyFormData, initialSignupFormData} : SignUpButtonProps) => {
   // 상수화
-  const PERSON = 0
+  const USER = 0
   const REPAIR = 1
   
   const resetFormData = () => {
-    if(selectedButton === PERSON) {
+    if(selectedButton === USER) {
       setSignupCompanyFormData({
         accountType: REPAIR,
         name: "",
@@ -39,7 +39,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
       })
     } else {
       setSignupUserFormData({
-        accountType: PERSON,
+        accountType: USER,
         name: "",
         id: "",
         password: "",
@@ -54,7 +54,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
 
   const handleUserSignUp = () => {
     resetFormData();
-    setSelectedButton(PERSON);
+    setSelectedButton(USER);
   }
 
   const handleCompanySignUp = () => {
