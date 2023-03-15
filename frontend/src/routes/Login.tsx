@@ -7,15 +7,16 @@ import { useDispatch } from "react-redux";
 import { loginTry, User } from "../modules/loginModule";
 import { useSelector } from "react-redux";
 
-const StyleLoginDiv = styled.div`
+export const StyleLoginSignUpDiv = styled.div`
   width: 100vw;
-  height: 65vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const StyleLoginBoxDiv = styled.div`
+export const StyleLoginSignUpBoxDiv = styled.div`
+  width: 25%;
+  padding: 0rem, 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,14 +25,14 @@ const StyleLoginBoxDiv = styled.div`
   background-color: #d5cfcf2a;
 `;
 
-const StyleLogin = styled.div`
+export const StyleLoginSignUpTitle = styled.div`
   width: 100%;
   height: 20%;
   border-bottom: 1px solid red;
   text-align: center;
 `;
 
-const StyleLoginBtn = styled.button`
+export const StyleLoginSignUpBtn = styled.button`
   width: 15rem;
   text-align: center;
   font-size: 1.2rem;
@@ -41,7 +42,7 @@ const StyleLoginBtn = styled.button`
   margin: 0.5rem 0;
 `;
 
-const StyleLoginAnotherLink = styled.div`
+export const StyleLoginAnotherLink = styled.div`
   font-size: 0.7rem;
   text-decoration: none;
 `;
@@ -58,15 +59,15 @@ export type LoginProps = {
 };
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const Obj = useSelector((state: any) => state)
-  const { success } = Obj.login.users
+  const Obj = useSelector((state: any) => state);
+  const { success } = Obj.login.users;
 
   const [inputObj, setinputObj] = useState<InputObj>({
     userid: "",
     userpassword: "",
-    success: false
+    success: false,
   });
 
   const handleLogin = () => {
@@ -74,33 +75,35 @@ const Login = () => {
       userid: inputObj.userid,
       userpassword: inputObj.userpassword,
       status: 404,
-      success: false
+      success: false,
     };
     dispatch(loginTry(user));
   };
 
   useEffect(() => {
     if (success) {
-      navigate('/')
+      navigate("/");
     }
-  }, [success, navigate])
+  }, [success, navigate]);
 
   return (
-    <StyleLoginDiv>
-      <StyleLoginBoxDiv>
-        <StyleLogin>
+    <StyleLoginSignUpDiv>
+      <StyleLoginSignUpBoxDiv>
+        <StyleLoginSignUpTitle>
           <h2>로그인</h2>
-        </StyleLogin>
+        </StyleLoginSignUpTitle>
         <LoginID setinputObj={setinputObj} />
         <LoginPassword setinputObj={setinputObj} />
-        <StyleLoginBtn onClick={handleLogin}>로그인 하기</StyleLoginBtn>
+        <StyleLoginSignUpBtn onClick={handleLogin}>
+          로그인 하기
+        </StyleLoginSignUpBtn>
         <StyleLoginAnotherLink>
-          <Link to="/signup">회원가입</Link> /
-          <Link to="/searchid"> 아이디 찾기</Link> /
+          <Link to="/termsofuse">회원가입</Link> /
+          <Link to="/searchuserid"> 아이디 찾기</Link> /
           <Link to="/passwordreset"> 비밀번호 재설정</Link>
         </StyleLoginAnotherLink>
-      </StyleLoginBoxDiv>
-    </StyleLoginDiv>
+      </StyleLoginSignUpBoxDiv>
+    </StyleLoginSignUpDiv>
   );
 };
 
