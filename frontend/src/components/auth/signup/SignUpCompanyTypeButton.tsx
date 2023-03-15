@@ -17,21 +17,21 @@ const SignUpCompanyTypeButton = ({signupCompanyFormData, setSignupCompanyFormDat
     e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
-      usertype: "1"
+      accountType: 1
     })
   }
   const handleInspectorType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
-      usertype: "2"
+      accountType: 2
     })
   }
   const handleInsuranceType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
-      usertype: "3"
+      accountType: 3
     })
   }
 

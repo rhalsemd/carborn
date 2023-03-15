@@ -1,6 +1,6 @@
 // 타입
 export type SignupFormData = {
-  usertype: string;
+  accountType: number;
   name: string;
   id: string;
   password: string;
@@ -23,7 +23,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
   const resetFormData = () => {
     if(selectedButton === "user") {
       setSignupCompanyFormData({
-        usertype: "1",
+        accountType: 1,
         name: "",
         id: "",
         password: "",
@@ -35,7 +35,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
       })
     } else if (selectedButton === "company") {
       setSignupUserFormData({
-        usertype: "0",
+        accountType: 0,
         name: "",
         id: "",
         password: "",

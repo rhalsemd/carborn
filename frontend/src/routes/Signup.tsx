@@ -23,7 +23,7 @@ const Signup = () => {
   const [selectedButton, setSelectedButton] = useState("user");
   // 회원가입 초기값
   const initialSignupFormData = {
-    usertype: "0",
+    accountType: 0,
     name: "",
     id: "",
     password: "",
