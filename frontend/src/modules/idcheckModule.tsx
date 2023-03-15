@@ -12,12 +12,12 @@ export const COMPANYID_CHECK_FAILURE = "COMPANYID_CHECK_FAILURE";
 // 액션 생성 함수
 export const useridCheck = (id: string) => ({
   type: USERID_CHECK,
-  payload: id,
+  payload: { id },
 });
 
 export const companyidCheck = (id: string) => ({
   type: COMPANYID_CHECK,
-  payload: id,
+  payload: { id },
 });
 
 // 초기값
@@ -30,13 +30,19 @@ export function* useridCheckSaga(
   action: ReturnType<typeof useridCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call(useridCheckApi, action.payload);
-    // console.log(response);
+    const response = yield call<any>(useridCheckApi, action.payload);
     const success = response.success;
-    if (success) {
-      yield put({ type: USERID_CHECK_FAILURE, payload: { success: success } });
+    
+    if (!success) {
+      yield put({ 
+        type: USERID_CHECK_FAILURE, 
+        payload: { ...action.payload, success: false }
+      });
     } else {
-      yield put({ type: USERID_CHECK_SUCCESS, payload: { success: success } });
+      yield put({ 
+        type: USERID_CHECK_SUCCESS, 
+        payload: { ...action.payload, success: true }
+      });
     }
   } catch (error) {
     console.log(error);
@@ -47,18 +53,17 @@ export function* companyidCheckSaga(
   action: ReturnType<typeof companyidCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call(companyidCheckApi, action.payload);
-    // console.log(response);
+    const response = yield call<any>(companyidCheckApi, action.payload);
     const success = response.success;
-    if (success) {
+    if (!success) {
       yield put({
         type: COMPANYID_CHECK_FAILURE,
-        payload: { success: success },
+        payload: { ...action.payload, success: false }
       });
     } else {
       yield put({
         type: COMPANYID_CHECK_SUCCESS,
-        payload: { success: success },
+        payload: { ...action.payload, success: true }
       });
     }
   } catch (error) {
@@ -66,7 +71,7 @@ export function* companyidCheckSaga(
   }
 }
 
-export function useridCheckReducer(
+export function idCheckReducer(
   state = initialState,
   action: { type: string; payload: { success: boolean } }
 ) {

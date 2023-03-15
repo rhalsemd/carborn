@@ -13,25 +13,30 @@ const StyleSignUpCompanyTypeButtonTypeDiv = styled.div`
 `
 
 const SignUpCompanyTypeButton = ({signupCompanyFormData, setSignupCompanyFormData}:SignUpProps) => {
+  // 상수화
+  const REPAIR = 1
+  const INSPECTOR = 2
+  const INSURANCE = 3
+
   const handleRepairType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
-      accountType: 1
+      accountType: REPAIR
     })
   }
   const handleInspectorType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
-      accountType: 2
+      accountType: INSPECTOR
     })
   }
   const handleInsuranceType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
-      accountType: 3
+      accountType: INSURANCE
     })
   }
 

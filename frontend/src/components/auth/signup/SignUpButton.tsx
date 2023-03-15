@@ -12,18 +12,22 @@ export type SignupFormData = {
 };
 
 export type SignUpButtonProps = {
-  setSelectedButton: React.Dispatch<React.SetStateAction<string>>;
-  selectedButton: string;
+  setSelectedButton: React.Dispatch<React.SetStateAction<number>>;
+  selectedButton: number;
   setSignupUserFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
   setSignupCompanyFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
   initialSignupFormData:SignupFormData
 }
 
 const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData, setSignupCompanyFormData, initialSignupFormData} : SignUpButtonProps) => {
+  // 상수화
+  const USER = 0
+  const REPAIR = 1
+  
   const resetFormData = () => {
-    if(selectedButton === "user") {
+    if(selectedButton === USER) {
       setSignupCompanyFormData({
-        accountType: 1,
+        accountType: REPAIR,
         name: "",
         id: "",
         password: "",
@@ -33,9 +37,9 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
         phonenumber: "",
         FileList: [],
       })
-    } else if (selectedButton === "company") {
+    } else {
       setSignupUserFormData({
-        accountType: 0,
+        accountType: USER,
         name: "",
         id: "",
         password: "",
@@ -50,12 +54,12 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
 
   const handleUserSignUp = () => {
     resetFormData();
-    setSelectedButton("user");
+    setSelectedButton(USER);
   }
 
   const handleCompanySignUp = () => {
     resetFormData();
-    setSelectedButton("company");
+    setSelectedButton(REPAIR);
   }
 
   return (

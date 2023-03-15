@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import { loginReducer } from "../modules/loginModule";
-import { idCheckReducer } from "./idcheckModule";
-import { termsofuseReducer } from "./termsOfUseModule";
+import { loginReducer } from "../loginModule";
+import { useridCheckReducer } from "../idcheckModule";
+import { termsofuseReducer } from "../termsOfUseModule";
 
 // 타입 지정
 // export type RootState = ReturnType<typeof rootReducer>
@@ -16,7 +16,7 @@ export type RootState = {
 const rootReducer = combineReducers({
   login: loginReducer,
   termsofuse: termsofuseReducer,
-  useridcheck: idCheckReducer,
+  useridcheck: useridCheckReducer,
 });
 
 export default rootReducer;

@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { StyleSignUpUserNameDiv } from "../../../routes/Signup"
+import { StyleSignUpInputDiv } from "../../../routes/Signup"
 import { SignupFormData } from "./SignUpButton";
 
 //타입 지정
@@ -19,7 +19,7 @@ const SignUpCompanyName = ({signupCompanyFormData, setSignupCompanyFormData} : S
 
   return (
     <div>
-      <StyleSignUpUserNameDiv>
+      <StyleSignUpInputDiv>
         <label htmlFor="companyname">회사명</label>
         <br />
         <input
@@ -29,7 +29,7 @@ const SignUpCompanyName = ({signupCompanyFormData, setSignupCompanyFormData} : S
           value={signupCompanyFormData.name}
           onChange={(e) => handleUserName(e)}
         />
-      </StyleSignUpUserNameDiv>
+      </StyleSignUpInputDiv>
     </div>
   )
 }
