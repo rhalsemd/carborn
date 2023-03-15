@@ -79,6 +79,8 @@ function Nav() {
       setTitle('Home');
     } else if (location.pathname === '/login') {
       setTitle('User Login');
+    } else if (location.pathname === '/myvehicle/registration') {
+      setTitle('Car Regitration')
     }
   }, [location.pathname]);
 
@@ -98,6 +100,11 @@ function Nav() {
               <Link to="/login" css={StyleLinkText}>
                 <StyleNavLi>
                   Login
+                </StyleNavLi>
+              </Link>
+              <Link to="/myvehicle/registration" css={StyleLinkText}>
+                <StyleNavLi>
+                  regist
                 </StyleNavLi>
               </Link>
           </StyleNavUl>

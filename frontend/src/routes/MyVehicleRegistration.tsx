@@ -12,7 +12,6 @@ import { useState } from "react";
 const outer = css`
   border: 1px solid black;
   width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
 `;

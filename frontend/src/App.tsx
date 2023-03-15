@@ -4,10 +4,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './routes/Login';
 import MyVehicleRegistration from "./routes/MyVehicleRegistration";
 import Nav from './routes/Nav';
+import Signup from './routes/Signup';
+import TermsOfUse from './routes/TermsOfUse';
 import TestHome from './routes/TestHome';
 
 const globalStyles = css`
   body {
+    width: 100vw;
     background-color: #ffffff !important;
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -24,8 +27,9 @@ function App() {
         <Routes>
           <Route path="/" element={<TestHome />}></Route>
           <Route path="/Login" element={<Login />}></Route>
-          <Route path="/myvehicle/registration" element={<MyVehicleRegistration />}
-        ></Route>
+          <Route path="/myvehicle/registration" element={<MyVehicleRegistration />}></Route>
+          <Route path="/termsofuse" element={<TermsOfUse />}></Route>
+          <Route path="/signup" element={<Signup />}></Route>
         </Routes>
       </Router>
     </>

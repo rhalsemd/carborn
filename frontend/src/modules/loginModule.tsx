@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 import { loginApi } from "../lib/loginApi";
 
 // 타입 지정
@@ -33,7 +33,7 @@ const initialState = {
 type Action = ReturnType<typeof loginTry> | ReturnType<typeof loginTrySuccess>;
 
 // 사가
-function* loginSaga(action: Action) {
+export function* loginSaga(action: Action) {
   try {
     const response: User = yield call<typeof loginApi>(loginApi, action.payload);
     
@@ -62,15 +62,10 @@ function* loginSaga(action: Action) {
   }
 }
 
-export function* rootSaga() {
-  yield takeEvery(LOGIN_TRY, loginSaga);
-}
-
 // 리듀서
 export function loginReducer(state = initialState, action: Action) {
   switch (action.type) {
     case LOGIN_TRY_SUCCESS:
-      console.log(action.payload)
       return { ...state, users: action.payload };
     default:
       return state;
