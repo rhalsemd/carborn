@@ -2,15 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "typeRoots": [
-      "node_modules/@types",
-      "node_modules"
-    ],
-    "types": [
-      "react",
-      "react-dom",
-      "react-hook-form",
-    ],
+    "typeRoots": ["node_modules/@types", "node_modules"],
+    "types": ["react", "react-dom", "react-hook-form"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -23,8 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "typeRoots": ["./node_modules/@types", "@types"]
+    "jsx": "react-jsx"
   },
   "include": ["src"],
   "moduleResolution": "node"
