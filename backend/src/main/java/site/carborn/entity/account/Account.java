@@ -24,8 +24,5 @@ public class Account {
     @Column(length = 50)
     private String phoneNo;
 
-    @Column(length = 500)
-    private String walletHash;
-
     private int auth;
 }
