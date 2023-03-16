@@ -5,6 +5,7 @@ import HomeCarModel from "../components/UserHome/HomeCarModel";
 import HomeIconMenu from "../components/UserHome/HomeIconMenu";
 import HomeMainMenu from "../components/UserHome/HomeMainMenu";
 import HomeCarForSales from "../components/UserHome/HomeCarForSales";
+import HomeWhyCooseUs from "../components/UserHome/HomeWhyChooseUs";
 
 const container = css`
   position: absolute;
@@ -18,6 +19,7 @@ export default function UserHome() {
       <HomeIconMenu />
       <HomeMainMenu />
       <HomeCarForSales />
+      <HomeWhyCooseUs />
     </div>
   );
 }
