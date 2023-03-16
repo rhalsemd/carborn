@@ -88,7 +88,11 @@ interface Page {
   postId: number;
 }
 
-function infinityFnc(pageParam: number): any {
+interface PageParam {
+  pageParam?: number;
+}
+
+function infinityFnc({ pageParam = 1 }: PageParam) {
   return axios({
     method: "get",
     url: `https://jsonplaceholder.typicode.com/comments`,
@@ -99,45 +103,28 @@ function infinityFnc(pageParam: number): any {
 }
 
 function CarList() {
-  const $div = document.querySelectorAll("#div");
-  const observerRef = useRef<IntersectionObserver>();
+  const divRef = useRef<HTMLDivElement | any>({});
 
-  const { data, fetchNextPage, isFetching, refetch, isLoading } =
-    useInfiniteQuery(
-      "infinity-scroll",
-      ({ pageParam = 1 }) => infinityFnc(pageParam),
-      {
-        getNextPageParam: (lastPage, allPages) => {
-          return allPages.length + 1;
-        },
-      }
-    );
-
-  const intersectionObserver = (
-    entries: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        observer.unobserve(entry.target);
-        fetchNextPage();
-        console.log("접촉");
-      }
-    });
-  };
-
-  useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
+  const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery(
+    "infinity-scroll",
+    infinityFnc,
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        return allPages.length + 1;
+      },
     }
-    observerRef.current = new IntersectionObserver(intersectionObserver);
-    if ($div[0]?.lastElementChild) {
-      observerRef.current.observe($div[0]?.lastElementChild);
-    }
-  }, [data]);
+  );
+
+  const intersection = new IntersectionObserver((e) => {
+    console.log(e, "이");
+  });
+
+  if (divRef?.current && data) {
+    intersection.observe(divRef.current[data?.pages.length - 1]);
+  }
 
   return (
-    <div css={rightContent} id="div">
+    <div css={rightContent}>
       {/* <div css={infoBox}>
         <button className="btn">asdf</button>
         <img src={carImg} alt=zx"carImg" css={imgStyle} />
@@ -157,7 +144,11 @@ function CarList() {
       </div> */}
       {data?.pages[0].data.map((page: Page, index: number) => {
         return (
-          <div css={infoBox} key={index}>
+          <div
+            css={infoBox}
+            key={index}
+            ref={(ref) => (divRef.current[index] = ref)}
+          >
             <button className="btn">asdf</button>
             <img src={carImg} alt="carImg" css={imgStyle} />
             <div css={textStyle}>

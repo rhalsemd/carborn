@@ -6,7 +6,6 @@ import Login from "./routes/Login";
 import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import { QueryClientProvider, QueryClient } from "react-query";
 import Nav from "./routes/Nav";
-import TestHome from "./routes/TestHome";
 import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
 import Signup from "./routes/Signup";
 import TermsOfUse from "./routes/TermsOfUse";
