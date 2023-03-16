@@ -7,7 +7,6 @@ import MenuBar from "../../components/VehiclePurchase/MenuBar";
 const outer = css`
   border: 1px solid black;
   width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
   flex-direction: column;
