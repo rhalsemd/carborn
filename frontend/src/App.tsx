@@ -1,37 +1,52 @@
 /** @jsxImportSource @emotion/react */
-import { css, Global } from '@emotion/react';
+import { css, Global } from "@emotion/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from './routes/Login';
-import MyVehicleRegistration from "./routes/MyVehicleRegistration";
-import Nav from './routes/Nav';
+
+import Login from "./routes/Login";
+import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
+import { QueryClientProvider, QueryClient } from "react-query";
+import Nav from "./routes/Nav";
+import TestHome from "./routes/TestHome";
+import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
 import Signup from './routes/Signup';
 import TermsOfUse from './routes/TermsOfUse';
-import TestHome from './routes/TestHome';
 
 const globalStyles = css`
   body {
     width: 100vw;
     background-color: #ffffff !important;
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 16px;
     margin: 0;
   }
 `;
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
+    // <div className="App"></div>
     <>
-      <Global styles={globalStyles}></Global>
-      <Router>
-        <Nav />
-        <Routes>
-          <Route path="/" element={<TestHome />}></Route>
-          <Route path="/Login" element={<Login />}></Route>
-          <Route path="/myvehicle/registration" element={<MyVehicleRegistration />}></Route>
+      <QueryClientProvider client={queryClient}>
+        <Global styles={globalStyles}></Global>
+        <Router>
+          <Nav />
+          <Routes>
+            <Route path="/" element={<TestHome />}></Route>
+            <Route path="/Login" element={<Login />}></Route>
+            <Route
+              path="/myvehicle/registration"
+              element={<MyVehicleRegistration />}
+            ></Route>
+            <Route
+              path="/vehicle/purchase"
+              element={<VehiclePurchase />}
+            ></Route>
           <Route path="/termsofuse" element={<TermsOfUse />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-        </Routes>
-      </Router>
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     </>
   );
 }
