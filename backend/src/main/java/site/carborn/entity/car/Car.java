@@ -22,6 +22,9 @@ public class Car {
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
 
+    @Column(length = 200)
+    private String walletHash;
+
     @Column(length = 50)
     private String maker;
 

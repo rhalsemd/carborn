@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation } from "react-query";
-import { Props } from "../../routes/MyVehicleRegistration";
+import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
 
 const fileUpLoadAPI = (data: FormData) => {
   return axios({
@@ -45,11 +45,9 @@ function AdditionalSubmissionFiles({
     const reader = new FileReader();
 
     uploadFiles.forEach((uploadFile) => {
-      console.log(uploadFile, "업로드");
       fileList.push(uploadFile);
 
       reader.onload = () => {
-        console.log("여기 오나");
         setRegistrationInfo((registrationInfo) => {
           const newFileListL: any = [
             ...registrationInfo.fileList,
@@ -63,8 +61,6 @@ function AdditionalSubmissionFiles({
         });
       };
       reader.readAsDataURL(uploadFile);
-
-      console.log(reader);
     });
   };
 
@@ -81,8 +77,14 @@ function AdditionalSubmissionFiles({
     //   name: "피자",
     //   price: 13500,
     // };
+    const newRegistrationInfo = {
+      manufacturingCompany: registrationInfo?.manufacturingCompany,
+      carNumber: registrationInfo?.carNumber,
+      carYear: registrationInfo?.carYear,
+      distanceDriven: registrationInfo?.distanceDriven,
+    };
 
-    formData.append("stringFoodDto", JSON.stringify(registrationInfo)); // 직렬화하여 객체 저장
+    formData.append("stringFoodDto", JSON.stringify(newRegistrationInfo)); // 직렬화하여 객체 저장
     // formData.append("stringFoodDto", JSON.stringify(foodDto)); // 직렬화하여 객체 저장
 
     mutate(formData);

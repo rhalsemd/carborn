@@ -4,8 +4,13 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { composeWithDevTools } from "redux-devtools-extension";
+<<<<<<< HEAD
 import rootReducer from "./modules/rootReducer";
 import { rootSaga } from "./modules/loginModule";
+=======
+import rootReducer from "./modules/root/rootReducer";
+import { rootSaga } from "./modules/root/rootSaga";
+>>>>>>> develop
 
 const sagaMiddleware = createSagaMiddleware();
 
