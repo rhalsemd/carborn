@@ -12,11 +12,13 @@ import UserHome from "./routes/userUseFnc/UserHome";
 import GarageHome from "./routes/company/garage/GarageHome";
 import InspectorHome from "./routes/company/inspector/InspectorHome";
 import InsuranceHome from "./routes/company/insurance/InsuranceHome";
+import VehiclePurchaseDetail from "./routes/userUseFnc/VehiclePurchaseDetail";
 
 const globalStyles = css`
   body {
     font-family: "Open Sans", sans-serif;
     margin: 0;
+    padding: 0 0 0 0;
   }
 `;
 
@@ -32,14 +34,6 @@ function App() {
           <Routes>
             <Route path="/" element={<UserHome />}></Route>
             <Route path="/Login" element={<Login />}></Route>
-            <Route
-              path="/myvehicle/registration"
-              element={<MyVehicleRegistration />}
-            ></Route>
-            <Route
-              path="/vehicle/purchase"
-              element={<VehiclePurchase />}
-            ></Route>
             <Route path="/termsofuse" element={<TermsOfUse />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
 
@@ -48,6 +42,12 @@ function App() {
             <Route path="/inspector" element={<InspectorHome />} />
 
             <Route path="/insurance" element={<InsuranceHome />} />
+            <Route path="/user/car" element={<MyVehicleRegistration />}></Route>
+            <Route path="/user/car/list" element={<VehiclePurchase />}></Route>
+            <Route
+              path="/user/car/:carId"
+              element={<VehiclePurchaseDetail />}
+            ></Route>
           </Routes>
         </Router>
       </QueryClientProvider>

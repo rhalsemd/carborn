@@ -4,11 +4,12 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 import Thumnail from "../../components/MyVehicleRegistrationComponent/leftContents/Thumnail";
 import FormArea from "../../components/MyVehicleRegistrationComponent/rightContents/FormArea";
+import Nav from "../../components/Nav";
 
 const outer = css`
   border: 1px solid black;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
 `;
@@ -41,17 +42,20 @@ function MyVehicleRegistration() {
   });
 
   return (
-    <div css={outer}>
-      <div css={content}>
-        {/* 왼쪽 컨텐츠 */}
-        <Thumnail registrationInfo={registrationInfo} />
-        {/* 오른쪽 컨텐츠*/}
-        <FormArea
-          setRegistrationInfo={setRegistrationInfo}
-          registrationInfo={registrationInfo}
-        />
+    <>
+      <Nav />
+      <div css={outer}>
+        <div css={content}>
+          {/* 왼쪽 컨텐츠 */}
+          <Thumnail registrationInfo={registrationInfo} />
+          {/* 오른쪽 컨텐츠*/}
+          <FormArea
+            setRegistrationInfo={setRegistrationInfo}
+            registrationInfo={registrationInfo}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
