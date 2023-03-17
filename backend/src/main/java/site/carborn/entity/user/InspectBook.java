@@ -20,6 +20,10 @@ public class InspectBook {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CAR_ID")
+    private int carId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INSPECTOR_ID")
     private Inspector inspector;
 
