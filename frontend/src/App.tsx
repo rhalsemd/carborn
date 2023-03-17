@@ -3,13 +3,13 @@ import { css, Global } from '@emotion/react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './routes/Login';
 import MyVehicleRegistration from "./routes/MyVehicleRegistration";
-import Nav from './routes/Nav';
+import Nav from './components/Nav';
 import Signup from './routes/Signup';
 import TermsOfUse from './routes/TermsOfUse';
 import TestHome from './routes/TestHome';
 
 const globalStyles = css`
-  body {
+  body, html {
     width: 100vw;
     background-color: #ffffff !important;
     font-family: 'Open Sans', sans-serif;

@@ -1,10 +1,14 @@
-import { takeLatest } from "redux-saga/effects";
-import { useridCheckSaga, USERID_CHECK } from "../idcheckModule";
-import { loginSaga, LOGIN_TRY } from "../loginModule";
-import { getTermsOfUseSaga, GET_TERMSOFUSE } from "../termsOfUseModule";
+import { all } from "axios";
+import { idCheckSaga } from "../idcheckModule";
+import { loginSaga } from "../loginModule";
+import { getTermsOfUseSaga } from "../termsOfUseModule";
+import { verificationNumberSaga } from "../verificationNumberModule";
 
 export function* rootSaga() {
-  yield takeLatest(LOGIN_TRY, loginSaga);
-  yield takeLatest(GET_TERMSOFUSE, getTermsOfUseSaga);
-  yield takeLatest(USERID_CHECK, useridCheckSaga);
+  yield all([
+    loginSaga(),
+    getTermsOfUseSaga(),
+    idCheckSaga(),
+    verificationNumberSaga(),
+  ])
 }
