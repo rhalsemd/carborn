@@ -19,19 +19,19 @@ public class UserRepairShopController {
     @Autowired
     private UserRepairShopService repairShopService;
 
-    // 정비소 예약 목록
-    @GetMapping("/book/list/{accountId}")
+    // 사용자의 정비소 예약 목록
+    @GetMapping("/book/list/{accountId}")// api/user/repair/book/list/
     public ResponseEntity<List<RepairBook>> getRepairBookList(@PathVariable String accountId) {
         List<RepairBook> repairBookList = repairShopService.repairBookList(accountId);
         return new ResponseEntity<>(repairBookList, HttpStatus.OK);
     }
 
     // 정비소 예약 단일 조회
-//    @GetMapping("/book/{repairId}")
-//    public ResponseEntity<?> getRepairBook(@PathVariable Integer repairId){
-//        RepairBook repairBook = repairShopService.repairBook(repairId);
-//        return new ResponseEntity<>(repairBook, HttpStatus.OK);
-//    }
+    @GetMapping("/book/{repairBookId}")
+    public ResponseEntity<?> getRepairBook(@PathVariable Integer repairBookId){
+        RepairBook repairBook = repairShopService.repairBook(repairBookId);
+        return new ResponseEntity<>(repairBook, HttpStatus.OK);
+    }
 
     // 사용자 정비소 예약
 //    @PostMapping("/book")

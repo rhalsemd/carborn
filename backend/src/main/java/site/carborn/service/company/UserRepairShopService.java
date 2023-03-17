@@ -23,10 +23,8 @@ public class UserRepairShopService {
         return repairBooks;
     }
 
-//    public RepairBook repairBook(Integer id){
-////        Optional<RepairBook> repairBook = repairBookRepository.findByStatusAndId(false, id);
-////        System.out.println(repairBook);
-////        return repairBook.get();
-//        return null;
-//    }
+    public RepairBook repairBook(Integer id){
+        Optional<RepairBook> repairBook = repairBookRepository.findByStatusAndId(false, id);
+        return repairBook.get();
+    }
 }
