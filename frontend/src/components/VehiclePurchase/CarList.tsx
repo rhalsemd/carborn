@@ -54,30 +54,6 @@ const temporaryData = [
     번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.`,
     price: "16,000,000,000￦",
   },
-  {
-    title: "2016 아반떼 | 120,000km",
-    content: `2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다. 사고난적 한
-    번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.`,
-    price: "16,000,000,000￦",
-  },
-  {
-    title: "2016 아반떼 | 120,000km",
-    content: `2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다. 사고난적 한
-    번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.`,
-    price: "16,000,000,000￦",
-  },
-  {
-    title: "2016 아반떼 | 120,000km",
-    content: `2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다. 사고난적 한
-    번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.`,
-    price: "16,000,000,000￦",
-  },
-  {
-    title: "2016 아반떼 | 120,000km",
-    content: `2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다. 사고난적 한
-    번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.`,
-    price: "16,000,000,000￦",
-  },
 ];
 
 interface Page {
@@ -102,66 +78,68 @@ function infinityFnc({ pageParam = 1 }: PageParam) {
   });
 }
 
+let intersectionOptions = {
+  root: document.querySelector("#scrollArea"),
+  rootMargin: "0px",
+  threshold: 0.3,
+};
+
 function CarList() {
   const divRef = useRef<HTMLDivElement | any>({});
 
-  const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery(
+  const { data, fetchNextPage, isRefetching } = useInfiniteQuery(
     "infinity-scroll",
     infinityFnc,
     {
       getNextPageParam: (lastPage, allPages) => {
         return allPages.length + 1;
       },
+      onSuccess: (data) => {
+        return data;
+      },
     }
   );
 
-  const intersection = new IntersectionObserver((e) => {
-    console.log(e, "이");
-  });
+  const intersection = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        observer.disconnect();
+        fetchNextPage();
+      }
+    });
+  }, intersectionOptions);
 
-  if (divRef?.current && data) {
-    intersection.observe(divRef.current[data?.pages.length - 1]);
-  }
+  useEffect(() => {
+    if (divRef?.current && data) {
+      let lastPage = data.pages[0].data.length - 1;
+      intersection.observe(divRef?.current[lastPage]);
+    }
+  }, [data]);
 
   return (
     <div css={rightContent}>
-      {/* <div css={infoBox}>
-        <button className="btn">asdf</button>
-        <img src={carImg} alt=zx"carImg" css={imgStyle} />
+      {data?.pages.map((item) => {
+        return item.data.map((page: Page, index: number) => {
+          return (
+            <div
+              css={infoBox}
+              key={index}
+              ref={(ref) => (divRef.current[index] = ref)}
+            >
+              <button className="btn">{page.id}</button>
+              <img src={carImg} alt="carImg" css={imgStyle} />
+              <div css={textStyle}>
+                <div>
+                  <div>{page.name}</div>
+                  <div style={{ border: "2px solid black", width: "5%" }}></div>
+                </div>
 
-        <div css={textStyle}>
-          <div>
-            <div>2016 아반떼 | 120,000km</div>
-            <div style={{ border: "2px solid black", width: "5%" }}></div>
-          </div>
-
-          <div>
-            2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다. 사고난적 한
-            번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.
-          </div>
-          <div>16,000,000,000￦</div>
-        </div>
-      </div> */}
-      {data?.pages[0].data.map((page: Page, index: number) => {
-        return (
-          <div
-            css={infoBox}
-            key={index}
-            ref={(ref) => (divRef.current[index] = ref)}
-          >
-            <button className="btn">asdf</button>
-            <img src={carImg} alt="carImg" css={imgStyle} />
-            <div css={textStyle}>
-              <div>
                 <div>{page.name}</div>
-                <div style={{ border: "2px solid black", width: "5%" }}></div>
+                <div>{`${page.name}￦`}</div>
               </div>
-
-              <div>{page.name}</div>
-              <div>{`${page.name}￦`}</div>
             </div>
-          </div>
-        );
+          );
+        });
       })}
     </div>
   );
