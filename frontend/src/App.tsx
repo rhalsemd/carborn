@@ -5,19 +5,20 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./routes/Login";
 import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import { QueryClientProvider, QueryClient } from "react-query";
-import Nav from "./routes/Nav";
-import TestHome from "./routes/TestHome";
 import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
-import Signup from './routes/Signup';
-import TermsOfUse from './routes/TermsOfUse';
+import Signup from "./routes/Signup";
+import TermsOfUse from "./routes/TermsOfUse";
+import UserHome from "./routes/userUseFnc/UserHome";
+import GarageHome from "./routes/company/garage/GarageHome";
+import InspectorHome from "./routes/company/inspector/InspectorHome";
+import InsuranceHome from "./routes/company/insurance/InsuranceHome";
+import VehiclePurchaseDetail from "./routes/userUseFnc/VehiclePurchaseDetail";
 
 const globalStyles = css`
   body {
-    width: 100vw;
-    background-color: #ffffff !important;
     font-family: "Open Sans", sans-serif;
-    font-size: 16px;
     margin: 0;
+    padding: 0 0 0 0;
   }
 `;
 
@@ -30,20 +31,23 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Global styles={globalStyles}></Global>
         <Router>
-          <Nav />
           <Routes>
-            <Route path="/" element={<TestHome />}></Route>
+            <Route path="/" element={<UserHome />}></Route>
             <Route path="/Login" element={<Login />}></Route>
+            <Route path="/termsofuse" element={<TermsOfUse />}></Route>
+            <Route path="/signup" element={<Signup />}></Route>
+
+            <Route path="/garage" element={<GarageHome />} />
+
+            <Route path="/inspector" element={<InspectorHome />} />
+
+            <Route path="/insurance" element={<InsuranceHome />} />
+            <Route path="/user/car" element={<MyVehicleRegistration />}></Route>
+            <Route path="/user/car/list" element={<VehiclePurchase />}></Route>
             <Route
-              path="/myvehicle/registration"
-              element={<MyVehicleRegistration />}
+              path="/user/car/:carId"
+              element={<VehiclePurchaseDetail />}
             ></Route>
-            <Route
-              path="/vehicle/purchase"
-              element={<VehiclePurchase />}
-            ></Route>
-          <Route path="/termsofuse" element={<TermsOfUse />}></Route>
-          <Route path="/signup" element={<Signup />}></Route>
           </Routes>
         </Router>
       </QueryClientProvider>
