@@ -3,17 +3,17 @@ import { css } from "@emotion/react";
 
 const leftContent = css`
   border: 1px solid black;
-  width: 15vw;
+  width: 40vw;
   height: 90vh;
-  margin: 0 1vw 0 2vw;
+  margin-right: 6vw;
 `;
 
-function MenuBar() {
+function DetailThumnail() {
   return (
     <div css={leftContent}>
-      <h1>메뉴바</h1>
+      <img src="" alt="Thumnail" width="100%" height="20%" />
     </div>
   );
 }
 
-export default MenuBar;
+export default DetailThumnail;

@@ -4,14 +4,18 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 
+const container = css`
+  height: 45vh;
+  width: 100%;
+  background-color: black;
+  position: relative;
+`;
 const StyleMainNav = styled.div`
-  width: 100vw;
+  width: auto;
   height: 35vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 1px solid black;
 `;
 
 const StyleMainLogo = styled.div`
@@ -55,11 +59,11 @@ const StyleNavLi = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 0.25rem;
+  /* margin-right: 0.25rem; */
 `;
 
 const StyleNavTitle = styled.h1`
-  margin-left: 2.5rem;
+  /* margin-left: 2.5rem; */
 `;
 
 const StyleLinkText = css`
@@ -84,27 +88,7 @@ function Nav() {
     }
   }, [location.pathname]);
 
-  return (
-    <StyleMainNav>
-      <StyleMainLogo>
-        <StyleLogo>로고</StyleLogo>
-        <StyleNav>
-          <StyleNavUl>
-            <Link to="/" css={StyleLinkText}>
-              <StyleNavLi>Home</StyleNavLi>
-            </Link>
-            <Link to="/login" css={StyleLinkText}>
-              <StyleNavLi>Login</StyleNavLi>
-            </Link>
-            <Link to="/myvehicle/registration" css={StyleLinkText}>
-              <StyleNavLi>regist</StyleNavLi>
-            </Link>
-          </StyleNavUl>
-        </StyleNav>
-      </StyleMainLogo>
-      <StyleNavTitle>{title}</StyleNavTitle>
-    </StyleMainNav>
-  );
+  return <div css={container}></div>;
 }
 
 export default Nav;

@@ -1,30 +1,35 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import axios from "axios";
 import { useInfiniteQuery } from "react-query";
-import carImg from "../../assets/car.png";
+import carImg from "../../../assets/car.png";
 import { useEffect, useRef } from "react";
+import { Page } from "../VehiclePurchaseType";
+import { infinityFnc } from "../VehiclePurchaseAPI";
+import { useNavigate } from "react-router-dom";
 
 const rightContent = css`
-  border: 1px solid black;
-  width: 80vw;
+  width: 75vw;
   height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
+  margin-left: 8vw;
   .btn {
     position: absolute;
     right: 5px;
     top: 5px;
-    width: 50px;
-    height: 10px;
+    width: 65px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    border-color: red;
+    font-size: x-small;
   }
 `;
 
 const infoBox = css`
-  border: 1px solid black;
   width: 95%;
+  background-color: beige;
   height: 40%;
   margin-top: 3%;
   display: flex;
@@ -47,37 +52,6 @@ const textStyle = css`
   justify-content: space-around;
 `;
 
-const temporaryData = [
-  {
-    title: "2016 아반떼 | 120,000km",
-    content: `2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다. 사고난적 한
-    번 없고 엔진오일, 타이어 제때 갈아줘서 상태가 좋습니다.`,
-    price: "16,000,000,000￦",
-  },
-];
-
-interface Page {
-  body: string;
-  email: string;
-  id: number;
-  name: string;
-  postId: number;
-}
-
-interface PageParam {
-  pageParam?: number;
-}
-
-function infinityFnc({ pageParam = 1 }: PageParam) {
-  return axios({
-    method: "get",
-    url: `https://jsonplaceholder.typicode.com/comments`,
-    params: {
-      postId: pageParam,
-    },
-  });
-}
-
 let intersectionOptions = {
   root: document.querySelector("#scrollArea"),
   rootMargin: "0px",
@@ -86,8 +60,9 @@ let intersectionOptions = {
 
 function CarList() {
   const divRef = useRef<HTMLDivElement | any>({});
+  const navigation = useNavigate();
 
-  const { data, fetchNextPage, isRefetching } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     "infinity-scroll",
     infinityFnc,
     {
@@ -104,7 +79,9 @@ function CarList() {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         observer.disconnect();
-        fetchNextPage();
+        if (hasNextPage) {
+          fetchNextPage();
+        }
       }
     });
   }, intersectionOptions);
@@ -116,6 +93,10 @@ function CarList() {
     }
   }, [data]);
 
+  const goToDetil: any = (id: number) => {
+    navigation(`/user/car/${id}`);
+  };
+
   return (
     <div css={rightContent}>
       {data?.pages.map((item) => {
@@ -126,12 +107,14 @@ function CarList() {
               key={index}
               ref={(ref) => (divRef.current[index] = ref)}
             >
-              <button className="btn">{page.id}</button>
+              <button className="btn" onClick={() => goToDetil(page.id)}>
+                Detail
+              </button>
               <img src={carImg} alt="carImg" css={imgStyle} />
               <div css={textStyle}>
                 <div>
                   <div>{page.name}</div>
-                  <div style={{ border: "2px solid black", width: "5%" }}></div>
+                  <div style={{ border: "2px solid red", width: "3vw" }}></div>
                 </div>
 
                 <div>{page.name}</div>
