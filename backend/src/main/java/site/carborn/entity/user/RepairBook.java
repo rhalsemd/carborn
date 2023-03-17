@@ -20,6 +20,10 @@ public class RepairBook {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CAR_ID")
+    private int carId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REPAIR_SHOP_ID")
     private RepairShop repairShop;
 
