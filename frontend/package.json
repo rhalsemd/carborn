@@ -5,9 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@mui/material": "^5.11.12",
     "@mui/styled-engine-sc": "^5.11.11",
     "@mui/x-date-pickers": "^6.0.1",
+    "@mui/material": "^5.11.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -23,6 +23,8 @@
     "gsap": "^3.11.4",
     "http-proxy-middleware": "^2.0.6",
     "react": "^18.2.0",
+    "react-datepicker": "^4.10.0",
+    "react-daum-postcode": "^3.1.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.5",
     "react-query": "^3.39.3",
@@ -63,6 +65,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.10.6",
-    "@types/gsap": "^3.0.0"
+    "@types/gsap": "^3.0.0",
+    "@types/react-datepicker": "^4.10.0"
   }
 }

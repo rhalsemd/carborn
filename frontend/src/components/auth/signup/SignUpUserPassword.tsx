@@ -1,5 +1,4 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
 import { StyleSignUpInputDiv } from "../../../routes/Signup";
 import { SignupFormData } from './SignUpButton';
 
@@ -9,9 +8,6 @@ export interface SignUpPasswordProps {
 }
 
 const SignUpUserPassword = ({setSignupUserFormData, signupUserFormData}:SignUpPasswordProps) => {
-  // dispatch, selector
-  // const result = useSelector((state) => state) 
-  // console.log(result)
 
   // 입력되는거 formdata에 넘겨주기
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +42,7 @@ const SignUpUserPassword = ({setSignupUserFormData, signupUserFormData}:SignUpPa
       <input
         type="password"
         id="userpassword"
+        name='userpassword'
         placeholder="비밀번호를 입력해주세요"
         autoComplete="off"
         required

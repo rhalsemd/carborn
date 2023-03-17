@@ -19,7 +19,7 @@ const LoginID = ({ setinputObj }: LoginProps) => {
       <span>아이디</span>
       <input
         type="text"
-        id="userId"
+        id="loginid"
         autoComplete="off"
         placeholder="아이디"
         onChange={handleChange}

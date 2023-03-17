@@ -18,6 +18,11 @@ import SignUpUserPassword from "../components/auth/signup/SignUpUserPassword";
 import SignUpCompanyPassword from "../components/auth/signup/SignUpCompanyPassword";
 import SignUpUserPasswordCheck from "../components/auth/signup/SignUpUserPasswordCheck";
 import SignUpCompanyPasswordCheck from "../components/auth/signup/SignUpCompanyPasswordCheck";
+import SignUpUserBirth from "../components/auth/signup/SignUpUserBirth";
+import SignUpCompanyBusinessNumber from "../components/auth/signup/SignUpCompanyBusinessNumber";
+import SignUpUserAddress from "../components/auth/signup/SignUpUserAddress";
+import SignUpCompanyAddress from "../components/auth/signup/SignUpCompanyAddress";
+import SignUpUserPhoneNumber from "../components/auth/signup/SignUpUserPhoneNumber";
 
 // CSS
 export const StyleSignUpInputDiv = styled.div`
@@ -37,10 +42,10 @@ const Signup = () => {
     id: "",
     password: "",
     passwordcheck: false,
-    birth: "",
+    identifynumber: "",
     address: "",
     phonenumber: "",
-    FileList: [],
+    FileList: undefined,
   };
 
   const [signupUserFormData, setSignupUserFormData] = useState<SignupFormData>(
@@ -89,6 +94,18 @@ const Signup = () => {
               <SignUpUserPasswordCheck
                 signupUserFormData={signupUserFormData}
               />
+              <SignUpUserBirth
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserAddress
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserPhoneNumber
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
             </div>
           ) : (
             <div>
@@ -109,6 +126,14 @@ const Signup = () => {
                 setSignupCompanyFormData={setSignupCompanyFormData}
               />
               <SignUpCompanyPasswordCheck
+                signupCompanyFormData={signupCompanyFormData}
+              />
+              <SignUpCompanyBusinessNumber
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                signupCompanyFormData={signupCompanyFormData}
+              />
+              <SignUpCompanyAddress
+                setSignupCompanyFormData={setSignupCompanyFormData}
                 signupCompanyFormData={signupCompanyFormData}
               />
             </div>
