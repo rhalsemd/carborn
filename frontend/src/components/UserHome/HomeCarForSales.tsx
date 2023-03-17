@@ -10,7 +10,7 @@ interface 임시type {
 
 const container = css`
   height: 70vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;

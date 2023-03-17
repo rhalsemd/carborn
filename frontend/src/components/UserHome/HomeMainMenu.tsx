@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 
 const container = css`
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   border: 1px solid black;
   flex-direction: column;
@@ -43,7 +43,7 @@ const buttons = css`
   .rectangleBtn {
     height: 50vh;
     width: 20vw;
-    margin: 0 2vw 0 2vw;
+    margin: 0 20px 0 20px;
     padding: 0;
     /* flex-direction: column; */
   }
@@ -55,7 +55,7 @@ const buttons = css`
   .squareBtn {
     height: 28vh;
     width: 20vw;
-    margin: 0 2vw 0 2vw;
+    margin: 0 20px 0 20px;
   }
 `;
 
@@ -106,30 +106,28 @@ export default function HomeMainMenu() {
 
   return (
     <div css={container}>
-      <div>
-        <div className="menu">
-          <h2>Menu</h2>
-          <hr />
+      <div className="menu">
+        <h2>Menu</h2>
+        <hr />
+      </div>
+      <div css={buttons}>
+        <div className="rectangleBtns">
+          {rectangles.map((rect: btns, idx: number): any => (
+            <button className="rectangleBtn" key={idx}>
+              <div>{rect.icon}</div>
+              <div>{rect.name}</div>
+              <div>{rect.description}</div>
+            </button>
+          ))}
         </div>
-        <div css={buttons}>
-          <div className="rectangleBtns">
-            {rectangles.map((rect: btns, idx: number): any => (
-              <button className="rectangleBtn" key={idx}>
-                <div>{rect.icon}</div>
-                <div>{rect.name}</div>
-                <div>{rect.description}</div>
-              </button>
-            ))}
-          </div>
-          <div className="squareBtns">
-            {squares.map((rect: btns, idx: number): any => (
-              <button className="squareBtn" key={idx}>
-                <p>{rect.icon}</p>
-                <p>{rect.name}</p>
-                <p>{rect.description}</p>
-              </button>
-            ))}
-          </div>
+        <div className="squareBtns">
+          {squares.map((rect: btns, idx: number): any => (
+            <button className="squareBtn" key={idx}>
+              <p>{rect.icon}</p>
+              <p>{rect.name}</p>
+              <p>{rect.description}</p>
+            </button>
+          ))}
         </div>
       </div>
     </div>

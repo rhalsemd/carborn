@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 
 const StyleMainNav = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 35vh;
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@ const StyleMainNav = styled.div`
 `;
 
 const StyleMainLogo = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 13.5vh;
   display: flex;
   justify-content: space-between;
@@ -75,19 +75,12 @@ function Nav() {
 
   // API 요청해서 받아오거나, json 파일에 저장해서 바로 임포트 해야할듯
   useEffect(() => {
-<<<<<<< HEAD
     if (location.pathname === "/") {
       setTitle("Home");
     } else if (location.pathname === "/login") {
       setTitle("User Login");
-=======
-    if (location.pathname === '/') {
-      setTitle('Home');
-    } else if (location.pathname === '/login') {
-      setTitle('User Login');
-    } else if (location.pathname === '/myvehicle/registration') {
-      setTitle('Car Regitration')
->>>>>>> develop
+    } else if (location.pathname === "/myvehicle/registration") {
+      setTitle("Car Regitration");
     }
   }, [location.pathname]);
 
@@ -97,30 +90,15 @@ function Nav() {
         <StyleLogo>로고</StyleLogo>
         <StyleNav>
           <StyleNavUl>
-<<<<<<< HEAD
             <Link to="/" css={StyleLinkText}>
               <StyleNavLi>Home</StyleNavLi>
             </Link>
             <Link to="/login" css={StyleLinkText}>
               <StyleNavLi>Login</StyleNavLi>
             </Link>
-=======
-              <Link to="/" css={StyleLinkText}>
-                <StyleNavLi>
-                  Home
-                </StyleNavLi>
-              </Link>
-              <Link to="/login" css={StyleLinkText}>
-                <StyleNavLi>
-                  Login
-                </StyleNavLi>
-              </Link>
-              <Link to="/myvehicle/registration" css={StyleLinkText}>
-                <StyleNavLi>
-                  regist
-                </StyleNavLi>
-              </Link>
->>>>>>> develop
+            <Link to="/myvehicle/registration" css={StyleLinkText}>
+              <StyleNavLi>regist</StyleNavLi>
+            </Link>
           </StyleNavUl>
         </StyleNav>
       </StyleMainLogo>
