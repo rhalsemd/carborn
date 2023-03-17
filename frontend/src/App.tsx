@@ -7,12 +7,12 @@ import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import { QueryClientProvider, QueryClient } from "react-query";
 import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
 import Signup from "./routes/Signup";
-import TermsOfUse from "./routes/TermsOfUse";
 import UserHome from "./routes/userUseFnc/UserHome";
 import GarageHome from "./routes/company/garage/GarageHome";
 import InspectorHome from "./routes/company/inspector/InspectorHome";
 import InsuranceHome from "./routes/company/insurance/InsuranceHome";
 import VehiclePurchaseDetail from "./routes/userUseFnc/VehiclePurchaseDetail";
+import TermsOfUse from "./routes/TermsOfUse";
 
 const globalStyles = css`
   body {

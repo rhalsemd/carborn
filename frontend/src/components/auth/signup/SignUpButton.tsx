@@ -5,10 +5,10 @@ export type SignupFormData = {
   id: string;
   password: string;
   passwordcheck: boolean;
-  birth: string;
+  identifynumber: string;
   address: string;
   phonenumber: string;
-  FileList: any[];
+  FileList?: any[];
 };
 
 export type SignUpButtonProps = {
@@ -32,7 +32,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
         id: "",
         password: "",
         passwordcheck: false,
-        birth: "",
+        identifynumber: "",
         address: "",
         phonenumber: "",
         FileList: [],
@@ -44,7 +44,7 @@ const SignUpButton = ({setSelectedButton, selectedButton, setSignupUserFormData,
         id: "",
         password: "",
         passwordcheck: false,
-        birth: "",
+        identifynumber: "",
         address: "",
         phonenumber: "",
         FileList: [],

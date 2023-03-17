@@ -1,4 +1,4 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { companyidCheckApi, useridCheckApi } from "../lib/idCheckApi";
 
 // 액션 타입 이름
@@ -25,8 +25,8 @@ const initialState = {
   idcheck: false,
 };
 
-//사가
-export function* useridCheckSaga(
+// 유저 아이디 중복 체크
+export function* useridCheckFnc(
   action: ReturnType<typeof useridCheck>
 ): Generator<any, any, any> {
   try {
@@ -49,7 +49,8 @@ export function* useridCheckSaga(
   }
 }
 
-export function* companyidCheckSaga(
+// 회사 아이디 중복 체크
+export function* companyidCheckFnc(
   action: ReturnType<typeof companyidCheck>
 ): Generator<any, any, any> {
   try {
@@ -69,6 +70,12 @@ export function* companyidCheckSaga(
   } catch (error) {
     console.log(error);
   }
+}
+
+//사가
+export function* idCheckSaga() {
+  yield takeLatest(USERID_CHECK, useridCheckFnc)
+  yield takeLatest(COMPANYID_CHECK, companyidCheckFnc)
 }
 
 export function idCheckReducer(

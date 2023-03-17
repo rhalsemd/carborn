@@ -27,11 +27,12 @@ const SignUpUserPasswordCheck = ({signupUserFormData}:SignUpUserPasswordCheckPro
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="userid">비밀번호 확인</label>{isValid ? <span>비밀번호가 일치합니다.</span> : null}
+      <label htmlFor="userpasswordcheck">비밀번호 확인</label>{isValid ? <span>비밀번호가 일치합니다.</span> : null}
       <br />
       <input
         type="password"
-        id="userid"
+        name="userpasswordcheck"
+        id="userpasswordcheck"
         placeholder="아이디를 입력해주세요(ex. ssafy123)"
         autoComplete="off"
         required
