@@ -10,6 +10,7 @@ import site.carborn.repository.user.RepairBookRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserRepairShopService {
@@ -17,12 +18,15 @@ public class UserRepairShopService {
     private RepairBookRepository repairBookRepository;
 
     public List<RepairBook> repairBookList(String accountId) {
-        List<RepairBook> repairBook = repairBookRepository.findByStatusAndAccount_IdOrderByIdDesc(false, accountId);
+        List<RepairBook> repairBooks = repairBookRepository.findByStatusAndAccount_IdOrderByIdDesc(false, accountId);
 //        System.out.println("repairBook는"+repairBook);
-        return repairBook;
+        return repairBooks;
     }
 
-    public RepairBook repairBook(Integer id){
-        return repairBookRepository.findById(id).get();
-    }
+//    public RepairBook repairBook(Integer id){
+////        Optional<RepairBook> repairBook = repairBookRepository.findByStatusAndId(false, id);
+////        System.out.println(repairBook);
+////        return repairBook.get();
+//        return null;
+//    }
 }

@@ -1,16 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "typeRoots": [
-      "node_modules/@types",
-      "node_modules"
-    ],
-    "types": [
-      "react",
-      "react-dom",
-      "react-hook-form",
-    ],
+    "typeRoots": ["node_modules/@types", "node_modules", "src/@types"],
+    "types": ["react", "react-dom", "react-hook-form"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -25,6 +18,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", "tsconfig.json"],
   "moduleResolution": "node"
 }

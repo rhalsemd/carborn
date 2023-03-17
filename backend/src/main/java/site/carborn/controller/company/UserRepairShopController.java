@@ -27,11 +27,11 @@ public class UserRepairShopController {
     }
 
     // 정비소 예약 단일 조회
-    @GetMapping("/book/{repairId}")
-    public ResponseEntity<?> getRepairBook(@PathVariable Integer repairId){
-        RepairBook repairBook = repairShopService.repairBook(repairId);
-        return new ResponseEntity<>(repairBook, HttpStatus.OK);
-    }
+//    @GetMapping("/book/{repairId}")
+//    public ResponseEntity<?> getRepairBook(@PathVariable Integer repairId){
+//        RepairBook repairBook = repairShopService.repairBook(repairId);
+//        return new ResponseEntity<>(repairBook, HttpStatus.OK);
+//    }
 
     // 사용자 정비소 예약
 //    @PostMapping("/book")
