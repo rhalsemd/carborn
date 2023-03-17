@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.carborn.entity.car.Car;
 import site.carborn.entity.company.RepairShop;
 import site.carborn.entity.account.Account;
 
@@ -21,7 +22,7 @@ public class RepairBook {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAR_ID")
-    private int carId;
+    private Car car;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REPAIR_SHOP_ID")
