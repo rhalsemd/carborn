@@ -17,7 +17,7 @@ public class InspectResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INSPECT_BOOK_ID")
     private InspectBook inspectBook;
 
