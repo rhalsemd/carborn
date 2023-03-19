@@ -31,6 +31,9 @@ public class CarInsuranceHistory {
 
     private String content;
 
+    @Column(length = 200)
+    private String insuranceImgNm;
+
     private LocalDateTime insuranceDt;
 
     private LocalDateTime regDt;
