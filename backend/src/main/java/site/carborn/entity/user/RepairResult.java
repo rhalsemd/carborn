@@ -32,7 +32,7 @@ public class RepairResult {
     private String afterImgNm;
 
     @Column(length = 200)
-    private String receiptImg;
+    private String receiptImgNm;
 
     private LocalDateTime repairDt;
 
