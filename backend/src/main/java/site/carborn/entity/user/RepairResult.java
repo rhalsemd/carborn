@@ -17,7 +17,7 @@ public class RepairResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REPAIR_BOOK_ID")
     private RepairBook repairBook;
 
@@ -32,7 +32,7 @@ public class RepairResult {
     private String afterImgNm;
 
     @Column(length = 200)
-    private String receiptImg;
+    private String receiptImgNm;
 
     private LocalDateTime repairDt;
 
