@@ -1,83 +1,102 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import { companyverificationNumberApi, userverificationNumberApi } from "../lib/userverificationNumberApi";
+import { call, put } from "redux-saga/effects";
+import {
+  companyverificationNumberApi,
+  userverificationNumberApi,
+} from "../lib/userverificationNumberApi";
 
 type State = {
-  phonenum: string
-}
+  certifiedNumber: string;
+};
 
 // 액션 타입 이름
-export const USER_VERIFICATION_CHECK = "USER_VERIFICATION_CHECK";
-export const USER_VERIFICATION_CHECK_SUCCESS = "USER_VERIFICATION_CHECK_SUCCESS";
-export const USER_VERIFICATION_CHECK_FAILURE = "USER_VERIFICATION_CHECK_FAILURE";
-export const COMPANY_VERIFICATION_CHECK = "COMPANY_VERIFICATION_CHECK";
-export const COMPANY_VERIFICATION_CHECK_SUCCESS = "COMPANY_VERIFICATION_CHECK_SUCCESS";
-export const COMPANY_VERIFICATION_CHECK_FAILURE = "COMPANY_VERIFICATION_CHECK_FAILURE";
+export const USER_VERIFICATION_CHECK_REQUEST = "USER_VERIFICATION_CHECK_REQUEST";
+export const USER_VERIFICATION_CHECK_SUCCESS =
+  "USER_VERIFICATION_CHECK_SUCCESS";
+export const USER_VERIFICATION_CHECK_FAILURE =
+  "USER_VERIFICATION_CHECK_FAILURE";
+
+export const COMPANY_VERIFICATION_CHECK_REQUEST = "COMPANY_VERIFICATION_CHECK_REQUEST";
+export const COMPANY_VERIFICATION_CHECK_SUCCESS =
+  "COMPANY_VERIFICATION_CHECK_SUCCESS";
+export const COMPANY_VERIFICATION_CHECK_FAILURE =
+  "COMPANY_VERIFICATION_CHECK_FAILURE";
 
 // 액션 생성 함수
-export const userverificationNumber = (phonenum: string) => ({
-  type: USER_VERIFICATION_CHECK,
-  payload: phonenum,
+export const userverificationNumber = (phoneNumber:string) => ({
+  type: USER_VERIFICATION_CHECK_REQUEST,
+  payload: phoneNumber
 });
 
-export const companyverificationNumber = (phonenum: string) => ({
-  type: COMPANY_VERIFICATION_CHECK,
-  payload: phonenum,
+export const userverificationNumberSuccess = (certificatedNumber:string) => ({
+  type: USER_VERIFICATION_CHECK_SUCCESS,
+  payload: certificatedNumber,
 });
+
+export const userverificationNumberFailure = (error:any) => ({
+  type: USER_VERIFICATION_CHECK_FAILURE,
+  payload: error
+})
+
+export const companyverificationNumber = (phoneNumber:string) => ({
+  type: COMPANY_VERIFICATION_CHECK_REQUEST,
+  payload: phoneNumber
+});
+
+export const companyverificationNumberSuccess = (certificatedNumber:string) => ({
+  type: USER_VERIFICATION_CHECK_SUCCESS,
+  payload: certificatedNumber,
+});
+
+export const companyverificationNumberFailure = (error:any) => ({
+  type: USER_VERIFICATION_CHECK_FAILURE,
+  payload: error
+})
 
 // 초기값
-const initialState:State = {
-  phonenum: ''
-}
+const initialState: State = {
+  certifiedNumber: "",
+};
 
+// 인증번호 관련 사가
 // 유저 휴대전화 인증번호
-export function* userverificationNumberFnc(
+export function* userverificationNumberSaga(
   action: ReturnType<typeof userverificationNumber>
-): Generator<any, any, any>{
+): Generator<any, any, any> {
   try {
-    const response = yield call(userverificationNumberApi, action.payload)
-    const { authenticatednumber } = response;
-    yield put({
-      type: USER_VERIFICATION_CHECK_SUCCESS,
-      payload: authenticatednumber
-    })
+    const response = yield call(userverificationNumberApi, action.payload);
+    yield put({ type: USER_VERIFICATION_CHECK_SUCCESS, payload: response });
   } catch (error) {
     console.log(error);
   }
 }
 
 // 회사 휴대전화 인증번호
-export function* companyverificationNumberFnc(
+export function* companyverificationNumberSaga(
   action: ReturnType<typeof companyverificationNumber>
-): Generator<any, any, any>{
+): Generator<any, any, any> {
   try {
-    const response = yield call(companyverificationNumberApi, action.payload)
-    const { authenticatednumber } = response;
+    const response = yield call(companyverificationNumberApi, action.payload);
     yield put({
       type: COMPANY_VERIFICATION_CHECK_SUCCESS,
-      payload: authenticatednumber
-    })
+      payload: response,
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
-// 인증번호 관련 사가
-export function* verificationNumberSaga() {
-  yield takeLatest(USER_VERIFICATION_CHECK, userverificationNumberFnc)
-  yield takeLatest(COMPANY_VERIFICATION_CHECK, companyverificationNumberFnc)
-}
 
 //리듀서
 export function verificationNumberReducer(
   state = initialState,
-  action: { type: string; payload: object }
+  action: { type: string; payload: any }
 ) {
-  switch(action.type) {
+  switch (action.type) {
     case USER_VERIFICATION_CHECK_SUCCESS:
-      return {...state, ...action.payload };
+      return { ...state, certificatedNum: action.payload.phoneNumber.slice(3, 9) };
     case COMPANY_VERIFICATION_CHECK_SUCCESS:
-      return {...state, ...action.payload };
+      return { ...state, certificatedNum: action.payload.phoneNumber.slice(3, 9) };
     default:
-      return state
+      return state;
   }
 }

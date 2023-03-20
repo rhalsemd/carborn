@@ -18,11 +18,11 @@ public class CarInsuranceHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INSURANCE_COM_ID")
     private InsuranceCompany insuranceCompany;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CAR_ID")
     private Car car;
 
@@ -30,6 +30,9 @@ public class CarInsuranceHistory {
     private String category;
 
     private String content;
+
+    @Column(length = 200)
+    private String insuranceImgNm;
 
     private LocalDateTime insuranceDt;
 

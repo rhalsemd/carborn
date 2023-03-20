@@ -13,6 +13,13 @@ import InspectorHome from "./routes/company/inspector/InspectorHome";
 import InsuranceHome from "./routes/company/insurance/InsuranceHome";
 import VehiclePurchaseDetail from "./routes/userUseFnc/VehiclePurchaseDetail";
 import TermsOfUse from "./routes/TermsOfUse";
+import Searchid from "./routes/SearchID";
+import SearchidComplete from "./routes/SearchidComplete";
+import PasswordResetCheck from "./routes/PasswordResetCheck";
+import PasswordReset from "./routes/PasswordReset";
+import PasswordComplete from "./routes/PasswordComplete";
+import BookList from "./routes/company/garage/BookList";
+import ViewHistory from "./routes/company/garage/ViewHistory";
 
 const globalStyles = css`
   body {
@@ -36,14 +43,34 @@ function App() {
             <Route path="/Login" element={<Login />}></Route>
             <Route path="/termsofuse" element={<TermsOfUse />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
+            <Route path="/searchid" element={<Searchid />}></Route>
+            <Route
+              path="/searchid/searchidcomplete"
+              element={<SearchidComplete />}
+            ></Route>
+            <Route
+              path="/passwordresetcheck"
+              element={<PasswordResetCheck />}
+            ></Route>
+            <Route
+              path="/passwordresetcheck/passwordreset"
+              element={<PasswordReset />}
+            ></Route>
+            <Route
+              path="/passwordresetcheck/passwordreset/passwordcomplete"
+              element={<PasswordComplete />}
+            ></Route>
 
             <Route path="/garage" element={<GarageHome />} />
+            <Route path="/garage/reserve" element={<BookList />} />
+            <Route path="/garage/history" element={<ViewHistory />} />
 
             <Route path="/inspector" element={<InspectorHome />} />
 
             <Route path="/insurance" element={<InsuranceHome />} />
-            <Route path="/user/car" element={<MyVehicleRegistration />}></Route>
-            <Route path="/user/car/list" element={<VehiclePurchase />}></Route>
+
+            <Route path="/user/car" element={<MyVehicleRegistration />} />
+            <Route path="/user/car/list" element={<VehiclePurchase />} />
             <Route
               path="/user/car/:carId"
               element={<VehiclePurchaseDetail />}

@@ -1,28 +1,35 @@
-import axios from "axios"
-import { API_URL, applicationjson, ContentType } from "./loginApi"
+import axios from "axios";
+import { API_URL, applicationjson, ContentType } from "./loginApi";
 
-export const userverificationNumberApi = (phonenum:string) => {
-  return axios({
-    method: "POST",
-    url: `${API_URL}/authenticatednumber`,
-    headers: {
-      [ContentType]: applicationjson,
-    },
-    data: {
-      phonenumber: phonenum
-    }
-  }).then((response) => response.data)
+export const userverificationNumberApi = async (phoneNumber: string) => {
+  try {
+    const response = await axios({
+      method:'POST',
+      url:`${API_URL}/authenticatednumbers`,
+      headers: {
+        [ContentType]: applicationjson,
+      },
+      data: {phoneNumber}
+    })
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const companyverificationNumberApi = (phonenum:string) => {
-  return axios({
-    method: "POST",
-    url: `${API_URL}/authenticatednumber`,
-    headers: {
-      [ContentType]: applicationjson,
-    },
-    data : {
-      phonenumber: phonenum
-    }
-  }).then((response) => response.data)
+export const companyverificationNumberApi = async (phoneNumber: string) => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${API_URL}/authenticatednumbers`,
+      headers: {
+        [ContentType]: applicationjson,
+      },
+      data: {phoneNumber}
+    })
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+
 };

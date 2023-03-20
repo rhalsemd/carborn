@@ -5,12 +5,12 @@ export const useridCheckApi = (id: string): Promise<any> => {
   return axios({
     method: "GET",
     url: `${API_URL}/useridcheck`,
-  }).then((response) => response.data)
+  }).then((response) => response.data.success )
 };
 
 export const companyidCheckApi = (id: string): Promise<any> => {
   return axios({
     method: "GET",
     url: `${API_URL}/companyidcheck`,
-  }).then((response) => response.data)
+  }).then((response) => response.data.success )
 };

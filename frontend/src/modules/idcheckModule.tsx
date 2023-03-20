@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 import { companyidCheckApi, useridCheckApi } from "../lib/idCheckApi";
 
 // 액션 타입 이름
@@ -8,6 +8,10 @@ export const USERID_CHECK_FAILURE = "USERID_CHECK_FAILURE";
 export const COMPANYID_CHECK = "COMPANYID_CHECK";
 export const COMPANYID_CHECK_SUCCESS = "COMPANYID_CHECK_SUCCESS";
 export const COMPANYID_CHECK_FAILURE = "COMPANYID_CHECK_FAILURE";
+
+// 리듀서 초기화 하는 함수
+export const USERID_CHECK_RESET = 'USERID_CHECK_RESET';
+export const COMPANYID_CHECK_RESET = 'COMPANYID_CHECK_RESET';
 
 // 액션 생성 함수
 export const useridCheck = (id: string) => ({
@@ -20,20 +24,28 @@ export const companyidCheck = (id: string) => ({
   payload: { id },
 });
 
+export const useridCheckReset  = () => ({
+  type: USERID_CHECK_RESET,
+});
+
+export const companyidCheckReset = () => ({
+  type: COMPANYID_CHECK_RESET,
+});
+
 // 초기값
 const initialState = {
   idcheck: false,
 };
 
+//사가
 // 유저 아이디 중복 체크
-export function* useridCheckFnc(
+export function* useridCheckSaga(
   action: ReturnType<typeof useridCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call<any>(useridCheckApi, action.payload);
-    const success = response.success;
+    const response = yield call<any>(useridCheckApi, action.payload.id);
     
-    if (!success) {
+    if (response === false) {
       yield put({ 
         type: USERID_CHECK_FAILURE, 
         payload: { ...action.payload, success: false }
@@ -50,13 +62,13 @@ export function* useridCheckFnc(
 }
 
 // 회사 아이디 중복 체크
-export function* companyidCheckFnc(
+export function* companyidCheckSaga(
   action: ReturnType<typeof companyidCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call<any>(companyidCheckApi, action.payload);
-    const success = response.success;
-    if (!success) {
+    const response = yield call<any>(companyidCheckApi, action.payload.id);
+    
+    if (response === false) {
       yield put({
         type: COMPANYID_CHECK_FAILURE,
         payload: { ...action.payload, success: false }
@@ -72,11 +84,6 @@ export function* companyidCheckFnc(
   }
 }
 
-//사가
-export function* idCheckSaga() {
-  yield takeLatest(USERID_CHECK, useridCheckFnc)
-  yield takeLatest(COMPANYID_CHECK, companyidCheckFnc)
-}
 
 export function idCheckReducer(
   state = initialState,
@@ -88,9 +95,13 @@ export function idCheckReducer(
     case USERID_CHECK_FAILURE:
       return { ...state, useridcheck: action.payload.success };
     case COMPANYID_CHECK_SUCCESS:
-      return { ...state, useridcheck: action.payload.success };
+      return { ...state, companyidcheck: action.payload.success };
     case COMPANYID_CHECK_FAILURE:
-      return { ...state, useridcheck: action.payload.success };
+      return { ...state, companyidcheck: action.payload.success };
+    case USERID_CHECK_RESET:
+      return { ...state, useridcheck: null};
+    case COMPANYID_CHECK_RESET:
+      return { ...state, companyidcheck: null};
     default:
       return state;
   }
