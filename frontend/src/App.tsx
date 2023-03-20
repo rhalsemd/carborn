@@ -18,6 +18,7 @@ import SearchidComplete from "./routes/SearchidComplete";
 import PasswordResetCheck from "./routes/PasswordResetCheck";
 import PasswordReset from "./routes/PasswordReset";
 import PasswordComplete from "./routes/PasswordComplete";
+import BookList from "./routes/company/garage/BookList";
 
 const globalStyles = css`
   body {
@@ -60,12 +61,14 @@ function App() {
             ></Route>
 
             <Route path="/garage" element={<GarageHome />} />
+            <Route path="/garage/reserve" element={<BookList />} />
 
             <Route path="/inspector" element={<InspectorHome />} />
 
             <Route path="/insurance" element={<InsuranceHome />} />
-            <Route path="/user/car" element={<MyVehicleRegistration />}></Route>
-            <Route path="/user/car/list" element={<VehiclePurchase />}></Route>
+
+            <Route path="/user/car" element={<MyVehicleRegistration />} />
+            <Route path="/user/car/list" element={<VehiclePurchase />} />
             <Route
               path="/user/car/:carId"
               element={<VehiclePurchaseDetail />}
