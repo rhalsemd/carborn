@@ -21,9 +21,6 @@ public class RepairShop {
     private Account account;
 
     @Column(length = 200)
-    private String name;
-
-    @Column(length = 200)
     private String address;
 
     private double lat;
