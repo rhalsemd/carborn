@@ -54,7 +54,7 @@ const SearchIDVerify = ({ setinputObj, inputObj }:SearchIDVerifyProps) => {
     <StyleLoginInputDiv>
       <span>전화번호</span>
       <input
-        type="text"
+        type="number"
         id="SearchName"
         autoComplete="off"
         placeholder="SearchName"

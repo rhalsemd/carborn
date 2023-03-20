@@ -55,10 +55,9 @@ const SignUpCompanyPhoneNumber = ({
   return (
     <StyleSignUpInputDiv>
       <label htmlFor="phoneNumber">휴대폰 번호</label>
-      {signupCompanyFormData.isVarify ? <span>오 이걸 해결해?</span> : null}
       <br />
       <input
-        type="text"
+        type="number"
         id="phoneNumber"
         value={phoneNumber}
         autoComplete="off"

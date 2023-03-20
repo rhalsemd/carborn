@@ -49,9 +49,10 @@ const SignUpUserPhoneNumber = ({setSignupUserFormData, signupUserFormData}: Sign
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="phoneNumber">휴대폰 번호</label>{signupUserFormData.isVarify ? <span>오 이걸 해결해?</span>: null}<br />
+      <label htmlFor="phoneNumber">휴대폰 번호</label>
+      <br />
       <input
-        type="text"
+        type="number"
         id="phoneNumber"
         autoComplete="off"
         value={phoneNumber}
