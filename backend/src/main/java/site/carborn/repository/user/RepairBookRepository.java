@@ -16,6 +16,7 @@ public interface RepairBookRepository extends JpaRepository<RepairBook, Integer>
     //예약 단일 조회
     Optional<RepairBook> findByStatusAndId(Boolean status, Integer id);
 
-    //    @Query(value = "SELECT * FROM MWS_REPAIR_BOOK WHERE STATUS = 1 ORDER BY ID DESC", nativeQuery = true)
-//    RepairBook loadBookList();
+    //예약 입력(예약신청)
+
+
 }
