@@ -6,5 +6,5 @@ import site.carborn.entity.account.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-
+    public Account findById(String accountId);
 }

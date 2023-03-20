@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "MWS_ACCOUNT")
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString(exclude = "pwd")
 public class Account {
     @Id
     @Column(length = 50)
