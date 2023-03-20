@@ -93,7 +93,12 @@ const container = css`
 export default function GarageHome() {
   const navigate = useNavigate();
   const bookList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     navigate("/garage/reserve");
+  };
+  const HistoryList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate("/garage/history");
   };
 
   return (
@@ -116,7 +121,7 @@ export default function GarageHome() {
               조회해보세요
             </div>
           </button>
-          <button className="btn">
+          <button className="btn" onClick={HistoryList}>
             <div>
               <img src={register} />
             </div>

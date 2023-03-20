@@ -19,6 +19,7 @@ import PasswordResetCheck from "./routes/PasswordResetCheck";
 import PasswordReset from "./routes/PasswordReset";
 import PasswordComplete from "./routes/PasswordComplete";
 import BookList from "./routes/company/garage/BookList";
+import ViewHistory from "./routes/company/garage/ViewHistory";
 
 const globalStyles = css`
   body {
@@ -62,6 +63,7 @@ function App() {
 
             <Route path="/garage" element={<GarageHome />} />
             <Route path="/garage/reserve" element={<BookList />} />
+            <Route path="/garage/history" element={<ViewHistory />} />
 
             <Route path="/inspector" element={<InspectorHome />} />
 
