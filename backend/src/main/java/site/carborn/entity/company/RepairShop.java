@@ -24,9 +24,6 @@ public class RepairShop {
 //    @JsonIgnore // 해당 클래스의 모든 속성 지정
     private Account account;
 
-//    @Column(length = 200)
-//    private String name;
-
     @Column(length = 200)
     private String address;
 
