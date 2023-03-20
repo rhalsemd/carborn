@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginTry, User } from "../modules/loginModule";
 import { useSelector } from "react-redux";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -62,29 +63,41 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const Obj = useSelector((state: any) => state);
-  const { success } = Obj.login.users;
 
   const [inputObj, setinputObj] = useState<InputObj>({
     userid: "",
     userpassword: "",
     success: false,
   });
+  const token = sessionStorage.getItem("login-token");
+
+  const [captchaValue, setCaptchaValue] = useState<string>("");
 
   const handleLogin = () => {
     const user: User = {
       userid: inputObj.userid,
       userpassword: inputObj.userpassword,
-      status: 404,
-      success: false,
+      captcha : captchaValue
     };
-    dispatch(loginTry(user));
+
+    // 리캡쳐가 체크가 되었을때, 액션 실행
+    if (captchaValue) {
+      dispatch(loginTry(user));
+    } else {
+      console.log("Captcha value is not set");
+    }
+  };
+
+  // 리캡챠 콜백 함수
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value ?? "");
   };
 
   useEffect(() => {
-    if (success) {
+    if (token) {
       navigate("/");
     }
-  }, [success, navigate]);
+  }, [token, navigate]);
 
   return (
     <StyleLoginSignUpDiv>
@@ -94,13 +107,16 @@ const Login = () => {
         </StyleLoginSignUpTitle>
         <LoginID setinputObj={setinputObj} />
         <LoginPassword setinputObj={setinputObj} />
-        <StyleLoginSignUpBtn onClick={handleLogin}>
-          로그인 하기
-        </StyleLoginSignUpBtn>
+        <ReCAPTCHA
+          sitekey="6LdijBMlAAAAACu0OtiHgCtKlGE58nkcRFXPxSLk"
+          onChange={handleCaptchaChange}
+          style={{ marginBottom: "1rem" }}
+        />
+        <StyleLoginSignUpBtn onClick={handleLogin}>로그인 하기</StyleLoginSignUpBtn>
         <StyleLoginAnotherLink>
           <Link to="/termsofuse">회원가입</Link> /
-          <Link to="/searchuserid"> 아이디 찾기</Link> /
-          <Link to="/passwordreset"> 비밀번호 재설정</Link>
+          <Link to="/searchid"> 아이디 찾기</Link> /
+          <Link to="/passwordresetcheck"> 비밀번호 재설정</Link>
         </StyleLoginAnotherLink>
       </StyleLoginSignUpBoxDiv>
     </StyleLoginSignUpDiv>

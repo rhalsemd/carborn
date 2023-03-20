@@ -12,6 +12,7 @@ const SignUpCompanyBusinessNumber = ({setSignupCompanyFormData, signupCompanyFor
   const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const value = e.target.value;
     if (/^[0-9]{0,10}$/.test(value)) {
       setBusinessNumber(value);
@@ -34,11 +35,12 @@ const SignUpCompanyBusinessNumber = ({setSignupCompanyFormData, signupCompanyFor
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="businessNumber">사업자등록번호</label>
+      <label htmlFor="businessNumber">사업자등록번호</label><br />
       <input
         type="text"
         id="businessNumber"
         name="businessNumber"
+        autoComplete="off"
         placeholder="숫자만 입력해주세요"
         maxLength={10}
         value={businessNumber}

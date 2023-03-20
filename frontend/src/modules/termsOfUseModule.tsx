@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 import { getTermsOfUseApi } from "../lib/termsOfUseApi";
 
 // 액션 타입 이름
@@ -23,18 +23,23 @@ const initialState = {
 };
 
 // 이용약관 가져오기
-export function* getTermsOfUseFnc() {
+// export function* getTermsOfUseFnc() {
+//   try {
+//     const termsofuse:object = yield call(getTermsOfUseApi);
+//     yield put({ type: GET_TERMSOFUSE_SUCCESS, payload : { ...termsofuse }})
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+// 사가
+export function* getTermsOfUseSaga() {
   try {
     const termsofuse:object = yield call(getTermsOfUseApi);
     yield put({ type: GET_TERMSOFUSE_SUCCESS, payload : { ...termsofuse }})
   } catch (error) {
     console.log(error)
   }
-}
-
-// 사가
-export function* getTermsOfUseSaga() {
-  yield takeLatest(GET_TERMSOFUSE, getTermsOfUseFnc)
 }
 
 // 리듀서
