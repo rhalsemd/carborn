@@ -13,6 +13,11 @@ import InspectorHome from "./routes/company/inspector/InspectorHome";
 import InsuranceHome from "./routes/company/insurance/InsuranceHome";
 import VehiclePurchaseDetail from "./routes/userUseFnc/VehiclePurchaseDetail";
 import TermsOfUse from "./routes/TermsOfUse";
+import Searchid from "./routes/SearchID";
+import SearchidComplete from "./routes/SearchidComplete";
+import PasswordResetCheck from "./routes/PasswordResetCheck";
+import PasswordReset from "./routes/PasswordReset";
+import PasswordComplete from "./routes/PasswordComplete";
 
 const globalStyles = css`
   body {
@@ -36,6 +41,23 @@ function App() {
             <Route path="/Login" element={<Login />}></Route>
             <Route path="/termsofuse" element={<TermsOfUse />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
+            <Route path="/searchid" element={<Searchid />}></Route>
+            <Route
+              path="/searchid/searchidcomplete"
+              element={<SearchidComplete />}
+            ></Route>
+            <Route
+              path="/passwordresetcheck"
+              element={<PasswordResetCheck />}
+            ></Route>
+            <Route
+              path="/passwordresetcheck/passwordreset"
+              element={<PasswordReset />}
+            ></Route>
+            <Route
+              path="/passwordresetcheck/passwordreset/passwordcomplete"
+              element={<PasswordComplete />}
+            ></Route>
 
             <Route path="/garage" element={<GarageHome />} />
 

@@ -11,12 +11,15 @@ export type SignUpUserNameProps = {
 const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNameProps) => {
   // 회원가입 이름 세팅
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const regex = /^[가-힣ㄱ-ㅎㅏ-ㅣ\s]*$/;
     if (regex.test(e.target.value)) {
       setSignupUserFormData({
         ...signupUserFormData,
         name: e.target.value,
       });
+    } else {
+      alert("한글 이름만 가능합니다.")
     }
   };
 
@@ -47,6 +50,8 @@ const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNa
         type="text"
         id="username"
         placeholder="이름을 입력해주세요(ex. 홍길동)"
+        maxLength={4}
+        autoComplete="off"
         value={signupUserFormData.name}
         onKeyDown={(e) => handleKeyPress(e)}
         onChange={(e) => handleUserName(e)}

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useridCheck } from "../../../modules/idcheckModule";
+import { companyidCheck } from "../../../modules/idcheckModule";
 import { StyleSignUpInputDiv } from "../../../routes/Signup";
 import { SignupFormData } from "./SignUpButton";
 
@@ -9,16 +9,21 @@ type SignUpCompanyIdProps = {
   setSignupCompanyFormData: React.Dispatch<
     React.SetStateAction<SignupFormData>
   >;
+  setIddupliCheck: React.Dispatch<React.SetStateAction<null | boolean | undefined>>
+  iddupliCheck:boolean | null | undefined;
 };
 const SignUpCompanyId = ({
   signupCompanyFormData,
   setSignupCompanyFormData,
+  setIddupliCheck,
+  iddupliCheck
 }: SignUpCompanyIdProps) => {
   const dispatch = useDispatch();
-  const { useridcheck } = useSelector((state: any) => state.useridcheck);
+  const { companyidcheck } = useSelector((state: any) => state.idcheck);
   // 입력되는거 formdata에 넘겨주기
   const handleUserId = (e: ChangeEvent<HTMLInputElement>) => {
     // 타이핑하는순간 아이디중복체크 초기화됨
+    e.preventDefault();
     setSignupCompanyFormData({
       ...signupCompanyFormData,
       id: e.target.value,
@@ -59,20 +64,28 @@ const SignUpCompanyId = ({
   };
 
   // 아이디 중복체크용
-  const userIdDuplicateCheck = async (
+  const userIdDuplicateCheck =  (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    dispatch(useridCheck(signupCompanyFormData.id));
+    dispatch(companyidCheck(signupCompanyFormData.id));
   };
 
   useEffect(() => {
-    if (useridcheck === true) {
-      alert("사용 가능한 아이디 입니다.");
-    } else if (useridcheck === false) {
+    if (companyidcheck === true) {
+      alert("사용가능한 아이디 입니다.")
+      setSignupCompanyFormData({
+        ...signupCompanyFormData,
+        idcheck: true
+      })
+    } else if (companyidcheck === false) {
       alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
+      setSignupCompanyFormData({
+        ...signupCompanyFormData,
+        idcheck: false
+      })
     }
-  }, [useridcheck]);
+  }, [companyidcheck]);
 
   return (
     <StyleSignUpInputDiv>

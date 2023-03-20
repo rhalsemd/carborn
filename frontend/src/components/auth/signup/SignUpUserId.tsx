@@ -12,18 +12,22 @@ import { SignupFormData } from "./SignUpButton";
 type SignUpUserIdProps = {
   setSignupUserFormData: Dispatch<SetStateAction<SignupFormData>>;
   signupUserFormData: SignupFormData;
+  setIddupliCheck: Dispatch<SetStateAction<null | boolean | undefined>>
+  iddupliCheck:boolean | null | undefined;
 };
 
 const SignUpUserId = ({
   setSignupUserFormData,
   signupUserFormData,
+  setIddupliCheck,
+  iddupliCheck
 }: SignUpUserIdProps) => {
-  const { useridcheck } = useSelector((state: any) => state.useridcheck);
+  const { useridcheck } = useSelector((state: any) => state.idcheck);
   const dispatch = useDispatch();
-
   // 입력되는거 formdata에 넘겨주기
   const handleUserId = (e: ChangeEvent<HTMLInputElement>) => {
     // 타이핑하는순간 아이디중복체크 초기화됨
+    e.preventDefault();
     setSignupUserFormData({
       ...signupUserFormData,
       id: e.target.value,
@@ -64,7 +68,7 @@ const SignUpUserId = ({
   };
 
   // 아이디 중복체크용
-  const userIdDuplicateCheck = async (
+  const userIdDuplicateCheck = (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
@@ -73,9 +77,17 @@ const SignUpUserId = ({
   
   useEffect(() => {
     if (useridcheck === true) {
-      alert("사용 가능한 아이디 입니다.");
+      alert("사용가능한 아이디 입니다.")
+      setSignupUserFormData({
+        ...signupUserFormData,
+        idcheck:true
+      })
     } else if (useridcheck === false) {
       alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
+      setSignupUserFormData({
+        ...signupUserFormData,
+        idcheck:false
+      })
     }
   }, [useridcheck]);
 
