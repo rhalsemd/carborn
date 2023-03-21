@@ -1,9 +1,7 @@
 package site.carborn.entity.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.RepairShop;
 import site.carborn.entity.account.Account;
@@ -14,7 +12,9 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_REPAIR_BOOK")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class RepairBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +43,5 @@ public class RepairBook {
     private LocalDateTime uptDt;
 
     private boolean status;
+
 }

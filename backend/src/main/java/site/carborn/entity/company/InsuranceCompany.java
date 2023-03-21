@@ -19,4 +19,5 @@ public class InsuranceCompany {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
+
 }

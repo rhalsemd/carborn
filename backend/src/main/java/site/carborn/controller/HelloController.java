@@ -13,6 +13,10 @@ import site.carborn.util.network.NormalResponse;
 @RestController
 @CrossOrigin(origins = "*")
 public class HelloController {
+
+    @GetMapping("/api/hello")
+    public String test() {return "Hello, world!";}
+
     @Autowired
     HelloService helloService;
 
