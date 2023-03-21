@@ -48,11 +48,12 @@ public class UserRepairShopController {
     }
 
     // 사용자 정비소 예약 삭제
-    @PostMapping("/book/delete/{repairBookId}")
+    @DeleteMapping ("/book/delete/{repairBookId}")
     public ResponseEntity<?> deleteRepairBook(@PathVariable Integer repairBookId){
         repairShopService.deleteRepairBook(repairBookId);
 //        return "delete complete";
         return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
     }
-    
+
+
 }
