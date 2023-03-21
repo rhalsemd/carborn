@@ -1,26 +1,21 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useridCheck } from "../../../modules/idcheckModule";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 type SignUpUserIdProps = {
   setSignupUserFormData: Dispatch<SetStateAction<SignupFormData>>;
   signupUserFormData: SignupFormData;
-  setIddupliCheck: Dispatch<SetStateAction<null | boolean | undefined>>
-  iddupliCheck:boolean | null | undefined;
+  setIddupliCheck: Dispatch<SetStateAction<null | boolean | undefined>>;
+  iddupliCheck: boolean | null | undefined;
 };
 
 const SignUpUserId = ({
   setSignupUserFormData,
   signupUserFormData,
   setIddupliCheck,
-  iddupliCheck
+  iddupliCheck,
 }: SignUpUserIdProps) => {
   const { useridcheck } = useSelector((state: any) => state.idcheck);
   const dispatch = useDispatch();
@@ -68,26 +63,24 @@ const SignUpUserId = ({
   };
 
   // 아이디 중복체크용
-  const userIdDuplicateCheck = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const userIdDuplicateCheck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(useridCheck(signupUserFormData.id));
   };
-  
+
   useEffect(() => {
     if (useridcheck === true) {
-      alert("사용가능한 아이디 입니다.")
+      alert("사용가능한 아이디 입니다.");
       setSignupUserFormData({
         ...signupUserFormData,
-        idcheck:true
-      })
+        idcheck: true,
+      });
     } else if (useridcheck === false) {
       alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
       setSignupUserFormData({
         ...signupUserFormData,
-        idcheck:false
-      })
+        idcheck: false,
+      });
     }
   }, [useridcheck]);
 

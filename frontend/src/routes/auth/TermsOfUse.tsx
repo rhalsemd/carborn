@@ -3,16 +3,17 @@ import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getTermsOfUse } from "../modules/termsOfUseModule";
+import { getTermsOfUse } from "../../modules/termsOfUseModule";
 import {
   StyleLoginSignUpBoxDiv,
   StyleLoginSignUpBtn,
   StyleLoginSignUpDiv,
   StyleLoginSignUpTitle,
 } from "./Login";
-import { RootState } from "../modules/root/rootReducer";
-import WebsiteComponent from "../components/auth/termsofuse/WebsiteComponent";
-import PrivacyComponent from "../components/auth/termsofuse/PrivacyComponent";
+import { RootState } from "../../modules/root/rootReducer";
+import WebsiteComponent from "../../components/auth/termsofuse/WebsiteComponent";
+import PrivacyComponent from "../../components/auth/termsofuse/PrivacyComponent";
+import Nav from './../../components/Nav';
 
 export const StyleTermsOfUseDiv = styled.div`
   width: 100%;
@@ -91,51 +92,54 @@ const TermsOfUse = () => {
   ]);
 
   return (
-    <StyleLoginSignUpDiv>
-      <StyleLoginSignUpBoxDiv>
-        <StyleLoginSignUpTitle>
-          <h2>이용약관</h2>
-        </StyleLoginSignUpTitle>
-        <StyleLoginSignUpTitle>
-          <StyleTermsOfUseTitleDiv>
-            <span>카본에 오신 것을 환영합니다.</span>
-            <span>카본에서 거래 및 커뮤니티 사용을 위하여</span>
-            <span>아래의 약관 동의 및 회원가입이 필요합니다.</span>
-            <div>
-              <input
-                type="checkbox"
-                id="allcheckbox"
-                checked={isCheckedAll}
-                onChange={handleCheckAll}
-              />
-              <span>전체동의</span>
-            </div>
-          </StyleTermsOfUseTitleDiv>
-        </StyleLoginSignUpTitle>
-        <StyleTermsOfUseDiv>
-          <WebsiteComponent
-            setIsChecked1={setIsChecked1}
-            setWebsiteDropdown={setWebsiteDropdown}
-            websiteDropdown={websiteDropdown}
-            isChecked1={isChecked1}
-            websiteTerms={websiteTerms}
-          />
-          <PrivacyComponent
-            setIsChecked2={setIsChecked2}
-            setPrivacyDropdown={setPrivacyDropdown}
-            privacyDropdown={privacyDropdown}
-            isChecked2={isChecked2}
-            privacyTerms={privacyTerms}
-          />
-        </StyleTermsOfUseDiv>
-        <StyleLoginSignUpBtn
-          disabled={isButtonDisabled(isChecked1, isChecked2)}
-          onClick={handleSignUp}
-        >
-          회원가입 하기
-        </StyleLoginSignUpBtn>
-      </StyleLoginSignUpBoxDiv>
-    </StyleLoginSignUpDiv>
+    <div>
+      <Nav />
+      <StyleLoginSignUpDiv>
+        <StyleLoginSignUpBoxDiv>
+          <StyleLoginSignUpTitle>
+            <h2>이용약관</h2>
+          </StyleLoginSignUpTitle>
+          <StyleLoginSignUpTitle>
+            <StyleTermsOfUseTitleDiv>
+              <span>카본에 오신 것을 환영합니다.</span>
+              <span>카본에서 거래 및 커뮤니티 사용을 위하여</span>
+              <span>아래의 약관 동의 및 회원가입이 필요합니다.</span>
+              <div>
+                <input
+                  type="checkbox"
+                  id="allcheckbox"
+                  checked={isCheckedAll}
+                  onChange={handleCheckAll}
+                />
+                <span>전체동의</span>
+              </div>
+            </StyleTermsOfUseTitleDiv>
+          </StyleLoginSignUpTitle>
+          <StyleTermsOfUseDiv>
+            <WebsiteComponent
+              setIsChecked1={setIsChecked1}
+              setWebsiteDropdown={setWebsiteDropdown}
+              websiteDropdown={websiteDropdown}
+              isChecked1={isChecked1}
+              websiteTerms={websiteTerms}
+            />
+            <PrivacyComponent
+              setIsChecked2={setIsChecked2}
+              setPrivacyDropdown={setPrivacyDropdown}
+              privacyDropdown={privacyDropdown}
+              isChecked2={isChecked2}
+              privacyTerms={privacyTerms}
+            />
+          </StyleTermsOfUseDiv>
+          <StyleLoginSignUpBtn
+            disabled={isButtonDisabled(isChecked1, isChecked2)}
+            onClick={handleSignUp}
+          >
+            회원가입 하기
+          </StyleLoginSignUpBtn>
+        </StyleLoginSignUpBoxDiv>
+      </StyleLoginSignUpDiv>
+    </div>
   );
 };
 

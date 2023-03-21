@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 export interface SignUpPasswordProps {
   signupCompanyFormData: SignupFormData;
-  setSignupCompanyFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
+  setSignupCompanyFormData: React.Dispatch<
+    React.SetStateAction<SignupFormData>
+  >;
   secondPassword: string;
   setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -56,14 +58,14 @@ const SignUpCompanyPassword = ({
       setIsPasswordValid(true);
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        passwordcheck: true
-      })
+        passwordcheck: true,
+      });
     } else {
       setIsPasswordValid(false);
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        passwordcheck: false
-      })
+        passwordcheck: false,
+      });
     }
   }, [secondPassword, signupCompanyFormData.password]);
 

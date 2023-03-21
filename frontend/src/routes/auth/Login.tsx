@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
-import LoginID from "../components/auth/login/LoginID";
-import LoginPassword from "../components/auth/login/LoginPassword";
+import LoginID from "../../components/auth/login/LoginID";
+import LoginPassword from "../../components/auth/login/LoginPassword";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginTry, User } from "../modules/loginModule";
+import { loginTry, User } from "../../modules/loginModule";
 import { useSelector } from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
+import Nav from './../../components/Nav';
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -77,7 +78,7 @@ const Login = () => {
     const user: User = {
       userid: inputObj.userid,
       userpassword: inputObj.userpassword,
-      captcha : captchaValue
+      captcha: captchaValue,
     };
 
     // 리캡쳐가 체크가 되었을때, 액션 실행
@@ -100,26 +101,31 @@ const Login = () => {
   }, [token, navigate]);
 
   return (
-    <StyleLoginSignUpDiv>
-      <StyleLoginSignUpBoxDiv>
-        <StyleLoginSignUpTitle>
-          <h2>로그인</h2>
-        </StyleLoginSignUpTitle>
-        <LoginID setinputObj={setinputObj} />
-        <LoginPassword setinputObj={setinputObj} />
-        <ReCAPTCHA
-          sitekey="6LdijBMlAAAAACu0OtiHgCtKlGE58nkcRFXPxSLk"
-          onChange={handleCaptchaChange}
-          style={{ marginBottom: "1rem" }}
-        />
-        <StyleLoginSignUpBtn onClick={handleLogin}>로그인 하기</StyleLoginSignUpBtn>
-        <StyleLoginAnotherLink>
-          <Link to="/termsofuse">회원가입</Link> /
-          <Link to="/searchid"> 아이디 찾기</Link> /
-          <Link to="/passwordresetcheck"> 비밀번호 재설정</Link>
-        </StyleLoginAnotherLink>
-      </StyleLoginSignUpBoxDiv>
-    </StyleLoginSignUpDiv>
+    <div>
+      <Nav />
+      <StyleLoginSignUpDiv>
+        <StyleLoginSignUpBoxDiv>
+          <StyleLoginSignUpTitle>
+            <h2>로그인</h2>
+          </StyleLoginSignUpTitle>
+          <LoginID setinputObj={setinputObj} />
+          <LoginPassword setinputObj={setinputObj} />
+          <ReCAPTCHA
+            sitekey="6LdijBMlAAAAACu0OtiHgCtKlGE58nkcRFXPxSLk"
+            onChange={handleCaptchaChange}
+            style={{ marginBottom: "1rem" }}
+          />
+          <StyleLoginSignUpBtn onClick={handleLogin}>
+            로그인 하기
+          </StyleLoginSignUpBtn>
+          <StyleLoginAnotherLink>
+            <Link to="/termsofuse">회원가입</Link> /
+            <Link to="/searchid"> 아이디 찾기</Link> /
+            <Link to="/passwordresetcheck"> 비밀번호 재설정</Link>
+          </StyleLoginAnotherLink>
+        </StyleLoginSignUpBoxDiv>
+      </StyleLoginSignUpDiv>
+    </div>
   );
 };
 

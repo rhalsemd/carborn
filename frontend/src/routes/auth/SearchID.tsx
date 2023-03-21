@@ -1,14 +1,15 @@
 import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
-import LoginID from "../components/auth/login/LoginID";
-import LoginPassword from "../components/auth/login/LoginPassword";
+import LoginID from "../../components/auth/login/LoginID";
+import LoginPassword from "../../components/auth/login/LoginPassword";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginTry, User } from "../modules/loginModule";
+import { loginTry, User } from "../../modules/loginModule";
 import { useSelector } from "react-redux";
-import SearchIDName from "../components/auth/searchID/SearchIDName";
-import SearchIDVerify from "../components/auth/searchID/SearchIDVerify";
-import { searchidCheck } from "../modules/searchIDModule";
+import SearchIDName from "../../components/auth/searchID/SearchIDName";
+import SearchIDVerify from "../../components/auth/searchID/SearchIDVerify";
+import { searchidCheck } from "../../modules/searchIDModule";
+import Nav from './../../components/Nav';
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -60,8 +61,10 @@ export type SearchInputObj = {
 const SearchID = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selector = useSelector((state:{searchid:{isVerify:boolean}}) => state.searchid)
-  const [isSearchIdOk, setIsSearchIdOk] = useState(false)
+  const selector = useSelector(
+    (state: { searchid: { isVerify: boolean } }) => state.searchid
+  );
+  const [isSearchIdOk, setIsSearchIdOk] = useState(false);
   const [inputObj, setinputObj] = useState<SearchInputObj>({
     name: "",
     phonenumber: "",
@@ -69,8 +72,8 @@ const SearchID = () => {
   });
 
   const handleSearchID = () => {
-    dispatch(searchidCheck(inputObj))
-  }
+    dispatch(searchidCheck(inputObj));
+  };
 
   useEffect(() => {
     if (selector.isVerify) {
@@ -85,18 +88,21 @@ const SearchID = () => {
   }, [isSearchIdOk, navigate, selector]);
 
   return (
-    <StyleLoginSignUpDiv>
-      <StyleLoginSignUpBoxDiv>
-        <StyleLoginSignUpTitle>
-          <h2>아이디 찾기</h2>
-        </StyleLoginSignUpTitle>
-        <SearchIDName setinputObj={setinputObj} inputObj={inputObj}/>
-        <SearchIDVerify setinputObj={setinputObj} inputObj={inputObj}/>
-        <StyleLoginSignUpBtn onClick={handleSearchID}>
-          아이디 찾기
-        </StyleLoginSignUpBtn>
-      </StyleLoginSignUpBoxDiv>
-    </StyleLoginSignUpDiv>
+    <div>
+      <Nav/>
+      <StyleLoginSignUpDiv>
+        <StyleLoginSignUpBoxDiv>
+          <StyleLoginSignUpTitle>
+            <h2>아이디 찾기</h2>
+          </StyleLoginSignUpTitle>
+          <SearchIDName setinputObj={setinputObj} inputObj={inputObj} />
+          <SearchIDVerify setinputObj={setinputObj} inputObj={inputObj} />
+          <StyleLoginSignUpBtn onClick={handleSearchID}>
+            아이디 찾기
+          </StyleLoginSignUpBtn>
+        </StyleLoginSignUpBoxDiv>
+      </StyleLoginSignUpDiv>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { SearchInputObj } from "../../../routes/SearchID";
+import { SearchInputObj } from "../../../routes/auth/SearchID";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
@@ -11,16 +11,15 @@ const StyleLoginInputDiv = styled.div`
 type SearchIDNameProps = {
   setinputObj: React.Dispatch<React.SetStateAction<SearchInputObj>>;
   inputObj: SearchInputObj;
-}
+};
 
-const SearchIDName = ({ setinputObj, inputObj }:SearchIDNameProps) => {
-  
+const SearchIDName = ({ setinputObj, inputObj }: SearchIDNameProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setinputObj({
       ...inputObj,
-      name: value
-    })
+      name: value,
+    });
   };
 
   return (
