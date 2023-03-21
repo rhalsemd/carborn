@@ -46,5 +46,10 @@ public class UserRepairShopController {
         return "reservation complete";
     }
 
-
+    // 사용자 정비소 예약 삭제
+    @PostMapping("/book/delete/{repairBookId}")
+    public String deleteRepairBook(@PathVariable Integer repairBookId){
+        repairShopService.deleteRepairBook(repairBookId);
+        return "delete complete";
+    }
 }
