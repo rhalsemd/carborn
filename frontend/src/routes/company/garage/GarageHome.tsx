@@ -14,7 +14,7 @@ const container = css`
   flex-direction: column;
   align-items: center;
   position: relative;
-
+  justify-content: center;
   img {
     /* align-self; */
     height: 75%;
@@ -96,11 +96,14 @@ export default function GarageHome() {
     e.preventDefault();
     navigate("/garage/reserve");
   };
-  const HistoryList = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const historyList = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     navigate("/garage/history");
   };
-
+  const regRepair = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate("/garage/register");
+  };
   return (
     <>
       <NavGarage />
@@ -121,7 +124,18 @@ export default function GarageHome() {
               조회해보세요
             </div>
           </button>
-          <button className="btn" onClick={HistoryList}>
+          <button className="btn" onClick={historyList}>
+            <div>
+              <img src={register} />
+            </div>
+            <div>Check</div>
+            <div>
+              정비내역을
+              <br />
+              조회해보세요
+            </div>
+          </button>
+          <button className="btn" onClick={regRepair}>
             <div>
               <img src={register} />
             </div>

@@ -21,6 +21,7 @@ import PasswordComplete from "./routes/PasswordComplete";
 import BookList from "./routes/company/garage/BookList";
 import ViewHistory from "./routes/company/garage/ViewHistory";
 import SaleRegistration from "./routes/userUseFnc/SaleRegistration";
+import Register from "./routes/company/garage/Register";
 
 const globalStyles = css`
   body {
@@ -65,6 +66,7 @@ function App() {
             <Route path="/garage" element={<GarageHome />} />
             <Route path="/garage/reserve" element={<BookList />} />
             <Route path="/garage/history" element={<ViewHistory />} />
+            <Route path="/garage/register" element={<Register />} />
 
             <Route path="/inspector" element={<InspectorHome />} />
 
