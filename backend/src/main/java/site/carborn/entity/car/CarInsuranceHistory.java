@@ -27,6 +27,9 @@ public class CarInsuranceHistory {
     private Car car;
 
     @Column(length = 200)
+    private String carVin;
+
+    @Column(length = 200)
     private String category;
 
     private String content;
