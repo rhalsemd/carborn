@@ -39,12 +39,12 @@ public class UserRepairShopController {
         return new ResponseEntity<>(repairBook, HttpStatus.OK);
     }
 
-    // 사용자 정비소 예약 @RequestBody
-
+    // 사용자 정비소 예약
     @PostMapping("/book/form")
     public String createRepairBook(@RequestBody RepairBook repairBook){
         repairShopService.createRepairBook(repairBook);
-        return "succes!!";
+        return "reservation complete";
     }
+
 
 }
