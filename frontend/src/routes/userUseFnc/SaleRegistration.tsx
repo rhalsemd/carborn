@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Params, useParams } from "react-router-dom";
 
 import Nav from "../../components/Nav";
-import DetailThumnail from "../../components/VehiclePurchaseDetailComponents/leftContents/DetailThumnail";
-import DetailInfomation from "../../components/VehiclePurchaseDetailComponents/rightContents/DetailInfomation";
+import SaleInfoArea from "../../components/SaleRegistrationComponents/rightContents/SaleInfoArea";
+import SaleCarImg from "./../../components/SaleRegistrationComponents/leftContents/SaleCarImg";
+import { useState } from "react";
+import { RegistrationInfo } from "./MyVehicleRegistration";
 
 const outer = css`
+  border: 1px solid black;
   width: 100%;
   height: 100%;
   display: flex;
@@ -18,21 +20,20 @@ const content = css`
   align-items: center;
 `;
 
-function VehiclePurchaseDetail() {
-  const { carId }: Readonly<Params<string>> = useParams();
-
+function SaleRegistration() {
   return (
     <>
       <Nav />
       <div css={outer}>
         <div css={content}>
           {/* 왼쪽 컨텐츠 */}
-          <DetailThumnail />
+          <SaleCarImg />
           {/* 오른쪽 컨텐츠*/}
-          <DetailInfomation carId={carId} />
+          <SaleInfoArea />
         </div>
       </div>
     </>
   );
 }
-export default VehiclePurchaseDetail;
+
+export default SaleRegistration;

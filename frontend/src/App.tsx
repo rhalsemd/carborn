@@ -19,6 +19,8 @@ import PasswordResetCheck from "./routes/PasswordResetCheck";
 import PasswordReset from "./routes/PasswordReset";
 import PasswordComplete from "./routes/PasswordComplete";
 import BookList from "./routes/company/garage/BookList";
+import ViewHistory from "./routes/company/garage/ViewHistory";
+import SaleRegistration from "./routes/userUseFnc/SaleRegistration";
 
 const globalStyles = css`
   body {
@@ -62,6 +64,7 @@ function App() {
 
             <Route path="/garage" element={<GarageHome />} />
             <Route path="/garage/reserve" element={<BookList />} />
+            <Route path="/garage/history" element={<ViewHistory />} />
 
             <Route path="/inspector" element={<InspectorHome />} />
 
@@ -73,6 +76,7 @@ function App() {
               path="/user/car/:carId"
               element={<VehiclePurchaseDetail />}
             ></Route>
+            <Route path="/user/car/sale" element={<SaleRegistration />}></Route>
           </Routes>
         </Router>
       </QueryClientProvider>

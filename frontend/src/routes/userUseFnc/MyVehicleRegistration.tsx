@@ -7,7 +7,6 @@ import FormArea from "../../components/MyVehicleRegistrationComponent/rightConte
 import Nav from "../../components/Nav";
 
 const outer = css`
-  border: 1px solid black;
   width: 100%;
   height: 100%;
   display: flex;
@@ -25,11 +24,12 @@ export interface RegistrationInfo {
   carYear: string;
   distanceDriven: string;
   fileList: any[];
+  fileNames: any[];
 }
 
-export interface Props {
-  registrationInfo?: RegistrationInfo;
-  setRegistrationInfo: React.Dispatch<React.SetStateAction<RegistrationInfo>>;
+export interface Props<T> {
+  registrationInfo?: Partial<RegistrationInfo>;
+  setRegistrationInfo: T;
 }
 
 function MyVehicleRegistration() {
@@ -39,6 +39,7 @@ function MyVehicleRegistration() {
     carYear: "",
     distanceDriven: "",
     fileList: [],
+    fileNames: [],
   });
 
   return (
