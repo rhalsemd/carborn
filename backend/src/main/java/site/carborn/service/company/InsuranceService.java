@@ -50,6 +50,7 @@ public class InsuranceService {
         String id = "insurancetest";
         int insuranceId = insuranceCompanyRepository.findByAccount_Id(id).getId();
 
-        return carInsuranceHistoryRepository.findByInsuranceCompany_Id(insuranceId,page);
+        return carInsuranceHistoryRepository.findAllByInsuranceCompany_Id(insuranceId,page);
     }
+
 }

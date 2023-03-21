@@ -9,5 +9,5 @@ import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 
 @Repository
 public interface CarInsuranceHistoryRepository extends JpaRepository<CarInsuranceHistory, Integer> {
-    Page<CarInsuranceHistoryGetListMapping> findByInsuranceCompany_Id(int insuranceCompany_Id, Pageable page);
+    Page<CarInsuranceHistoryGetListMapping> findAllByInsuranceCompany_Id(int insuranceCompany_Id, Pageable page);
 }
