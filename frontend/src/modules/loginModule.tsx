@@ -62,6 +62,10 @@ export function* loginSaga(action: LoginTryAction) {
 
       // 객체를 JSON 문자열로 변환
       const objString = JSON.stringify(obj);
+      const userid = obj?.userId;
+      if (userid) {
+        sessionStorage.setItem("userId", userid);
+      }
       sessionStorage.setItem("login-token", objString);
 
       yield put({

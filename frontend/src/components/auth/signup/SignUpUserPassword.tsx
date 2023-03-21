@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 export interface SignUpPasswordProps {
@@ -57,14 +57,14 @@ const SignUpUserPassword = ({
       setIsPasswordValid(true);
       setSignupUserFormData({
         ...signupUserFormData,
-        passwordcheck: true
-      })
+        passwordcheck: true,
+      });
     } else {
       setIsPasswordValid(false);
       setSignupUserFormData({
         ...signupUserFormData,
-        passwordcheck: false
-      })
+        passwordcheck: false,
+      });
     }
   }, [secondPassword, signupUserFormData.password]);
 

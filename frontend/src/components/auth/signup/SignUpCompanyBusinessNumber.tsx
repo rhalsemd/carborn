@@ -1,14 +1,19 @@
 import { SetStateAction, Dispatch, useState, ChangeEvent } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 type SignUpCompanyBusinessNumberProps = {
-  setSignupCompanyFormData: Dispatch<SetStateAction<SignupFormData>>
-  signupCompanyFormData: SignupFormData
-}
+  setSignupCompanyFormData: Dispatch<SetStateAction<SignupFormData>>;
+  signupCompanyFormData: SignupFormData;
+};
 
-const SignUpCompanyBusinessNumber = ({setSignupCompanyFormData, signupCompanyFormData}:SignUpCompanyBusinessNumberProps) => {
-  const [businessNumber, setBusinessNumber] = useState<string>(signupCompanyFormData.identifynumber);
+const SignUpCompanyBusinessNumber = ({
+  setSignupCompanyFormData,
+  signupCompanyFormData,
+}: SignUpCompanyBusinessNumberProps) => {
+  const [businessNumber, setBusinessNumber] = useState<string>(
+    signupCompanyFormData.identifynumber
+  );
   const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,13 +25,12 @@ const SignUpCompanyBusinessNumber = ({setSignupCompanyFormData, signupCompanyFor
       if (e.target.value.length === 10) {
         setSignupCompanyFormData({
           ...signupCompanyFormData,
-          identifynumber: e.target.value
-        })
+          identifynumber: e.target.value,
+        });
       }
-    }
-    else {
+    } else {
       if (!showWarning) {
-        alert("숫자만 입력 가능합니다.")
+        alert("숫자만 입력 가능합니다.");
         setShowWarning(true);
         setTimeout(() => setShowWarning(false), 200); // 1초 후에 상태값 초기화
       }
@@ -35,7 +39,8 @@ const SignUpCompanyBusinessNumber = ({setSignupCompanyFormData, signupCompanyFor
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="businessNumber">사업자등록번호</label><br />
+      <label htmlFor="businessNumber">사업자등록번호</label>
+      <br />
       <input
         type="text"
         id="businessNumber"
@@ -47,7 +52,7 @@ const SignUpCompanyBusinessNumber = ({setSignupCompanyFormData, signupCompanyFor
         onChange={(e) => handleInputChange(e)}
       />
     </StyleSignUpInputDiv>
-  )
-}
+  );
+};
 
 export default SignUpCompanyBusinessNumber;

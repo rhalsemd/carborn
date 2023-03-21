@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { companyidCheck } from "../../../modules/idcheckModule";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 type SignUpCompanyIdProps = {
@@ -9,14 +9,16 @@ type SignUpCompanyIdProps = {
   setSignupCompanyFormData: React.Dispatch<
     React.SetStateAction<SignupFormData>
   >;
-  setIddupliCheck: React.Dispatch<React.SetStateAction<null | boolean | undefined>>
-  iddupliCheck:boolean | null | undefined;
+  setIddupliCheck: React.Dispatch<
+    React.SetStateAction<null | boolean | undefined>
+  >;
+  iddupliCheck: boolean | null | undefined;
 };
 const SignUpCompanyId = ({
   signupCompanyFormData,
   setSignupCompanyFormData,
   setIddupliCheck,
-  iddupliCheck
+  iddupliCheck,
 }: SignUpCompanyIdProps) => {
   const dispatch = useDispatch();
   const { companyidcheck } = useSelector((state: any) => state.idcheck);
@@ -64,26 +66,24 @@ const SignUpCompanyId = ({
   };
 
   // 아이디 중복체크용
-  const userIdDuplicateCheck =  (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const userIdDuplicateCheck = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(companyidCheck(signupCompanyFormData.id));
   };
 
   useEffect(() => {
     if (companyidcheck === true) {
-      alert("사용가능한 아이디 입니다.")
+      alert("사용가능한 아이디 입니다.");
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        idcheck: true
-      })
+        idcheck: true,
+      });
     } else if (companyidcheck === false) {
       alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        idcheck: false
-      })
+        idcheck: false,
+      });
     }
   }, [companyidcheck]);
 

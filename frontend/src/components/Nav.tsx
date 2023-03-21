@@ -1,25 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "../modules/loginModule";
-import axios from "axios";
-import { API_URL } from "../lib/loginApi";
 
-const container = css`
-  height: 45vh;
-  width: 100%;
-  background-color: black;
-  position: relative;
-`;
 const StyleMainNav = styled.div`
   width: 100%;
   height: 35vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-bottom: 2px solid #D23131;
 `;
 
 const StyleMainLogo = styled.div`
@@ -81,9 +74,9 @@ function Nav() {
   const [title, setTitle] = useState<string>("Home");
   const location = useLocation();
   const dispatch = useDispatch();
-  const loggedIn = useSelector((state: any) => state.login.loggedIn);
   const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false);
   const token = sessionStorage.getItem("login-token");
+  const userid = sessionStorage.getItem("userId");
 
   // API 요청해서 받아오거나, json 파일에 저장해서 바로 임포트 해야할듯
   useEffect(() => {
@@ -93,6 +86,10 @@ function Nav() {
       setTitle("User Login");
     } else if (location.pathname === "/myvehicle/registration") {
       setTitle("Car Regitration");
+    } else if (location.pathname === `/${userid}/mypage`) {
+      setTitle(`${userid}'s Page`);
+    } else if (location.pathname === `/${userid}/mypage/mycarinfo`) {
+      setTitle(`내 차량 정보`);
     }
   }, [location.pathname]);
 
@@ -126,6 +123,15 @@ function Nav() {
                   Login
                 </StyleNavLi>
               </Link>
+            )}
+            {token ? (
+              <Link to={`/${userid}/mypage`} css={StyleLinkText}>
+                <StyleNavLi>
+                  Mypage
+                </StyleNavLi>
+              </Link>
+            ) : (
+              null
             )}
             <Link to="/myvehicle/registration" css={StyleLinkText}>
               <StyleNavLi>regist</StyleNavLi>

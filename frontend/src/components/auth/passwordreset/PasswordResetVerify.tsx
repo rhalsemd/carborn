@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import SignUpUserPhoneNumberModal from "../signup/modal/SignUpUserPhoneNumberModal";
-import { PasswordResetInputObj } from "../../../routes/PasswordResetCheck";
+import { PasswordResetInputObj } from "../../../routes/auth/PasswordResetCheck";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`

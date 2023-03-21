@@ -3,9 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import PasswordResetVerify from "../components/auth/passwordreset/PasswordResetVerify";
-import PasswordResetID from "../components/auth/passwordreset/PasswordResetID";
-import { passwordResetCheck } from "../modules/passwordResetCheckModule";
+import PasswordResetVerify from "../../components/auth/passwordreset/PasswordResetVerify";
+import PasswordResetID from "../../components/auth/passwordreset/PasswordResetID";
+import { passwordResetCheck } from "../../modules/passwordResetCheckModule";
+import Nav from './../../components/Nav';
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -57,8 +58,13 @@ export type PasswordResetInputObj = {
 const PasswordResetCheck = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selector = useSelector((state:{passwordResetCheck:{isVerify:boolean}}) => state.passwordResetCheck)
-  const [isPasswordResetValid, setIsPasswordResetValid] = useState<null | boolean>(null);
+  const selector = useSelector(
+    (state: { passwordResetCheck: { isVerify: boolean } }) =>
+      state.passwordResetCheck
+  );
+  const [isPasswordResetValid, setIsPasswordResetValid] = useState<
+    null | boolean
+  >(null);
 
   const [inputObj, setinputObj] = useState<PasswordResetInputObj>({
     userid: "",
@@ -67,33 +73,37 @@ const PasswordResetCheck = () => {
   });
 
   const handlePasswordReset = () => {
-    dispatch(passwordResetCheck(inputObj))
-  }
+    dispatch(passwordResetCheck(inputObj));
+  };
 
   useEffect(() => {
-    if(selector.isVerify){
-      setIsPasswordResetValid(selector.isVerify)
+    if (selector.isVerify) {
+      setIsPasswordResetValid(selector.isVerify);
     }
-  }, [selector.isVerify])
-  
-  useEffect(() => {
-    if(isPasswordResetValid){
-      navigate('/passwordresetcheck/passwordreset')
-    }
-  }, [isPasswordResetValid, navigate, selector])
+  }, [selector.isVerify]);
 
+  useEffect(() => {
+    if (isPasswordResetValid) {
+      navigate("/passwordresetcheck/passwordreset");
+    }
+  }, [isPasswordResetValid, navigate, selector]);
 
   return (
-    <StyleLoginSignUpDiv>
-      <StyleLoginSignUpBoxDiv>
-        <StyleLoginSignUpTitle>
-          <h2>비밀번호 재설정</h2>
-        </StyleLoginSignUpTitle>
-        <PasswordResetID setinputObj={setinputObj} inputObj={inputObj} />
-        <PasswordResetVerify setinputObj={setinputObj} inputObj={inputObj} />
-        <StyleLoginSignUpBtn onClick={handlePasswordReset}>비밀번호 재설정</StyleLoginSignUpBtn>
-      </StyleLoginSignUpBoxDiv>
-    </StyleLoginSignUpDiv>
+    <div>
+      <Nav />
+      <StyleLoginSignUpDiv>
+        <StyleLoginSignUpBoxDiv>
+          <StyleLoginSignUpTitle>
+            <h2>비밀번호 재설정</h2>
+          </StyleLoginSignUpTitle>
+          <PasswordResetID setinputObj={setinputObj} inputObj={inputObj} />
+          <PasswordResetVerify setinputObj={setinputObj} inputObj={inputObj} />
+          <StyleLoginSignUpBtn onClick={handlePasswordReset}>
+            비밀번호 재설정
+          </StyleLoginSignUpBtn>
+        </StyleLoginSignUpBoxDiv>
+      </StyleLoginSignUpDiv>
+    </div>
   );
 };
 
