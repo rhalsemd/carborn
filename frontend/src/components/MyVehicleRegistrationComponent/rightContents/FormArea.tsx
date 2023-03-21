@@ -1,6 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
+import {
+  Props,
+  RegistrationInfo,
+} from "../../../routes/userUseFnc/MyVehicleRegistration";
 import AdditionalSubmissionFiles from "./AdditionalSubmissionFiles";
 import CarNumber from "./CarNumber";
 import CarYear from "./CarYear";
@@ -13,7 +16,10 @@ const rightContent = css`
   height: 90vh;
 `;
 
-function FormArea({ registrationInfo, setRegistrationInfo }: Props) {
+function FormArea({
+  registrationInfo,
+  setRegistrationInfo,
+}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
   return (
     <div css={rightContent}>
       <h2 style={{ textAlign: "center" }}>차량 등록</h2>
