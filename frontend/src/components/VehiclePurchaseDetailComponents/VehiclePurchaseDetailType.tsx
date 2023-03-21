@@ -1,3 +1,7 @@
 export interface Props {
-  setRefetch: React.Dispatch<React.SetStateAction<null>>;
+  setError: React.Dispatch<React.SetStateAction<Error | null>>;
+  open: boolean;
+  handleClose: () => void;
+  data: any;
+  error: Error | null;
 }

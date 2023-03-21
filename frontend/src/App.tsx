@@ -20,6 +20,7 @@ import PasswordReset from "./routes/PasswordReset";
 import PasswordComplete from "./routes/PasswordComplete";
 import BookList from "./routes/company/garage/BookList";
 import ViewHistory from "./routes/company/garage/ViewHistory";
+import SaleRegistration from "./routes/userUseFnc/SaleRegistration";
 
 const globalStyles = css`
   body {
@@ -75,6 +76,7 @@ function App() {
               path="/user/car/:carId"
               element={<VehiclePurchaseDetail />}
             ></Route>
+            <Route path="/user/car/sale" element={<SaleRegistration />}></Route>
           </Routes>
         </Router>
       </QueryClientProvider>

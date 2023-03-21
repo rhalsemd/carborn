@@ -10,11 +10,11 @@ import CarCost from "./CarCost";
 import CarContent from "./CarContent";
 import CarDistance from "./CarDistance";
 import WatchFileBtn from "./WatchFileBtn";
-import PurchaseApplication from "./PurchaseApplication";
+import PurchaseApplicationBtn from "./PurchaseApplicationBtn";
 // import Loading from "../../Loading";
 import Loading from "../../Loading";
 import { useAPI } from "../../../hooks/useAPI";
-import DetailInfomationFallback from "../../Error";
+import ErrorComponent from "../../ErrorComponent";
 
 const rightContent = css`
   border: 1px solid black;
@@ -22,7 +22,7 @@ const rightContent = css`
   height: 80vh;
 `;
 
-const API = `https://jsonplaceholder.typicode.com/todo/1`;
+const API = `https://jsonplaceholder.typicode.com/todos/1`;
 
 // 내부 컨텐츠
 const DetailInfomationComponent = ({ setError }: any) => {
@@ -49,7 +49,7 @@ const DetailInfomationComponent = ({ setError }: any) => {
       <CarContent />
       <CarDistance />
       <WatchFileBtn />
-      <PurchaseApplication />
+      <PurchaseApplicationBtn />
     </div>
   );
 };
@@ -58,9 +58,7 @@ function DetailInfomation({ carId }: Readonly<Params<string>>) {
   const [error, setError] = useState<Error | null>(null);
   return (
     <ErrorBoundary
-      fallback={
-        <DetailInfomationFallback queryKey={"car-detail"} error={error} />
-      }
+      fallback={<ErrorComponent queryKey={"car-detail"} error={error} />}
     >
       <Suspense fallback={<Loading />}>
         <DetailInfomationComponent setError={setError} />
