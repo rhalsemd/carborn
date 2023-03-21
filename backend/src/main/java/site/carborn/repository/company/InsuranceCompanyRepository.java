@@ -7,5 +7,5 @@ import site.carborn.mapping.company.InsuranceCompanyGetIdMapping;
 
 @Repository
 public interface InsuranceCompanyRepository extends JpaRepository<InsuranceCompany, Integer> {
-    InsuranceCompanyGetIdMapping findByAccount_Id(String Account_Id);
+    InsuranceCompanyGetIdMapping findByAccount_Id(String account_Id);
 }
