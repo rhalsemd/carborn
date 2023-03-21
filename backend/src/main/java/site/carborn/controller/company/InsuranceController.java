@@ -50,6 +50,8 @@ public class InsuranceController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<CarInsuranceHistoryGetListMapping> result = insuranceService.carinsuranceHistoryList(pageRequest);
 
-        return NormalResponse.toResponseEntity(HttpStatus.OK, result);    }
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
+    }
+
 
 }
