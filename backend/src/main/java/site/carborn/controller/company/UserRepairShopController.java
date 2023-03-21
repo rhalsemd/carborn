@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.service.company.UserRepairShopService;
+import site.carborn.util.network.NormalResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,8 +49,10 @@ public class UserRepairShopController {
 
     // 사용자 정비소 예약 삭제
     @PostMapping("/book/delete/{repairBookId}")
-    public String deleteRepairBook(@PathVariable Integer repairBookId){
+    public ResponseEntity<?> deleteRepairBook(@PathVariable Integer repairBookId){
         repairShopService.deleteRepairBook(repairBookId);
-        return "delete complete";
+//        return "delete complete";
+        return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
     }
+    
 }
