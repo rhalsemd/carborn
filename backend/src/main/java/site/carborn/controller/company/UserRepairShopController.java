@@ -51,7 +51,6 @@ public class UserRepairShopController {
     @DeleteMapping ("/book/delete/{repairBookId}")
     public ResponseEntity<?> deleteRepairBook(@PathVariable Integer repairBookId){
         repairShopService.deleteRepairBook(repairBookId);
-//        return "delete complete";
         return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
     }
 
