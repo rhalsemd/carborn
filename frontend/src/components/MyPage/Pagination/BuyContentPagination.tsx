@@ -26,8 +26,8 @@ const BuyContentPagination = ({data, itemsPerPage}:BuyContentPaginationProps) =>
       <table>
         <thead>
           <tr>
-            <th>차량 모델</th>
-            <th>차량 번호</th>
+            <th>차량모델</th>
+            <th>차량번호</th>
             <th>{`주행 거리(km)`}</th>
             <th>{`연식(년)`}</th>
             <th>구매가</th>

@@ -13,7 +13,7 @@ function CarNumber({ setRegistrationInfo }: Props) {
 
   return (
     <div>
-      <span>차량 번호</span>
+      <span>차량번호</span>
       <div>
         <input type="text" autoComplete="false" onChange={inputTyping} />
       </div>
