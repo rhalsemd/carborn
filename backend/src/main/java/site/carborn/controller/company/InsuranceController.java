@@ -17,6 +17,7 @@ import site.carborn.service.company.InsuranceService;
 import site.carborn.util.network.NormalResponse;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Tag(name = "Insurance History", description = "보험회사 손상 내역 관련 API")
 @RequestMapping("/api/insurance")
@@ -53,5 +54,12 @@ public class InsuranceController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
+    @GetMapping("/list/{id}")
+    @Operation(description = "보험회사 손상 내역 상세 조회")
+    @Parameter(name = "id", description = "게시물 번호")
+    public ResponseEntity<?> carInsuranceHistoryDetailContent(@PathVariable("id") int id){
+        Optional<CarInsuranceHistory> result = insuranceService.carinsuranceHistoryDetail(id);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
+    }
 
 }

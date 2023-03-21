@@ -14,6 +14,8 @@ import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InsuranceCompanyRepository;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class InsuranceService {
@@ -52,5 +54,8 @@ public class InsuranceService {
 
         return carInsuranceHistoryRepository.findAllByInsuranceCompany_Id(insuranceId,page);
     }
-
+    @Transactional
+    public Optional<CarInsuranceHistory> carinsuranceHistoryDetail(int id){
+        return carInsuranceHistoryRepository.findById(id);
+    }
 }
