@@ -32,38 +32,44 @@ public class UserRepairShopService {
         return repairBook.get();
     }
 
+//    @Transactional
+//    public void createRepairBook(UserRepairBookRequestDTO dto){
+//
+//        Car car = new Car();
+//        car.setId(dto.getCarId());
+//
+//        RepairShop repairShop = new RepairShop();
+//        repairShop.setId(dto.getRepairShopId());
+//
+//        Account account = new Account();
+//        account.setId(dto.getAccount());
+//
+//
+////        LocalDateTime LocalDate ;
+//        RepairBook repairBookRequest = RepairBook.builder()
+//                .car(car)
+//                .repairShop(repairShop)
+//                .account(account)
+//                .content(dto.getContent())
+//                .bookStatus(0)
+//                .bookDt(dto.getBookDt())
+//                .regDt(LocalDateTime.now())
+//                .uptDt(LocalDateTime.now())
+//                .status(false)
+//                .build();
+//        System.out.println(repairBookRequest);
+//        repairBookRepository.save(repairBookRequest);
+//
+//    }
+
     @Transactional
-    public void createRepairBook(UserRepairBookRequestDTO dto){
-
-        Car car = new Car();
-        car.setId(dto.getCarId());
-
-        RepairShop repairShop = new RepairShop();
-        repairShop.setId(dto.getRepairShopId());
-
-        Account account = new Account();
-        account.setId(dto.getAccount());
-
-
-//        LocalDateTime LocalDate ;
-        RepairBook repairBookRequest = RepairBook.builder()
-                .car(car)
-                .repairShop(repairShop)
-                .account(account)
-                .content(dto.getContent())
-                .bookStatus(0)
-                .bookDt(LocalDateTime.now())
-                .regDt(LocalDateTime.now())
-                .uptDt(LocalDateTime.now())
-                .status(false)
-                .build();
-        System.out.println(repairBookRequest);
-        repairBookRepository.save(repairBookRequest);
-
-        //private int carId;
-        //    private int repairShopId;
-        //    private String account;
-        //    private String content;
+    public void createRepairBook(RepairBook repairBook){
+        repairBook.setRegDt(LocalDateTime.now());
+        repairBook.setUptDt(LocalDateTime.now());
+        repairBook.setBookStatus(0);
+        repairBook.setStatus(false);
+        repairBookRepository.save(repairBook);
     }
+
 
 }

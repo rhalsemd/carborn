@@ -45,26 +45,15 @@ public class UserRepairShopController {
     }
 
     // 사용자 정비소 예약 @RequestBody
+//    @PostMapping("/book/form")
+//    public String createRepairBook(@RequestBody UserRepairBookRequestDTO dto){
+//        repairShopService.createRepairBook(dto);
+//        return "succes!!";
+//    }
     @PostMapping("/book/form")
-    public String createRepairBook(@RequestBody UserRepairBookRequestDTO dto){
-        repairShopService.createRepairBook(dto);
+    public String createRepairBook(@RequestBody RepairBook repairBook){
+        repairShopService.createRepairBook(repairBook);
         return "succes!!";
     }
-//    @PostMapping("/book/form")
-//
-//    public String createRepairBook(
-//            @RequestParam("car_id") int carId,
-//            @RequestParam("repairShop_id") int repairShopId,
-//            @RequestParam("account") String account,
-//            @RequestParam("content") String content
-//    ) {
-//        UserRepairBookRequestDTO dto = new UserRepairBookRequestDTO();
-//        dto.setCarId(carId);
-//        dto.setRepairShopId(repairShopId);
-//        dto.setAccount(account);
-//        dto.setContent(content);
-//
-//        repairShopService.createRepairBook(dto);
-//        return "success!!";
-//    }
+
 }
