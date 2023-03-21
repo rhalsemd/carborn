@@ -26,6 +26,8 @@ public class CarInsuranceHistory {
     @JoinColumn(name = "CAR_ID")
     private Car car;
 
+    private String carVin;
+
     @Column(length = 200)
     private String category;
 
