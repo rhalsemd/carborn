@@ -3,15 +3,9 @@ package site.carborn.service.company;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import site.carborn.dto.request.UserRepairBookRequestDTO;
-import site.carborn.entity.account.Account;
-import site.carborn.entity.car.Car;
-import site.carborn.entity.company.RepairShop;
 import site.carborn.entity.user.RepairBook;
-import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.user.RepairBookRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
