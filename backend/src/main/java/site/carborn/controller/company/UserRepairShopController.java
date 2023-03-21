@@ -2,15 +2,10 @@ package site.carborn.controller.company;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.carborn.dto.request.UserRepairBookRequestDTO;
-import site.carborn.entity.company.RepairShop;
 import site.carborn.entity.user.RepairBook;
-import site.carborn.repository.user.RepairBookRepository;
-import site.carborn.repository.user.mapping.RepairBookMapping;
 import site.carborn.service.company.UserRepairShopService;
 
 import java.time.LocalDateTime;
@@ -45,11 +40,7 @@ public class UserRepairShopController {
     }
 
     // 사용자 정비소 예약 @RequestBody
-//    @PostMapping("/book/form")
-//    public String createRepairBook(@RequestBody UserRepairBookRequestDTO dto){
-//        repairShopService.createRepairBook(dto);
-//        return "succes!!";
-//    }
+
     @PostMapping("/book/form")
     public String createRepairBook(@RequestBody RepairBook repairBook){
         repairShopService.createRepairBook(repairBook);
