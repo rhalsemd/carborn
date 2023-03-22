@@ -26,10 +26,10 @@ public class AddressService {
         try {
             JSONObject geoData = requestGeo(address);
             if (geoData == null) {
-                return null;
+                throw new NullPointerException();
             }
             if ((int) ((JSONObject) geoData.get("meta")).get("totalCount") == 0) {
-                return null;
+                throw new NullPointerException();
             }
             JSONObject document = (JSONObject) ((JSONArray) geoData.get("addresses")).get(0);
             Map<String, Object> map = new HashMap<>();
@@ -41,14 +41,14 @@ public class AddressService {
             System.out.println(e);
         }
 
-        return null;
+        throw new NullPointerException();
     }
 
     public Map<String, Object> getReverseGeo(double lat, double lng) {
         try {
             JSONObject rGeoData = requestReverseGeo(lat, lng);
             if (rGeoData == null) {
-                return null;
+                throw new NullPointerException();
             }
 
             Map<String, Object> map = new HashMap<>();
@@ -66,7 +66,7 @@ public class AddressService {
             System.out.println(e);
         }
 
-        return null;
+        throw new NullPointerException();
     }
 
     public JSONObject requestGeo(String address) throws IOException {
@@ -82,7 +82,7 @@ public class AddressService {
 
         int responseCode = get.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            return null;
+            throw new NullPointerException();
         }
 
         String content = get.get();
@@ -103,7 +103,7 @@ public class AddressService {
 
         int responseCode = get.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            return null;
+            throw new NullPointerException();
         }
 
         String content = get.get();
