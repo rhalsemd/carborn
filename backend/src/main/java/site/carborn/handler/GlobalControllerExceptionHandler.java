@@ -3,6 +3,7 @@ package site.carborn.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,12 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ErrorResponse> nullPointerException(NullPointerException e) {
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
+    }
+
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        return ErrorResponse.toResponseEntity(HttpStatus.METHOD_NOT_ALLOWED, e);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
