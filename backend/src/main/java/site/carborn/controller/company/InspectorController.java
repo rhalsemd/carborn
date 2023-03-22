@@ -63,9 +63,9 @@ public class InspectorController {
         inspectResult.setInspectBook(new InspectBook());
         inspectResult.getInspectBook().setId(inspectBookId);
         inspectResult.setRegDt(LocalDateTime.now());
-        inspectorService.inspectorResultInsert(inspectResult);
         //multipartfile 입력 부분
 
+        inspectorService.inspectorResultInsert(inspectResult);
         //caver 입력 부분
 
         return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");

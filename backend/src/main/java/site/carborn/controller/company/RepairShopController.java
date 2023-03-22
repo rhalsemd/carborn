@@ -10,12 +10,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import site.carborn.entity.user.RepairBook;
+import site.carborn.entity.user.RepairResult;
 import site.carborn.service.company.RepairShopService;
+import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Tag(name = "RepairShop", description = "정비소 정비 관련 API")
 @RequestMapping("/api/repair-shop")
@@ -35,5 +38,36 @@ public class RepairShopController {
     public ResponseEntity<?> repairBookList(@PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairBookList(pageRequest));
+    }
+
+    @GetMapping("book/{repairBookId}")
+    @Operation(description = "정비소 정비 예약 상세 조회")
+    @Parameter(name = "repairBookId", description = "예약 번호")
+    public ResponseEntity<?> repairBookDetailContent(@PathVariable("id") int repairBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairBookDetailContent(repairBookId));
+    }
+
+    @PutMapping("book/{repairBookId}")
+    @Operation(description = "정비소 정비 예약 상태 수정 및 검수 데이터 입력")
+    @Parameter(name = "repairBookId", description = "예약 번호")
+    public ResponseEntity<?> inspectBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult){
+        Optional<RepairBook> updateData = repairShopService.repairBookDetailContent(repairBookId);
+        if(!updateData.isPresent()){
+            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
+        }
+        updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
+        repairShopService.repairBookUpdate(updateData.get());
+
+        repairResult.setRepairBook(new RepairBook());
+        repairResult.getRepairBook().setId(repairBookId);
+        repairResult.setRegDt(LocalDateTime.now());
+        //multipartfile 입력 부분
+
+        repairShopService.repairResultInsert(repairResult);
+
+        //caver 입력 부분
+
+        return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");
+
     }
 }
