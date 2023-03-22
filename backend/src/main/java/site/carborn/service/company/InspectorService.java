@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import site.carborn.entity.user.InspectBook;
 import site.carborn.mapping.user.InspectBookGetListMapping;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.util.common.BookUtils;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +31,10 @@ public class InspectorService {
         int inspectorId = inspectorRepository.findByAccount_Id(inspector).getId();
 
          return inspectBookRepository.findByStatusAndInspector_Id(false,inspectorId,page);
+    }
+
+    @Transactional
+    public Optional<InspectBook> inspectBookDetail(int id){
+        return inspectBookRepository.findById(id);
     }
 }

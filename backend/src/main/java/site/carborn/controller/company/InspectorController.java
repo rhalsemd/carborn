@@ -34,9 +34,16 @@ public class InspectorController {
             @Parameter(name = "page", description = "페이지 번호"),
             @Parameter(name = "size", description = "페이지 사이즈")
     })
-    public ResponseEntity<?> carInsuranceHistoryList(@PathVariable("page") int page, @PathVariable("size") int size){
+    public ResponseEntity<?> inspectBookList(@PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         return NormalResponse.toResponseEntity(HttpStatus.OK, inspectorService.inspectBookGetList(pageRequest));
+    }
+
+    @GetMapping("book/{id}")
+    @Operation(description = "검수원 정비 예약 상세 조회")
+    @Parameter(name = "id", description = "게시물 번호")
+    public ResponseEntity<?> inspectBookDetailContent(@PathVariable("id") int id){
+        return  NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectBookDetail(id));
     }
 
 }
