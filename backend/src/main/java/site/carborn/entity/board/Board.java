@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import site.carborn.entity.account.Account;
 
 import java.time.LocalDateTime;
@@ -27,9 +28,18 @@ public class Board {
 
     private String content;
 
+    @Column(length = 200)
+    private String imgNm;
+
     private LocalDateTime regDt;
 
     private LocalDateTime uptDt;
 
     private boolean status;
+
+    public static Board copy(Board board) {
+        Board b = new Board();
+        BeanUtils.copyProperties(board, b);
+        return b;
+    }
 }
