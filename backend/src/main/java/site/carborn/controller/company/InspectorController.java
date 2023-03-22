@@ -57,15 +57,16 @@ public class InspectorController {
         }
         //예약 상태 수정
         updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
+        updateData.get().setUptDt(LocalDateTime.now());
         inspectorService.inspectorBookUpdate(updateData.get());
 
         //검수 결과 입력
         inspectResult.setInspectBook(new InspectBook());
         inspectResult.getInspectBook().setId(inspectBookId);
         inspectResult.setRegDt(LocalDateTime.now());
-        inspectorService.inspectorResultInsert(inspectResult);
         //multipartfile 입력 부분
 
+        inspectorService.inspectorResultInsert(inspectResult);
         //caver 입력 부분
 
         return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");
@@ -88,4 +89,6 @@ public class InspectorController {
     public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectResultId") int inspectResultId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectResultId));
     }
+
+
 }
