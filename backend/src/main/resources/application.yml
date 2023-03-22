@@ -68,8 +68,17 @@ image:
     windows: C:/Users/SSAFY/Downloads/images
     linux: /home/ubuntu/images
 
-#naver-cloud-sms:
-#  accessKey: hZMpYNUxSNTcNY73KTBW
-#  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
-#  serviceId: ncp:sms:kr:257282496643:sms_example
-#  senderPhone: 01085241881
+naver:
+  naver-cloud-map:
+    X-NCP-APIGW-API-KEY-ID: iap87u1sur
+    X-NCP-APIGW-API-KEY: DMlA2OvuXox8pSlVqTIAwXHRdL8sJz79VbUqF5wH
+
+  #naver-cloud-sms:
+  #  accessKey: hZMpYNUxSNTcNY73KTBW
+  #  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
+  #  serviceId: ncp:sms:kr:257282496643:sms_example
+  #  senderPhone: 01085241881
+
+  #naver-cloud-ocr:
+  #  apiURL: https://5omzwputv7.apigw.ntruss.com/custom/v1/21212/9e015480e19104a91ee5d3cdfb7200731357cdaf00d3689246ffaacc81f8fd02/general
+  #  secretKey: TG5OdG5UTFpJZU9sVG1DR21NRlB2Qm1rTUdDdUJLRHc=
