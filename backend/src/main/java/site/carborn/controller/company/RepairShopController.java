@@ -43,7 +43,7 @@ public class RepairShopController {
     @GetMapping("book/{repairBookId}")
     @Operation(description = "정비소 정비 예약 상세 조회")
     @Parameter(name = "repairBookId", description = "예약 번호")
-    public ResponseEntity<?> repairBookDetailContent(@PathVariable("id") int repairBookId) {
+    public ResponseEntity<?> repairBookDetailContent(@PathVariable("repairBookId") int repairBookId) {
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairBookDetailContent(repairBookId));
     }
 
