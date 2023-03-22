@@ -7,10 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.InspectBook;
+import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.user.InspectBookGetListMapping;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.user.InspectBookRepository;
-import site.carborn.util.common.BookUtils;
+import site.carborn.repository.user.InspectResultRepository;
 
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class InspectorService {
     @Autowired
     private InspectBookRepository inspectBookRepository;
 
+    @Autowired
+    private InspectResultRepository inspectResultRepository;
+
     @Transactional
     public Page<InspectBookGetListMapping> inspectBookGetList(Pageable page){
         //회사 ID 가져오는 부분(현재는 임시)
@@ -36,5 +40,15 @@ public class InspectorService {
     @Transactional
     public Optional<InspectBook> inspectBookDetail(int id){
         return inspectBookRepository.findById(id);
+    }
+
+    @Transactional
+    public void inspectorBookUpdate(InspectBook inspectBook){
+        inspectBookRepository.save(inspectBook);
+    }
+
+    @Transactional
+    public void inspectorResultInsert(InspectResult inspectResult){
+        inspectResultRepository.save(inspectResult);
     }
 }
