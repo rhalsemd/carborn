@@ -7,6 +7,12 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./modules/root/rootReducer";
 import rootSaga from "./modules/root/rootSaga";
 
+declare global {
+  interface Window {
+    naver: any;
+  }
+}
+
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(

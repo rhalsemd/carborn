@@ -22,16 +22,17 @@ import SearchidComplete from "./routes/auth/SearchidComplete";
 import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
 import PasswordReset from "./routes/auth/PasswordReset";
 import PasswordComplete from "./routes/auth/PasswordComplete";
-import MyPage from './routes/MyPage';
+import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
-import Booking from './components/MyPage/Booking';
-import Repair from './components/MyPage/Repair';
-import MyGallery from './components/MyPage/MyGallery';
-import BuyContent from './components/MyPage/BuyContent';
+import Booking from "./components/MyPage/Booking";
+import Repair from "./components/MyPage/Repair";
+import MyGallery from "./components/MyPage/MyGallery";
+import BuyContent from "./components/MyPage/BuyContent";
 import SellContent from "./components/MyPage/SellContent";
-import Insurance from './components/MyPage/Insurance';
-import UserWithdrawal from './components/MyPage/UserWithdrawal';
-import PasswordModify from './components/MyPage/PasswordModify';
+import Insurance from "./components/MyPage/Insurance";
+import UserWithdrawal from "./components/MyPage/UserWithdrawal";
+import PasswordModify from "./components/MyPage/PasswordModify";
+import NaverMap from "./routes/userUseFnc/NaverMap";
 
 const globalStyles = css`
   body {
@@ -53,7 +54,10 @@ const routes = [
   { path: "/searchid/searchidcomplete", element: <SearchidComplete /> },
   { path: "/passwordresetcheck", element: <PasswordResetCheck /> },
   { path: "/passwordresetcheck/passwordreset", element: <PasswordReset /> },
-  { path: "/passwordresetcheck/passwordreset/passwordcomplete", element: <PasswordComplete /> },
+  {
+    path: "/passwordresetcheck/passwordreset/passwordcomplete",
+    element: <PasswordComplete />,
+  },
   { path: "/:userid/mypage", element: <MyPage /> },
   { path: "/:userid/mypage/mycarinfo", element: <MyCarInfo /> },
   { path: "/:userid/mypage/booking", element: <Booking /> },
@@ -74,6 +78,7 @@ const routes = [
   { path: "/garage/history", element: <ViewHistory /> },
   { path: "/garage/register", element: <Register /> },
   { path: "/user/car/sale", element: <SaleRegistration /> },
+  { path: "/user/map", element: <NaverMap /> },
 ];
 
 function App() {
@@ -84,9 +89,9 @@ function App() {
         <Global styles={globalStyles}></Global>
         <Router>
           <Routes>
-          {routes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element} />
-          ))}
+            {routes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
           </Routes>
         </Router>
       </QueryClientProvider>
