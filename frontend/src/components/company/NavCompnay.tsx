@@ -51,8 +51,8 @@ export default function NavGarage() {
   return (
     <div css={container}>
       <div className="loginInfo">
-        <div>현재 비로그인 상태입니다</div>
-        <div>로그인</div>
+        <div>{}님 환영합니다.</div>
+        <div>로그아웃</div>
       </div>
       <div className="menu">
         <div className="logo"></div>

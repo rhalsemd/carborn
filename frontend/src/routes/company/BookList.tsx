@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import NavGarage from "../../../components/NavGarage";
-import car from "../../../assets/giup-car.png";
-import GarageUserTable from "../../../components/garage/GarageUserTable";
+import NavGarage from "../../components/company/NavCompnay";
+import car from "../../assets/giup-car.png";
+import ReserveTable from "../../components/company/ReserveTable";
 
 const container = css`
   width: 100%;
@@ -29,7 +29,7 @@ export default function BookList() {
       <NavGarage />
       <div css={container}>
         <img src={car} />
-        <GarageUserTable />
+        <ReserveTable />
       </div>
     </>
   );
