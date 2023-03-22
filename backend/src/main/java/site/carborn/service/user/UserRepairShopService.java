@@ -1,13 +1,15 @@
-package site.carborn.service.company;
+package site.carborn.service.user;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.RepairBook;
+import site.carborn.mapping.user.repairListMapping;
 import site.carborn.repository.user.RepairBookRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +17,8 @@ public class UserRepairShopService {
     @Autowired
     private RepairBookRepository repairBookRepository;
 
-    public List<RepairBook> repairBookList(String accountId) {
-        List<RepairBook> repairBooks = repairBookRepository.findByStatusAndAccount_IdOrderByIdDesc(false, accountId);
+    public Page<repairListMapping> repairBookList(String accountId, PageRequest pageRequest) {
+        Page<repairListMapping> repairBooks = repairBookRepository.findByStatusAndAccount_Id(false, accountId, pageRequest);
         return repairBooks;
     }
 
