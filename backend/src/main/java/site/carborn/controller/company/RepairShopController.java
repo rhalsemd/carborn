@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.service.company.RepairShopService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
@@ -36,7 +37,7 @@ public class RepairShopController {
             @Parameter(name = "size", description = "페이지 사이즈")
     })
     public ResponseEntity<?> repairBookList(@PathVariable("page") int page, @PathVariable("size") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairBookList(pageRequest));
     }
 
@@ -78,7 +79,7 @@ public class RepairShopController {
             @Parameter(name = "size", description = "페이지 사이즈")
     })
     public ResponseEntity<?> repairResultList(@PathVariable("page") int page, @PathVariable("size") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairResultGetList(pageRequest));
     }
 

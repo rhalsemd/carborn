@@ -16,6 +16,7 @@ import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.service.company.InsuranceService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
 import java.time.LocalDateTime;
@@ -49,8 +50,7 @@ public class InsuranceController {
             @Parameter(name = "size", description = "한 페이지 개수")
     })
     public ResponseEntity<?> carInsuranceHistoryList(@PathVariable("page") int page, @PathVariable("size") int size){
-
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         Page<CarInsuranceHistoryGetListMapping> result = insuranceService.carinsuranceHistoryList(pageRequest);
 
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
