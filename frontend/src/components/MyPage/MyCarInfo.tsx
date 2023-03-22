@@ -8,14 +8,14 @@ import Nav from './../Nav';
 import MyCarDataComponent from './TableComponent/MyCarDataComponent';
 
 // CarStatus 이미지 import 해오기
-import carousel1 from '../../assets/carouselTest/CarStatus1.jpg';
-import carousel2 from '../../assets/carouselTest/CarStatus2.jpg';
-import carousel4 from '../../assets/carouselTest/CarStatus4.jpg';
-import carousel5 from '../../assets/carouselTest/CarStatus5.jpg';
-import carousel7 from '../../assets/carouselTest/CarStatus7.jpg';
-import carousel8 from '../../assets/carouselTest/CarStatus8.jpg';
-import carousel9 from '../../assets/carouselTest/CarStatus9.jpg';
-import carousel10 from '../../assets/carouselTest/CarStatus10.jpg';
+import carousel1 from '../../assets/carousel/CarStatus1.jpg';
+import carousel2 from '../../assets/carousel/CarStatus2.jpg';
+import carousel4 from '../../assets/carousel/CarStatus4.jpg';
+import carousel5 from '../../assets/carousel/CarStatus5.jpg';
+import carousel7 from '../../assets/carousel/CarStatus7.jpg';
+import carousel8 from '../../assets/carousel/CarStatus8.jpg';
+import carousel9 from '../../assets/carousel/CarStatus9.jpg';
+import carousel10 from '../../assets/carousel/CarStatus10.jpg';
 import styled from '@emotion/styled';
 
 // 캐러셀 CSS

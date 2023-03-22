@@ -16,7 +16,7 @@ const StyleBuyContentContainer = styled.div`
   align-items: center;
 `
 
-const StyleBuyConteneTitleDiv = styled.div`
+const StyleBuyContentTitleDiv = styled.div`
   width: 70%;
   height: 20%;
 
@@ -38,9 +38,9 @@ const BuyContent = () => {
     <StyleBuyContent>
       <Nav/>
       <StyleBuyContentContainer>
-        <StyleBuyConteneTitleDiv>
+        <StyleBuyContentTitleDiv>
           <p>구매 내역</p>
-        </StyleBuyConteneTitleDiv>
+        </StyleBuyContentTitleDiv>
         <MyBuyContentComponent/>
       </StyleBuyContentContainer>
     </StyleBuyContent>
