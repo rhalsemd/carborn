@@ -16,7 +16,7 @@ public interface repairListMapping{
 
     int getBookStatus();
 
-    LocalDateTime getBookDt();
+    LocalDate getBookDt();
 
     LocalDateTime getRegDt();
 

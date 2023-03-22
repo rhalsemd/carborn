@@ -1,14 +1,17 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/Signup"
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 //타입 지정
 export type SignUpUserNameProps = {
   signupCompanyFormData: SignupFormData;
   setSignupCompanyFormData: Dispatch<SetStateAction<SignupFormData>>;
-}
+};
 
-const SignUpCompanyName = ({signupCompanyFormData, setSignupCompanyFormData} : SignUpUserNameProps) => {
+const SignUpCompanyName = ({
+  signupCompanyFormData,
+  setSignupCompanyFormData,
+}: SignUpUserNameProps) => {
   // 회원가입 이름 세팅(회사명은 정규표현식 제거)
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -33,7 +36,7 @@ const SignUpCompanyName = ({signupCompanyFormData, setSignupCompanyFormData} : S
         />
       </StyleSignUpInputDiv>
     </div>
-  )
-}
+  );
+};
 
-export default SignUpCompanyName
+export default SignUpCompanyName;

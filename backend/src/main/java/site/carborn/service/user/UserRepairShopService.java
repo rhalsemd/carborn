@@ -22,9 +22,14 @@ public class UserRepairShopService {
         return repairBooks;
     }
 
-    public RepairBook repairBook(Integer id){
-        Optional<RepairBook> repairBook = repairBookRepository.findByStatusAndId(false, id);
-        return repairBook.get();
+    public repairListMapping repairBook(Integer id){
+        //게시글이 없을때
+        if (repairBookRepository.findById(id).get().isStatus()==true){
+            repairListMapping repairBook = null;
+            return repairBook;
+        }
+        repairListMapping repairBook = repairBookRepository.findByStatusAndId(false, id);
+        return repairBook;
     }
 
     @Transactional

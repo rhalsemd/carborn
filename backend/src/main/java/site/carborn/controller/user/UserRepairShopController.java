@@ -25,7 +25,7 @@ public class UserRepairShopController {
     @Autowired
     private UserRepairShopService repairShopService;
 
-    @GetMapping("/book/list/{page}/{size}")// api/user/repair/book/list/
+    @GetMapping("/book/list/{page}/{size}")// api/user/repair/book/list/0/3
     @Operation(description = "사용자의 정비소 예약 목록 조회")
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호"),
@@ -42,8 +42,8 @@ public class UserRepairShopController {
     @GetMapping("/book/{repairBookId}")
     @Operation(description = "정비소 예약 단일 조회")
     @Parameter(name = "repairBookId", description = "예약 게시글 id")
-    public ResponseEntity<RepairBook> getRepairBook(@PathVariable("repairBookId") Integer repairBookId){
-        RepairBook repairBook = repairShopService.repairBook(repairBookId);
+    public ResponseEntity<repairListMapping> getRepairBook(@PathVariable("repairBookId") Integer repairBookId){
+        repairListMapping repairBook = repairShopService.repairBook(repairBookId);
         return new ResponseEntity<>(repairBook, HttpStatus.OK);
     }
 

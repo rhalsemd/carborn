@@ -1,13 +1,16 @@
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 import { useState } from "react";
 
 type SignUpUserBirthProps = {
   setSignupUserFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
   signupUserFormData: SignupFormData;
-}
+};
 
-const SignUpUserBirth = ({setSignupUserFormData, signupUserFormData}:SignUpUserBirthProps) => {
+const SignUpUserBirth = ({
+  setSignupUserFormData,
+  signupUserFormData,
+}: SignUpUserBirthProps) => {
   const [userBirth, setUserBirth] = useState<null | String>(null);
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -24,7 +27,7 @@ const SignUpUserBirth = ({setSignupUserFormData, signupUserFormData}:SignUpUserB
       });
       setUserBirth(birthday);
     }
-  }
+  };
 
   return (
     <StyleSignUpInputDiv>
@@ -32,7 +35,7 @@ const SignUpUserBirth = ({setSignupUserFormData, signupUserFormData}:SignUpUserB
       <br />
       <input type="date" onChange={(e) => handleDateChange(e)} />
     </StyleSignUpInputDiv>
-  )
-}
+  );
+};
 
 export default SignUpUserBirth;

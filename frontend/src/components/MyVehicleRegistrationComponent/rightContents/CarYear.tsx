@@ -3,11 +3,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
+import { RegistrationInfo } from "./../../../routes/userUseFnc/MyVehicleRegistration";
 
 const now = new Date();
 let year = now.getFullYear();
 
-function CarYear({ setRegistrationInfo }: Props) {
+function CarYear({
+  setRegistrationInfo,
+}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
   const inputTyping = (e: any) => {
     const inputValue = e.$y;
     setRegistrationInfo((registrationInfo) => {

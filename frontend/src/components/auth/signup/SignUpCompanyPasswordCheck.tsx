@@ -1,33 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import React, { useEffect, useState } from "react";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 export type SignUpCompanyPasswordCheckProps = {
-  signupCompanyFormData:SignupFormData
-  setSignupCompanyFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
-  secondPassword:string;
+  signupCompanyFormData: SignupFormData;
+  setSignupCompanyFormData: React.Dispatch<
+    React.SetStateAction<SignupFormData>
+  >;
+  secondPassword: string;
   setSecondPassword: React.Dispatch<React.SetStateAction<string>>;
   setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
   isPasswordValid: boolean;
-}
+};
 
-const SignUpCompanyPasswordCheck = ({signupCompanyFormData, setSignupCompanyFormData, secondPassword, setSecondPassword, isPasswordValid, setIsPasswordValid}:SignUpCompanyPasswordCheckProps) => {
+const SignUpCompanyPasswordCheck = ({
+  signupCompanyFormData,
+  setSignupCompanyFormData,
+  secondPassword,
+  setSecondPassword,
+  isPasswordValid,
+  setIsPasswordValid,
+}: SignUpCompanyPasswordCheckProps) => {
   // 비밀번호 중복 체크 로직
-  const handleCompanyPasswordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCompanyPasswordCheck = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     e.preventDefault();
-    setSecondPassword(e.target.value)
+    setSecondPassword(e.target.value);
     if (signupCompanyFormData.password === e.target.value) {
-      setIsPasswordValid(true)
+      setIsPasswordValid(true);
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        passwordcheck: true
-      })
+        passwordcheck: true,
+      });
     } else {
-      setIsPasswordValid(false)
+      setIsPasswordValid(false);
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        passwordcheck: false
-      })
+        passwordcheck: false,
+      });
     }
 
     // 비밀번호 입력창과 비밀번호 재확인용 입력창이 비어있지 않아야한다는 유효성 조건
@@ -38,26 +49,27 @@ const SignUpCompanyPasswordCheck = ({signupCompanyFormData, setSignupCompanyForm
     }
   };
 
-  const handleKeyPress = (e:React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
     }
-  }
+  };
 
   // 다른 회원유형으로 옮길때, 초기화
   useEffect(() => {
-    if(isPasswordValid && signupCompanyFormData.passwordcheck === false){
-      setSecondPassword('')
+    if (isPasswordValid && signupCompanyFormData.passwordcheck === false) {
+      setSecondPassword("");
     }
-  }, [signupCompanyFormData.passwordcheck, setSecondPassword])
+  }, [signupCompanyFormData.passwordcheck, setSecondPassword]);
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="companypasswordcheck">비밀번호 확인</label>{isPasswordValid ? <span>비밀번호가 일치합니다.</span> : null}
+      <label htmlFor="companypasswordcheck">비밀번호 확인</label>
+      {isPasswordValid ? <span>비밀번호가 일치합니다.</span> : null}
       <br />
       <input
         type="password"
-        name='companypasswordcheck'
+        name="companypasswordcheck"
         id="companypasswordcheck"
         placeholder="비밀번호를 입력해주세요(ex. ssafy123)"
         autoComplete="off"
@@ -67,7 +79,7 @@ const SignUpCompanyPasswordCheck = ({signupCompanyFormData, setSignupCompanyForm
         onKeyDown={(e) => handleKeyPress(e)}
       />
     </StyleSignUpInputDiv>
-  )
-}
+  );
+};
 
 export default SignUpCompanyPasswordCheck;

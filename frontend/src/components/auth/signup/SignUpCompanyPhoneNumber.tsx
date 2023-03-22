@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 import SignUpUserPhoneNumberModal from "./modal/SignUpUserPhoneNumberModal";
 

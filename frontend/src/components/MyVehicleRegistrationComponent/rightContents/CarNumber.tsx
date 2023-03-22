@@ -1,6 +1,11 @@
-import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
+import {
+  Props,
+  RegistrationInfo,
+} from "../../../routes/userUseFnc/MyVehicleRegistration";
 
-function CarNumber({ setRegistrationInfo }: Props) {
+function CarNumber({
+  setRegistrationInfo,
+}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
   const inputTyping = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const inputValue = e.target.value;
     setRegistrationInfo((registrationInfo) => {
@@ -13,7 +18,7 @@ function CarNumber({ setRegistrationInfo }: Props) {
 
   return (
     <div>
-      <span>차량 번호</span>
+      <span>차량번호</span>
       <div>
         <input type="text" autoComplete="false" onChange={inputTyping} />
       </div>

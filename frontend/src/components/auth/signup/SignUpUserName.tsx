@@ -1,14 +1,17 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/Signup"
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import { SignupFormData } from "./SignUpButton";
 
 //타입 지정
 export type SignUpUserNameProps = {
   signupUserFormData: SignupFormData;
   setSignupUserFormData: Dispatch<SetStateAction<SignupFormData>>;
-}
+};
 
-const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNameProps) => {
+const SignUpUserName = ({
+  setSignupUserFormData,
+  signupUserFormData,
+}: SignUpUserNameProps) => {
   // 회원가입 이름 세팅
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -19,7 +22,7 @@ const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNa
         name: e.target.value,
       });
     } else {
-      alert("한글 이름만 가능합니다.")
+      alert("한글 이름만 가능합니다.");
     }
   };
 
@@ -57,7 +60,7 @@ const SignUpUserName = ({setSignupUserFormData, signupUserFormData}:SignUpUserNa
         onChange={(e) => handleUserName(e)}
       />
     </StyleSignUpInputDiv>
-  )
-}
+  );
+};
 
-export default SignUpUserName
+export default SignUpUserName;

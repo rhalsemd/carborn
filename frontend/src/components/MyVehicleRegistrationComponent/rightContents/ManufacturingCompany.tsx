@@ -1,6 +1,11 @@
-import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
+import {
+  Props,
+  RegistrationInfo,
+} from "../../../routes/userUseFnc/MyVehicleRegistration";
 
-function ManufacturingCompany({ setRegistrationInfo }: Props) {
+function ManufacturingCompany({
+  setRegistrationInfo,
+}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
   const inputTyping = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const inputValue = e.target.value;
     setRegistrationInfo((registrationInfo) => {

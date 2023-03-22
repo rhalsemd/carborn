@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
+import { useState } from "react";
+import { RegistrationInfo } from "./../../../routes/userUseFnc/MyVehicleRegistration";
 
 const fileUpLoadAPI = (data: FormData) => {
   return axios({
@@ -10,60 +12,49 @@ const fileUpLoadAPI = (data: FormData) => {
   });
 };
 
-// const fileUpLoadAPI = (data: FormData) => {
-//   return axios({
-//     method: "post",
-//     url: "https://jsonplaceholder.typicode.com/posts",
-//     data: {
-//       title: "foo",
-//       body: "bar",
-//       userId: 1,
-//     },
-//     headers: {
-//       "Content-type": "application/json; charset=UTF-8",
-//     },
-//   });
-// };
-const fileList: File[] = []; // 업로드한 파일들을 저장하는 배열
-
 function AdditionalSubmissionFiles({
   registrationInfo,
   setRegistrationInfo,
-}: Props) {
-  const { mutate } = useMutation(fileUpLoadAPI, {
-    onSuccess: (data) => {
-      console.log("성공", data.data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
+  const { mutate } = useMutation(fileUpLoadAPI);
+  const [fileList, setFileList] = useState<Array<File>>([]);
 
+  // 파일 선택
   const onSaveFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadFiles = Array.prototype.slice.call(e.target.files); // 파일선택창에서 선택한 파일들
-
-    const reader = new FileReader();
-
     uploadFiles.forEach((uploadFile) => {
-      fileList.push(uploadFile);
+      // fileList.push(uploadFile);
+      const reader = new FileReader();
+      setFileList((file) => {
+        return [...file, uploadFile];
+      });
 
       reader.onload = () => {
         setRegistrationInfo((registrationInfo) => {
-          const newFileListL: any = [
+          const newFileListL: File[] = [
             ...registrationInfo.fileList,
             reader.result,
+          ];
+
+          const newFileNames: string[] = [
+            ...registrationInfo.fileNames,
+            uploadFile.name,
           ];
 
           return {
             ...registrationInfo,
             fileList: newFileListL,
+            fileNames: newFileNames,
           };
         });
       };
+
       reader.readAsDataURL(uploadFile);
     });
+    e.target.value = "";
   };
 
+  // 등록하기 버튼 누름
   const onFileUpload = () => {
     const formData = new FormData();
 
@@ -72,11 +63,6 @@ function AdditionalSubmissionFiles({
       formData.append("multipartFiles", file);
     });
 
-    // // 객체 (registrationInfo)
-    // const foodDto = {
-    //   name: "피자",
-    //   price: 13500,
-    // };
     const newRegistrationInfo = {
       manufacturingCompany: registrationInfo?.manufacturingCompany,
       carNumber: registrationInfo?.carNumber,
@@ -85,14 +71,31 @@ function AdditionalSubmissionFiles({
     };
 
     formData.append("stringFoodDto", JSON.stringify(newRegistrationInfo)); // 직렬화하여 객체 저장
-    // formData.append("stringFoodDto", JSON.stringify(foodDto)); // 직렬화하여 객체 저장
 
     mutate(formData);
-    // axios({
-    //   method: "post",
-    //   url: "http://192.168.100.176:8080/uploadFiles",
-    //   data: formData,
-    // });
+  };
+
+  // 등록된 사진 삭제
+  const deleteImg = (index: number) => {
+    setFileList((fileList) => {
+      const newFileList = fileList.filter((file, number) => {
+        return number !== index;
+      });
+      return newFileList;
+    });
+
+    setRegistrationInfo((registrationInfo) => {
+      const newFileListL: File[] = registrationInfo.fileList.filter(
+        (file, number) => {
+          return index !== number;
+        }
+      );
+
+      return {
+        ...registrationInfo,
+        fileList: newFileListL,
+      };
+    });
   };
 
   return (
@@ -103,7 +106,14 @@ function AdditionalSubmissionFiles({
         accept="image/*"
         onChange={onSaveFiles}
       />
-
+      {fileList.map((file, index) => {
+        return (
+          <div key={`${file.name}/${index}`}>
+            <span style={{ padding: "0" }}>{file.name}</span>
+            <button onClick={() => deleteImg(index)}>삭제</button>
+          </div>
+        );
+      })}
       <div>
         {/* 등록하기 버튼 */}
         <button onClick={onFileUpload}>등록하기</button>

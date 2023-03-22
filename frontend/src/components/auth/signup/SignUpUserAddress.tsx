@@ -1,7 +1,7 @@
 import { SetStateAction, Dispatch, useState } from "react";
 import { SignupFormData } from "./SignUpButton";
 import DaumPostcode, { Address } from "react-daum-postcode";
-import { StyleSignUpInputDiv } from "../../../routes/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
 import styled from "@emotion/styled";
 
 export type SignUpUserAddressProps = {
@@ -50,10 +50,13 @@ export const CloseButton = styled.button`
   border-radius: 5px;
 `;
 
-const SignUpUserAddress = ({setSignupUserFormData, signupUserFormData}:SignUpUserAddressProps) => {
+const SignUpUserAddress = ({
+  setSignupUserFormData,
+  signupUserFormData,
+}: SignUpUserAddressProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [addressData, setAddressData] = useState<string>("");
-  const handleComplete = (data:Address) => {
+  const handleComplete = (data: Address) => {
     setSignupUserFormData({
       ...signupUserFormData,
       address: data.address,
@@ -62,11 +65,12 @@ const SignUpUserAddress = ({setSignupUserFormData, signupUserFormData}:SignUpUse
     setAddressData(data.address);
   };
 
-
   return (
     <StyleSignUpInputDiv>
-      <span>주소</span><br/>
-      <button onClick={() => setIsOpen(true)}>검색하기</button>{addressData ? <span>{addressData}</span>:null}
+      <span>주소</span>
+      <br />
+      <button onClick={() => setIsOpen(true)}>검색하기</button>
+      {addressData ? <span>{addressData}</span> : null}
       {isOpen && (
         <ModalContainer>
           <ModalBox>
@@ -77,7 +81,7 @@ const SignUpUserAddress = ({setSignupUserFormData, signupUserFormData}:SignUpUse
         </ModalContainer>
       )}
     </StyleSignUpInputDiv>
-  )
-}
+  );
+};
 
-export default SignUpUserAddress
+export default SignUpUserAddress;
