@@ -35,7 +35,7 @@ public class InspectorService {
         String inspector = "imunseymc";
         int inspectorId = inspectorRepository.findByAccount_Id(inspector).getId();
 
-         return inspectBookRepository.findByStatusAndInspector_Id(false,inspectorId,page);
+        return inspectBookRepository.findByStatusAndInspector_Id(false,inspectorId,page);
     }
 
     @Transactional
