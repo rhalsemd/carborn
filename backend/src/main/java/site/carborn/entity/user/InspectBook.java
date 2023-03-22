@@ -8,6 +8,7 @@ import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.account.Account;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,7 +37,7 @@ public class InspectBook {
 
     private int bookStatus;
 
-    private LocalDateTime bookDt;
+    private LocalDate bookDt;
 
     private LocalDateTime regDt;
 
