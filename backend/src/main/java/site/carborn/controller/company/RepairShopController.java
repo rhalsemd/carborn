@@ -50,7 +50,7 @@ public class RepairShopController {
     @PutMapping("book/{repairBookId}")
     @Operation(description = "정비소 정비 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "repairBookId", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult) {
+    public ResponseEntity<?> repairBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult) {
         Optional<RepairBook> updateData = repairShopService.repairBookDetailContent(repairBookId);
         if (!updateData.isPresent()) {
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
@@ -77,7 +77,7 @@ public class RepairShopController {
             @Parameter(name = "page", description = "페이지 번호"),
             @Parameter(name = "size", description = "페이지 사이즈")
     })
-    public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size) {
+    public ResponseEntity<?> repairResultList(@PathVariable("page") int page, @PathVariable("size") int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairResultGetList(pageRequest));
     }
