@@ -61,4 +61,9 @@ public class InspectorService {
 
         return inspectResultRepository.findByInspectBook_Inspector_Id(inspectorId,page);
     }
+
+    @Transactional
+    public Optional<InspectResult> inspectResultDetail(int id){
+        return inspectResultRepository.findById(id);
+    }
 }

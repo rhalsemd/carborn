@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.service.company.InspectorService;
+import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
 import java.time.LocalDateTime;
@@ -38,29 +39,29 @@ public class InspectorController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, inspectorService.inspectBookGetList(pageRequest));
     }
 
-    @GetMapping("book/{id}")
+    @GetMapping("book/{inspectBookId}")
     @Operation(description = "검수원 검수 예약 상세 조회")
-    @Parameter(name = "id", description = "게시물 번호")
-    public ResponseEntity<?> inspectBookDetailContent(@PathVariable("id") int id){
-        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectBookDetail(id));
+    @Parameter(name = "inspectBookId", description = "예약 번호")
+    public ResponseEntity<?> inspectBookDetailContent(@PathVariable("inspectBookId") int inspectBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectBookDetail(inspectBookId));
     }
 
-    @PutMapping("book/{id}")
+    @PutMapping("book/{inspectBookId}")
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
-    @Parameter(name = "id", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(@PathVariable("id") int id, @RequestBody InspectResult inspectResult){
-        Optional<InspectBook> updateData = inspectorService.inspectBookDetail(id);
+    @Parameter(name = "inspectBookId", description = "예약 번호")
+    public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult){
+        Optional<InspectBook> updateData = inspectorService.inspectBookDetail(inspectBookId);
 
         if(!updateData.isPresent()){
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
         }
         //예약 상태 수정
-        updateData.get().setBookStatus(2);
+        updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
         inspectorService.inspectorBookUpdate(updateData.get());
 
         //검수 결과 입력
         inspectResult.setInspectBook(new InspectBook());
-        inspectResult.getInspectBook().setId(id);
+        inspectResult.getInspectBook().setId(inspectBookId);
         inspectResult.setRegDt(LocalDateTime.now());
         inspectorService.inspectorResultInsert(inspectResult);
         //multipartfile 입력 부분
@@ -79,5 +80,12 @@ public class InspectorController {
     public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultGetList(pageRequest));
+    }
+
+    @GetMapping("result/{inspectResultId}")
+    @Operation(description = "검수원 검수 완료 상세 조회")
+    @Parameter(name = "inspectResultId", description = "검수 완료 목록 번호")
+    public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectResultId") int inspectResultId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectResultId));
     }
 }
