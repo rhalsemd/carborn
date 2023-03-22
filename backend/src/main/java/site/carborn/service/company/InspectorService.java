@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
+import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.InspectBookGetListMapping;
+import site.carborn.mapping.user.InspectResultGetDetailMapping;
 import site.carborn.mapping.user.InspectResultGetListMapping;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.user.InspectBookRepository;
@@ -39,7 +41,12 @@ public class InspectorService {
     }
 
     @Transactional
-    public Optional<InspectBook> inspectBookDetail(int id){
+    public InspectBookGetDetailMapping inspectBookDetail(int id){
+        return inspectBookRepository.findAllById(id);
+    }
+
+    @Transactional
+    public Optional<InspectBook> inspectBookUpdateData(int id){
         return inspectBookRepository.findById(id);
     }
 
@@ -63,7 +70,7 @@ public class InspectorService {
     }
 
     @Transactional
-    public Optional<InspectResult> inspectResultDetail(int id){
-        return inspectResultRepository.findById(id);
+    public InspectResultGetDetailMapping inspectResultDetail(int id){
+        return inspectResultRepository.findAllById(id);
     }
 }

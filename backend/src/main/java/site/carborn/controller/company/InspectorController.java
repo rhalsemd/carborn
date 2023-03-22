@@ -50,7 +50,7 @@ public class InspectorController {
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "inspectBookId", description = "예약 번호")
     public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult){
-        Optional<InspectBook> updateData = inspectorService.inspectBookDetail(inspectBookId);
+        Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(inspectBookId);
 
         if(!updateData.isPresent()){
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
