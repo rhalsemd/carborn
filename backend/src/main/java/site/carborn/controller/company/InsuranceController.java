@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.car.CarInsuranceHistory;
+import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.service.company.InsuranceService;
 import site.carborn.util.network.NormalResponse;
@@ -59,7 +60,7 @@ public class InsuranceController {
     @Operation(description = "보험회사 손상 내역 상세 조회")
     @Parameter(name = "id", description = "게시물 번호")
     public ResponseEntity<?> carInsuranceHistoryDetailContent(@PathVariable("id") int id){
-        Optional<CarInsuranceHistory> result = insuranceService.carinsuranceHistoryDetail(id);
+        CarInsuranceHistoryGetDetailMapping result = insuranceService.carinsuranceHistoryDetail(id);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 

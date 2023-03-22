@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.RepairBook;
+import site.carborn.mapping.user.RepairBookGetDetailMapping;
 import site.carborn.mapping.user.RepairBookGetListMapping;
 
 import java.util.List;
@@ -23,4 +24,5 @@ public interface RepairBookRepository extends JpaRepository<RepairBook, Integer>
 
     Page<RepairBookGetListMapping> findByStatusAndRepairShop_Id(boolean status, int repairShopId, Pageable page);
 
+    RepairBookGetDetailMapping findAllById(int id);
 }
