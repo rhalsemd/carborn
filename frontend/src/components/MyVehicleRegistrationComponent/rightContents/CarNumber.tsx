@@ -5,7 +5,7 @@ import {
 
 function CarNumber({
   setRegistrationInfo,
-}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
+}: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
   const inputTyping = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const inputValue = e.target.value;
     setRegistrationInfo((registrationInfo) => {

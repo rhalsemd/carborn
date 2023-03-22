@@ -20,7 +20,7 @@ const leftContent = css`
 function Thumnail({
   registrationInfo,
 }: Pick<
-  Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>,
+  Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>,
   "registrationInfo"
 >) {
   return (

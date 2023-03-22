@@ -25,6 +25,7 @@ export interface RegistrationInfo {
   distanceDriven: string;
   fileList: any[];
   fileNames: any[];
+  files: File[];
 }
 
 export interface Props<T> {
@@ -33,13 +34,16 @@ export interface Props<T> {
 }
 
 function MyVehicleRegistration() {
-  const [registrationInfo, setRegistrationInfo] = useState<RegistrationInfo>({
+  const [registrationInfo, setRegistrationInfo] = useState<
+    Partial<RegistrationInfo>
+  >({
     manufacturingCompany: "",
     carNumber: "",
     carYear: "",
     distanceDriven: "",
     fileList: [],
     fileNames: [],
+    files: [],
   });
 
   return (
