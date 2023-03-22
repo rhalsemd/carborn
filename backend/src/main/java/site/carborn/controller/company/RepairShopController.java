@@ -35,7 +35,7 @@ public class RepairShopController {
             @Parameter(name = "page", description = "페이지 번호"),
             @Parameter(name = "size", description = "페이지 사이즈")
     })
-    public ResponseEntity<?> repairBookList(@PathVariable("page") int page, @PathVariable("size") int size){
+    public ResponseEntity<?> repairBookList(@PathVariable("page") int page, @PathVariable("size") int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairBookList(pageRequest));
     }
@@ -43,19 +43,20 @@ public class RepairShopController {
     @GetMapping("book/{repairBookId}")
     @Operation(description = "정비소 정비 예약 상세 조회")
     @Parameter(name = "repairBookId", description = "예약 번호")
-    public ResponseEntity<?> repairBookDetailContent(@PathVariable("id") int repairBookId){
-        return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairBookDetailContent(repairBookId));
+    public ResponseEntity<?> repairBookDetailContent(@PathVariable("id") int repairBookId) {
+        return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairBookDetailContent(repairBookId));
     }
 
     @PutMapping("book/{repairBookId}")
     @Operation(description = "정비소 정비 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "repairBookId", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult){
+    public ResponseEntity<?> inspectBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult) {
         Optional<RepairBook> updateData = repairShopService.repairBookDetailContent(repairBookId);
-        if(!updateData.isPresent()){
-            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
+        if (!updateData.isPresent()) {
+            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
         }
         updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
+        updateData.get().setUptDt(LocalDateTime.now());
         repairShopService.repairBookUpdate(updateData.get());
 
         repairResult.setRepairBook(new RepairBook());
@@ -67,7 +68,24 @@ public class RepairShopController {
 
         //caver 입력 부분
 
-        return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");
+        return NormalResponse.toResponseEntity(HttpStatus.OK, "예약 상태 수정 및 데이터 입력 완료");
+    }
 
+    @GetMapping("/result/list/{page}/{size}")
+    @Operation(description = "정비소 정비 완료 목록 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 사이즈")
+    })
+    public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairResultGetList(pageRequest));
+    }
+
+    @GetMapping("result/{repairResultId}")
+    @Operation(description = "정비소 정비 완료 상세 조회")
+    @Parameter(name = "repairResultId", description = "정비 완료 목록 번호")
+    public ResponseEntity<?> repairResultDetailContent(@PathVariable("repairResultId") int repairResultId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairResultDetailContent(repairResultId));
     }
 }

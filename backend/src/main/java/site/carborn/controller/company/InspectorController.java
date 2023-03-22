@@ -57,6 +57,7 @@ public class InspectorController {
         }
         //예약 상태 수정
         updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
+        updateData.get().setUptDt(LocalDateTime.now());
         inspectorService.inspectorBookUpdate(updateData.get());
 
         //검수 결과 입력
@@ -88,4 +89,6 @@ public class InspectorController {
     public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectResultId") int inspectResultId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectResultId));
     }
+
+
 }

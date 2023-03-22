@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.user.RepairBookGetListMapping;
+import site.carborn.mapping.user.RepairResultGetListMapping;
 import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.repository.user.RepairBookRepository;
 import site.carborn.repository.user.RepairResultRepository;
@@ -50,5 +51,18 @@ public class RepairShopService {
     @Transactional
     public void repairResultInsert(RepairResult repairResult){
         repairResultRepository.save(repairResult);
+    }
+
+    @Transactional
+    public Page<RepairResultGetListMapping> repairResultGetList(Pageable page){
+        //현재는 임시 아이디(아이디 받아오는 부분 필요)
+        String repairShop = "againsburgh28";
+        int repairShopId = repairShopRepository.findByAccount_Id(repairShop).getId();
+
+        return repairResultRepository.findByRepairBook_RepairShop_Id(repairShopId, page);
+    }
+    @Transactional
+    public Optional<RepairResult> repairResultDetailContent(int id){
+        return repairResultRepository.findById(id);
     }
 }
