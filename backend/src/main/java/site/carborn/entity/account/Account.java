@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Entity
 @Table(name = "MWS_ACCOUNT")
@@ -27,4 +28,8 @@ public class Account {
     private String phoneNo;
 
     private int auth;
+
+    public UsernamePasswordAuthenticationToken toAuthentication() {
+        return new UsernamePasswordAuthenticationToken(id, pwd);
+    }
 }
