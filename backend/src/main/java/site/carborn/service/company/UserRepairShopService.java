@@ -40,4 +40,14 @@ public class UserRepairShopService {
         repairBookRepository.save(delete.get());
     }
 
+    public void updateRepairBook(Integer id, RepairBook repairBook) {
+        Optional<RepairBook> update = repairBookRepository.findById(id);
+
+        update.get().setCar(repairBook.getCar());
+        update.get().setContent(repairBook.getContent());
+        update.get().setBookDt(repairBook.getBookDt());
+        update.get().setUptDt(LocalDateTime.now());
+
+        repairBookRepository.save(update.get());
+    }
 }

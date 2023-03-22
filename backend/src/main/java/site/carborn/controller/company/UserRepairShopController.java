@@ -54,5 +54,12 @@ public class UserRepairShopController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
     }
 
+    // 사용자 정비소 예약 내역 수정
+    @PatchMapping("book/update/{repairBookId}")
+    public ResponseEntity<?> updateRepairBook(@PathVariable Integer repairBookId,
+                                              @RequestBody RepairBook repairBook){
+        repairShopService.updateRepairBook(repairBookId,repairBook);
+        return null;
+    }
 
 }
