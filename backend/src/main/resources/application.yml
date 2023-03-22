@@ -68,6 +68,9 @@ image:
     windows: C:/Users/SSAFY/Downloads/images
     linux: /home/ubuntu/images
 
+kakao:
+  APP_KEY: 5fcd8a6948d0eb38356fe8045792670c
+
 #naver-cloud-sms:
 #  accessKey: hZMpYNUxSNTcNY73KTBW
 #  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
