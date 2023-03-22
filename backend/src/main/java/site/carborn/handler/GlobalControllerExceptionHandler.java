@@ -1,4 +1,4 @@
-package site.carborn.controller;
+package site.carborn.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,15 +45,15 @@ public class GlobalControllerExceptionHandler {
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(RuntimeException.class)
-//    public ResponseEntity<ErrorResponse> runtimeException(RuntimeException e) {
-//        return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, e);
-//    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> illegalArgumentException(IllegalArgumentException e) {
+        return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
+    }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponse> exception(Exception e) {
-//        return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, e);
-//    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> runtimeException(RuntimeException e) {
+        return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
+    }
 }
