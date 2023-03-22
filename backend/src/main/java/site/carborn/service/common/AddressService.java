@@ -17,20 +17,21 @@ import java.util.Map;
 @Service
 public class AddressService {
 
-    @Value("${kakao.APP_KEY}")
-    private String APP_KEY;
+    @Value("${naver.naver-cloud-map.X-NCP-APIGW-API-KEY-ID}")
+    private String clientId;
+    @Value("${naver.naver-cloud-map.X-NCP-APIGW-API-KEY}")
+    private String clientSecret;
 
     public Map<String, Object> getGeoAddress(String address) {
         try {
-            JSONObject geoData = requestGeoAddress(address);
+            JSONObject geoData = requestGeo(address);
             if (geoData == null) {
                 return null;
             }
-            if ((int) ((JSONObject) geoData.get("meta")).get("total_count") == 0) {
+            if ((int) ((JSONObject) geoData.get("meta")).get("totalCount") == 0) {
                 return null;
             }
-
-            JSONObject document = (JSONObject) ((JSONArray) geoData.get("documents")).get(0);
+            JSONObject document = (JSONObject) ((JSONArray) geoData.get("addresses")).get(0);
             Map<String, Object> map = new HashMap<>();
             map.put("lat", document.get("y"));
             map.put("lng", document.get("x"));
@@ -51,11 +52,14 @@ public class AddressService {
             }
 
             Map<String, Object> map = new HashMap<>();
+            JSONObject addr = (JSONObject)((JSONObject) ((JSONArray) rGeoData.get("results")).get(0)).get("region");
+            map.put("addr1", ((JSONObject)addr.get("area1")).get("name"));
+            map.put("addr2", ((JSONObject)addr.get("area2")).get("name"));
 
-            map.put("address_name", ((JSONObject) ((JSONArray) rGeoData.get("documents")).get(0)).get("address_name"));
-            map.put("region_1depth_name", ((JSONObject) ((JSONArray) rGeoData.get("documents")).get(0)).get("region_1depth_name"));
-            map.put("region_2depth_name", ((JSONObject) ((JSONArray) rGeoData.get("documents")).get(0)).get("region_2depth_name"));
-            map.put("region_3depth_name", ((JSONObject) ((JSONArray) rGeoData.get("documents")).get(0)).get("region_3depth_name"));
+            addr = (JSONObject)((JSONObject) ((JSONArray) rGeoData.get("results")).get(0)).get("land");
+            map.put("addr3", (addr.get("name")));
+            map.put("number1", (addr.get("number1")));
+            map.put("number2", (addr.get("number2")));
 
             return map;
         } catch (IOException e) {
@@ -65,15 +69,15 @@ public class AddressService {
         return null;
     }
 
-    public JSONObject requestGeoAddress(String address) throws IOException {
-        String url = String.format("https://dapi.kakao.com/v2/local/search/address.json?query=%s", URLUtils.urlEncode(address));
+    public JSONObject requestGeo(String address) throws IOException {
+        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=%s", URLUtils.urlEncode(address));
 
         Header header = new Header();
         header.append("User-Agent", HTTPUtils.USER_AGENT);
         header.append("Accept-Language", HTTPUtils.ACCEPT_LANGUAGE);
         header.append("Connection", HTTPUtils.CONNECTION);
-        header.append("Authorization", String.format("KakaoAK %s", APP_KEY));
-
+        header.append("X-NCP-APIGW-API-KEY-ID", clientId);
+        header.append("X-NCP-APIGW-API-KEY", clientSecret);
         Get get = new Get(url, header);
 
         int responseCode = get.getResponseCode();
@@ -86,13 +90,14 @@ public class AddressService {
     }
 
     public JSONObject requestReverseGeo(double lat, double lng) throws IOException  {
-        String url = String.format("https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=%f&y=%f", lng, lat);
-
+        String coords = lng+","+lat;
+        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=%s&sourcecrs=epsg:4326&output=json&orders=roadaddr", URLUtils.urlEncode(coords));
         Header header = new Header();
         header.append("User-Agent", HTTPUtils.USER_AGENT);
         header.append("Accept-Language", HTTPUtils.ACCEPT_LANGUAGE);
         header.append("Connection", HTTPUtils.CONNECTION);
-        header.append("Authorization", String.format("KakaoAK %s", APP_KEY));
+        header.append("X-NCP-APIGW-API-KEY-ID", clientId);
+        header.append("X-NCP-APIGW-API-KEY", clientSecret);
 
         Get get = new Get(url, header);
 
@@ -104,4 +109,5 @@ public class AddressService {
         String content = get.get();
         return new JSONObject(content);
     }
+
 }
