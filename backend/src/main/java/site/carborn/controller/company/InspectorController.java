@@ -69,4 +69,15 @@ public class InspectorController {
 
         return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");
     }
+
+    @GetMapping("/result/list/{page}/{size}")
+    @Operation(description = "검수원 검수 완료 목록 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 사이즈")
+    })
+    public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size){
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultGetList(pageRequest));
+    }
 }

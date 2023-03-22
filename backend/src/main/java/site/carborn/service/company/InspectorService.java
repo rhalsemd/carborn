@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.user.InspectBookGetListMapping;
+import site.carborn.mapping.user.InspectResultGetListMapping;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
@@ -50,5 +51,14 @@ public class InspectorService {
     @Transactional
     public void inspectorResultInsert(InspectResult inspectResult){
         inspectResultRepository.save(inspectResult);
+    }
+
+    @Transactional
+    public Page<InspectResultGetListMapping> inspectResultGetList(Pageable page){
+        //회사 ID 가져오는 부분(현재는 임시)
+        String inspector = "imunseymc";
+        int inspectorId = inspectorRepository.findByAccount_Id(inspector).getId();
+
+        return inspectResultRepository.findByInspectBook_Inspector_Id(inspectorId,page);
     }
 }
