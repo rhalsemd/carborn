@@ -1,5 +1,6 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import hand from "../../assets/hand.png";
+import { useEffect, useRef } from "react";
+import { getCurrentLocation } from "../../components/NaverMap/MapFunction";
+import Nav from "./../../components/Nav";
 
 const 좌표 = [
   {
@@ -20,130 +21,21 @@ const 좌표 = [
   },
 ];
 
-interface LocationType {
-  lat: number;
-  lng: number;
-}
-
-const naver = window.naver;
-
-const options = {
-  enableHighAccuracy: true,
-};
-
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [currentLocation, setCurrentLocation] = useState<LocationType | null>(
-    null
-  );
-
-  // 지도를 그리는 함수
-  const drawingMap = (lat: number, lng: number) => {
-    const center = new naver.maps.LatLng(lat, lng);
-
-    var markers: any[] = [],
-      infoWindows: any[] = [];
-    // 네이버 맵 생성
-    const mapDiv = mapRef.current;
-    const map = new naver.maps.Map(mapDiv, {
-      center,
-      zoom: 17,
-    });
-
-    // 인포 마커
-    좌표.forEach((key) => {
-      var position = new naver.maps.LatLng(key.lat, key.lng);
-      var marker = new naver.maps.Marker({
-        map: map,
-        position,
-        icon: {
-          url: hand,
-          size: new naver.maps.Size(50, 52),
-          scaledSize: new naver.maps.Size(50, 52),
-          origin: new naver.maps.Point(0, 0),
-          anchor: new naver.maps.Point(25, 26),
-        },
-        zIndex: 100,
-      });
-      var infoWindow = new naver.maps.InfoWindow({
-        content:
-          '<div style="width:150px;text-align:center;padding:10px;">The Letter is <b>"' +
-          '"</b>.</div>',
-      });
-
-      markers.push(marker);
-      infoWindows.push(infoWindow);
-    });
-
-    naver.maps.Event.addListener(map, "idle", function () {
-      updateMarkers(map, markers);
-    });
-
-    function updateMarkers(map: any, markers: any) {
-      var mapBounds = map.getBounds();
-      var marker, position;
-
-      for (var i = 0; i < markers.length; i++) {
-        marker = markers[i];
-        position = marker.getPosition();
-
-        if (mapBounds.hasLatLng(position)) {
-          showMarker(map, marker);
-        } else {
-          hideMarker(map, marker);
-        }
-      }
-    }
-    function showMarker(map: any, marker: any) {
-      if (marker.setMap()) return;
-      marker.setMap(map);
-    }
-
-    function hideMarker(map: any, marker: any) {
-      if (!marker.setMap()) return;
-      marker.setMap(null);
-    }
-
-    function getClickHandler(seq: number) {
-      return function () {
-        var marker = markers[seq],
-          infoWindow = infoWindows[seq];
-
-        if (infoWindow.getMap()) {
-          infoWindow.close();
-        } else {
-          infoWindow.open(map, marker);
-        }
-      };
-    }
-
-    for (var i = 0, ii = markers.length; i < ii; i++) {
-      naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
-    }
-  };
-
-  // 현재 위치를 받는 함수
-  const getCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        drawingMap(lat, lng);
-      },
-      null,
-      options
-    );
-  };
 
   useEffect(() => {
-    getCurrentLocation();
+    getCurrentLocation(좌표, mapRef);
   }, []);
 
   return (
     <>
       <div
         ref={mapRef}
-        style={{ width: "100vw", height: "100vh", position: "relative" }}
+        style={{
+          width: "100vw",
+          height: "100vh",
+        }}
       />
       <button
         style={{
@@ -152,7 +44,7 @@ function NaverMap() {
           bottom: "14%",
           right: "0.8%",
         }}
-        onClick={() => getCurrentLocation()}
+        onClick={() => getCurrentLocation(좌표, mapRef)}
       >
         +
       </button>

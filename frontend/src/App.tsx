@@ -33,6 +33,7 @@ import Insurance from "./components/MyPage/Insurance";
 import UserWithdrawal from "./components/MyPage/UserWithdrawal";
 import PasswordModify from "./components/MyPage/PasswordModify";
 import NaverMap from "./routes/userUseFnc/NaverMap";
+import TestHome from "./routes/TestHome";
 
 const globalStyles = css`
   body {
@@ -79,6 +80,7 @@ const routes = [
   { path: "/garage/register", element: <Register /> },
   { path: "/user/car/sale", element: <SaleRegistration /> },
   { path: "/user/map", element: <NaverMap /> },
+  { path: "/test", element: <TestHome /> },
 ];
 
 function App() {
