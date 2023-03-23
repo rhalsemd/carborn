@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
-import site.carborn.mapping.user.repairListMapping;
+import site.carborn.mapping.user.UserRepairBookListMapping;
+import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.RepairBookRepository;
+import site.carborn.repository.user.RepairResultRepository;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 
@@ -17,14 +19,16 @@ import java.time.LocalDateTime;
 
 @Service
 @Transactional
-public class UserRepairShopService {
+public class UserRepairService {
     @Autowired
     private RepairBookRepository repairBookRepository;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    private RepairResultRepository repairResultRepository;
 
-    public Page<repairListMapping> repairBookList(String accountId, int page) {
-        Page<repairListMapping> repairBooks = repairBookRepository.findByStatusAndAccount_Id(
+    public Page<UserRepairBookListMapping> repairBookList(String accountId, int page) {
+        Page<UserRepairBookListMapping> repairBooks = repairBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
                 ,BoardUtils.pageRequestInit(
@@ -39,7 +43,7 @@ public class UserRepairShopService {
         return repairBooks;
     }
 
-    public repairListMapping repairBook(Integer id){
+    public UserRepairBookListMapping repairBook(Integer id){
         //게시글이 없을때
         RepairBook repairBook = repairBookRepository.findById(id).orElseThrow(()->
                 new RuntimeException("존재하지 않는 데이터입니다"));
@@ -104,5 +108,21 @@ public class UserRepairShopService {
 
         repairBookRepository.save(update);
         return update.getId();
+    }
+
+    public Page<UserRepairResultListMapping> repairResultList(String accountId, int page) {
+        Page<UserRepairResultListMapping> repairResults = repairResultRepository.findByRepairBook_StatusAndRepairBook_Account_ID(
+                BoardUtils.BOARD_DELETE_STATUS_FALSE,
+                accountId
+                ,BoardUtils.pageRequestInit(
+                        page
+                        ,BoardUtils.PAGE_PER_ROW_20
+                        ,"repairDt", BoardUtils.ORDER_BY_DESC
+                )
+        );
+//        if(repairBooks.isEmpty()){
+//            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
+//        }
+        return repairResults;
     }
 }
