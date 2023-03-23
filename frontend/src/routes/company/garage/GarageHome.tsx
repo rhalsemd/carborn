@@ -71,7 +71,6 @@ const container = css`
         img {
           position: relative;
           height: 50%;
-          /* width: 50%; */
         }
       }
       div:nth-of-type(3) {

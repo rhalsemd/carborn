@@ -69,7 +69,7 @@ export default function RegisterForm() {
   const [연비, set연비] = useState<string>("");
 
   const isGarage = useLocation().pathname == "/garage/reserve";
-
+  const { id } = useLocation().state;
   const change연비 = (e: any) => {
     if (/^[0-9]+$/.test(e.target.value)) {
       set연비(e.target.value);

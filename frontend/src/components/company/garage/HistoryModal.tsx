@@ -57,10 +57,7 @@ export default function HistoryModal({ id }: Props) {
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleClose}>
-            취소
-          </Button>
-          <Button variant="contained" onClick={handleClose}>
-            수락
+            닫기
           </Button>
         </DialogActions>
       </Dialog>
