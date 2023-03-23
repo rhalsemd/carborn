@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,8 @@ import site.carborn.service.company.InsuranceService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+import java.io.IOException;
+
 
 @Tag(name = "Insurance History", description = "보험회사 손상 내역 관련 API")
 @RequestMapping("/api/insurance")
@@ -33,13 +32,8 @@ public class InsuranceController {
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistory history){
-        history.setRegDt(LocalDateTime.now());
-        //multipartfile 들어가야 되는 부분
-
-        //caver 입력 부분
-
-        insuranceService.insertCarInsuranceHistory(history);
+    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistory carInsuranceHistory) throws IOException {
+        insuranceService.insertCarInsuranceHistory(carInsuranceHistory);
         return NormalResponse.toResponseEntity(HttpStatus.OK, "등록 되었습니다.");
     }
 

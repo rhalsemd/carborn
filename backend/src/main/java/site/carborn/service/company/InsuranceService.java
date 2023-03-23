@@ -14,8 +14,12 @@ import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InsuranceCompanyRepository;
+import site.carborn.service.common.KlaytnService;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +34,15 @@ public class InsuranceService {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private KlaytnService klaytnService;
+
     @Transactional
-    public void insertCarInsuranceHistory(CarInsuranceHistory carInsuranceHistory){
+    public void insertCarInsuranceHistory(CarInsuranceHistory carInsuranceHistory) throws IOException {
+
+        carInsuranceHistory.setRegDt(LocalDateTime.now());
+        //multipartfile 들어가야 되는 부분
+
         //회사 ID 가져오는 부분(현재는 임시)
         String id = "insurancetest";
         
@@ -42,8 +53,21 @@ public class InsuranceService {
         carInsuranceHistory.getCar().setId(carId);
         carInsuranceHistory.setInsuranceCompany(new InsuranceCompany());
         carInsuranceHistory.getInsuranceCompany().setId(insuranceId);
-        
-        //데이터 저장
+
+        //carId를 통해 carHash를 가져오는 부분
+        String carHash = carRepository.findAllById(carId).getWalletHash();
+
+        //kas api 호출
+        //metaData 등록
+        String metaDataUri = klaytnService.getUri(carInsuranceHistory).get("uri").toString();
+
+        //데이터 저장 및 alias 규칙에 따라 alias 생성
+        LocalDateTime aliastime = carInsuranceHistory.getRegDt();
+        String alias = "insurance-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+
+        //contract 배포
+        carInsuranceHistory.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
+
         carInsuranceHistoryRepository.save(carInsuranceHistory);
     }
 
