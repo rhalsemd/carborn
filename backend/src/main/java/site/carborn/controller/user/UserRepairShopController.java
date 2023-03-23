@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.repairListMapping;
 import site.carborn.service.user.UserRepairShopService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
 
@@ -25,50 +26,45 @@ public class UserRepairShopController {
     @Autowired
     private UserRepairShopService repairShopService;
 
-    @GetMapping("/book/list/{page}/{size}")// api/user/repair/book/list/0/3
+    @GetMapping("/book/list/{page}")// api/user/repair/book/list/0/3
     @Operation(description = "사용자의 정비소 예약 목록 조회")
     @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "한 페이지 게시물 수")
+            @Parameter(name = "page", description = "페이지 번호")
     })
-    public ResponseEntity<Page<repairListMapping>> getRepairBookList(@PathVariable("size") int size,
-                                                              @PathVariable("page") int page) {
+    public ResponseEntity<?> getRepairBookList(@PathVariable("page") int page) {
         String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
-        PageRequest pageRequest = PageRequest.of(page, size,Sort.by("id").descending());
-        Page<repairListMapping> result = repairShopService.repairBookList(accountId,pageRequest);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+//        PageRequest pageRequest = PageRequest.of(page, size,Sort.by("id").descending());
+        Page<repairListMapping> result = repairShopService.repairBookList(accountId,page);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
     @GetMapping("/book/{repairBookId}")
     @Operation(description = "정비소 예약 단일 조회")
     @Parameter(name = "repairBookId", description = "예약 게시글 id")
-    public ResponseEntity<repairListMapping> getRepairBook(@PathVariable("repairBookId") Integer repairBookId){
+    public ResponseEntity<?> getRepairBook(@PathVariable("repairBookId") Integer repairBookId){
         repairListMapping repairBook = repairShopService.repairBook(repairBookId);
-        return new ResponseEntity<>(repairBook, HttpStatus.OK);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,repairBook);
     }
 
     @PostMapping("/book")
     @Operation(description = "사용자 정비소 예약")
-    public Object createRepairBook(@RequestBody RepairBook repairBook){
+    public ResponseEntity<?> createRepairBook(@RequestBody RepairBook repairBook){
         repairShopService.createRepairBook(repairBook);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
+        return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.createRepairBook(repairBook));
     }
 
     @DeleteMapping ("/book/delete/{repairBookId}")
     @Operation(description = "사용자 정비소 예약 삭제")
     @Parameter(name = "repairBookId", description = "예약 게시글 id")
-    public Object deleteRepairBook(@PathVariable("repairBookId") Integer repairBookId){
+    public ResponseEntity<?> deleteRepairBook(@PathVariable("repairBookId") Integer repairBookId){
         repairShopService.deleteRepairBook(repairBookId);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
-    @PatchMapping("book/update/{repairBookId}")
+    @PutMapping("/book")
     @Operation(description = "사용자 정비소 예약 내역 수정")
-    @Parameter(name = "repairBookId", description = "예약 게시글 id")
-    public Object updateRepairBook(@PathVariable("repairBookId") Integer repairBookId,
-                                              @RequestBody RepairBook repairBook){
-        repairShopService.updateRepairBook(repairBookId,repairBook);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, "SUCCESS");
+    public ResponseEntity<?> updateRepairBook(@RequestBody RepairBook repairBook){
+        return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.updateRepairBook(repairBook));
     }
 
 }
