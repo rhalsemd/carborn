@@ -12,15 +12,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
 import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.service.company.InsuranceService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
+import xyz.groundx.caver_ext_kas.rest_client.io.swagger.client.ApiException;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Tag(name = "Insurance History", description = "보험회사 손상 내역 관련 API")
 @RequestMapping("/api/insurance")
@@ -33,13 +33,8 @@ public class InsuranceController {
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistory history){
-        history.setRegDt(LocalDateTime.now());
-        //multipartfile 들어가야 되는 부분
-
-        //caver 입력 부분
-
-        insuranceService.insertCarInsuranceHistory(history);
+    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws ApiException {
+        insuranceService.insertCarInsuranceHistory(carInsuranceHistoryRequestDTO);
         return NormalResponse.toResponseEntity(HttpStatus.OK, "등록 되었습니다.");
     }
 

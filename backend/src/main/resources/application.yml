@@ -85,3 +85,9 @@ naver:
 
 business-registration-number-verification:
   serviceKey: 6gySi+blFPcHBT8gEPjE0eHTAuce2xs6nDw+IlZSQnYMq925qN9opkE4aDZRME3VB2gqZt/Khqg28B4nYC3juQ==
+
+klaytn:
+  accessKeyId: KASKUIIPRW139WBZAXT657H0
+  secretAccessKey: 8fxpWhYFGmYW3Fz1uXT5MiZ_Mw9qhFmojpS94psy
+  authorization: Basic S0FTS1VJSVBSVzEzOVdCWkFYVDY1N0gwOjhmeHBXaFlGR21ZVzNGejF1WFQ1TWlaX013OXFoRm1vanBTOTRwc3k=
+  chainId: 1001
