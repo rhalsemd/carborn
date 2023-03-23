@@ -17,7 +17,7 @@ public interface UserRepairResultListMapping {
     //아이디
     String getRepairBookAccountId();
     //정비받은 날짜
-    LocalDateTime gerRepairDt();
+    LocalDateTime getRepairDt();
     //상세정보조회(정비예약상태)
     int getRepairBookBookStatus();
 

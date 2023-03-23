@@ -111,7 +111,7 @@ public class UserRepairService {
     }
 
     public Page<UserRepairResultListMapping> repairResultList(String accountId, int page) {
-        Page<UserRepairResultListMapping> repairResults = repairResultRepository.findByRepairBook_StatusAndRepairBook_Account_ID(
+        Page<UserRepairResultListMapping> repairResults = repairResultRepository.findByRepairBook_StatusAndRepairBook_Account_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
                 ,BoardUtils.pageRequestInit(
@@ -120,9 +120,9 @@ public class UserRepairService {
                         ,"repairDt", BoardUtils.ORDER_BY_DESC
                 )
         );
-//        if(repairBooks.isEmpty()){
-//            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
-//        }
+        if(repairResults.isEmpty()){
+            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
+        }
         return repairResults;
     }
 }

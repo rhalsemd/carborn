@@ -15,6 +15,6 @@ public interface RepairResultRepository extends JpaRepository<RepairResult, Inte
 
     RepairResultGetDetailMapping findAllById(int id);
 
-    Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_ID(Boolean repairBookStatus, String repairBookAccountId, Pageable page);
+    Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_Id(Boolean repairBookStatus, String repairBookAccountId, Pageable page);
                                 //삭제되지 않았고, 회원꺼만
 }
