@@ -39,5 +39,8 @@ public class CarInsuranceHistory {
 
     private LocalDateTime insuranceDt;
 
+    @Column(length = 200)
+    private String contractHash;
+
     private LocalDateTime regDt;
 }

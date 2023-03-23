@@ -10,6 +10,10 @@ public interface CarInsuranceHistoryGetDetailMapping {
 
     String getCategory();
 
+    String getContent();
+
+    String getInsuranceImgNm();
+
     LocalDateTime getInsuranceDt();
 
     LocalDateTime getRegDt();

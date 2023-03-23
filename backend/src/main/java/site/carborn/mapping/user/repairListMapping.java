@@ -3,21 +3,14 @@ package site.carborn.mapping.user;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface RepairBookGetDetailMapping {
-
+public interface repairListMapping{
     int getId();
 
-    String getCarModelNm();
+    int getCarId();
 
-    String getCarRegNm();
-
-    String getCarVin();
+    int getRepairShopId();
 
     String getAccountId();
-
-    String getAccountName();
-
-    String getAccountPhoneNo();
 
     String getContent();
 
@@ -28,4 +21,4 @@ public interface RepairBookGetDetailMapping {
     LocalDateTime getRegDt();
 
     LocalDateTime getUptDt();
-}
+    }

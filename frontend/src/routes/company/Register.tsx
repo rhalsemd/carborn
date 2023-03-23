@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import NavGarage from "../../../components/NavGarage";
-import RegisterForm from "../../../components/garage/RegisterForm";
-import car from "../../../assets/giup-car.png";
+import NavCompany from "../../components/company/NavCompnay";
+import RegisterForm from "../../components/company/garage/RegisterForm";
+import car from "../../assets/giup-car.png";
 
 const container = css`
   width: 100%;
@@ -13,7 +13,7 @@ const container = css`
   justify-content: center;
   align-items: center;
   position: relative;
-  img {
+  .backImg {
     height: 75%;
     width: 75%;
     opacity: 0.6;
@@ -25,9 +25,9 @@ const container = css`
 export default function Register() {
   return (
     <>
-      <NavGarage />
+      <NavCompany />
       <div css={container}>
-        <img src={car} />
+        <img src={car} className="backImg" />
         <RegisterForm />
       </div>
     </>

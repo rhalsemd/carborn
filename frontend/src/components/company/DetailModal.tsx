@@ -7,6 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Props {
   id: string;
@@ -23,12 +24,23 @@ const Transition = React.forwardRef(function Transition(
 
 export default function DetailModal({ id }: Props) {
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
+  const isGarage = useLocation().pathname == "/garage/reserve";
   const handleClickOpen = () => {
     setOpen(true);
+    navigate("");
   };
 
-  const handleClose = () => {
+  const handleRegister = () => {
+    setOpen(false);
+    if (isGarage) {
+      navigate("/garage/register");
+    } else {
+      navigate("/inspector/register");
+    }
+  };
+
+  const handleCancel = () => {
     setOpen(false);
   };
 
@@ -46,7 +58,7 @@ export default function DetailModal({ id }: Props) {
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        onClose={handleCancel}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>"수리 요청 내역"{id}</DialogTitle>
@@ -57,11 +69,11 @@ export default function DetailModal({ id }: Props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" onClick={handleCancel}>
             취소
           </Button>
-          <Button variant="contained" onClick={handleClose}>
-            수락
+          <Button variant="contained" onClick={handleRegister}>
+            {isGarage ? "정비 내역 등록" : "검수 내역 등록"}
           </Button>
         </DialogActions>
       </Dialog>

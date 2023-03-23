@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import NavGarage from "../../../components/NavGarage";
-import car from "../../../assets/giup-car.png";
-import HistoryTable from "../../../components/garage/HistoryTable";
+import NavGarage from "../../components/company/NavCompnay";
+import car from "../../assets/giup-car.png";
+import HistoryTable from "../../components/company/HistoryTable";
 
 const container = css`
   width: 100%;
