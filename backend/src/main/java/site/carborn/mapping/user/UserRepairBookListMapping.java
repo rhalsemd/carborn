@@ -3,7 +3,7 @@ package site.carborn.mapping.user;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface repairListMapping{
+public interface UserRepairBookListMapping {
     int getId();
 
     int getCarId();
