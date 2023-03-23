@@ -1,19 +1,23 @@
 package site.carborn.service.user;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.BoardRequestDTO;
+import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.repairListMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.RepairBookRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 
 @Service
 public class UserRepairShopService {
@@ -56,18 +60,17 @@ public class UserRepairShopService {
         if (repairBook.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
-
-        if (accountRepository.findById(repairBook.getAccount().getId())==null){
+        Account account = accountRepository.findById(repairBook.getAccount().getId());
+        if (account == null){
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
         repairBook.setRegDt(LocalDateTime.now());
         repairBook.setUptDt(LocalDateTime.now());
-        repairBook.setBookStatus(0);
-        repairBook.setStatus(false);
+        repairBook.setBookStatus(BookUtils.BOOK_STATUS_WAIT);
+        repairBook.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         RepairBook save = repairBookRepository.save(repairBook);
-        System.out.println(save.getId());
         return save.getId();
     }
 
@@ -80,7 +83,7 @@ public class UserRepairShopService {
             throw new RuntimeException("삭제된 데이터입니다");
         }
 
-        delete.setStatus(true);
+        delete.setStatus(BoardUtils.BOARD_DELETE_STATUS_TRUE);
         delete.setUptDt(LocalDateTime.now());
         repairBookRepository.save(delete);
     }
