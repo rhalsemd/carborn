@@ -17,6 +17,8 @@ public interface RepairBookGetDetailMapping {
 
     String getAccountName();
 
+    String getAccountPhoneNo();
+
     String getContent();
 
     int getBookStatus();
