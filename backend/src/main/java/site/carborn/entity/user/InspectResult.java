@@ -36,5 +36,8 @@ public class InspectResult {
 
     private LocalDateTime inspectDt;
 
+    @Column(length = 200)
+    private String contractHash;
+
     private LocalDateTime regDt;
 }
