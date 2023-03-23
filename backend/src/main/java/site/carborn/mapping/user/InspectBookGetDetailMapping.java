@@ -17,6 +17,8 @@ public interface InspectBookGetDetailMapping {
 
     String getAccountName();
 
+    String getAccountPhoneNo();
+
     String getContent();
 
     int getBookStatus();

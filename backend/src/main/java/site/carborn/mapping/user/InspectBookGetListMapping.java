@@ -15,7 +15,7 @@ public interface InspectBookGetListMapping {
 
     String getAccountId();
 
-    String getAccountName();
+    String getAccountPhoneNo();
 
     int getBookStatus();
 
@@ -23,5 +23,4 @@ public interface InspectBookGetListMapping {
 
     LocalDateTime getRegDt();
 
-    LocalDateTime getUptDt();
 }
