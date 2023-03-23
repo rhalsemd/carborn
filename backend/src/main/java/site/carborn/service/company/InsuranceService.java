@@ -63,7 +63,7 @@ public class InsuranceService {
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = carInsuranceHistory.getRegDt();
-        String alias = "insurance-"+carId+"time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "insurance-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
         carInsuranceHistory.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());

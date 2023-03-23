@@ -12,10 +12,15 @@ import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.InspectBookGetListMapping;
 import site.carborn.mapping.user.InspectResultGetDetailMapping;
 import site.carborn.mapping.user.InspectResultGetListMapping;
+import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
+import site.carborn.service.common.KlaytnService;
+import site.carborn.util.common.BookUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -30,6 +35,12 @@ public class InspectorService {
 
     @Autowired
     private InspectResultRepository inspectResultRepository;
+
+    @Autowired
+    private CarRepository carRepository;
+
+    @Autowired
+    private KlaytnService klaytnService;
 
     @Transactional
     public Page<InspectBookGetListMapping> inspectBookGetList(Pageable page){
@@ -52,11 +63,40 @@ public class InspectorService {
 
     @Transactional
     public void inspectorBookUpdate(InspectBook inspectBook){
+        inspectBook.setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
+        inspectBook.setUptDt(LocalDateTime.now());
         inspectBookRepository.save(inspectBook);
     }
 
     @Transactional
-    public void inspectorResultInsert(InspectResult inspectResult){
+    public void inspectorResultInsert(InspectResult inspectResult, int inspectBookId){
+        //검수 결과 입력
+        inspectResult.setInspectBook(new InspectBook());
+        inspectResult.getInspectBook().setId(inspectBookId);
+        inspectResult.setRegDt(LocalDateTime.now());
+
+        //bookId를 통해 carHash를 가져오는 부분
+        String carVin = inspectBookRepository.findAllById(inspectBookId).getCarVin();
+        int carId = carRepository.findByVin(carVin).getId();
+
+        //carId를 통해 carHash를 가져오는 부분
+        String carHash = carRepository.findAllById(carId).getWalletHash();
+
+        //multipartfile 입력 부분
+
+
+        //caver 입력 부분
+        //kas api 호출
+        //metaData 등록
+        String metaDataUri = klaytnService.getUri(inspectResult).get("uri").toString();
+
+        //데이터 저장 및 alias 규칙에 따라 alias 생성
+        LocalDateTime aliastime = inspectResult.getRegDt();
+        String alias = "insurance-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+
+        //contract 배포
+        inspectResult.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
+
         inspectResultRepository.save(inspectResult);
     }
 
