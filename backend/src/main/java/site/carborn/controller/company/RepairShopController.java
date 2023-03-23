@@ -56,18 +56,10 @@ public class RepairShopController {
         if (!updateData.isPresent()) {
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
         }
-        updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
-        updateData.get().setUptDt(LocalDateTime.now());
+        //예약 상태 수정
         repairShopService.repairBookUpdate(updateData.get());
-
-        repairResult.setRepairBook(new RepairBook());
-        repairResult.getRepairBook().setId(repairBookId);
-        repairResult.setRegDt(LocalDateTime.now());
-        //multipartfile 입력 부분
-
-        repairShopService.repairResultInsert(repairResult);
-
-        //caver 입력 부분
+        //정비 결과 입력
+        repairShopService.repairResultInsert(repairResult,repairBookId);
 
         return NormalResponse.toResponseEntity(HttpStatus.OK, "예약 상태 수정 및 데이터 입력 완료");
     }
