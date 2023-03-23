@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
+import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.service.company.InsuranceService;
@@ -32,8 +32,8 @@ public class InsuranceController {
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws IOException {
-        insuranceService.insertCarInsuranceHistory(carInsuranceHistoryRequestDTO);
+    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistory carInsuranceHistory) throws IOException {
+        insuranceService.insertCarInsuranceHistory(carInsuranceHistory);
         return NormalResponse.toResponseEntity(HttpStatus.OK, "등록 되었습니다.");
     }
 

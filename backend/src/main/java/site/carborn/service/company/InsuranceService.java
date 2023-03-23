@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.entity.company.InsuranceCompany;
@@ -19,6 +18,7 @@ import site.carborn.service.common.KlaytnService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Service
@@ -38,8 +38,7 @@ public class InsuranceService {
     private KlaytnService klaytnService;
 
     @Transactional
-    public void insertCarInsuranceHistory(CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws IOException {
-        CarInsuranceHistory carInsuranceHistory = CarInsuranceHistory.copy(carInsuranceHistoryRequestDTO);
+    public void insertCarInsuranceHistory(CarInsuranceHistory carInsuranceHistory) throws IOException {
 
         carInsuranceHistory.setRegDt(LocalDateTime.now());
         //multipartfile 들어가야 되는 부분
@@ -58,16 +57,18 @@ public class InsuranceService {
         //carId를 통해 carHash를 가져오는 부분
         String carHash = carRepository.findAllById(carId).getWalletHash();
 
-        //alias 규칙에 따라 alias 생성
-        String alias = "insurance"+carId+carInsuranceHistory.getRegDt();
-
-        //caver 입력 부분
-        //String metaDataUri = carInsuranceHistoryRequestDTO.getMetaDataUri();
+        //kas api 호출
+        //metaData 등록
         String metaDataUri = klaytnService.getUri(carInsuranceHistory).get("uri").toString();
-        //carInsuranceHistory.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
 
-        //데이터 저장
-        //carInsuranceHistoryRepository.save(carInsuranceHistory);
+        //데이터 저장 및 alias 규칙에 따라 alias 생성
+        LocalDateTime aliastime = carInsuranceHistory.getRegDt();
+        String alias = "insurance-"+carId+"time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+
+        //contract 배포
+        carInsuranceHistory.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
+
+        carInsuranceHistoryRepository.save(carInsuranceHistory);
     }
 
     @Transactional
