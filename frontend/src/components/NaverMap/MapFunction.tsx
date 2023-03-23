@@ -8,18 +8,24 @@ const naver = window.naver;
  * @param lat : 위도
  * @param lng : 경도
  * @param mapRef : map을 그릴 div tag
+ * @param markers : 마커 배열
+ * @param infoWindows : 인포 배열
  */
 export const drawingMap = (
   location: any,
-  lat: number,
-  lng: number,
-  mapRef: React.RefObject<HTMLDivElement>
+  { lng, lat }: { lng: number; lat: number },
+  mapRef: React.RefObject<HTMLDivElement>,
+  markers: any[],
+  setMarkers: React.Dispatch<any>,
+  infoWindows: any[],
+  setInfoWindows: React.Dispatch<any>,
+  setMapObject: React.Dispatch<any>
 ) => {
   // const center = new naver.maps.LatLng(lat, lng);
   const center = new naver.maps.LatLng(37.565525, 126.976915);
 
-  var markers: any[] = [],
-    infoWindows: any[] = [];
+  // var markers: any[] = [],
+  //   infoWindows: any[] = [];
 
   // 네이버 맵 생성
   const mapDiv = mapRef.current;
@@ -27,8 +33,17 @@ export const drawingMap = (
     center,
     zoom: 17,
   });
+  setMapObject(map);
 
-  setMarker(location, markers, infoWindows, map, "red");
+  setMarker(
+    location,
+    markers,
+    setMarkers,
+    infoWindows,
+    setInfoWindows,
+    map,
+    "red"
+  );
 };
 
 /**
@@ -37,12 +52,14 @@ export const drawingMap = (
  * @param markers : 마커를 저장하는 배열
  * @param infoWindows : info를 저장하는 배열
  * @param map : 네이버 map 객체를 받는다.
- * @param color :
+ * @param color : 색갈
  */
 export const setMarker = (
   location: any,
   markers: any,
+  setMarkers: React.Dispatch<any>,
   infoWindows: any,
+  setInfoWindows: React.Dispatch<any>,
   map: any,
   color: any
 ) => {
@@ -82,38 +99,15 @@ export const setMarker = (
       console.log("클릭");
     });
 
-    markers.push(marker);
-    infoWindows.push(infoWindow);
+    // markers.push(marker);
+    // infoWindows.push(infoWindow);
+    setMarkers((m: any) => {
+      return [...m, marker];
+    });
+    setInfoWindows((info: any) => {
+      return [...info, infoWindow];
+    });
   });
-
-  naver.maps.Event.addListener(map, "idle", function () {
-    updateMarkers(map, markers);
-  });
-
-  function updateMarkers(map: any, markers: any) {
-    var mapBounds = map.getBounds();
-    var marker, position;
-
-    for (var i = 0; i < markers.length; i++) {
-      marker = markers[i];
-      position = marker.getPosition();
-
-      if (mapBounds.hasLatLng(position)) {
-        showMarker(map, marker);
-      } else {
-        hideMarker(map, marker);
-      }
-    }
-  }
-  function showMarker(map: any, marker: any) {
-    if (marker.setMap()) return;
-    marker.setMap(map);
-  }
-
-  function hideMarker(map: any, marker: any) {
-    if (!marker.setMap()) return;
-    marker.setMap(null);
-  }
 
   function getClickHandler(seq: number) {
     return function () {
@@ -133,24 +127,41 @@ export const setMarker = (
   }
 };
 
-const options = {
-  enableHighAccuracy: true,
-};
-
 /**
  * 현재 위치를 받는 함수
  * @param location : 정비소 or 검수원의 정보를 받는다.
  * @param mapRef : map을 그릴 div 태그
+ * @param markers : 마커 배열
+ * @param infoWindos : 인포 배열
  */
+const options = {
+  enableHighAccuracy: true,
+};
+
 export const getCurrentLocation = (
   location: any,
-  mapRef: React.RefObject<HTMLDivElement>
+  mapRef: React.RefObject<HTMLDivElement>,
+  markers: any[],
+  setMarkers: React.Dispatch<any>,
+  infoWindows: any[],
+  setInfoWindows: React.Dispatch<any>,
+  setMapObject: React.Dispatch<any>
 ) => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-      drawingMap(location, lat, lng, mapRef);
+
+      drawingMap(
+        location,
+        { lat, lng },
+        mapRef,
+        markers,
+        setMarkers,
+        infoWindows,
+        setInfoWindows,
+        setMapObject
+      );
     },
     null,
     options
