@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.entity.company.InsuranceCompany;
+import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.car.CarRepository;
@@ -55,7 +56,7 @@ public class InsuranceService {
         return carInsuranceHistoryRepository.findAllByInsuranceCompany_Id(insuranceId,page);
     }
     @Transactional
-    public Optional<CarInsuranceHistory> carinsuranceHistoryDetail(int id){
-        return carInsuranceHistoryRepository.findById(id);
+    public CarInsuranceHistoryGetDetailMapping carinsuranceHistoryDetail(int id){
+        return carInsuranceHistoryRepository.findAllById(id);
     }
 }

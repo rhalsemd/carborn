@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.service.company.InspectorService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
@@ -35,7 +36,7 @@ public class InspectorController {
             @Parameter(name = "size", description = "페이지 사이즈")
     })
     public ResponseEntity<?> inspectBookList(@PathVariable("page") int page, @PathVariable("size") int size){
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK, inspectorService.inspectBookGetList(pageRequest));
     }
 
@@ -50,7 +51,7 @@ public class InspectorController {
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "inspectBookId", description = "예약 번호")
     public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult){
-        Optional<InspectBook> updateData = inspectorService.inspectBookDetail(inspectBookId);
+        Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(inspectBookId);
 
         if(!updateData.isPresent()){
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
@@ -79,7 +80,7 @@ public class InspectorController {
             @Parameter(name = "size", description = "페이지 사이즈")
     })
     public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size){
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultGetList(pageRequest));
     }
 

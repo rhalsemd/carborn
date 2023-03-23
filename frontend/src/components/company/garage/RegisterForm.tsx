@@ -1,10 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import TimePicker from "./Timepicker";
+import TimePicker from "../Timepicker";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import dayjs from "dayjs";
-import FileUpload from "../FileUpload";
+import FileUpload from "../../FileUpload";
+import Carousels from "../Carousels";
+import { useLocation } from "react-router-dom";
+
+type ImageType = string[];
 
 const container = css`
   overflow: scroll;
@@ -23,12 +27,14 @@ const container = css`
     height: 100%;
     border-right: 1px solid black;
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
   .section2 {
     width: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     margin: 20px 0 0 20px;
   }
 
@@ -36,11 +42,6 @@ const container = css`
     width: 50%;
     height: 50%;
     position: relative;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
   }
 
   .formDetail {
@@ -62,36 +63,29 @@ const container = css`
 
 export default function RegisterForm() {
   const [selectTime, setSelectTime] = useState<any>("");
-
-  const [beforeImage, setbeforeImage] = useState<string[]>([]);
-  const [afterImage, setAfterImage] = useState<string[]>([]);
-  const [reciptImage, setReciptImage] = useState<string[]>([]);
+  const [beforeImage, setbeforeImage] = useState<string>("");
+  const [afterImage, setAfterImage] = useState<string>("");
+  const [reciptImage, setReciptImage] = useState<string>("");
   const [연비, set연비] = useState<string>("");
 
+  const isGarage = useLocation().pathname == "/garage/reserve";
+
   const change연비 = (e: any) => {
-    if (/^0123456789/.test(e.target.value)) {
-      console.log("aaa");
+    if (/^[0-9]+$/.test(e.target.value)) {
+      set연비(e.target.value);
+    } else {
+      set연비("");
+      alert("숫자만 입력하세요");
     }
   };
   return (
     <div css={container}>
       <div className="section1">
-        <div className="imgSection">
-          <img src={beforeImage[0]} />
-        </div>
-        <div className="imgSection">
-          <img src={afterImage[0]} />
-        </div>
-
-        <div className="imgSection">
-          <img src={reciptImage[0]} />
-        </div>
-
-        <div className="imgSection"></div>
+        <Carousels<ImageType> images={[beforeImage, afterImage, reciptImage]} />
       </div>
       <div className="section2">
         <div className="formDetail">
-          수리 완료 일자
+          {isGarage ? "수리 완료 일자" : "검수 완료 일자"}
           <div css={{ display: "flex", alignItems: "center" }}>
             <TextField
               id="standard-basic"
@@ -117,25 +111,30 @@ export default function RegisterForm() {
             multiline
             rows={3}
             size="small"
-            placeholder="수리 내역을 입력해 주세요"
+            placeholder={
+              isGarage
+                ? "수리 내역을 입력해 주세요"
+                : "검수 내역을 입력해 주세요"
+            }
           />
         </div>
         <div className="formDetail">
-          연비
+          주행거리
           <TextField
             id="standard-basic"
             variant="standard"
             size="small"
-            placeholder="숫자만 입력하세요"
+            value={연비}
+            placeholder="숫자만 입력하세요 (단위 : km)"
             onChange={change연비}
           />
         </div>
         <div className="formDetail upload">
-          수리 전 사진 등록
+          {isGarage ? "수리 전 사진 등록" : "검수 전 사진 등록"}
           <FileUpload size={20} row={1} setImage={setbeforeImage} />
         </div>
         <div className="formDetail upload">
-          수리 후 사진 등록
+          {isGarage ? "수리 후 사진 등록" : "검수 후 사진 등록"}
           <FileUpload size={20} row={1} setImage={setAfterImage} />
         </div>
         <div className="formDetail upload">

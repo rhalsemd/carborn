@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
+import site.carborn.mapping.user.RepairBookGetDetailMapping;
 import site.carborn.mapping.user.RepairBookGetListMapping;
+import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.RepairResultGetListMapping;
 import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.repository.user.RepairBookRepository;
@@ -39,7 +41,12 @@ public class RepairShopService {
     }
 
     @Transactional
-    public Optional<RepairBook> repairBookDetailContent(int id){
+    public RepairBookGetDetailMapping repairBookDetailContent(int id){
+        return repairBookRepository.findAllById(id);
+    }
+
+    @Transactional
+    public Optional<RepairBook> repairBookUpdateData(int id){
         return repairBookRepository.findById(id);
     }
 
@@ -62,7 +69,7 @@ public class RepairShopService {
         return repairResultRepository.findByRepairBook_RepairShop_Id(repairShopId, page);
     }
     @Transactional
-    public Optional<RepairResult> repairResultDetailContent(int id){
-        return repairResultRepository.findById(id);
+    public RepairResultGetDetailMapping repairResultDetailContent(int id){
+        return repairResultRepository.findAllById(id);
     }
 }

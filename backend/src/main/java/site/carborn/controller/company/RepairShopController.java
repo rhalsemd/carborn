@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.service.company.RepairShopService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
@@ -36,7 +37,7 @@ public class RepairShopController {
             @Parameter(name = "size", description = "페이지 사이즈")
     })
     public ResponseEntity<?> repairBookList(@PathVariable("page") int page, @PathVariable("size") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairBookList(pageRequest));
     }
 
@@ -51,7 +52,7 @@ public class RepairShopController {
     @Operation(description = "정비소 정비 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "repairBookId", description = "예약 번호")
     public ResponseEntity<?> repairBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult) {
-        Optional<RepairBook> updateData = repairShopService.repairBookDetailContent(repairBookId);
+        Optional<RepairBook> updateData = repairShopService.repairBookUpdateData(repairBookId);
         if (!updateData.isPresent()) {
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
         }
@@ -78,7 +79,7 @@ public class RepairShopController {
             @Parameter(name = "size", description = "페이지 사이즈")
     })
     public ResponseEntity<?> repairResultList(@PathVariable("page") int page, @PathVariable("size") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairResultGetList(pageRequest));
     }
 
