@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.carborn.entity.account.Account;
+import site.carborn.entity.user.RepairResult;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,10 @@ public class RepairShopReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "REPAIR_RESULT_ID")
+    private RepairResult repairResult;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REPAIR_SHOP_ID")

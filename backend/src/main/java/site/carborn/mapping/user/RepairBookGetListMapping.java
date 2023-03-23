@@ -15,7 +15,7 @@ public interface RepairBookGetListMapping {
 
     String getAccountId();
 
-    String getAccountName();
+    String getAccountPhoneNo();
 
     int getBookStatus();
 
@@ -23,5 +23,4 @@ public interface RepairBookGetListMapping {
 
     LocalDateTime getRegDt();
 
-    LocalDateTime getUptDt();
 }
