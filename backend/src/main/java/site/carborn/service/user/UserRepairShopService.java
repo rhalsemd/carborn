@@ -1,12 +1,9 @@
 package site.carborn.service.user;
 
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import site.carborn.dto.request.BoardRequestDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.repairListMapping;
@@ -16,10 +13,10 @@ import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 
 @Service
+@Transactional
 public class UserRepairShopService {
     @Autowired
     private RepairBookRepository repairBookRepository;
@@ -47,14 +44,14 @@ public class UserRepairShopService {
         RepairBook repairBook = repairBookRepository.findById(id).orElseThrow(()->
                 new RuntimeException("존재하지 않는 데이터입니다"));
 
-        if (repairBook.isStatus()==true){
+        if (repairBook.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE){
             throw new RuntimeException("삭제된 데이터입니다.");
         }
 
-        return repairBookRepository.findByStatusAndId(false, id);
+        return repairBookRepository.findByStatusAndId(BoardUtils.BOARD_DELETE_STATUS_FALSE, id);
     }
 
-    @Transactional
+
     public int createRepairBook(RepairBook repairBook){
 
         if (repairBook.getAccount().getId().isBlank()) {
@@ -79,7 +76,7 @@ public class UserRepairShopService {
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
 
-        if (delete.isStatus()) {
+        if (delete.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
             throw new RuntimeException("삭제된 데이터입니다");
         }
 
