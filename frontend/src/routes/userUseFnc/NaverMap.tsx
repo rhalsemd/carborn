@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import hand from "../../assets/hand.png";
 
 const 좌표 = [
@@ -20,29 +20,16 @@ const 좌표 = [
   },
 ];
 
-const getCurrentLocation = (): any => {
-  const options = {
-    enableHighAccuracy: true,
-  };
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      return {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-    },
-    null,
-    options
-  );
-};
+interface LocationType {
+  lat: number;
+  lng: number;
+}
 
 const naver = window.naver;
 
-interface LocationType {
-  lat: string;
-  lng: string;
-}
+const options = {
+  enableHighAccuracy: true,
+};
 
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -50,15 +37,9 @@ function NaverMap() {
     null
   );
 
-  useEffect(() => {
-    setCurrentLocation(getCurrentLocation());
-    console.log(getCurrentLocation());
-    console.log(currentLocation);
-
-    const center = new naver.maps.LatLng(
-      currentLocation?.lat,
-      currentLocation?.lng
-    );
+  // 지도를 그리는 함수
+  const drawingMap = (lat: number, lng: number) => {
+    const center = new naver.maps.LatLng(lat, lng);
 
     var markers: any[] = [],
       infoWindows: any[] = [];
@@ -139,6 +120,23 @@ function NaverMap() {
     for (var i = 0, ii = markers.length; i < ii; i++) {
       naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
     }
+  };
+
+  // 현재 위치를 받는 함수
+  const getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        drawingMap(lat, lng);
+      },
+      null,
+      options
+    );
+  };
+
+  useEffect(() => {
+    getCurrentLocation();
   }, []);
 
   return (
@@ -154,7 +152,7 @@ function NaverMap() {
           bottom: "14%",
           right: "0.8%",
         }}
-        onClick={() => setCurrentLocation(getCurrentLocation())}
+        onClick={() => getCurrentLocation()}
       >
         +
       </button>
