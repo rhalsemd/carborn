@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -8,13 +9,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TablePagination, TableFooter } from "@mui/material";
-import { faker } from "@faker-js/faker";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DetailModal from "./DetailModal";
 import { useQuery } from "react-query";
 import { useAPI } from "../../hooks/useAPI";
-
-faker.seed(123);
+import { useLocation } from "react-router-dom";
 
 interface MapType {
   id: string;
@@ -32,44 +31,42 @@ const container = css`
   opacity: 0.85;
 `;
 
-const users = Array<any>(53)
-  .fill(null)
-  .map(() => ({
-    id: faker.datatype.uuid(),
-    name: faker.name.lastName() + faker.name.firstName(),
-    content: faker.internet.email(),
-    phone: faker.phone.number(),
-  }));
-
 export default function ReserveTable() {
   const [page, setPage] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(7);
-
-  // const URL = `http://192.168.100.176:80/api/repair-shop/book/list/${page}/7`;
-  const URL = "http://localhost:3001/content";
-  const getRepairReserveData = useAPI("get", URL);
-
+  const rowsPerPage = 7;
+  const isGarage = useLocation().pathname == "/garage/reserve";
   const handleChangePage = (e: any, newPage: any) => {
     setPage(newPage);
   };
+  // 페이지 상태 표시를 바꿔주는 함수
+  let URL;
+  let queryKey;
+  // 컴포넌트 재사용을 위해 url로 분기 만들기
 
-  const { data } = useQuery(
-    "getRepairReserveData",
-    () => getRepairReserveData,
-    {
-      cacheTime: 1000 * 300,
-      staleTime: 1000 * 300,
-      select: (data) => {
-        return data.data;
-      },
-      onError: (error: Error) => {
-        // setError(error);
-        console.log(error);
-      },
-      // suspense: true,
-      // useErrorBoundary: true,
-    }
-  );
+  if (isGarage) {
+    //URL = `http://192.168.100.176:80/api/repair-shop/book/list/${page}/7`;
+    URL = "http://localhost:3001/content";
+    queryKey = "getRepairReserveData";
+  } else {
+    URL = "http://localhost:3001/content";
+    queryKey = "getInspectorData";
+    console.log("여기는 인스펙터");
+    //URL = `http://192.168.100.176:80/api/inspector/book/${page}/7`;
+  }
+  const getReserveData = useAPI("get", URL);
+  const { data } = useQuery(queryKey, () => getReserveData, {
+    cacheTime: 1000 * 300,
+    staleTime: 1000 * 300,
+    select: (data) => {
+      return data.data;
+    },
+    onError: (error: Error) => {
+      // setError(error);
+      console.log(error);
+    },
+    // suspense: true,
+    // useErrorBoundary: true,
+  });
 
   return (
     <div css={container}>
@@ -104,7 +101,7 @@ export default function ReserveTable() {
                 i: number
               ) => (
                 <TableRow
-                  key={id}
+                  key={i}
                   hover={bookStatus ? false : true}
                   sx={
                     bookStatus
@@ -132,7 +129,7 @@ export default function ReserveTable() {
           <TableFooter>
             <TableRow>
               <TablePagination
-                count={users.length}
+                count={10} //임시 나중에 서버에서 totalElement 받아야함
                 page={page - 1}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}

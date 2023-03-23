@@ -38,15 +38,27 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function DetailModal({ id }: Props) {
-  // const URL = `http://192.168.100.176:80/api/repair-shop/book/${id}`;
-  const URL = `http://localhost:3001/test`;
-  const getRepairDetail = useAPI("get", URL);
+  // const URL = `http://localhost:3001/test`;
+  let URL;
+  let queryKey;
 
-  const { data } = useQuery("getRepairDetail", () => getRepairDetail, {
+  const isGarage = useLocation().pathname == "/garage/reserve";
+  const navigate = useNavigate();
+
+  if (isGarage) {
+    //URL = `http://192.168.100.176:80/api/repair-shop/book/${id}`;
+    URL = "http://localhost:3001/test";
+    queryKey = "getRepairDetailData";
+  } else {
+    URL = "http://localhost:3001/test";
+    queryKey = "getInspectorDetailData";
+    //URL = `http://192.168.100.176:80/api/inspector/book/${id}`;
+  }
+  const getRepairDetail = useAPI("get", URL);
+  const { data } = useQuery(queryKey, () => getRepairDetail, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
-      // return data.data.message;
       return data.data;
     },
     onError: (error: Error) => {
@@ -55,13 +67,13 @@ export default function DetailModal({ id }: Props) {
     enabled: !!id,
     suspense: true,
   });
+
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate();
-  const isGarage = useLocation().pathname == "/garage/reserve";
+
   const handleClickOpen = () => {
     setOpen(true);
-    console.log(data);
   };
+
   const handleRegister = () => {
     setOpen(false);
     if (isGarage) {
@@ -95,8 +107,8 @@ export default function DetailModal({ id }: Props) {
         >
           <DialogTitle>수리 요청 내역</DialogTitle>
           <DialogContent>
-            {/* <DialogContentText id="alert-dialog-slide-description"> */}
             <table css={tableStyle}>
+              <thead></thead>
               <tbody>
                 <tr>
                   <td>아이디</td>

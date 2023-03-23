@@ -11,8 +11,16 @@ import { TablePagination, TableFooter } from "@mui/material";
 import { faker } from "@faker-js/faker";
 import { useState } from "react";
 import HistoryModal from "./garage/HistoryModal";
+import { useQuery } from "react-query";
+import { useAPI } from "./../../hooks/useAPI";
+import { Suspense } from "react";
 
-faker.seed(123);
+interface MapType {
+  id: string;
+  regDt: string;
+  mileage: string;
+  inspectDt: string;
+}
 
 const container = css`
   position: relative;
@@ -32,6 +40,22 @@ export default function HistoryTable() {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(7);
 
+  const URL = "http://localhost:3001/test1";
+
+  const getRepairResult = useAPI("get", URL);
+
+  const { data } = useQuery("getRepairReuslt", () => getRepairResult, {
+    cacheTime: 1000 * 300,
+    staleTime: 1000 * 300,
+    select: (data) => {
+      return data.data;
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+    suspense: true,
+  });
+  console.log(data);
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
@@ -43,30 +67,22 @@ export default function HistoryTable() {
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
-              <TableCell align="center">수리 완료 날짜</TableCell>
-              <TableCell align="center">수리 내용</TableCell>
-              <TableCell align="center">주행 거리</TableCell>
-              <TableCell align="center">사진</TableCell>
               <TableCell align="center">요청 날짜</TableCell>
+              <TableCell align="center">완료 날짜</TableCell>
+              <TableCell align="center">주행 거리</TableCell>
+              <TableCell align="center">자세히 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users
-              .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-              .map(({ id, name, content, phone }, i) => (
-                <TableRow key={id} hover={true}>
-                  <TableCell component="th" scope="row">
-                    {page * rowsPerPage + i + 1}
-                  </TableCell>
-                  <TableCell align="right">{name}</TableCell>
-                  <TableCell align="right">{content}</TableCell>
-                  <TableCell align="right">{phone}</TableCell>
-                  <TableCell align="center">
-                    <HistoryModal id={id} />
-                  </TableCell>
-                  <TableCell align="right">{phone}</TableCell>
-                </TableRow>
-              ))}
+            <TableRow>
+              <TableCell align="right">{data.id}</TableCell>
+              <TableCell align="right">{data.regDt}</TableCell>
+              <TableCell align="right">{data.inspectDt}</TableCell>
+              <TableCell align="right">{data.mileage} KM</TableCell>
+              <TableCell align="center">
+                <HistoryModal id={data.id} />
+              </TableCell>
+            </TableRow>
           </TableBody>
           <TableFooter>
             <TableRow>

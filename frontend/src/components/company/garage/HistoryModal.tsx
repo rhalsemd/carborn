@@ -31,7 +31,6 @@ export default function HistoryModal({ id }: Props) {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div>
       <Button
@@ -49,7 +48,7 @@ export default function HistoryModal({ id }: Props) {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>사진{id}</DialogTitle>
+        <DialogTitle>사진</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             사진들

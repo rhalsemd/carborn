@@ -68,8 +68,9 @@ export default function RegisterForm() {
   const [reciptImage, setReciptImage] = useState<string>("");
   const [연비, set연비] = useState<string>("");
 
-  const isGarage = useLocation().pathname == "/garage/reserve";
+  const isGarage = useLocation().pathname == "/garage/register";
   const { id } = useLocation().state;
+
   const change연비 = (e: any) => {
     if (/^[0-9]+$/.test(e.target.value)) {
       set연비(e.target.value);
@@ -105,7 +106,7 @@ export default function RegisterForm() {
           </div>
         </div>
         <div className="formDetail">
-          수리 내용
+          {isGarage ? "수리 내용" : "검수 내용"}
           <TextField
             id="outlined-multiline-static"
             multiline
