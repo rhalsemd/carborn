@@ -8,18 +8,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
-import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
 import site.carborn.service.company.InsuranceService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
-import xyz.groundx.caver_ext_kas.rest_client.io.swagger.client.ApiException;
+
+import java.io.IOException;
 
 
 @Tag(name = "Insurance History", description = "보험회사 손상 내역 관련 API")
@@ -33,7 +32,7 @@ public class InsuranceController {
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws ApiException {
+    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws IOException {
         insuranceService.insertCarInsuranceHistory(carInsuranceHistoryRequestDTO);
         return NormalResponse.toResponseEntity(HttpStatus.OK, "등록 되었습니다.");
     }

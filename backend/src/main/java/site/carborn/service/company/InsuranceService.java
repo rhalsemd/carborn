@@ -2,7 +2,6 @@ package site.carborn.service.company;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +16,8 @@ import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InsuranceCompanyRepository;
 import site.carborn.service.common.KlaytnService;
-import xyz.groundx.caver_ext_kas.rest_client.io.swagger.client.ApiException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 
@@ -39,15 +38,11 @@ public class InsuranceService {
     private KlaytnService klaytnService;
 
     @Transactional
-    public void insertCarInsuranceHistory(CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws ApiException {
+    public void insertCarInsuranceHistory(CarInsuranceHistoryRequestDTO carInsuranceHistoryRequestDTO) throws IOException {
         CarInsuranceHistory carInsuranceHistory = CarInsuranceHistory.copy(carInsuranceHistoryRequestDTO);
 
         carInsuranceHistory.setRegDt(LocalDateTime.now());
         //multipartfile 들어가야 되는 부분
-
-        //caver 입력 부분
-        String metaDataUri = carInsuranceHistoryRequestDTO.getMetaDataUri();
-        klaytnService.contract(metaDataUri);
 
         //회사 ID 가져오는 부분(현재는 임시)
         String id = "insurancetest";
@@ -59,6 +54,17 @@ public class InsuranceService {
         carInsuranceHistory.getCar().setId(carId);
         carInsuranceHistory.setInsuranceCompany(new InsuranceCompany());
         carInsuranceHistory.getInsuranceCompany().setId(insuranceId);
+
+        //carId를 통해 carHash를 가져오는 부분
+        String carHash = carRepository.findAllById(carId).getWalletHash();
+
+        //alias 규칙에 따라 alias 생성
+        String alias = "insurance"+carId+carInsuranceHistory.getRegDt();
+
+        //caver 입력 부분
+        //String metaDataUri = carInsuranceHistoryRequestDTO.getMetaDataUri();
+        String metaDataUri = klaytnService.getUri(carInsuranceHistory).get("uri").toString();
+        //carInsuranceHistory.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
 
         //데이터 저장
         //carInsuranceHistoryRepository.save(carInsuranceHistory);
