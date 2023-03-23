@@ -11,8 +11,13 @@ import { TablePagination, TableFooter } from "@mui/material";
 import { faker } from "@faker-js/faker";
 import { useState } from "react";
 import DetailModal from "./DetailModal";
+import { useLocation } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useAPI } from "../../hooks/useAPI";
 
 faker.seed(123);
+
+const repairShopId = 1;
 
 const container = css`
   position: relative;
@@ -25,12 +30,37 @@ const users = Array<any>(53)
     id: faker.datatype.uuid(),
     name: faker.name.lastName() + faker.name.firstName(),
     content: faker.internet.email(),
-    phone: faker.phone.phoneNumber(),
+    phone: faker.phone.number(),
   }));
 
-function UserTable() {
+export default function ReserveTable() {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(7);
+  const url = useLocation().pathname;
+  const num = 9;
+  // const URL = `http://192.168.100.176:80/api/repair-shop/book/list/${page}/7`;
+  // const URL = `http://192.168.100.176:80/api/repair-shop/book/${num}`;
+  const URL = `http://192.168.100.176:80/api/insurance/list/22`;
+  const getRepairReserveData = useAPI("get", URL);
+  const { data } = useQuery(
+    "getRepairReserveData",
+    () => getRepairReserveData,
+    {
+      cacheTime: 1000 * 300,
+      staleTime: 1000 * 300,
+      select: (data) => {
+        return data.data;
+      },
+      onError: (error: Error) => {
+        // setError(error);
+        console.log(error);
+      },
+      // suspense: true,
+      // useErrorBoundary: true,
+    }
+  );
+
+  console.log(data);
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
@@ -44,9 +74,11 @@ function UserTable() {
             <TableRow>
               <TableCell>No</TableCell>
               <TableCell align="center">요청 시간</TableCell>
-              <TableCell align="center">수리 내용</TableCell>
+              <TableCell align="center">
+                {url == "/garage/reserve" ? "수리 내용" : "검수 내용"}
+              </TableCell>
               <TableCell align="center">희망 시간</TableCell>
-              <TableCell align="center">전화번호</TableCell>
+              <TableCell align="center">전화 번호</TableCell>
               <TableCell align="center">자세히 보기</TableCell>
             </TableRow>
           </TableHead>
@@ -84,5 +116,3 @@ function UserTable() {
     </div>
   );
 }
-
-export default UserTable;

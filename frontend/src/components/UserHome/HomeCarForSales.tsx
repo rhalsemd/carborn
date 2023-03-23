@@ -26,7 +26,6 @@ const container = css`
   }
 
   hr:nth-of-type(2) {
-    /* margin-top: 2px; */
     width: 5vw;
   }
 `;
@@ -39,8 +38,6 @@ const header = css`
 
   p:nth-of-type(1) {
     margin: 7vh 0 0 0;
-    /* font-size: 25px; */
-    /* font-weight: bold; */
   }
   p:nth-of-type(2) {
     margin: 0 0 0 0;
@@ -52,8 +49,6 @@ const header = css`
 const imgBox = css`
   width: 65vw;
   height: 55vh;
-  /* border: 1px solid black; */
-  /* margin-top: ; */
   position: relative;
   overflow: hidden;
   padding: 0 10px 0 10px;
@@ -133,7 +128,6 @@ export default function HomeCarForSales() {
     height: 100%;
     width: 80%;
     align-items: center;
-    /* overflow-y: scroll; */
     flex-wrap: nowrap;
     transform: translateX(${x}px);
     &::-webkit-scrollbar {
