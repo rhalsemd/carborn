@@ -111,7 +111,12 @@ public class RepairShopService {
         return repairResultRepository.findByRepairBook_RepairShop_Id(repairShopId, page);
     }
     @Transactional
-    public RepairShopReviewGetDetailMapping repairResultDetailContent(int id){
+    public RepairResultGetDetailMapping repairResultDetailContent(int id){
+        return repairResultRepository.findAllById(id);
+    }
+
+    @Transactional
+    public RepairShopReviewMapping repairResultReview(int id){
         return repairShopReviewRepository.findByStatusAndRepairResult_Id(false, id);
     }
 }
