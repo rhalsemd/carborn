@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import site.carborn.dto.request.InspectResultRequestDTO;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.company.InspectorReviewMapping;
@@ -19,6 +20,7 @@ import site.carborn.repository.company.InspectorReviewRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.service.common.KlaytnService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 
 import java.io.IOException;
@@ -75,21 +77,27 @@ public class InspectorService {
     }
 
     @Transactional
-    public void inspectorResultInsert(InspectResult inspectResult, int inspectBookId) throws IOException {
+    public void inspectorResultInsert(InspectResultRequestDTO dto) throws IOException {
         //검수 결과 입력
-        inspectResult.setInspectBook(new InspectBook());
-        inspectResult.getInspectBook().setId(inspectBookId);
-        inspectResult.setRegDt(LocalDateTime.now());
+        dto.setRegDt(LocalDateTime.now());
 
         //bookId를 통해 carHash를 가져오는 부분
-        String carVin = inspectBookRepository.findAllById(inspectBookId).getCarVin();
+        String carVin = inspectBookRepository.findAllById(dto.getInspectBook().getId()).getCarVin();
         int carId = carRepository.findByVin(carVin).getId();
 
         //carId를 통해 carHash를 가져오는 부분
         String carHash = carRepository.findAllById(carId).getWalletHash();
 
         //multipartfile 입력 부분
+        String beforeImgNm = BoardUtils.singleFileSave((dto.getBeforeImg()));
+        String afterImgNm = BoardUtils.singleFileSave((dto.getAfterImg()));
+        String receiptImgNm = BoardUtils.singleFileSave((dto.getReceiptImg()));
 
+        dto.setBeforeImgNm(beforeImgNm);
+        dto.setAfterImgNm(afterImgNm);
+        dto.setReceiptImgNm(receiptImgNm);
+
+        InspectResult inspectResult = InspectResult.copy(dto);
 
         //caver 입력 부분
         //kas api 호출

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.InspectResultRequestDTO;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.service.company.InspectorService;
@@ -38,19 +39,18 @@ public class InspectorController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, inspectorService.inspectBookGetList(pageRequest));
     }
 
-    @GetMapping("book/{inspectBookId}")
+    @GetMapping("/book/{inspectBookId}")
     @Operation(description = "검수원 검수 예약 상세 조회")
     @Parameter(name = "inspectBookId", description = "예약 번호")
     public ResponseEntity<?> inspectBookDetailContent(@PathVariable("inspectBookId") int inspectBookId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectBookDetail(inspectBookId));
     }
 
-    @PutMapping("book/{inspectBookId}")
+    @PutMapping("/book")
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "inspectBookId", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult) throws IOException {
-        Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(inspectBookId);
-
+    public ResponseEntity<?> inspectBookUpdate(InspectResultRequestDTO dto) throws IOException {
+        Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(dto.getInspectBook().getId());
         if(!updateData.isPresent()){
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
         }
@@ -58,9 +58,9 @@ public class InspectorController {
         inspectorService.inspectorBookUpdate(updateData.get());
         
         //검수 결과 입력
-        inspectorService.inspectorResultInsert(inspectResult,inspectBookId);
+        inspectorService.inspectorResultInsert(dto);
 
-        return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
     @GetMapping("/result/list/{page}/{size}")

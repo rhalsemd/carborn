@@ -61,7 +61,7 @@ public class RepairShopController {
         //정비 결과 입력
         repairShopService.repairResultInsert(dto);
 
-        return NormalResponse.toResponseEntity(HttpStatus.OK, "예약 상태 수정 및 데이터 입력 완료");
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
     @GetMapping("/result/list/{page}/{size}")
