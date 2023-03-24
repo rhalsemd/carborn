@@ -19,6 +19,7 @@ import site.carborn.repository.user.RepairResultRepository;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.common.BookUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public class RepairShopService {
     }
 
     @Transactional
-    public void repairResultInsert(RepairResult repairResult, int repairBookId){
+    public void repairResultInsert(RepairResult repairResult, int repairBookId) throws IOException {
         repairResult.setRepairBook(new RepairBook());
         repairResult.getRepairBook().setId(repairBookId);
         repairResult.setRegDt(LocalDateTime.now());
@@ -94,7 +95,8 @@ public class RepairShopService {
         String alias = "repair-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
-        repairResult.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
+        klaytnService.requestContract(metaDataUri, carHash, alias);
+        repairResult.setContractHash(alias);
 
         repairResultRepository.save(repairResult);
     }

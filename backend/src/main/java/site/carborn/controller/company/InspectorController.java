@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +14,9 @@ import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.service.company.InspectorService;
 import site.carborn.util.board.BoardUtils;
-import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
 import java.util.Optional;
 
 @Tag(name = "Inspector", description = "검수원 검수 관련 API")
@@ -50,7 +48,7 @@ public class InspectorController {
     @PutMapping("book/{inspectBookId}")
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "inspectBookId", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult){
+    public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult) throws IOException {
         Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(inspectBookId);
 
         if(!updateData.isPresent()){

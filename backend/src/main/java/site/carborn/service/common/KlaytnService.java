@@ -112,25 +112,7 @@ public class KlaytnService {
         return new JSONObject(content);
     }
 
-
-    public Map<String, Object> getContractHash(String metaDataUri, String carHash, String alias) {
-        try {
-            JSONObject geoData = requestContract(metaDataUri, carHash, alias);
-            if (geoData == null) {
-                throw new NullPointerException();
-            }
-            Map<String, Object> map = new HashMap<>();
-            map.put("transactionHash", geoData.get("transactionHash"));
-
-            return map;
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-        throw new NullPointerException();
-    }
-
-    public JSONObject requestContract(String metaDataUri, String carHash, String alias) throws IOException {
+    public void requestContract(String metaDataUri, String carHash, String alias) throws IOException {
         String url = String.format("https://kip37-api.klaytnapi.com/v2/contract");
 
         Header header = new Header();
@@ -155,8 +137,5 @@ public class KlaytnService {
         if (responseCode != HttpURLConnection.HTTP_OK) {
             throw new NullPointerException();
         }
-
-        String content = post.httpPost();
-        return new JSONObject(content);
     }
 }

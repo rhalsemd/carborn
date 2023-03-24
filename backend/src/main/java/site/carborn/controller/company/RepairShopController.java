@@ -18,6 +18,7 @@ import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -51,7 +52,7 @@ public class RepairShopController {
     @PutMapping("book/{repairBookId}")
     @Operation(description = "정비소 정비 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "repairBookId", description = "예약 번호")
-    public ResponseEntity<?> repairBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult) {
+    public ResponseEntity<?> repairBookUpdate(@PathVariable("repairBookId") int repairBookId, @RequestBody RepairResult repairResult) throws IOException {
         Optional<RepairBook> updateData = repairShopService.repairBookUpdateData(repairBookId);
         if (!updateData.isPresent()) {
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
