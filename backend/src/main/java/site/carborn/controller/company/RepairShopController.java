@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,6 @@ import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.service.company.RepairShopService;
 import site.carborn.util.board.BoardUtils;
-import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
 import java.io.IOException;

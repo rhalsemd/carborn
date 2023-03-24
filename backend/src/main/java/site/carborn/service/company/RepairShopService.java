@@ -8,12 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
-import site.carborn.mapping.user.RepairBookGetDetailMapping;
-import site.carborn.mapping.user.RepairBookGetListMapping;
-import site.carborn.mapping.user.RepairResultGetDetailMapping;
-import site.carborn.mapping.user.RepairResultGetListMapping;
+import site.carborn.mapping.user.*;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.RepairShopRepository;
+import site.carborn.repository.company.RepairShopReviewRepository;
 import site.carborn.repository.user.RepairBookRepository;
 import site.carborn.repository.user.RepairResultRepository;
 import site.carborn.service.common.KlaytnService;
@@ -36,6 +34,9 @@ public class RepairShopService {
 
     @Autowired
     private RepairResultRepository repairResultRepository;
+
+    @Autowired
+    private RepairShopReviewRepository repairShopReviewRepository;
 
     @Autowired
     private CarRepository carRepository;
@@ -110,7 +111,7 @@ public class RepairShopService {
         return repairResultRepository.findByRepairBook_RepairShop_Id(repairShopId, page);
     }
     @Transactional
-    public RepairResultGetDetailMapping repairResultDetailContent(int id){
-        return repairResultRepository.findAllById(id);
+    public RepairShopReviewGetDetailMapping repairResultDetailContent(int id){
+        return repairShopReviewRepository.findByStatusAndRepairResult_Id(false, id);
     }
 }
