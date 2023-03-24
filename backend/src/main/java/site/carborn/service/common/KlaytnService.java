@@ -1,6 +1,7 @@
 package site.carborn.service.common;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class KlaytnService {
     @Value("${klaytn.accessKeyId}")
@@ -135,7 +137,7 @@ public class KlaytnService {
 
         int responseCode = post.getHttpResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new NullPointerException();
+            throw new NullPointerException(String.format("응답코드 %d", responseCode));
         }
     }
 }
