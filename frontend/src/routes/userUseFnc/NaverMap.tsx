@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { useState } from "react";
 import hand from "../../assets/hand.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
+import ReserveForm from "../../components/NaverMap/ReserveForm";
 import SearchBar from "../../components/NaverMap/SearchBar";
 import SearchForm from "./../../components/NaverMap/SearchForm";
 
@@ -59,6 +60,23 @@ const 좌표 = [
 
 const naver = window.naver;
 
+// 현재 지도에 마커 정보가 없을 때 나타나는 컴포넌트
+const NoContentComponent = () => {
+  return (
+    <div
+      style={{
+        transform: "translate(20%,50vh)",
+        height: "20%",
+        width: "80%",
+        fontSize: "1.5rem",
+        fontWeight: "bolder",
+      }}
+    >
+      주변에 정보가 없어요.
+    </div>
+  );
+};
+
 // geolocation 옵션
 const options = {
   enableHighAccuracy: true,
@@ -71,6 +89,7 @@ function NaverMap() {
   const [searchMarkers, setSearchMarkers] = useState<any[]>([]);
   const [searchInfoWindows, setSearchInfoWindows] = useState<any[]>([]);
   const [mapObject, setMapObject] = useState<any>(null);
+  const [reserve, setReserve] = useState<boolean>(false);
 
   /**
    * 현재 위치를 받는 함수
@@ -142,14 +161,15 @@ function NaverMap() {
           '<p style="margin-bottom: 0; color: #606060; font-size: 0.9rem">경북 구미시 구미중앙로 76</p>',
           '<p style="margin: 0; color: #C1C1C1; font-size: 0.9rem">(우) 39301 (지번) 원평동 1008-1</p>',
           '<p style="margin-top: 0; color: #038400; font-size: 1rem; font-weight: bold;">1234-5678</p>',
-          `<button class="fix-shop" style="background-color: red; width: 90%; height: 22%; border-radius: 10px; border: 0; font-size: 1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
+          `<button class="fix-shop" style="background-color: red; width: 90%; height: 22%; border-radius: 10px; border: 0; font-size: 1.1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
           "</div>",
         ].join(""),
       });
 
+      // 예약하기 버튼 클릭
       const button = infoWindow.getContentElement().childNodes[5];
       button.addEventListener("click", () => {
-        console.log("클릭");
+        setReserve((reserve) => !reserve);
       });
 
       markers.push(marker);
@@ -181,6 +201,7 @@ function NaverMap() {
         } else {
           hideMarker(map, marker);
           infoWindow.close();
+          setReserve(false);
         }
 
         if (marker.map) {
@@ -207,8 +228,10 @@ function NaverMap() {
 
         if (infoWindow.getMap()) {
           infoWindow.close();
+          setReserve(false);
         } else {
           infoWindow.open(map, marker);
+          setReserve(false);
         }
       };
     }
@@ -222,7 +245,7 @@ function NaverMap() {
     getCurrentLocation();
   }, []);
 
-  // 검색창 검수원, 정비소 클릭
+  // 검색창 검수원, 정비소 왼쪽 박스에서 클릭시 실행
   const searchBarItemClick = (index: number) => {
     if (searchInfoWindows.length && searchMarkers.length) {
       if (searchInfoWindows[index].getMap()) {
@@ -237,34 +260,28 @@ function NaverMap() {
     <>
       <div css={container}>
         <div css={searchBar}>
-          <div style={{ height: "10%" }}>
+          <div style={{ height: "15%" }}>
             {/* 검색창 */}
-            <SearchForm />
+            {!reserve ? <SearchForm /> : null}
           </div>
           <div css={searchResult}>
             {/* 검색 결과 */}
             {searchMarkers.length ? (
-              searchMarkers.map((item, index) => {
-                return (
-                  <SearchBar
-                    key={index}
-                    index={index}
-                    searchBarItemClick={searchBarItemClick}
-                  />
-                );
-              })
+              reserve ? (
+                <ReserveForm />
+              ) : (
+                searchMarkers.map((item, index) => {
+                  return (
+                    <SearchBar
+                      key={index}
+                      index={index}
+                      searchBarItemClick={searchBarItemClick}
+                    />
+                  );
+                })
+              )
             ) : (
-              <div
-                style={{
-                  transform: "translate(20%,50vh)",
-                  height: "20%",
-                  width: "80%",
-                  fontSize: "1.5rem",
-                  fontWeight: "bolder",
-                }}
-              >
-                주변에 정보가 없어요.
-              </div>
+              <NoContentComponent />
             )}
           </div>
         </div>

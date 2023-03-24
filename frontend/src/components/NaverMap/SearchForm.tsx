@@ -1,6 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
+import Paper from "@mui/material/Paper";
+import InputBase from "@mui/material/InputBase";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
+
 const searchForm = css`
   width: 100%;
   height: 100%;
@@ -16,10 +21,22 @@ function SearchForm() {
 
   return (
     <div css={searchForm}>
-      <form onSubmit={getSearchResult}>
-        <input type="text" placeholder="장소를 입력해주세요" />
-        <input type="submit" value="검색" />
-      </form>
+      <Paper
+        component="form"
+        sx={{
+          display: "flex",
+          width: "100%",
+        }}
+        onSubmit={getSearchResult}
+      >
+        <InputBase
+          sx={{ ml: 9, flex: 1, textAlign: "center" }}
+          inputProps={{ "aria-label": "search google maps" }}
+        />
+        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+          <SearchIcon />
+        </IconButton>
+      </Paper>
     </div>
   );
 }

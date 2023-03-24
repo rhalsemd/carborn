@@ -16,7 +16,7 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
     >
       <p
         style={{
-          fontSize: "1.5rem",
+          fontSize: "1.2rem",
           marginBottom: "0",
           fontWeight: "bolder",
         }}
