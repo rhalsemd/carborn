@@ -3,6 +3,7 @@ package site.carborn.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ import site.carborn.service.user.UserRepairService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
-
+@Tag(name = "사용자 RepairShop 조회", description = "사용자가 RepairShop에 대한 정보를 조회하는 경우")
 @RequestMapping("/api/user/repair")
 @RequiredArgsConstructor
 @RestController
