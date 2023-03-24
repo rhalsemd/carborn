@@ -51,7 +51,7 @@ public class RepairShopController {
     @PutMapping("/book")
     @Operation(description = "정비소 정비 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "repairBookId", description = "예약 번호")
-    public ResponseEntity<?> repairBookUpdate(@RequestBody RepairResultRequestDTO dto) throws IOException {
+    public ResponseEntity<?> repairBookUpdate(RepairResultRequestDTO dto) throws IOException {
         Optional<RepairBook> updateData = repairShopService.repairBookGetData(dto.getRepairBook().getId());
         if (!updateData.isPresent()) {
             return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
