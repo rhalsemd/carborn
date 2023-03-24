@@ -80,4 +80,11 @@ public class RepairShopController {
     public ResponseEntity<?> repairResultDetailContent(@PathVariable("repairResultId") int repairResultId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairResultDetailContent(repairResultId));
     }
+
+    @GetMapping("result/review/{repairResultId}")
+    @Operation(description = "정비소 정비 완료 리뷰 조회")
+    @Parameter(name = "repairResultId", description = "정비 완료 정비 번호")
+    public ResponseEntity<?> repairResultReview(@PathVariable("repairResultId") int repairResultId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairResultReview(repairResultId));
+    }
 }
