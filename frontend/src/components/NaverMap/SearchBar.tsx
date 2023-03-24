@@ -1,9 +1,6 @@
 interface SearchBarType {
   index: number;
-  searchBarItemClick: (
-    index: number,
-    e: React.MouseEvent<HTMLDivElement>
-  ) => void;
+  searchBarItemClick: (index: number) => void;
 }
 
 function SearchBar({ index, searchBarItemClick }: SearchBarType) {
@@ -15,9 +12,7 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
         cursor: "pointer",
         backgroundColor: "white",
       }}
-      onClick={(event: React.MouseEvent<HTMLDivElement>) =>
-        searchBarItemClick(index, event)
-      }
+      onClick={() => searchBarItemClick(index)}
     >
       <p
         style={{

@@ -7,6 +7,7 @@ import { useState } from "react";
 import hand from "../../assets/hand.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
 import SearchBar from "../../components/NaverMap/SearchBar";
+import SearchForm from "./../../components/NaverMap/SearchForm";
 
 const container = css`
   display: flex;
@@ -21,16 +22,16 @@ const searchBar = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const searchResult = css`
   background-color: #ffffff;
-  width: 90%;
+  width: 83%;
   height: 100%;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const 좌표 = [
@@ -69,7 +70,6 @@ function NaverMap() {
     infoWindows: any[] = [];
   const [searchMarkers, setSearchMarkers] = useState<any[]>([]);
   const [searchInfoWindows, setSearchInfoWindows] = useState<any[]>([]);
-
   const [mapObject, setMapObject] = useState<any>(null);
 
   /**
@@ -102,6 +102,12 @@ function NaverMap() {
       zoom: 17,
     });
     setMapObject(map);
+    setSearchMarkers((mark) => {
+      return [];
+    });
+    setSearchInfoWindows((info) => {
+      return [];
+    });
 
     setMarker(map);
   };
@@ -162,17 +168,19 @@ function NaverMap() {
 
     function updateMarkers(map: any, markers: any) {
       var mapBounds = map.getBounds();
-      var marker: any, position;
+      var marker: any, position, infoWindow;
       let newMarker: any[] = [];
 
       for (var i = 0; i < markers.length; i++) {
         marker = markers[i];
         position = marker.getPosition();
+        infoWindow = infoWindows[i];
 
         if (mapBounds.hasLatLng(position)) {
           showMarker(map, marker);
         } else {
           hideMarker(map, marker);
+          infoWindow.close();
         }
 
         if (marker.map) {
@@ -214,10 +222,8 @@ function NaverMap() {
     getCurrentLocation();
   }, []);
 
-  const searchBarItemClick = (
-    index: number,
-    event: React.MouseEvent<HTMLDivElement>
-  ) => {
+  // 검색창 검수원, 정비소 클릭
+  const searchBarItemClick = (index: number) => {
     if (searchInfoWindows.length && searchMarkers.length) {
       if (searchInfoWindows[index].getMap()) {
         searchInfoWindows[index].close();
@@ -231,16 +237,35 @@ function NaverMap() {
     <>
       <div css={container}>
         <div css={searchBar}>
+          <div style={{ height: "10%" }}>
+            {/* 검색창 */}
+            <SearchForm />
+          </div>
           <div css={searchResult}>
-            {searchMarkers.map((item, index) => {
-              return (
-                <SearchBar
-                  key={index}
-                  index={index}
-                  searchBarItemClick={searchBarItemClick}
-                />
-              );
-            })}
+            {/* 검색 결과 */}
+            {searchMarkers.length ? (
+              searchMarkers.map((item, index) => {
+                return (
+                  <SearchBar
+                    key={index}
+                    index={index}
+                    searchBarItemClick={searchBarItemClick}
+                  />
+                );
+              })
+            ) : (
+              <div
+                style={{
+                  transform: "translate(20%,50vh)",
+                  height: "20%",
+                  width: "80%",
+                  fontSize: "1.5rem",
+                  fontWeight: "bolder",
+                }}
+              >
+                주변에 정보가 없어요.
+              </div>
+            )}
           </div>
         </div>
         <CurrentLocationBtn
