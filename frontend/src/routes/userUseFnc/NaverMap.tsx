@@ -58,6 +58,7 @@ const 좌표 = [
 
 const naver = window.naver;
 
+// geolocation 옵션
 const options = {
   enableHighAccuracy: true,
 };
@@ -155,6 +156,42 @@ function NaverMap() {
       });
     });
 
+    naver.maps.Event.addListener(map, "idle", function () {
+      updateMarkers(map, markers);
+    });
+
+    function updateMarkers(map: any, markers: any) {
+      var mapBounds = map.getBounds();
+      var marker: any, position;
+      let newMarker: any[] = [];
+
+      for (var i = 0; i < markers.length; i++) {
+        marker = markers[i];
+        position = marker.getPosition();
+
+        if (mapBounds.hasLatLng(position)) {
+          showMarker(map, marker);
+        } else {
+          hideMarker(map, marker);
+        }
+
+        if (marker.map) {
+          newMarker[newMarker.length] = marker;
+        }
+        setSearchMarkers(newMarker);
+      }
+    }
+
+    function showMarker(map: any, marker: any) {
+      if (marker.getMap()) return;
+      marker.setMap(map);
+    }
+
+    function hideMarker(map: any, marker: any) {
+      if (!marker.getMap()) return;
+      marker.setMap(null);
+    }
+
     function getClickHandler(seq: number) {
       return function () {
         var marker = markers[seq],
@@ -195,7 +232,7 @@ function NaverMap() {
       <div css={container}>
         <div css={searchBar}>
           <div css={searchResult}>
-            {좌표.map((item, index) => {
+            {searchMarkers.map((item, index) => {
               return (
                 <SearchBar
                   key={index}
