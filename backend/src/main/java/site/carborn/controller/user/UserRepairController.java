@@ -83,6 +83,8 @@ public class UserRepairController {
     }
 
     @GetMapping("/result/{repairResultId}")
+    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @Parameter(name = "repairResultId", description = "정비 결과 게시글 id")
     public ResponseEntity<?> getRepairResultDetail(@PathVariable("repairResultId") int repairResultId){
         RepairResultGetDetailMapping result = userRepairService.repairResultDetail(repairResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
