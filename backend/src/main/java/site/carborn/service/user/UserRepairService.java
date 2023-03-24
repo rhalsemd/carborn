@@ -8,7 +8,6 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
-import site.carborn.mapping.user.UserRepairResultDetailMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.RepairBookRepository;

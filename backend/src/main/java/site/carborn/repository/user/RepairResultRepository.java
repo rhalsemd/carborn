@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.RepairResultGetListMapping;
-import site.carborn.mapping.user.UserRepairResultDetailMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 
 @Repository

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
-import site.carborn.mapping.user.UserRepairResultDetailMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.service.user.UserRepairService;
 import site.carborn.util.board.BoardUtils;
