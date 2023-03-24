@@ -83,7 +83,7 @@ public class BoardServiceImpl implements BoardService {
         }
 
         // 첨부파일 저장
-        String fileName = singleFileSave(((BoardRequestDTO) data).getFile());
+        String fileName = BoardUtils.singleFileSave(((BoardRequestDTO) data).getFile());
         ((Board) data).setImgNm(fileName);
 
         ((Board) data).setStatus(false);
@@ -93,40 +93,6 @@ public class BoardServiceImpl implements BoardService {
         Board save = boardRepository.save(Board.copy((Board) data));
         return save.getId();
     }
-
-    private <T> String singleFileSave(MultipartFile multipartFile) {
-        try {
-            // 원본 파일 이름
-            String origFileName = multipartFile.getOriginalFilename();
-
-            // 확장자
-            String fileExtension = origFileName.substring(origFileName.lastIndexOf(".") + 1);
-            BoardUtils.checkImageFileExtension(fileExtension);
-
-            // 서버에 저장될 파일 이름
-            String fileName = (LocalDateTime.now()).toString().replace(":", "-")
-                    + "_" + (new Random().ints(1000, 9999).findAny().getAsInt())
-                    + "." + fileExtension;
-
-            // 파일 크기
-            // long fileSize = multipartFile.getSize();
-
-            File file = new File(ImageUtils.getImageUrl(), fileName);
-            multipartFile.transferTo(file);
-
-            log.debug(fileName + " 저장 완료");
-
-            return fileName;
-        } catch(Exception e) {
-            throw new MultipartException("첨부파일 저장시 오류가 발생했습니다: " + e.getMessage());
-        }
-    }
-
-//    private void multiFileSave(MultipartFile[] multipartFiles) {
-//        for (MultipartFile multipartFile: multipartFiles) {
-//            String fileName = singleFileSave(multipartFile);
-//        }
-//    }
 
     @Override
     public <T> int update(T data) {
