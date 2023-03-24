@@ -115,7 +115,7 @@ const StyleMypageCardImg = styled.div`
 `
 
 const MyPage = () => {
-  const userid = sessionStorage.getItem('userId')
+  const userid = localStorage.getItem('userId')
 
   return (
     <div>

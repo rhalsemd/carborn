@@ -1,15 +1,11 @@
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
-import LoginID from "../../components/auth/login/LoginID";
-import LoginPassword from "../../components/auth/login/LoginPassword";
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loginTry, User } from "../../modules/loginModule";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import SearchIDName from "../../components/auth/searchID/SearchIDName";
-import SearchIDVerify from "../../components/auth/searchID/SearchIDVerify";
-import { searchidCheck } from "../../modules/searchIDModule";
-import Nav from './../../components/Nav';
+import SearchIDPhoneNumberVerify from "../../components/auth/searchID/SearchIDPhoneNumberVerify";
+import Nav from "./../../components/Nav";
+import { SearchIDCheckAction } from "../../modules/SearchIDModule";
+import { useNavigate } from 'react-router-dom';
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -44,6 +40,7 @@ export const StyleLoginSignUpBtn = styled.button`
   background-color: #d23131;
   border: none;
   margin: 0.5rem 0;
+  cursor: pointer;
 `;
 
 export const StyleLoginAnotherLink = styled.div`
@@ -52,52 +49,52 @@ export const StyleLoginAnotherLink = styled.div`
 `;
 
 // 타입 설정
-export type SearchInputObj = {
+export type SearchInputType = {
   name: string;
   phonenumber: string;
   isVerify: boolean;
 };
 
 const SearchID = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selector = useSelector(
-    (state: { searchid: { isVerify: boolean } }) => state.searchid
-  );
-  const [isSearchIdOk, setIsSearchIdOk] = useState(false);
-  const [inputObj, setinputObj] = useState<SearchInputObj>({
+  const navigate = useNavigate();
+  const isComplete = useSelector((state:any) => state.SearchIDCheckReducer.verify)
+  const SearchIDdata = useSelector((state:any) => state.SearchIDCheckReducer)
+  const [searchInput, setSearchInput] = useState<SearchInputType>({
     name: "",
     phonenumber: "",
     isVerify: false,
   });
 
   const handleSearchID = () => {
-    dispatch(searchidCheck(inputObj));
+    dispatch(SearchIDCheckAction(searchInput));
   };
 
   useEffect(() => {
-    if (selector.isVerify) {
-      setIsSearchIdOk(selector.isVerify);
+    if (isComplete) {
+      navigate('/searchid/searchidcomplete', {state:SearchIDdata})
     }
-  }, [selector.isVerify]);
-
-  useEffect(() => {
-    if (isSearchIdOk) {
-      navigate("/searchid/searchidcomplete", { state: selector });
-    }
-  }, [isSearchIdOk, navigate, selector]);
+  }, [isComplete])
 
   return (
     <div>
-      <Nav/>
+      <Nav />
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>
             <h2>아이디 찾기</h2>
           </StyleLoginSignUpTitle>
-          <SearchIDName setinputObj={setinputObj} inputObj={inputObj} />
-          <SearchIDVerify setinputObj={setinputObj} inputObj={inputObj} />
-          <StyleLoginSignUpBtn onClick={handleSearchID}>
+          <SearchIDName
+            setSearchInput={setSearchInput}
+            searchInput={searchInput}
+          />
+          <SearchIDPhoneNumberVerify
+            setSearchInput={setSearchInput}
+            searchInput={searchInput}
+          />
+          <StyleLoginSignUpBtn
+            onClick={handleSearchID}
+            disabled={!Boolean(searchInput.name) && !Boolean(searchInput.phonenumber) && !searchInput.isVerify}>
             아이디 찾기
           </StyleLoginSignUpBtn>
         </StyleLoginSignUpBoxDiv>

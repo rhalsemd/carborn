@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global } from "@emotion/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Login from "./routes/auth/Login";
-import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
+import jwt_decode from "jwt-decode";
 import { QueryClientProvider, QueryClient } from "react-query";
+
+import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
-import Signup from "./routes/auth/Signup";
+import Signup from "./routes/auth/SignupPage";
 import UserHome from "./routes/userUseFnc/UserHome";
 import GarageHome from "./routes/company/garage/GarageHome";
 import InspectorHome from "./routes/company/inspector/InspectorHome";
@@ -16,11 +16,8 @@ import BookList from "./routes/company/BookList";
 import ViewHistory from "./routes/company/ViewHistory";
 import SaleRegistration from "./routes/userUseFnc/SaleRegistration";
 import Register from "./routes/company/Register";
-import TermsOfUse from "./routes/auth/TermsOfUse";
 import Searchid from "./routes/auth/SearchID";
-import SearchidComplete from "./routes/auth/SearchidComplete";
 import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
-import PasswordReset from "./routes/auth/PasswordReset";
 import PasswordComplete from "./routes/auth/PasswordComplete";
 import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
@@ -32,6 +29,10 @@ import SellContent from "./components/MyPage/SellContent";
 import Insurance from "./components/MyPage/Insurance";
 import UserWithdrawal from "./components/MyPage/UserWithdrawal";
 import PasswordModify from "./components/MyPage/PasswordModify";
+import LoginPages from "./routes/auth/LoginPage";
+import GetAgreementPage from "./routes/auth/GetAgreementPage";
+import NewPasswordReset from "./routes/auth/NewPassword";
+import SearchidComplete from "./routes/auth/SearchidComplete";
 
 const globalStyles = css`
   body {
@@ -46,13 +47,13 @@ const queryClient = new QueryClient();
 // 경로 지정
 const routes = [
   { path: "/", element: <UserHome /> },
-  { path: "/login", element: <Login /> },
-  { path: "/termsofuse", element: <TermsOfUse /> },
+  { path: "/login", element: <LoginPages /> },
+  { path: "/getagreement", element: <GetAgreementPage /> },
   { path: "/signup", element: <Signup /> },
   { path: "/searchid", element: <Searchid /> },
   { path: "/searchid/searchidcomplete", element: <SearchidComplete /> },
   { path: "/passwordresetcheck", element: <PasswordResetCheck /> },
-  { path: "/passwordresetcheck/passwordreset", element: <PasswordReset /> },
+  { path: "/passwordresetcheck/passwordreset", element: <NewPasswordReset /> },
   {
     path: "/passwordresetcheck/passwordreset/passwordcomplete",
     element: <PasswordComplete />,
@@ -81,6 +82,20 @@ const routes = [
 ];
 
 function App() {
+  // 토큰 만료 기한 확인 및 세션 스토리지에서 토큰 삭제
+  function checkTokenExpiration() {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      const decodedToken: { [key: string]: any } = jwt_decode(accessToken);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem("accessToken");
+      }
+    }
+  }
+  // 1분마다 토큰 만료 기한 확인
+  setInterval(checkTokenExpiration, 60 * 1000);
+
   return (
     // <div className="App"></div>
     <>

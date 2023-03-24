@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { SearchInputObj } from "../../../routes/auth/SearchID";
 import SignUpUserPhoneNumberModal from "../signup/modal/SignUpUserPhoneNumberModal";
+import { SearchInputType } from "../../../routes/auth/SearchID";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
@@ -10,11 +10,11 @@ const StyleLoginInputDiv = styled.div`
 `;
 
 type SearchIDVerifyProps = {
-  setinputObj: React.Dispatch<React.SetStateAction<SearchInputObj>>;
-  inputObj: SearchInputObj;
+  setSearchInput: React.Dispatch<React.SetStateAction<SearchInputType>>;
+  searchInput: SearchInputType;
 };
 
-const SearchIDVerify = ({ setinputObj, inputObj }: SearchIDVerifyProps) => {
+const SearchIDPhoneNumberVerify = ({ setSearchInput, searchInput }: SearchIDVerifyProps) => {
   const [isValid, setIsValid] = useState(false);
 
   // 모달 관련
@@ -22,8 +22,8 @@ const SearchIDVerify = ({ setinputObj, inputObj }: SearchIDVerifyProps) => {
 
   const openModal = () => {
     if (
-      inputObj.phonenumber.length <= 10 &&
-      inputObj.phonenumber.length <= 11
+      searchInput.phonenumber.length <= 10 &&
+      searchInput.phonenumber.length <= 11
     ) {
       alert("휴대폰 번호는 10자리이상 11자리 이하 여야합니다.");
       setIsModalOpen(false);
@@ -38,8 +38,8 @@ const SearchIDVerify = ({ setinputObj, inputObj }: SearchIDVerifyProps) => {
 
   useEffect(() => {
     if (isValid) {
-      setinputObj({
-        ...inputObj,
+      setSearchInput({
+        ...searchInput,
         isVerify: true,
       });
     }
@@ -47,21 +47,22 @@ const SearchIDVerify = ({ setinputObj, inputObj }: SearchIDVerifyProps) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setinputObj({
-      ...inputObj,
+    setSearchInput({
+      ...searchInput,
       phonenumber: value,
     });
   };
 
   return (
     <StyleLoginInputDiv>
-      <span>전화번호</span>
+      <label htmlFor="searchIDPhoneNumber">전화번호</label>
       <input
-        type="number"
-        id="SearchName"
+        type="text"
+        id="searchIDPhoneNumber"
+        name="searchIDPhoneNumber"
         autoComplete="off"
         placeholder="SearchName"
-        value={inputObj.phonenumber}
+        value={searchInput.phonenumber}
         onChange={handleChange}
       />
       <button onClick={openModal}>인증하러가기</button>
@@ -70,7 +71,7 @@ const SearchIDVerify = ({ setinputObj, inputObj }: SearchIDVerifyProps) => {
       <SignUpUserPhoneNumberModal
         open={isModalOpen}
         onClose={closeModal}
-        phoneNumber={inputObj.phonenumber}
+        phoneNumber={searchInput.phonenumber}
         setIsValid={setIsValid}
         isValid={isValid}
       />
@@ -78,4 +79,4 @@ const SearchIDVerify = ({ setinputObj, inputObj }: SearchIDVerifyProps) => {
   );
 };
 
-export default SearchIDVerify;
+export default SearchIDPhoneNumberVerify;

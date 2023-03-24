@@ -1,8 +1,5 @@
 import { call, put } from "redux-saga/effects";
-import {
-  companyverificationNumberApi,
-  userverificationNumberApi,
-} from "../lib/userverificationNumberApi";
+import { PhoneNumberCheckApi } from "../lib/api";
 
 type State = {
   certifiedNumber: string;
@@ -20,6 +17,12 @@ export const COMPANY_VERIFICATION_CHECK_SUCCESS =
   "COMPANY_VERIFICATION_CHECK_SUCCESS";
 export const COMPANY_VERIFICATION_CHECK_FAILURE =
   "COMPANY_VERIFICATION_CHECK_FAILURE";
+
+// 액션타입이름(인증번호확인버튼)
+export const AUTH_SENDMESSAGE_BTN = 'AUTH_SENDMESSAGE_BTN'
+export const AUTH_SENDMESSAGE_BTN_RESET = 'AUTH_SENDMESSAGE_BTN_RESET'
+export const AUTH_CONFIRM_BTN = 'AUTH_CONFIRM_BTN'
+export const AUTH_CONFIRM_BTN_RESET = 'AUTH_CONFIRM_BTN_RESET'
 
 // 액션 생성 함수
 export const userverificationNumber = (phoneNumber:string) => ({
@@ -52,6 +55,23 @@ export const companyverificationNumberFailure = (error:any) => ({
   payload: error
 })
 
+// 발송 및 인증번호 버튼 disabled 상태 관리용
+export const authSendMessageBtn = () => ({
+  type: AUTH_SENDMESSAGE_BTN
+})
+
+export const authSendMessageBtnReset = () => ({
+  type: AUTH_SENDMESSAGE_BTN_RESET
+})
+
+export const authConfirmBtn = () => ({
+  type: AUTH_CONFIRM_BTN
+})
+
+export const authConfirmBtnReset = () => ({
+  type: AUTH_CONFIRM_BTN_RESET
+})
+
 // 초기값
 const initialState: State = {
   certifiedNumber: "",
@@ -63,7 +83,7 @@ export function* userverificationNumberSaga(
   action: ReturnType<typeof userverificationNumber>
 ): Generator<any, any, any> {
   try {
-    const response = yield call(userverificationNumberApi, action.payload);
+    const response = yield call(PhoneNumberCheckApi, action.payload);
     yield put({ type: USER_VERIFICATION_CHECK_SUCCESS, payload: response });
   } catch (error) {
     console.log(error);
@@ -75,7 +95,7 @@ export function* companyverificationNumberSaga(
   action: ReturnType<typeof companyverificationNumber>
 ): Generator<any, any, any> {
   try {
-    const response = yield call(companyverificationNumberApi, action.payload);
+    const response = yield call(PhoneNumberCheckApi, action.payload);
     yield put({
       type: COMPANY_VERIFICATION_CHECK_SUCCESS,
       payload: response,
@@ -85,7 +105,6 @@ export function* companyverificationNumberSaga(
   }
 }
 
-
 //리듀서
 export function verificationNumberReducer(
   state = initialState,
@@ -93,9 +112,17 @@ export function verificationNumberReducer(
 ) {
   switch (action.type) {
     case USER_VERIFICATION_CHECK_SUCCESS:
-      return { ...state, certificatedNum: action.payload.phoneNumber.slice(3, 9) };
+      return { ...state, ...action.payload, certificatedNum: action.payload.phone.slice(3, 9) };
     case COMPANY_VERIFICATION_CHECK_SUCCESS:
-      return { ...state, certificatedNum: action.payload.phoneNumber.slice(3, 9) };
+      return { ...state, ...action.payload, certificatedNum: action.payload.phone.slice(3, 9) };
+    case AUTH_SENDMESSAGE_BTN:
+      return { ...state, isSendBtn : true };
+    case AUTH_SENDMESSAGE_BTN_RESET:
+      return { ...state, isSendBtn : false };
+    case AUTH_CONFIRM_BTN:
+      return { ...state, isConfirmBtn : true };
+    case AUTH_CONFIRM_BTN_RESET:
+      return { ...state, isConfirmBtn : false };
     default:
       return state;
   }

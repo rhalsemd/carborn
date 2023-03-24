@@ -1,5 +1,5 @@
 import { call, put } from "redux-saga/effects";
-import { companyidCheckApi, useridCheckApi } from "../lib/idCheckApi";
+import { CompanyIdCheckApi, UserIdCheckApi } from "../lib/api";
 
 // 액션 타입 이름
 export const USERID_CHECK = "USERID_CHECK";
@@ -39,11 +39,11 @@ const initialState = {
 
 //사가
 // 유저 아이디 중복 체크
-export function* useridCheckSaga(
+export function* UserIdCheckSaga(
   action: ReturnType<typeof useridCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call<any>(useridCheckApi, action.payload.id);
+    const response = yield call<any>(UserIdCheckApi, action.payload.id);
     
     if (response === false) {
       yield put({ 
@@ -62,11 +62,11 @@ export function* useridCheckSaga(
 }
 
 // 회사 아이디 중복 체크
-export function* companyidCheckSaga(
+export function* CompanyIdCheckSaga(
   action: ReturnType<typeof companyidCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call<any>(companyidCheckApi, action.payload.id);
+    const response = yield call<any>(CompanyIdCheckApi, action.payload.id);
     
     if (response === false) {
       yield put({
@@ -85,7 +85,7 @@ export function* companyidCheckSaga(
 }
 
 
-export function idCheckReducer(
+export function IdCheckReducer(
   state = initialState,
   action: { type: string; payload: { success: boolean } }
 ) {

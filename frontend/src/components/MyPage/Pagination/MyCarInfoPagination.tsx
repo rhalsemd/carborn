@@ -39,13 +39,13 @@ const MyCarInfoPagination = ({ data, itemsPerPage }:PaginationProps) => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((car:{model:string, number:string, mileage:string, year:string, registrationDate:string}, index:number) => (
+          {currentItems.map((car:{model:string, license_plate:string, mileage:string, year:string, registration_date:string}, index:number) => (
             <tr key={index}>
               <td>{car.model}</td>
-              <td>{car.number}</td>
+              <td>{car.license_plate}</td>
               <td>{car.mileage}</td>
               <td>{car.year}</td>
-              <td>{car.registrationDate}</td>
+              <td>{car.registration_date}</td>
             </tr>
           ))}
         </tbody>

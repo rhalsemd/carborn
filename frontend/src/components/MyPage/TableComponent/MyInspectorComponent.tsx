@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_URL } from './../../../lib/api';
+import { API_URL } from "../../../lib/api";
 import axios from "axios";
-import BookingPagination from "../Pagination/BookingPagination";
+import MyInspectorPagination from "../Pagination/MyInspectorPagination";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -15,12 +15,12 @@ const StyleMyBookingTableDiv = styled.div`
   align-items: center;
 `;
 
-const MyBookingComponent = () => {
+const MyInspectorComponent = () => {
   const [bookingData, setBookingData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(`${API_URL}/bookingdata`);
+      const result = await axios.get(`${API_URL}/inspector`);
       setBookingData(result.data);
     };
     fetchData();
@@ -32,9 +32,9 @@ const MyBookingComponent = () => {
 
   return (
     <StyleMyBookingTableDiv>
-      <BookingPagination data={bookingData} itemsPerPage={ITEMS_PER_PAGE} />
+      <MyInspectorPagination data={bookingData} itemsPerPage={ITEMS_PER_PAGE} />
     </StyleMyBookingTableDiv>
   );
 };
 
-export default MyBookingComponent;
+export default MyInspectorComponent;

@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import carbornLogo from "../../assets/carbornLogo.png";
-import { StyleLoginSignUpBtn } from "./Login";
 import Nav from './../../components/Nav';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { newPasswordReset } from './../../modules/PasswordResetModule';
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -29,7 +31,24 @@ const StyleSearchidCompleteContainer = styled.div`
   }
 `;
 
+export const StyleBtn = styled.button`
+  width: 15rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #D23131;
+  border: none;
+  margin: 0.5rem 0;
+  cursor: pointer;
+`;
+
 const PasswordComplete = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(newPasswordReset())
+  }, [])
+
   return (
     <div>
       <Nav />
@@ -46,7 +65,8 @@ const PasswordComplete = () => {
           </span>
         </div>
         <Link to="/login">
-          <StyleLoginSignUpBtn>로그인</StyleLoginSignUpBtn>
+          <StyleBtn
+          >로그인</StyleBtn>
         </Link>
       </StyleSearchidCompleteContainer>
     </div>

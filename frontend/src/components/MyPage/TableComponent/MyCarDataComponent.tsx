@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_URL } from "./../../../lib/loginApi";
+import { API_URL } from './../../../lib/api';
 import styled from "@emotion/styled";
 import MyCarInfoPagination from "../Pagination/MyCarInfoPagination";
 

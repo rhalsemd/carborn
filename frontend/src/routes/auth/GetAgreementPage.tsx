@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React, { ButtonHTMLAttributes, useState } from "react";
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getTermsOfUse } from "../../modules/termsOfUseModule";
 import {
   StyleLoginSignUpBoxDiv,
-  StyleLoginSignUpBtn,
   StyleLoginSignUpDiv,
   StyleLoginSignUpTitle,
-} from "./Login";
-import { RootState } from "../../modules/root/rootReducer";
+} from "./LoginPage";
 import WebsiteComponent from "../../components/auth/termsofuse/WebsiteComponent";
 import PrivacyComponent from "../../components/auth/termsofuse/PrivacyComponent";
-import Nav from './../../components/Nav';
+import Nav from "../../components/Nav";
+import { GetAgreementAction } from "../../modules/getAgreementModule";
 
 export const StyleTermsOfUseDiv = styled.div`
   width: 100%;
@@ -34,11 +32,28 @@ export const StyleTermsOfUseEleDiv = styled.div`
   align-items: center;
 `;
 
-const TermsOfUse = () => {
+export const StyleGoSignUpBtn = styled.button<StyleGoSignUpBtnProps>`
+  width: 15rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: white;
+  background-color: ${(props) => props.backgroundColor};
+  border: none;
+  margin: 0.5rem 0;
+  cursor: pointer;
+`;
+
+// CSS 타입
+export interface StyleGoSignUpBtnProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  backgroundColor: string;
+}
+
+const GetAgreementPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 이용약관 받아오기
-  const termsOfUse = useSelector((state: RootState) => state.termsofuse);
+  const GetAgreement = useSelector((state: any) => state.GetAgreementReducer);
   const [websiteTerms, setWebsiteTerms] = useState("");
   const [privacyTerms, setPrivacyTerms] = useState("");
   // 전체 체크용
@@ -72,9 +87,9 @@ const TermsOfUse = () => {
 
   // 화면이 렌더링 될 때, 상황
   useEffect(() => {
-    dispatch(getTermsOfUse());
-    setWebsiteTerms(termsOfUse.website);
-    setPrivacyTerms(termsOfUse.privacy);
+    dispatch(GetAgreementAction());
+    setWebsiteTerms(GetAgreement.website);
+    setPrivacyTerms(GetAgreement.privacy);
     const onCheckBox = () => {
       if (isChecked1 && isChecked2) {
         setIsCheckedAll(true);
@@ -85,8 +100,8 @@ const TermsOfUse = () => {
     onCheckBox();
   }, [
     dispatch,
-    termsOfUse.website,
-    termsOfUse.privacy,
+    GetAgreement.website,
+    GetAgreement.privacy,
     isChecked1,
     isChecked2,
   ]);
@@ -131,16 +146,19 @@ const TermsOfUse = () => {
               privacyTerms={privacyTerms}
             />
           </StyleTermsOfUseDiv>
-          <StyleLoginSignUpBtn
+          <StyleGoSignUpBtn
+            backgroundColor={
+              isButtonDisabled(isChecked1, isChecked2) ? "grey" : "#d23131"
+            }
             disabled={isButtonDisabled(isChecked1, isChecked2)}
             onClick={handleSignUp}
           >
             회원가입 하기
-          </StyleLoginSignUpBtn>
+          </StyleGoSignUpBtn>
         </StyleLoginSignUpBoxDiv>
       </StyleLoginSignUpDiv>
     </div>
   );
 };
 
-export default TermsOfUse;
+export default GetAgreementPage;
