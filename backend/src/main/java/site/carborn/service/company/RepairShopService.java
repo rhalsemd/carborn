@@ -103,7 +103,7 @@ public class RepairShopService {
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = repairResult.getRegDt();
-        String alias = "repair-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "repair-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);

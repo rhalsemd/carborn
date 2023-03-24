@@ -98,7 +98,7 @@ public class InspectorService {
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = inspectResult.getRegDt();
-        String alias = "inspect-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "inspect-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
