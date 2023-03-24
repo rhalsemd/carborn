@@ -4,7 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 
-function MyCarInformation() {
+function MyCarInformation({ data }: { data: any }) {
   const [age, setAge] = useState<string | undefined>("");
 
   const handleChange = (event: SelectChangeEvent) => {

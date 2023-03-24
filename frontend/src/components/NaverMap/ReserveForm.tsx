@@ -19,7 +19,7 @@ interface reserveInfoType {
   date: string;
 }
 
-function ReserveForm() {
+function ReserveForm({ data }: { data: any }) {
   const [reserveInfo, setReserveInfo] = useState<reserveInfoType>({
     carId: "",
     shopId: "",
@@ -31,7 +31,7 @@ function ReserveForm() {
   return (
     <div>
       <h2 css={title}>예약 정보 입력</h2>
-      <MyCarInformation />
+      <MyCarInformation data={data} />
       <TextBox />
       <Calendar />
       <ApplyBtn />

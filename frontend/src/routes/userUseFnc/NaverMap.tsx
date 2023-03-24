@@ -8,7 +8,9 @@ import hand from "../../assets/hand.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
 import ReserveForm from "../../components/NaverMap/ReserveForm";
 import SearchBar from "../../components/NaverMap/SearchBar";
+import { useAPI } from "../../hooks/useAPI";
 import SearchForm from "./../../components/NaverMap/SearchForm";
+import { useQuery } from "react-query";
 
 const container = css`
   display: flex;
@@ -57,8 +59,8 @@ const 좌표 = [
     lng: 126.977339,
   },
 ];
-
 const naver = window.naver;
+const API = `https://jsonplaceholder.typicode.com/todos/1`;
 
 // 현재 지도에 마커 정보가 없을 때 나타나는 컴포넌트
 const NoContentComponent = () => {
@@ -82,14 +84,24 @@ const options = {
   enableHighAccuracy: true,
 };
 
+var markers: any[] = [],
+  infoWindows: any[] = [];
+
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
-  var markers: any[] = [],
-    infoWindows: any[] = [];
   const [searchMarkers, setSearchMarkers] = useState<any[]>([]);
   const [searchInfoWindows, setSearchInfoWindows] = useState<any[]>([]);
   const [mapObject, setMapObject] = useState<any>(null);
   const [reserve, setReserve] = useState<boolean>(false);
+
+  const getUserCarInfo = useAPI("get", API);
+  const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {
+    cacheTime: 1000 * 300,
+    staleTime: 1000 * 600,
+    select: (data) => {
+      return data.data;
+    },
+  });
 
   /**
    * 현재 위치를 받는 함수
@@ -268,7 +280,7 @@ function NaverMap() {
             {/* 검색 결과 */}
             {searchMarkers.length ? (
               reserve ? (
-                <ReserveForm />
+                <ReserveForm data={data} />
               ) : (
                 searchMarkers.map((item, index) => {
                   return (
