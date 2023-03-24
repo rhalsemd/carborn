@@ -1,8 +1,8 @@
-package site.carborn.mapping.user;
+package site.carborn.mapping.company;
 
 import java.time.LocalDateTime;
 
-public interface RepairShopReviewMapping {
+public interface InspectorReviewMapping {
 
     String getAccountId();
 

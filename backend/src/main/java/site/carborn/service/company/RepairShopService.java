@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
+import site.carborn.mapping.company.RepairShopReviewMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.RepairShopRepository;

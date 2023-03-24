@@ -81,5 +81,10 @@ public class InspectorController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectResultId));
     }
 
-
+    @GetMapping("result/review/{inspectResultId}")
+    @Operation(description = "검수원 검수 완료 리뷰 조회")
+    @Parameter(name = "inspectResultId", description = "검수 완료 목록 번호")
+    public ResponseEntity<?> inspectResultReview(@PathVariable("inspectResultId") int inspectResultId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultReview(inspectResultId));
+    }
 }
