@@ -1,12 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import TimePicker from "../Timepicker";
+import TimePicker from "./Timepicker";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import dayjs from "dayjs";
-import FileUpload from "../../FileUpload";
-import Carousels from "../Carousels";
+import FileUpload from "../FileUpload";
+import Carousels from "./Carousels";
 import { useLocation } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { useMutation } from "react-query";
+import { useAPI } from "./../../hooks/useAPI";
+import axios from "axios";
 
 type ImageType = string[];
 
@@ -67,9 +71,26 @@ export default function RegisterForm() {
   const [afterImage, setAfterImage] = useState<string>("");
   const [reciptImage, setReciptImage] = useState<string>("");
   const [연비, set연비] = useState<string>("");
+  const [content, setContent] = useState<string>("123123");
+  const [mileage, setMileage] = useState<number>(39);
+
+  // const URL = "http://192.168.100.176/api/repair-shop/book"
+  // const submitInspector = useAPI("post", URL, "data: ")
+
+  const fileUpLoadAPI = (data: FormData) => {
+    return axios({
+      method: "put",
+      url: "http://192.168.100.176/api/repair-shop/book",
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  };
+
+  const { mutate } = useMutation(fileUpLoadAPI);
 
   const isGarage = useLocation().pathname == "/garage/register";
-  const { id } = useLocation().state;
+  // const { id } = useLocation().state;
+  const id = 10;
 
   const change연비 = (e: any) => {
     if (/^[0-9]+$/.test(e.target.value)) {
@@ -79,6 +100,34 @@ export default function RegisterForm() {
       alert("숫자만 입력하세요");
     }
   };
+
+  const submit = () => {
+    const formData = new FormData();
+    // console.log(beforeImage);
+
+    formData.append("beforeImg", beforeImage);
+    formData.append("afterImg", afterImage);
+    formData.append("receiptImg", reciptImage);
+
+    const submitForm = {
+      "inspectBook.id": id,
+      content,
+      mileage,
+      inspectDt: selectTime,
+    };
+
+    formData.append("inspectorReg", JSON.stringify(submitForm)); // 직렬화하여 객체 저장
+    // formData.append("inspectBook.id", JSON.stringify(id)); // 직렬화하여 객체 저장
+    // formData.append("content", JSON.stringify(content)); // 직렬화하여 객체 저장
+    // formData.append("mileage", JSON.stringify(mileage)); // 직렬화하여 객체 저장
+    // formData.append("inspectDt", JSON.stringify(selectTime)); // 직렬화하여 객체 저장
+    // console.log(formData);
+    // for (let i of formData) {
+    //   console.log(i);
+    // }
+    mutate(formData);
+  };
+
   return (
     <div css={container}>
       <div className="section1">
@@ -142,6 +191,9 @@ export default function RegisterForm() {
           영수증 등록
           <FileUpload size={20} row={1} setImage={setReciptImage} />
         </div>
+        <Button variant="contained" sx={{ maxWidth: "50%" }} onClick={submit}>
+          제출
+        </Button>
       </div>
     </div>
   );

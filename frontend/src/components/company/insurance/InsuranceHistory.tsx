@@ -9,11 +9,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TablePagination, TableFooter } from "@mui/material";
 import { useState } from "react";
-import HistoryModal from "./HistoryModal";
 import { useQuery } from "react-query";
-import { useAPI } from "./../../hooks/useAPI";
-import { useLocation } from "react-router-dom";
+import { useAPI } from "../../../hooks/useAPI";
 import { useEffect } from "react";
+import InsuranceModal from "./InsuranceModal";
 
 interface Column {
   id: "name" | "code" | "population" | "size" | "density";
@@ -42,27 +41,17 @@ const container = css`
   opacity: 0.85;
 `;
 
-export default function HistoryTable() {
+export default function InsuranceHistory() {
   const [page, setPage] = useState<number>(0);
   const rowsPerPage = 7;
 
-  const isGarage = useLocation().pathname == "/garage/history";
+  const URL = "http://localhost:3001/history";
+  //const URL = `http://192.168.100.176:80/api/insurance/list/${page + 1}/7`;
+  const queryKey = "getInsuranceHistory";
 
-  let URL: any;
-  let queryKey;
+  const getInsuranceHistory = useAPI("get", URL);
 
-  if (isGarage) {
-    URL = "http://localhost:3001/history";
-    // URL = `http://192.168.100.176:80/api/repair-shop/result/list/${page + 1}/7`;
-    queryKey = "getGarageHistory";
-  } else {
-    URL = "http://localhost:3001/history";
-    queryKey = "getInspectorHistory";
-  }
-
-  const getHistoryData = useAPI("get", URL);
-
-  const { data, refetch } = useQuery(queryKey, () => getHistoryData, {
+  const { data, refetch } = useQuery(queryKey, () => getInsuranceHistory, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
@@ -90,27 +79,26 @@ export default function HistoryTable() {
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
-              <TableCell align="center">요청 날짜</TableCell>
-              <TableCell align="center">완료 날짜</TableCell>
-              <TableCell align="center">주행 거리</TableCell>
+              <TableCell align="center">사고 일시</TableCell>
+              <TableCell align="center">차대 번호</TableCell>
+              <TableCell align="center">사고 유형</TableCell>
               <TableCell align="center">자세히 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {/* {data?.content?.map( */}
-            {data?.map(
+            {/* {data?.map(
               ({ id, regDt, inspectDt, mileage }: MapType, idx: number) => (
                 <TableRow key={idx}>
                   <TableCell sx={{ minWidth: "20px" }}>{id}</TableCell>
-                  <TableCell>{regDt}</TableCell>
                   <TableCell>{inspectDt}</TableCell>
-                  <TableCell sx={{ minWidth: "30px" }}>{mileage} KM</TableCell>
-                  <TableCell align="center">
-                    <HistoryModal id={id} />
-                  </TableCell>
-                </TableRow>
+                  <TableCell>{category}</TableCell> */}
+            <TableCell align="center">
+              <InsuranceModal id={"10"} />
+            </TableCell>
+            {/* </TableRow>
               )
-            )}
+            )} */}
           </TableBody>
           <TableFooter>
             <TableRow>

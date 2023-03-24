@@ -14,6 +14,7 @@ import DetailModal from "./DetailModal";
 import { useQuery } from "react-query";
 import { useAPI } from "../../hooks/useAPI";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 interface MapType {
   id: string;
@@ -32,20 +33,19 @@ const container = css`
 `;
 
 export default function ReserveTable() {
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const rowsPerPage = 7;
   const isGarage = useLocation().pathname == "/garage/reserve";
   const handleChangePage = (e: any, newPage: any) => {
-    setPage(newPage);
+    setPage(() => newPage);
   };
   // 페이지 상태 표시를 바꿔주는 함수
   let URL;
   let queryKey;
   // 컴포넌트 재사용을 위해 url로 분기 만들기
-
   if (isGarage) {
-    //URL = `http://192.168.100.176:80/api/repair-shop/book/list/${page}/7`;
-    URL = "http://localhost:3001/content";
+    // URL = `http://192.168.100.176:80/api/repair-shop/book/list/${page + 1}/7`;
+    URL = `http://localhost:3001/${page + 1}`;
     queryKey = "getRepairReserveData";
   } else {
     URL = "http://localhost:3001/content";
@@ -54,12 +54,14 @@ export default function ReserveTable() {
     //URL = `http://192.168.100.176:80/api/inspector/book/${page}/7`;
   }
   const getReserveData = useAPI("get", URL);
-  const { data } = useQuery(queryKey, () => getReserveData, {
+  const { data, refetch } = useQuery(queryKey, () => getReserveData, {
     cacheTime: 1000 * 300,
-    staleTime: 1000 * 300,
+    staleTime: 0,
     select: (data) => {
+      // return data.data.message.content;
       return data.data;
     },
+    onSuccess: (res) => {},
     onError: (error: Error) => {
       // setError(error);
       console.log(error);
@@ -67,6 +69,9 @@ export default function ReserveTable() {
     // suspense: true,
     // useErrorBoundary: true,
   });
+  useEffect(() => {
+    refetch();
+  }, [page]);
 
   return (
     <div css={container}>
@@ -98,27 +103,30 @@ export default function ReserveTable() {
                   accountId,
                   bookStatus,
                 }: MapType,
-                i: number
+                idx: number
               ) => (
                 <TableRow
-                  key={i}
+                  key={idx}
                   hover={bookStatus ? false : true}
                   sx={
                     bookStatus
-                      ? { backgroundColor: "black", opacity: "0.5" }
+                      ? {
+                          backgroundColor: "gray",
+                          opacity: "0.8",
+                        }
                       : null
                   }
                 >
                   <TableCell component="th" scope="row">
                     {id}
                   </TableCell>
-                  <TableCell align="right">{accountId}</TableCell>
-                  <TableCell align="right">{regDt}</TableCell>
-                  <TableCell align="right">{bookDt}</TableCell>
-                  <TableCell align="right">{carModelNm}</TableCell>
-                  <TableCell align="right">{carRegNm}</TableCell>
-                  <TableCell align="right">{carVin}</TableCell>
-                  <TableCell align="right">01020100209</TableCell>
+                  <TableCell>{accountId}</TableCell>
+                  <TableCell>{regDt}</TableCell>
+                  <TableCell>{bookDt}</TableCell>
+                  <TableCell>{carModelNm}</TableCell>
+                  <TableCell>{carRegNm}</TableCell>
+                  <TableCell>{carVin}</TableCell>
+                  <TableCell>01020100209</TableCell>
                   <TableCell align="center">
                     {bookStatus ? null : <DetailModal id={id} />}
                   </TableCell>
@@ -129,8 +137,8 @@ export default function ReserveTable() {
           <TableFooter>
             <TableRow>
               <TablePagination
-                count={10} //임시 나중에 서버에서 totalElement 받아야함
-                page={page - 1}
+                count={13} //임시 나중에 서버에서 totalElement 받아야함
+                page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}
                 rowsPerPageOptions={[]}
