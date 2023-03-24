@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import site.carborn.dto.request.BoardRequestDTO;
+import site.carborn.dto.request.RepairResultRequestDTO;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.company.RepairShopReviewMapping;
@@ -16,6 +18,7 @@ import site.carborn.repository.company.RepairShopReviewRepository;
 import site.carborn.repository.user.RepairBookRepository;
 import site.carborn.repository.user.RepairResultRepository;
 import site.carborn.service.common.KlaytnService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 
 import java.io.IOException;
@@ -60,32 +63,38 @@ public class RepairShopService {
     }
 
     @Transactional
-    public Optional<RepairBook> repairBookUpdateData(int id){
+    public Optional<RepairBook> repairBookGetData(int id){
         return repairBookRepository.findById(id);
     }
 
     @Transactional
-    public void repairBookUpdate(RepairBook repairBook){
+    public void repairBookUpdate(RepairBook repairBook) {
         repairBook.setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
         repairBook.setUptDt(LocalDateTime.now());
         repairBookRepository.save(repairBook);
     }
 
     @Transactional
-    public void repairResultInsert(RepairResult repairResult, int repairBookId) throws IOException {
-        repairResult.setRepairBook(new RepairBook());
-        repairResult.getRepairBook().setId(repairBookId);
-        repairResult.setRegDt(LocalDateTime.now());
+    public void repairResultInsert(RepairResultRequestDTO dto) throws IOException {
+        dto.setRegDt(LocalDateTime.now());
 
         //bookId를 통해 carHash를 가져오는 부분
-        String carVin = repairBookRepository.findAllById(repairBookId).getCarVin();
+        String carVin = repairBookRepository.findAllById(dto.getRepairBook().getId()).getCarVin();
         int carId = carRepository.findByVin(carVin).getId();
 
         //carId를 통해 carHash를 가져오는 부분
         String carHash = carRepository.findAllById(carId).getWalletHash();
 
         //multipartfile 입력 부분
+        String beforeImgNm = BoardUtils.singleFileSave((dto.getBeforeImg()));
+        String afterImgNm = BoardUtils.singleFileSave((dto.getAfterImg()));
+        String receiptImgNm = BoardUtils.singleFileSave((dto.getReceiptImg()));
 
+        dto.setBeforeImgNm(beforeImgNm);
+        dto.setAfterImgNm(afterImgNm);
+        dto.setReceiptImgNm(receiptImgNm);
+
+        RepairResult repairResult = RepairResult.copy(dto);
 
         //caver 입력 부분
         //kas api 호출
