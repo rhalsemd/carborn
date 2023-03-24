@@ -4,7 +4,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import site.carborn.entity.company.RepairShopReview;
-import site.carborn.mapping.user.RepairShopReviewMapping;
+import site.carborn.mapping.company.RepairShopReviewMapping;
 
 
 @Repository

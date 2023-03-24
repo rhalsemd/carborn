@@ -8,12 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
+import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.InspectBookGetListMapping;
 import site.carborn.mapping.user.InspectResultGetDetailMapping;
 import site.carborn.mapping.user.InspectResultGetListMapping;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
+import site.carborn.repository.company.InspectorReviewRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.service.common.KlaytnService;
@@ -36,6 +38,9 @@ public class InspectorService {
 
     @Autowired
     private InspectResultRepository inspectResultRepository;
+
+    @Autowired
+    private InspectorReviewRepository inspectorReviewRepository;
 
     @Autowired
     private CarRepository carRepository;
@@ -114,5 +119,10 @@ public class InspectorService {
     @Transactional
     public InspectResultGetDetailMapping inspectResultDetail(int id){
         return inspectResultRepository.findAllById(id);
+    }
+
+    @Transactional
+    public InspectorReviewMapping inspectResultReview(int id){
+        return inspectorReviewRepository.findByStatusAndInspectResult_Id(false, id);
     }
 }
