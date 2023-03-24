@@ -19,6 +19,7 @@ import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.common.BookUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public class InspectorService {
     }
 
     @Transactional
-    public void inspectorResultInsert(InspectResult inspectResult, int inspectBookId){
+    public void inspectorResultInsert(InspectResult inspectResult, int inspectBookId) throws IOException {
         //검수 결과 입력
         inspectResult.setInspectBook(new InspectBook());
         inspectResult.getInspectBook().setId(inspectBookId);
@@ -95,7 +96,8 @@ public class InspectorService {
         String alias = "inspect-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
-        inspectResult.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
+        klaytnService.requestContract(metaDataUri, carHash, alias);
+        inspectResult.setContractHash(alias);
 
         inspectResultRepository.save(inspectResult);
     }

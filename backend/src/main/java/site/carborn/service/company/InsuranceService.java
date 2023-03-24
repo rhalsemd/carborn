@@ -66,7 +66,8 @@ public class InsuranceService {
         String alias = "insurance-"+carHash+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
-        carInsuranceHistory.setContractHash(klaytnService.getContractHash(metaDataUri, carHash, alias).get("transactionHash").toString());
+        klaytnService.requestContract(metaDataUri, carHash, alias);
+        carInsuranceHistory.setContractHash(alias);
 
         carInsuranceHistoryRepository.save(carInsuranceHistory);
     }
