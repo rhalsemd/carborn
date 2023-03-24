@@ -1,7 +1,7 @@
 import {
   StyleTermsOfUseDiv,
   StyleTermsOfUseEleDiv,
-} from "../../../routes/auth/TermsOfUse";
+} from "../../../routes/auth/GetAgreementPage";
 
 export interface WebsiteProps {
   setIsChecked1: React.Dispatch<React.SetStateAction<boolean>>;

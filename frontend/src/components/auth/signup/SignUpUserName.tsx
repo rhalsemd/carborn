@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
 import { SignupFormData } from "./SignUpButton";
 
 //타입 지정
@@ -22,7 +22,7 @@ const SignUpUserName = ({
         name: e.target.value,
       });
     } else {
-      alert("한글 이름만 가능합니다.");
+      alert("한글 이름만 가능합니다. 한영키를 눌러주세요.");
     }
   };
 
@@ -50,6 +50,7 @@ const SignUpUserName = ({
       <label htmlFor="username">이름</label>
       <br />
       <input
+        tabIndex={1}
         type="text"
         id="username"
         placeholder="이름을 입력해주세요(ex. 홍길동)"

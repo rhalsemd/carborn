@@ -1,6 +1,5 @@
-import axios from "axios";
-import { API_URL } from "./../../lib/loginApi";
-import { useState, useEffect } from "react";
+import { API_URL } from '../../lib/api';
+import { useState } from "react";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // 스타일 시트를 import 해야함
 
@@ -75,8 +74,9 @@ const StyleMyCarInfo = styled.div`
   width: 50%;
   margin-top: 2rem !important;
   margin-left: 2rem !important;
-}
-`;
+}`;
+
+
 
 const StyleMyCarInfoContainer = styled.div`
   display: flex;

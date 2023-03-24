@@ -1,8 +1,9 @@
 import { call, put } from "redux-saga/effects";
-import { passwordResetCheckApi } from "../lib/passwordResetCheckApi";
+import { passwordCheckIdApi } from "../lib/api";
 
 // 액션 타입 이름
 export const PASSWORD_RESET_CHECK = "PASSWORD_RESET_CHECK";
+export const PASSWORD_RESET_CHECK_RESET = "PASSWORD_RESET_CHECK_RESET";
 export const PASSWORD_RESET_CHECK_SUCCESS = "PASSWORD_RESET_CHECK_SUCCESS";
 
 // 액션 생성 함수
@@ -10,6 +11,10 @@ export const passwordResetCheck = (data: Object) => ({
   type: PASSWORD_RESET_CHECK,
   payload: data,
 });
+
+export const passwordResetCheckReset = () => ({
+  type:PASSWORD_RESET_CHECK_RESET,
+})
 
 // 초기값
 const initialState = {
@@ -24,8 +29,9 @@ export function* passwordResetCheckSaga(
   action: ReturnType<typeof passwordResetCheck>
 ): Generator<any, any, any> {
   try {
-    const response = yield call<any>(passwordResetCheckApi, action.payload);
-    yield put({ type: PASSWORD_RESET_CHECK_SUCCESS, payload: response})
+    const response = yield call<any>(passwordCheckIdApi, action.payload);
+    console.log(response)
+    yield put({ type: PASSWORD_RESET_CHECK_SUCCESS, payload: response });
   } catch (error) {
     console.log(error);
   }
@@ -37,7 +43,9 @@ export function passwordResetCheckReducer(
 ) {
   switch (action.type) {
     case PASSWORD_RESET_CHECK_SUCCESS:
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload }; 
+    case PASSWORD_RESET_CHECK_RESET:
+      return { ...state, isVerify: false }
     default:
       return state;
   }

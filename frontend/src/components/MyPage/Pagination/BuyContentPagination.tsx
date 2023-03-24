@@ -1,8 +1,7 @@
-import { useState } from "react";
-import styled from "@emotion/styled";
-import { API_URL } from "./../../../lib/loginApi";
 import axios from "axios";
-import { useEffect } from "react";
+import { API_URL } from './../../../lib/api';
+import { useEffect, useState } from "react";
+import styled from "@emotion/styled";
 
 export interface BuySellContentPaginationProps {
   itemsPerPage: number;

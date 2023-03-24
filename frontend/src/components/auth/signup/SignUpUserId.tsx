@@ -1,32 +1,38 @@
 import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useridCheck } from "../../../modules/idcheckModule";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import {
+  companyidCheckReset,
+  useridCheck,
+} from "../../../modules/UserIdCheckModule";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
 import { SignupFormData } from "./SignUpButton";
+import { useridCheckReset } from "../../../modules/UserIdCheckModule";
 
 type SignUpUserIdProps = {
   setSignupUserFormData: Dispatch<SetStateAction<SignupFormData>>;
   signupUserFormData: SignupFormData;
-  setIddupliCheck: Dispatch<SetStateAction<null | boolean | undefined>>;
-  iddupliCheck: boolean | null | undefined;
 };
 
 const SignUpUserId = ({
   setSignupUserFormData,
   signupUserFormData,
-  setIddupliCheck,
-  iddupliCheck,
 }: SignUpUserIdProps) => {
-  const { useridcheck } = useSelector((state: any) => state.idcheck);
+  // const { useridcheck } = useSelector((state: any) => state.idcheck);
+  const { useridcheck } = useSelector((state: any) => state.IdCheckReducer);
+  console.log(useridcheck)
+  
   const dispatch = useDispatch();
+
   // 입력되는거 formdata에 넘겨주기
   const handleUserId = (e: ChangeEvent<HTMLInputElement>) => {
-    // 타이핑하는순간 아이디중복체크 초기화됨
-    e.preventDefault();
-    setSignupUserFormData({
-      ...signupUserFormData,
-      id: e.target.value,
-    });
+    const regex = /^[a-z0-9_]+(\s*[a-z0-9_]+)*$/i;
+    const { value } = e.target;
+    if (value === "" || regex.test(value)) {
+      setSignupUserFormData({
+        ...signupUserFormData,
+        userid: value,
+      });
+    }
   };
 
   // 아이디 유효성 : 영문자 소문자랑 숫자랑 _ 만 가능가능
@@ -42,13 +48,13 @@ const SignUpUserId = ({
         alert("아이디는 영어 소문자와 숫자, _만 가능합니다.");
         setSignupUserFormData({
           ...signupUserFormData,
-          id: "",
+          userid: "",
         });
       } else if (!isValidLength) {
         alert("아이디 길이는 5글자에서 20글자입니다.");
         setSignupUserFormData({
           ...signupUserFormData,
-          id: "",
+          userid: "",
         });
       } else {
         alert(
@@ -56,16 +62,16 @@ const SignUpUserId = ({
         );
         setSignupUserFormData({
           ...signupUserFormData,
-          id: "",
+          userid: "",
         });
       }
     }
   };
 
   // 아이디 중복체크용
-  const userIdDuplicateCheck = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const userIdDuplicateCheck = (e: any) => {
     e.preventDefault();
-    dispatch(useridCheck(signupUserFormData.id));
+    dispatch(useridCheck(signupUserFormData.userid));
   };
 
   useEffect(() => {
@@ -80,8 +86,11 @@ const SignUpUserId = ({
       setSignupUserFormData({
         ...signupUserFormData,
         idcheck: false,
+        userid: "",
       });
     }
+    dispatch(useridCheckReset());
+    dispatch(companyidCheckReset());
   }, [useridcheck]);
 
   return (
@@ -89,22 +98,25 @@ const SignUpUserId = ({
       <label htmlFor="userid">아이디</label>
       <br />
       <input
+        tabIndex={2}
         type="text"
         id="userid"
-        placeholder="아이디를 입력해주세요(ex. ssafy123)"
+        name="userid"
+        placeholder="아이디"
         autoComplete="off"
         required
-        value={signupUserFormData.id}
+        value={signupUserFormData.userid}
         onChange={(e) => handleUserId(e)}
         onKeyDown={(e) => handleKeyPress(e)}
       />
-      <button
+      <input
+        type="button"
+        tabIndex={3}
         onClick={(e) => {
           userIdDuplicateCheck(e);
         }}
-      >
-        중복체크
-      </button>
+        value={`중복체크`}
+      />
     </StyleSignUpInputDiv>
   );
 };

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { BuySellContentPaginationProps, Car } from './BuyContentPagination';
-import { API_URL } from './../../../lib/loginApi';
+import { API_URL } from './../../../lib/api';
 import axios from 'axios';
 import { useEffect } from 'react';
 
