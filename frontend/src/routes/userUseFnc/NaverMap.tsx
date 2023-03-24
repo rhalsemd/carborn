@@ -2,11 +2,11 @@
 import { css } from "@emotion/react";
 
 import { useEffect, useRef } from "react";
-import {
-  drawingMap,
-  getCurrentLocation,
-} from "../../components/NaverMap/MapFunction";
+
 import { useState } from "react";
+import hand from "../../assets/hand.png";
+import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
+import SearchBar from "../../components/NaverMap/SearchBar";
 
 const container = css`
   display: flex;
@@ -56,34 +56,136 @@ const 좌표 = [
   },
 ];
 
+const naver = window.naver;
+
+const options = {
+  enableHighAccuracy: true,
+};
+
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
-  // var markers: any[] = [],
-  //   infoWindows: any[] = [];
-  const [markers, setMarkers] = useState<any>([]);
-  const [infoWindows, setInfoWindows] = useState<any>([]);
+  var markers: any[] = [],
+    infoWindows: any[] = [];
+  const [searchMarkers, setSearchMarkers] = useState<any[]>([]);
+  const [searchInfoWindows, setSearchInfoWindows] = useState<any[]>([]);
 
   const [mapObject, setMapObject] = useState<any>(null);
 
-  useEffect(() => {
-    getCurrentLocation(
-      좌표,
-      mapRef,
-      markers,
-      setMarkers,
-      infoWindows,
-      setInfoWindows,
-      setMapObject
+  /**
+   * 현재 위치를 받는 함수
+   */
+  const getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        drawingMap(lat, lng);
+      },
+      null,
+      options
     );
+  };
+
+  /**
+   * 지도를 그리는 함수
+   */
+  const drawingMap = (lat: number, lng: number) => {
+    // const center = new naver.maps.LatLng(lat, lng);
+    const center = new naver.maps.LatLng(37.565525, 126.976915);
+
+    // 네이버 맵 생성
+    const mapDiv = mapRef.current;
+    const map = new naver.maps.Map(mapDiv, {
+      center,
+      zoom: 17,
+    });
+    setMapObject(map);
+
+    setMarker(map);
+  };
+
+  /**
+   * 마커 생성 함수
+   */
+  const setMarker = (map: any) => {
+    좌표.forEach((key: any) => {
+      var position = new naver.maps.LatLng(key.lat, key.lng);
+      var marker = new naver.maps.Marker({
+        map: map,
+        position,
+        icon: {
+          url: hand,
+          size: new naver.maps.Size(50, 52),
+          scaledSize: new naver.maps.Size(50, 52),
+          origin: new naver.maps.Point(0, 0),
+          anchor: new naver.maps.Point(25, 26),
+        },
+        zIndex: 100,
+      });
+
+      var infoWindow = new naver.maps.InfoWindow({
+        content: [
+          '<div style="width:28vw; padding:10px; height: 28vh; margin-left:2.5vw;">',
+          '<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">정비소</p>',
+          '<p style="margin-top: 0; color: #E00000; font-weight: bolder;">',
+          "3.9<span>★★★★☆</span>",
+          '<span style="color: #BBBBBB; font-size: 0.9rem; "> 리뷰 15</span>',
+          "</p>",
+          '<p style="margin-bottom: 0; color: #606060; font-size: 0.9rem">경북 구미시 구미중앙로 76</p>',
+          '<p style="margin: 0; color: #C1C1C1; font-size: 0.9rem">(우) 39301 (지번) 원평동 1008-1</p>',
+          '<p style="margin-top: 0; color: #038400; font-size: 1rem; font-weight: bold;">1234-5678</p>',
+          `<button class="fix-shop" style="background-color: red; width: 90%; height: 22%; border-radius: 10px; border: 0; font-size: 1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
+          "</div>",
+        ].join(""),
+      });
+
+      const button = infoWindow.getContentElement().childNodes[5];
+      button.addEventListener("click", () => {
+        console.log("클릭");
+      });
+
+      markers.push(marker);
+      infoWindows.push(infoWindow);
+      setSearchMarkers((mark) => {
+        return [...mark, marker];
+      });
+      setSearchInfoWindows((info) => {
+        return [...info, infoWindow];
+      });
+    });
+
+    function getClickHandler(seq: number) {
+      return function () {
+        var marker = markers[seq],
+          infoWindow = infoWindows[seq];
+
+        if (infoWindow.getMap()) {
+          infoWindow.close();
+        } else {
+          infoWindow.open(map, marker);
+        }
+      };
+    }
+
+    for (var i = 0, ii = markers.length; i < ii; i++) {
+      naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
+    }
+  };
+
+  useEffect(() => {
+    getCurrentLocation();
   }, []);
 
-  const searchBarItemClick = (index: number) => {
-    console.log(infoWindows);
-    if (infoWindows.length && markers.length) {
-      if (infoWindows[index].getMap()) {
-        infoWindows[index].close();
+  const searchBarItemClick = (
+    index: number,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    if (searchInfoWindows.length && searchMarkers.length) {
+      if (searchInfoWindows[index].getMap()) {
+        searchInfoWindows[index].close();
       } else {
-        infoWindows[index].open(mapObject, markers[index]);
+        searchInfoWindows[index].open(mapObject, searchMarkers[index]);
       }
     }
   };
@@ -95,108 +197,19 @@ function NaverMap() {
           <div css={searchResult}>
             {좌표.map((item, index) => {
               return (
-                <div
+                <SearchBar
                   key={index}
-                  style={{
-                    transform: "translate(10%,0)",
-                    marginBottom: "5vh",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => searchBarItemClick(index)}
-                >
-                  <p
-                    style={{
-                      fontSize: "1.5rem",
-                      marginBottom: "0",
-                      fontWeight: "bolder",
-                    }}
-                  >
-                    정비소
-                  </p>
-                  <p
-                    style={{
-                      marginTop: "0",
-                      color: "#E00000",
-                      fontWeight: "bolder",
-                    }}
-                  >
-                    3.9
-                    <span>★★★★☆</span>
-                    <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
-                      {" "}
-                      리뷰 15
-                    </span>
-                  </p>
-                  <p
-                    style={{
-                      marginBottom: "0",
-                      color: "#606060",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    경북 구미시 구미중앙로 76
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      color: "#C1C1C1",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    (우) 39301 (지번) 원평동 1008-1
-                  </p>
-                  <p
-                    style={{
-                      marginTop: "0",
-                      color: "#038400",
-                      fontSize: "1rem",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    1234-5678
-                  </p>
-                  <div
-                    style={{
-                      border: "0.8px solid #C1C1C1",
-                      opacity: "0.3",
-                      width: "80%",
-                    }}
-                  ></div>
-                </div>
+                  index={index}
+                  searchBarItemClick={searchBarItemClick}
+                />
               );
             })}
           </div>
         </div>
-        <div>
-          <div
-            ref={mapRef}
-            style={{
-              width: "74vw",
-              height: "100vh",
-            }}
-          />
-          <button
-            style={{
-              position: "fixed",
-              zIndex: 100,
-              bottom: "14%",
-              right: "0.8%",
-            }}
-            onClick={() =>
-              getCurrentLocation(
-                좌표,
-                mapRef,
-                markers,
-                setMarkers,
-                infoWindows,
-                setInfoWindows,
-                setMapObject
-              )
-            }
-          >
-            +
-          </button>
-        </div>
+        <CurrentLocationBtn
+          mapRef={mapRef}
+          getCurrentLocation={getCurrentLocation}
+        />
       </div>
     </>
   );
