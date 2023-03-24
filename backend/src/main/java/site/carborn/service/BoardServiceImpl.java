@@ -60,8 +60,6 @@ public class BoardServiceImpl implements BoardService {
             throw new RuntimeException("삭제된 데이터입니다");
         }
 
-        // 이미지 경로 필요!!
-        data.setImgNm(String.format("", data.getImgNm()));
         return data;
     }
 

@@ -3,6 +3,7 @@ package site.carborn.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,13 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
+import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
+import site.carborn.mapping.user.UserRepairResultDetailMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.service.user.UserRepairService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
-
+@Tag(name = "사용자 RepairShop 조회", description = "사용자가 RepairShop에 대한 정보를 조회하는 경우")
 @RequestMapping("/api/user/repair")
 @RequiredArgsConstructor
 @RestController
@@ -80,5 +83,12 @@ public class UserRepairController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
+    @GetMapping("/result/{repairResultId}")
+    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @Parameter(name = "repairResultId", description = "정비 결과 게시글 id")
+    public ResponseEntity<?> getRepairResultDetail(@PathVariable("repairResultId") int repairResultId){
+        RepairResultGetDetailMapping result = userRepairService.repairResultDetail(repairResultId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+    }
 
 }
