@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 
 export type SignUpCompanyPasswordCheckProps = {

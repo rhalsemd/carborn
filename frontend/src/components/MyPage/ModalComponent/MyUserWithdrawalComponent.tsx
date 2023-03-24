@@ -65,7 +65,7 @@ const MyUserWithdrawalButtonDiv = styled.div`
 `;
 
 const MyUserWithdrawalComponent = () => {
-  const userid = sessionStorage.getItem("userId");
+  const userid = localStorage.getItem("userId");
   const dispatch = useDispatch();
 
   const handleUserInfoDelete = () => {

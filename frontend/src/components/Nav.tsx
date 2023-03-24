@@ -79,7 +79,7 @@ function Nav({setIsToken, isToken}:any) {
   // 액션 실행
   const dispatch = useDispatch();
   // 유저아이디랑 토큰 가져오기
-  const userid = sessionStorage.getItem("userid");
+  const userid = localStorage.getItem("userid");
   // 리듀서
   const { success } = useSelector((state:any) => state.LoginOutReducer)
   
@@ -102,7 +102,10 @@ function Nav({setIsToken, isToken}:any) {
     dispatch(logoutAction());
   };
   
+  const localToken = localStorage.getItem('accessToken')
+
   useEffect(() => {
+
   },[success])
 
   return (
@@ -114,7 +117,7 @@ function Nav({setIsToken, isToken}:any) {
             <Link to="/" css={StyleLinkText}>
               <StyleNavLi>Home</StyleNavLi>
             </Link>
-            {success ? (
+            {success || localToken ? (
               <StyleNavLi css={StyleLinkText} onClick={handleLogout}>
                 Logout
               </StyleNavLi>
@@ -123,7 +126,7 @@ function Nav({setIsToken, isToken}:any) {
                 <StyleNavLi>Login</StyleNavLi>
               </Link>
             )}
-            {success ? (
+            {success || localToken? (
               <Link to={`/${userid}/mypage`} css={StyleLinkText}>
                 <StyleNavLi>Mypage</StyleNavLi>
               </Link>

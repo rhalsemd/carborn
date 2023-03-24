@@ -194,15 +194,15 @@ const SignupPages: React.FC = () => {
   useEffect(() => {
     updateIsValid();
     // console.log(isValid)
-    console.log(Boolean(signupCompanyFormData.name));
-    console.log(Boolean(signupCompanyFormData.userid));
-    console.log(Boolean(signupCompanyFormData.idcheck));
-    console.log(Boolean(signupCompanyFormData.password));
-    console.log(Boolean(signupCompanyFormData.passwordcheck));
-    console.log(Boolean(signupCompanyFormData.identifynumber));
-    console.log(Boolean(signupCompanyFormData.address));
-    console.log(Boolean(signupCompanyFormData.isVarify));
-    console.log(selectedFiles.length === 0 ? false : true, "회사용");
+    // console.log(Boolean(signupCompanyFormData.name));
+    // console.log(Boolean(signupCompanyFormData.userid));
+    // console.log(Boolean(signupCompanyFormData.idcheck));
+    // console.log(Boolean(signupCompanyFormData.password));
+    // console.log(Boolean(signupCompanyFormData.passwordcheck));
+    // console.log(Boolean(signupCompanyFormData.identifynumber));
+    // console.log(Boolean(signupCompanyFormData.address));
+    // console.log(Boolean(signupCompanyFormData.isVarify));
+    // console.log(selectedFiles.length === 0 ? false : true, "회사용");
     // console.log(selectedFiles.length);
   }, [updateIsValid, SignUpisValid, signupCompanyFormData]);
 

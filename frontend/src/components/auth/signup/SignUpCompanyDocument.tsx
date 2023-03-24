@@ -1,13 +1,10 @@
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 
 export interface Props {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SignUpCompanyDocument: React.FC<Props> = ({
-  handleFileChange,
-}) => {
-
+const SignUpCompanyDocument: React.FC<Props> = ({ handleFileChange }) => {
   return (
     <StyleSignUpInputDiv>
       {/* 이전에 설명한 파일 input */}

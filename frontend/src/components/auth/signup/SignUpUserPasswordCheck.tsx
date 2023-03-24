@@ -1,4 +1,4 @@
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import React, { useEffect } from "react";
 import { SignupFormData } from "./SignUpButton";
 

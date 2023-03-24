@@ -1,5 +1,5 @@
 import { SetStateAction, Dispatch, useState, ChangeEvent } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 
 type SignUpCompanyBusinessNumberProps = {

@@ -4,7 +4,7 @@ import {
   companyidCheck,
   companyidCheckReset,
 } from "../../../modules/UserIdCheckModule";
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import { useridCheckReset } from "../../../modules/UserIdCheckModule";
 

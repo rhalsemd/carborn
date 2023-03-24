@@ -4,7 +4,7 @@ import {
   companyidCheckReset,
   useridCheck,
 } from "../../../modules/UserIdCheckModule";
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import { useridCheckReset } from "../../../modules/UserIdCheckModule";
 
@@ -19,8 +19,7 @@ const SignUpUserId = ({
 }: SignUpUserIdProps) => {
   // const { useridcheck } = useSelector((state: any) => state.idcheck);
   const { useridcheck } = useSelector((state: any) => state.IdCheckReducer);
-  console.log(useridcheck)
-  
+
   const dispatch = useDispatch();
 
   // 입력되는거 formdata에 넘겨주기

@@ -1,7 +1,7 @@
 import { SetStateAction, Dispatch, useState } from "react";
 import { SignupFormData } from "./SignUpButton";
 import DaumPostcode, { Address } from "react-daum-postcode";
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPages";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import styled from "@emotion/styled";
 
 export type SignUpUserAddressProps = {
@@ -69,7 +69,12 @@ const SignUpUserAddress = ({
     <StyleSignUpInputDiv>
       <span>주소</span>
       <br />
-      <input tabIndex={6} type="button" onClick={() => setIsOpen(true)} value="검색하기"/>
+      <input
+        tabIndex={6}
+        type="button"
+        onClick={() => setIsOpen(true)}
+        value="검색하기"
+      />
       {addressData ? <span>{addressData}</span> : null}
       {isOpen && (
         <ModalContainer>

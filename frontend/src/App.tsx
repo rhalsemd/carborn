@@ -6,7 +6,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 
 import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
-import Signup from "./routes/auth/SignupPages";
+import Signup from "./routes/auth/SignupPage";
 import UserHome from "./routes/userUseFnc/UserHome";
 import GarageHome from "./routes/company/garage/GarageHome";
 import InspectorHome from "./routes/company/inspector/InspectorHome";
@@ -15,7 +15,6 @@ import VehiclePurchaseDetail from "./routes/userUseFnc/VehiclePurchaseDetail";
 import Searchid from "./routes/auth/SearchID";
 import SearchidComplete from "./routes/auth/SearchIDComplete";
 import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
-import PasswordReset from "./routes/auth/NewPassword";
 import PasswordComplete from "./routes/auth/PasswordComplete";
 import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
@@ -29,7 +28,7 @@ import UserWithdrawal from "./components/MyPage/UserWithdrawal";
 import PasswordModify from "./components/MyPage/PasswordModify";
 import LoginPages from "./routes/auth/LoginPage";
 import GetAgreementPage from "./routes/auth/GetAgreementPage";
-import NewPasswordReset from './routes/auth/NewPassword';
+import NewPasswordReset from "./routes/auth/NewPassword";
 
 const globalStyles = css`
   body {
@@ -76,12 +75,12 @@ const routes = [
 function App() {
   // 토큰 만료 기한 확인 및 세션 스토리지에서 토큰 삭제
   function checkTokenExpiration() {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       const decodedToken: { [key: string]: any } = jwt_decode(accessToken);
       const currentTime = Math.floor(Date.now() / 1000);
       if (decodedToken.exp < currentTime) {
-        sessionStorage.removeItem("accessToken");
+        localStorage.removeItem("accessToken");
       }
     }
   }

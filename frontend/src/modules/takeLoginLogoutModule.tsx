@@ -52,9 +52,11 @@ export function* takeLoginSaga(
       INSPECTOR: "2",
       INSURANCE: "3",
     };
-    sessionStorage.setItem("accessToken", Token);
-    sessionStorage.setItem("userid", userid);
-    sessionStorage.setItem("accountType", String(accountType.USER));
+
+    localStorage.setItem("accessToken", Token);
+    localStorage.setItem("userid", userid);
+    localStorage.setItem("accountType", String(accountType.USER));
+
     yield put(loginSuccessAction(response));
   } catch (error: any) {
     yield put(loginFailureAction(error.message));
@@ -71,9 +73,9 @@ export function* takeLogoutSaga() {
     yield put(logoutSuccessAction());
 
     // 세션스토리지에 있는 정보 삭제
-    sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accountType");
-    sessionStorage.removeItem("userid");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("accountType");
+    localStorage.removeItem("userid");
   } catch (error: any) {
     yield put(logoutFailureAction(error));
   }
@@ -88,7 +90,7 @@ const initialState = {
 
 // 로그인, 로그아웃 리듀서
 export function LoginOutReducer(state = initialState, action: any) {
-  const accountType = sessionStorage.getItem("accountType");
+  const accountType = localStorage.getItem("accountType");
   switch (action.type) {
     case LOGIN_REQUEST:
       return {

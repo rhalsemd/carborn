@@ -34,14 +34,14 @@ const initialState = {
 // 유저 정보 삭제 사가
 export function* userinfoDeleteSaga(): Generator<any, any, any> {
   // 테스트용 (이건 실패)
-  // const userid = sessionStorage.getItem('userId')
+  // const userid = localStorage.getItem('userId')
 
   // 테스트용 (이건 성공)
   const id = 15;
   const userinfoDeleteApi = async () => {
     try {
-      sessionStorage.removeItem("login-token");
-      sessionStorage.removeItem("userId");
+      localStorage.removeItem("login-token");
+      localStorage.removeItem("userId");
 
       const response = await axios({
         method: "DELETE",
