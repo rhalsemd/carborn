@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.RepairResultGetListMapping;
+import site.carborn.mapping.user.UserRepairResultDetailMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 
 @Repository
@@ -16,5 +17,5 @@ public interface RepairResultRepository extends JpaRepository<RepairResult, Inte
     RepairResultGetDetailMapping findAllById(int id);
 
     Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_Id(Boolean repairBookStatus, String repairBookAccountId, Pageable page);
-                                //삭제되지 않았고, 회원꺼만
+
 }
