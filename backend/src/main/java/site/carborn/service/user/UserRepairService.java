@@ -129,7 +129,7 @@ public class UserRepairService {
     }
 
     public RepairResultGetDetailMapping repairResultDetail(int repairResultId){
-        RepairResultGetDetailMapping result = repairResultRepository.findAllById(repairResultId);
+        RepairResultGetDetailMapping result = repairResultRepository.findAllByRepairBook_Id(repairResultId);
         if (result == null){
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
