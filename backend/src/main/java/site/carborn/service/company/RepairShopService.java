@@ -69,7 +69,6 @@ public class RepairShopService {
 
     @Transactional
     public void repairBookUpdate(RepairBook repairBook) {
-        repairBook.setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
         repairBook.setUptDt(LocalDateTime.now());
         repairBookRepository.save(repairBook);
     }

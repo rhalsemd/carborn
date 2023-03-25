@@ -1,5 +1,6 @@
 package site.carborn.controller.company;
 
+import com.fasterxml.jackson.core.io.IOContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -15,6 +16,8 @@ import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.service.company.InspectorService;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
+import site.carborn.util.network.ErrorResponse;
 import site.carborn.util.network.NormalResponse;
 
 import java.io.IOException;
@@ -51,16 +54,27 @@ public class InspectorController {
     @Parameter(name = "inspectBookId", description = "예약 번호")
     public ResponseEntity<?> inspectBookUpdate(InspectResultRequestDTO dto) throws IOException {
         Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(dto.getInspectBook().getId());
+        //데이터가 빈 경우
         if(!updateData.isPresent()){
-            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
+            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, BoardUtils.BOARD_CRUD_FAIL);
         }
+        //BookStatus가 정상적으로 들어오지 않았을때
+        if(updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_CANCEL && updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_COMPLETE){
+            throw new RuntimeException("예약 변경 데이터가 잘못되었습니다.");
+        }
+
+        //예약 상태 취소만
+        else if(updateData.get().getBookStatus() == BookUtils.BOOK_STATUS_CANCEL) {
+            inspectorService.inspectorBookUpdate(updateData.get());
+            return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+        }
+
         //예약 상태 수정
         inspectorService.inspectorBookUpdate(updateData.get());
-        
-        //검수 결과 입력
+        //정비 결과 입력
         inspectorService.inspectorResultInsert(dto);
-
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+
     }
 
     @GetMapping("result/{inspectBookId}")
