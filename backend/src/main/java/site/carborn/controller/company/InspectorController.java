@@ -63,22 +63,11 @@ public class InspectorController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
-    @GetMapping("/result/list/{page}/{size}")
-    @Operation(description = "검수원 검수 완료 목록 조회")
-    @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 사이즈")
-    })
-    public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size){
-        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultGetList(pageRequest));
-    }
-
-    @GetMapping("result/{inspectResultId}")
+    @GetMapping("result/{inspectBookId}")
     @Operation(description = "검수원 검수 완료 상세 조회")
-    @Parameter(name = "inspectResultId", description = "검수 완료 목록 번호")
-    public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectResultId") int inspectResultId){
-        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectResultId));
+    @Parameter(name = "inspectBookId", description = "검수 완료 예약 번호")
+    public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectBookId") int inspectBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectBookId));
     }
 
     @GetMapping("result/review/{inspectResultId}")
