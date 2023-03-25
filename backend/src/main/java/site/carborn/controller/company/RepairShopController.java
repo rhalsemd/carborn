@@ -58,28 +58,18 @@ public class RepairShopController {
         }
         //예약 상태 수정
         repairShopService.repairBookUpdate(updateData.get());
+
         //정비 결과 입력
         repairShopService.repairResultInsert(dto);
 
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
-    @GetMapping("/result/list/{page}/{size}")
-    @Operation(description = "정비소 정비 완료 목록 조회")
-    @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 사이즈")
-    })
-    public ResponseEntity<?> repairResultList(@PathVariable("page") int page, @PathVariable("size") int size) {
-        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairResultGetList(pageRequest));
-    }
-
-    @GetMapping("result/{repairResultId}")
+    @GetMapping("result/{repairBookId}")
     @Operation(description = "정비소 정비 완료 상세 조회")
-    @Parameter(name = "repairResultId", description = "정비 완료 목록 번호")
-    public ResponseEntity<?> repairResultDetailContent(@PathVariable("repairResultId") int repairResultId){
-        return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairResultDetailContent(repairResultId));
+    @Parameter(name = "repairBookId", description = "정비 예약 목록 번호")
+    public ResponseEntity<?> repairResultDetailContent(@PathVariable("repairBookId") int repairBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairResultDetailContent(repairBookId));
     }
 
     @GetMapping("result/review/{repairResultId}")
