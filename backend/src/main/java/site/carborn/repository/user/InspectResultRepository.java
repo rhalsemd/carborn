@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.user.InspectResultGetDetailMapping;
 import site.carborn.mapping.user.InspectResultGetListMapping;
+import site.carborn.mapping.user.UserInspectBookListMapping;
 
 @Repository
 public interface InspectResultRepository extends JpaRepository<InspectResult, Integer> {
