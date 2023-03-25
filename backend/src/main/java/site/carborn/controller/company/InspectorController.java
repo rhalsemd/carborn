@@ -56,7 +56,7 @@ public class InspectorController {
         Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(dto.getInspectBook().getId());
         //데이터가 빈 경우
         if(!updateData.isPresent()){
-            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, BoardUtils.BOARD_CRUD_FAIL);
+            throw new NullPointerException("예약번호에 해당하는 데이터가 없습니다");
         }
         //BookStatus가 정상적으로 들어오지 않았을때
         if(updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_CANCEL && updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_COMPLETE){
