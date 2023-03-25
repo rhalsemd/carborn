@@ -7,7 +7,6 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
   return (
     <div
       style={{
-        transform: "translate(10%,0)",
         marginBottom: "5vh",
         cursor: "pointer",
         backgroundColor: "white",

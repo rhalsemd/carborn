@@ -1,15 +1,16 @@
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useState } from "react";
+import { Props, ReserveInfoType } from "./ReserveForm";
 
-function MyCarInformation({ data }: { data: any }) {
-  const [age, setAge] = useState<string | undefined>("");
-
+function MyCarInformation({ data, setReserveInfo, reserveInfo }: Props) {
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+    setReserveInfo((reserveInfo) => {
+      const value = event.target.value;
+      return { ...reserveInfo, carId: value };
+    });
   };
+
   return (
     <>
       <div>
@@ -20,7 +21,7 @@ function MyCarInformation({ data }: { data: any }) {
           <Select
             labelId="demo-simple-select-autowidth-label"
             id="demo-simple-select-autowidth"
-            value={age}
+            value={reserveInfo?.carId}
             onChange={handleChange}
             defaultValue="차를 선택해주세요."
           >

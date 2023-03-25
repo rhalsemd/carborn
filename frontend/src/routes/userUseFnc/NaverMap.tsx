@@ -10,7 +10,8 @@ import ReserveForm from "../../components/NaverMap/ReserveForm";
 import SearchBar from "../../components/NaverMap/SearchBar";
 import { useAPI } from "../../hooks/useAPI";
 import SearchForm from "./../../components/NaverMap/SearchForm";
-import { useQuery } from "react-query";
+import { useQueries, useQuery } from "react-query";
+import MarkerDetail from "../../components/NaverMap/MarkerDetail";
 
 const container = css`
   display: flex;
@@ -59,8 +60,6 @@ const 좌표 = [
     lng: 126.977339,
   },
 ];
-const naver = window.naver;
-const API = `https://jsonplaceholder.typicode.com/todos/1`;
 
 // 현재 지도에 마커 정보가 없을 때 나타나는 컴포넌트
 const NoContentComponent = () => {
@@ -87,21 +86,32 @@ const options = {
 var markers: any[] = [],
   infoWindows: any[] = [];
 
+const naver = window.naver;
+const API = `https://jsonplaceholder.typicode.com/todos/1`;
+
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
   const [searchMarkers, setSearchMarkers] = useState<any[]>([]);
   const [searchInfoWindows, setSearchInfoWindows] = useState<any[]>([]);
   const [mapObject, setMapObject] = useState<any>(null);
   const [reserve, setReserve] = useState<boolean>(false);
+  const [markerNum, setMarkerNum] = useState<number>(-1);
 
   const getUserCarInfo = useAPI("get", API);
-  const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {
-    cacheTime: 1000 * 300,
-    staleTime: 1000 * 600,
-    select: (data) => {
-      return data.data;
+  const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {});
+
+  const queries = useQueries([
+    {
+      // 사용자 자동차 정보 가져온다.
+      queryKey: "get-user-car-info",
+      queryFn: () => getUserCarInfo,
+      cacheTime: 1000 * 300,
+      staleTime: 1000 * 300,
+      refetchOnMount: false,
+      retry: false,
+      keepPreviousData: true,
     },
-  });
+  ]);
 
   /**
    * 현재 위치를 받는 함수
@@ -214,6 +224,7 @@ function NaverMap() {
           hideMarker(map, marker);
           infoWindow.close();
           setReserve(false);
+          setMarkerNum(-1);
         }
 
         if (marker.map) {
@@ -241,9 +252,11 @@ function NaverMap() {
         if (infoWindow.getMap()) {
           infoWindow.close();
           setReserve(false);
+          setMarkerNum(-1);
         } else {
           infoWindow.open(map, marker);
           setReserve(false);
+          setMarkerNum(seq);
         }
       };
     }
@@ -262,8 +275,10 @@ function NaverMap() {
     if (searchInfoWindows.length && searchMarkers.length) {
       if (searchInfoWindows[index].getMap()) {
         searchInfoWindows[index].close();
+        setMarkerNum(-1);
       } else {
         searchInfoWindows[index].open(mapObject, searchMarkers[index]);
+        setMarkerNum(index);
       }
     }
   };
@@ -280,7 +295,20 @@ function NaverMap() {
             {/* 검색 결과 */}
             {searchMarkers.length ? (
               reserve ? (
-                <ReserveForm data={data} />
+                <ReserveForm
+                  data={data}
+                  setReserve={setReserve}
+                  setMarkerNum={setMarkerNum}
+                  searchInfoWindows={searchInfoWindows}
+                  markerNum={markerNum}
+                />
+              ) : markerNum >= 0 ? (
+                <MarkerDetail
+                  searchInfoWindows={searchInfoWindows}
+                  setReserve={setReserve}
+                  setMarkerNum={setMarkerNum}
+                  markerNum={markerNum}
+                />
               ) : (
                 searchMarkers.map((item, index) => {
                   return (
