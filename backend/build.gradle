@@ -43,6 +43,7 @@ dependencies {
 
 	// http
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+	implementation 'commons-logging:commons-logging:1.2'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -57,7 +58,7 @@ tasks.named('test') {
 }
 
 bootJar {
-	mainClass = 'site.carborn'
+	mainClass = 'site.carborn.CarbornApplication'
 }
 
 /* =============================================================================== */
