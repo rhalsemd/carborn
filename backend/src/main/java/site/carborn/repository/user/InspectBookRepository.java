@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.InspectBookGetListMapping;
+import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
 
 @Repository
@@ -16,5 +17,5 @@ public interface InspectBookRepository extends JpaRepository<InspectBook, Intege
     InspectBookGetDetailMapping findAllById(int id);
 
     Page<UserInspectBookListMapping> findByStatusAndAccount_Id(boolean status, String accountId,Pageable page);
-
+    UserInspectBookDetailMapping findAllByIdAndStatus(int id, boolean status);
 }

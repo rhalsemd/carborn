@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.carborn.entity.user.InspectBook;
+import site.carborn.mapping.user.InspectBookGetDetailMapping;
+import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
+import site.carborn.mapping.user.UserRepairBookListMapping;
 import site.carborn.service.user.UserInspectService;
 import site.carborn.util.network.NormalResponse;
 
@@ -39,5 +43,12 @@ public class UserInspectConteroller {
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
+    @GetMapping("book/{inspectId}")
+    @Operation(description = "사용자의 검수원 예약 단일 조회")
+    @Parameter(name = "inspectId", description = "예약글 id")
+    public ResponseEntity<?> getInspectBook(@PathVariable("inspectId") Integer inspectBookId){
+        UserInspectBookDetailMapping inspectBook = userInspectService.inspectBookDetail(inspectBookId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectBook);
+    }
 
 }
