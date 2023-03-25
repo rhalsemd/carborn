@@ -2,7 +2,6 @@
 import { css } from "@emotion/react";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-// import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 
@@ -11,13 +10,17 @@ const container = css`
   align-items: center;
   width: auto;
   flex-wrap: nowrap;
+  height: 10px;
   .cancel {
-    height: 10px;
-    width: 10px;
+    width: 20px;
+    height: 20px;
     display: flex;
+    text-align: center;
+
     align-items: center;
     margin-left: 10px;
     font-weight: bolder;
+    cursor: pointer;
   }
 `;
 
@@ -28,7 +31,7 @@ export default function FileUpload({
 }: {
   size: number;
   row: number;
-  setImage: React.Dispatch<React.SetStateAction<string[]>>;
+  setImage: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [imageName, setImageName] = useState<string>("");
 
@@ -38,15 +41,14 @@ export default function FileUpload({
       const reader = new FileReader();
 
       setImageName(file.name);
-      reader.onload = () =>
-        setImage((prev: string | any[]) => [...prev, reader.result as string]);
+      reader.onload = () => setImage(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
   const cancel = () => {
     setImageName("");
-    setImage([]);
+    setImage("");
   };
 
   const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {

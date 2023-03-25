@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import NavGarage from "../../../components/NavGarage";
+import NavGarage from "../../../components/company/NavCompnay";
 import car from "../../../assets/giup-car.png";
 import dotBogi from "../../../assets/dot-bo-gi.png";
 import register from "../../../assets/register.png";
@@ -16,7 +16,6 @@ const container = css`
   position: relative;
   justify-content: center;
   img {
-    /* align-self; */
     height: 75%;
     width: 75%;
     opacity: 0.6;
@@ -29,12 +28,14 @@ const container = css`
       margin-top: 0;
     }
   }
+
   p {
     color: #d23131;
     font-size: 84px;
     font-weight: bold;
     margin: 0 0 0 0;
   }
+
   .bottomTxt {
     margin: 20px 0;
     display: flex;
@@ -43,6 +44,7 @@ const container = css`
       margin-right: 20px;
     }
   }
+
   button {
     width: 18vw;
     height: 53vh;
@@ -100,17 +102,14 @@ export default function GarageHome() {
     e.preventDefault();
     navigate("/garage/history");
   };
-  const regRepair = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    navigate("/garage/register");
-  };
+
   return (
     <>
       <NavGarage />
       <div css={container}>
         <img src={car} />
         <div className="topTxt">
-          <p>Insurance</p>
+          <p>Repair</p>
         </div>
         <div className="btnSection">
           <button className="btn" onClick={bookList}>
@@ -125,17 +124,6 @@ export default function GarageHome() {
             </div>
           </button>
           <button className="btn" onClick={historyList}>
-            <div>
-              <img src={register} />
-            </div>
-            <div>Check</div>
-            <div>
-              정비내역을
-              <br />
-              조회해보세요
-            </div>
-          </button>
-          <button className="btn" onClick={regRepair}>
             <div>
               <img src={register} />
             </div>

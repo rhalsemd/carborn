@@ -1,3 +1,4 @@
+/// <reference types="@emotion/react/types/css-prop" />
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
@@ -6,6 +7,7 @@ import createSagaMiddleware from "redux-saga";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./modules/root/rootReducer";
 import rootSaga from "./modules/root/rootSaga";
+import { createBrowserHistory } from "history";
 
 declare global {
   interface Window {
@@ -13,7 +15,13 @@ declare global {
   }
 }
 
-const sagaMiddleware = createSagaMiddleware();
+const history = createBrowserHistory();
+
+const sagaMiddleware = createSagaMiddleware({
+  context: {
+    history,
+  },
+});
 
 const store = createStore(
   rootReducer,

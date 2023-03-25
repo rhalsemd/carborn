@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import NavGarage from "../../../components/NavGarage";
+import NavGarage from "../../../components/company/NavCompnay";
 import car from "../../../assets/giup-car.png";
 import dotBogi from "../../../assets/dot-bo-gi.png";
 import register from "../../../assets/register.png";
@@ -14,7 +14,7 @@ const container = css`
   flex-direction: column;
   align-items: center;
   position: relative;
-
+  justify-content: center;
   img {
     /* align-self; */
     height: 75%;
@@ -90,10 +90,15 @@ const container = css`
   }
 `;
 
-export default function InspectorHome() {
+export default function InspecterHome() {
   const navigate = useNavigate();
   const bookList = (e: React.MouseEvent<HTMLButtonElement>) => {
-    navigate("/garage/reserve");
+    e.preventDefault();
+    navigate("/inspector/reserve");
+  };
+  const historyList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate("/garage/history");
   };
 
   return (
@@ -116,13 +121,13 @@ export default function InspectorHome() {
               조회해보세요
             </div>
           </button>
-          <button className="btn">
+          <button className="btn" onClick={historyList}>
             <div>
               <img src={register} />
             </div>
             <div>Check</div>
             <div>
-              정비내역을
+              검수 내역을
               <br />
               조회해보세요
             </div>

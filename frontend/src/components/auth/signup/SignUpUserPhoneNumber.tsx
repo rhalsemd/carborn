@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import SignUpUserPhoneNumberModal from "./modal/SignUpUserPhoneNumberModal";
 
@@ -12,14 +12,17 @@ export interface SignUpUserPhoneNumberState {
 export type SignUpUserPhoneNumberProps = {
   signupUserFormData: SignupFormData;
   setSignupUserFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
+  setIsValid: any;
+  isValid: boolean;
 };
 
 const SignUpUserPhoneNumber = ({
   setSignupUserFormData,
   signupUserFormData,
+  setIsValid,
+  isValid,
 }: SignUpUserPhoneNumberProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (value: string) => {
     setPhoneNumber(value);
@@ -32,6 +35,11 @@ const SignUpUserPhoneNumber = ({
     if (phoneNumber.length <= 10 && phoneNumber.length <= 11) {
       alert("휴대폰 번호는 10자리이상 11자리 이하 여야합니다.");
       setIsModalOpen(false);
+      setIsValid(false);
+      setSignupUserFormData({
+        ...signupUserFormData,
+        isVarify: false,
+      });
     } else {
       setIsModalOpen(true);
     }
@@ -55,14 +63,17 @@ const SignUpUserPhoneNumber = ({
       <label htmlFor="phoneNumber">휴대폰 번호</label>
       <br />
       <input
-        type="number"
+        tabIndex={7}
+        type="text"
         id="phoneNumber"
-        autoComplete="off"
         value={phoneNumber}
+        autoComplete="off"
         onChange={(e) => handleChange(e.target.value)}
         maxLength={11}
       />
-      <button onClick={openModal}>인증하러가기</button>
+      <button tabIndex={8} onClick={openModal}>
+        인증하러가기
+      </button>
 
       {/* 모달 */}
       <SignUpUserPhoneNumberModal

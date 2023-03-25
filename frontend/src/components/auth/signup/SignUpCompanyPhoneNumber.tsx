@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import SignUpUserPhoneNumberModal from "./modal/SignUpUserPhoneNumberModal";
 
@@ -14,14 +14,17 @@ export type SignUpCompanyPhoneNumberProps = {
   setSignupCompanyFormData: React.Dispatch<
     React.SetStateAction<SignupFormData>
   >;
+  setIsValid: any;
+  isValid: boolean;
 };
 
 const SignUpCompanyPhoneNumber = ({
   setSignupCompanyFormData,
   signupCompanyFormData,
+  setIsValid,
+  isValid,
 }: SignUpCompanyPhoneNumberProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (value: string) => {
     setPhoneNumber(value);
@@ -57,14 +60,17 @@ const SignUpCompanyPhoneNumber = ({
       <label htmlFor="phoneNumber">휴대폰 번호</label>
       <br />
       <input
-        type="number"
+        tabIndex={8}
+        type="text"
         id="phoneNumber"
         value={phoneNumber}
         autoComplete="off"
         onChange={(e) => handleChange(e.target.value)}
         maxLength={11}
       />
-      <button onClick={openModal}>인증하러가기</button>
+      <button tabIndex={9} onClick={openModal}>
+        인증하러가기
+      </button>
 
       {/* 모달 */}
       <SignUpUserPhoneNumberModal

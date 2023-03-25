@@ -1,17 +1,25 @@
 server:
-  port: 80
+  port: 443
+  http:
+    port: 80
+
   servlet:
     context-path: /
     encoding:
       charset: UTF-8
       enabled: true
       force: true
-#  ssl:
-#    enabled: true
-#    key-store: classpath:keystore.p12
-#    key-store-password: ssafy123
-#    key-store-type: PKCS12
-#    key-alias: 1
+
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: ssafy123
+    key-store-type: PKCS12
+    key-alias: 1
+
+tomcat:
+  protocol_header: x-forwarded-proto
+  remote_ip_header: x-forwarded-for
 
 logging:
   level:
@@ -54,6 +62,10 @@ spring:
       port: 6379
       host: rigizer.iptime.org
 
+servlet:
+  multipart:
+    max-file-size: 20MB
+
 jwt:
   header: Authorization
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
@@ -64,8 +76,26 @@ image:
     windows: C:/Users/SSAFY/Downloads/images
     linux: /home/ubuntu/images
 
-#naver-cloud-sms:
-#  accessKey: hZMpYNUxSNTcNY73KTBW
-#  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
-#  serviceId: ncp:sms:kr:257282496643:sms_example
-#  senderPhone: 01085241881
+naver:
+  naver-cloud-map:
+    X-NCP-APIGW-API-KEY-ID: iap87u1sur
+    X-NCP-APIGW-API-KEY: DMlA2OvuXox8pSlVqTIAwXHRdL8sJz79VbUqF5wH
+
+  #naver-cloud-sms:
+  #  accessKey: hZMpYNUxSNTcNY73KTBW
+  #  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
+  #  serviceId: ncp:sms:kr:257282496643:sms_example
+  #  senderPhone: 01085241881
+
+  #naver-cloud-ocr:
+  #  apiURL: https://5omzwputv7.apigw.ntruss.com/custom/v1/21212/9e015480e19104a91ee5d3cdfb7200731357cdaf00d3689246ffaacc81f8fd02/general
+  #  secretKey: TG5OdG5UTFpJZU9sVG1DR21NRlB2Qm1rTUdDdUJLRHc=
+
+business-registration-number-verification:
+  serviceKey: 6gySi+blFPcHBT8gEPjE0eHTAuce2xs6nDw+IlZSQnYMq925qN9opkE4aDZRME3VB2gqZt/Khqg28B4nYC3juQ==
+
+klaytn:
+  accessKeyId: KASKUIIPRW139WBZAXT657H0
+  secretAccessKey: 8fxpWhYFGmYW3Fz1uXT5MiZ_Mw9qhFmojpS94psy
+  authorization: Basic S0FTS1VJSVBSVzEzOVdCWkFYVDY1N0gwOjhmeHBXaFlGR21ZVzNGejF1WFQ1TWlaX013OXFoRm1vanBTOTRwc3k=
+  chainId: 1001

@@ -60,7 +60,7 @@ const PasswordResetVerify = ({
     <StyleLoginInputDiv>
       <label htmlFor="passwordResetPhonenumber">전화번호</label>
       <input
-        type="number"
+        type="text"
         id="passwordResetPhonenumber"
         name="passwordResetPhonenumber"
         autoComplete="off"

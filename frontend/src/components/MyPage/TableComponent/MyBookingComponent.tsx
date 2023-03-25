@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_URL } from "./../../../lib/loginApi";
+import { API_URL } from './../../../lib/api';
 import axios from "axios";
 import BookingPagination from "../Pagination/BookingPagination";
 

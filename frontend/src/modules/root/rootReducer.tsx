@@ -1,30 +1,26 @@
 import { combineReducers } from "redux";
-import { loginReducer } from "../loginModule";
-import { idCheckReducer } from "../idcheckModule";
-import { termsofuseReducer } from "../termsOfUseModule";
+import { LoginOutReducer } from "../takeLoginLogoutModule";
+import { SignUpReducer } from "../signUpModule";
+import { GetAgreementReducer } from "../getAgreementModule";
 import { verificationNumberReducer } from "../verificationNumberModule";
-import { searchidCheckReducer } from "../searchIDModule";
-import { passwordResetCheckReducer } from "../passwordResetCheckModule";
-import { passwordResetReducer } from "../passwordResetModule";
-
-// 타입 지정
-// export type RootState = ReturnType<typeof rootReducer>
-
-export type RootState = {
-  termsofuse: {
-    privacy: string;
-    website: string;
-  };
-};
+import { passwordResetCheckReducer } from "../PasswordCheckModule";
+import { userinfoDeleteReducer } from "../userInfoDeleteModule";
+import { setAccountTypeReducer } from "./../setAccountTypeModule";
+import { IdCheckReducer } from "./../UserIdCheckModule";
+import { SearchIDCheckReducer } from "../SearchIDModule";
+import { newPasswordReducer } from './../PasswordResetModule';
 
 const rootReducer = combineReducers({
-  login: loginReducer,
-  termsofuse: termsofuseReducer,
-  idcheck: idCheckReducer,
-  verificationNumber: verificationNumberReducer,
-  searchid: searchidCheckReducer,
-  passwordResetCheck: passwordResetCheckReducer,
-  passwordReset: passwordResetReducer
+  LoginOutReducer,
+  GetAgreementReducer,
+  SignUpReducer,
+  IdCheckReducer,
+  setAccountTypeReducer,
+  SearchIDCheckReducer,
+  verificationNumberReducer,
+  newPasswordReducer,
+  passwordResetCheckReducer,
+  userinfodelete: userinfoDeleteReducer,
 });
 
 export default rootReducer;

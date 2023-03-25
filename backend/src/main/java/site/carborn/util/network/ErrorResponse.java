@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ErrorResponse {
     private final LocalDateTime timestamp = LocalDateTime.now();
     private final int status;
-    private final String statusName;
+    private final String error;
     private final String message;
 
     public static ResponseEntity<ErrorResponse> toResponseEntity(HttpStatus httpStatus, Exception e) {
@@ -22,7 +22,7 @@ public class ErrorResponse {
                 .status(httpStatus)
                 .body(ErrorResponse.builder()
                         .status(httpStatus.value())
-                        .statusName(httpStatus.name())
+                        .error(httpStatus.name())
                         .message(e.getMessage())
                         .build()
                 );
@@ -36,7 +36,7 @@ public class ErrorResponse {
         return "ErrorResponse{" +
                 "timestamp=" + timestamp +
                 ", status=" + status +
-                ", statusName='" + statusName + '\'' +
+                ", error='" + error + '\'' +
                 ", message='" + message + '\'' +
                 '}';
     }

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
+import site.carborn.dto.request.RepairResultRequestDTO;
+import site.carborn.entity.board.Board;
 
 import java.time.LocalDateTime;
 
@@ -36,5 +39,14 @@ public class RepairResult {
 
     private LocalDateTime repairDt;
 
+    @Column(length = 200)
+    private String contractHash;
+
     private LocalDateTime regDt;
+
+    public static RepairResult copy(RepairResult repairResult) {
+        RepairResult rr = new RepairResult();
+        BeanUtils.copyProperties(repairResult, rr);
+        return rr;
+    }
 }

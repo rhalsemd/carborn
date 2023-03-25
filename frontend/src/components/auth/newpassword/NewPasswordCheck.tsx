@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
-import { SearchInputPasswordCheckObj } from "../../../routes/auth/PasswordReset";
+import { SearchInputPasswordCheckObj } from "../../../routes/auth/NewPassword";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
@@ -15,7 +15,7 @@ type NewPasswordCheckProps = {
   inputObj: SearchInputPasswordCheckObj;
   setNewSecondPassword: React.Dispatch<React.SetStateAction<string>>;
   newSecondPassword: string;
-  setIsNewPassword: React.Dispatch<React.SetStateAction<null | boolean>>;
+  setIsNewPassword: React.Dispatch<React.SetStateAction<boolean>>;
   isNewPassword: null | boolean;
   newpassword: string;
 };

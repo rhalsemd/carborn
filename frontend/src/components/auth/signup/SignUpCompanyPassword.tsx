@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 
 export interface SignUpPasswordProps {
@@ -74,6 +74,7 @@ const SignUpCompanyPassword = ({
       <label htmlFor="companypassword">비밀번호</label>
       <br />
       <input
+        tabIndex={4}
         type="password"
         id="companypassword"
         placeholder="비밀번호를 입력해주세요"

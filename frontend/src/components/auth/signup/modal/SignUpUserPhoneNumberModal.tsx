@@ -126,9 +126,9 @@ const VerifyNumberButtonDiv = styled.div`
 export interface SignUpUserPhoneNumberModalProps {
   open: boolean;
   onClose: () => void;
-  phoneNumber: string;
-  setIsValid: any;
-  isValid: boolean;
+  phoneNumber: any;
+  setIsValid: any,
+  isValid:boolean
 }
 
 export interface ModalWrapperProps {
@@ -141,34 +141,36 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   onClose,
   phoneNumber,
   setIsValid,
-  isValid,
+  isValid
 }) => {
+
   const selector = useSelector(
-    (state: any) => state.verificationNumber.certificatedNum
+    (state: any) => state.verificationNumberReducer.certificatedNum
   );
   const [inputValue, setInputValue] = useState("");
   const [countdown, setCountdown] = useState(180);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [countdownInterval, setCountdownInterval] = useState<ReturnType<
     typeof setTimeout
   > | null>(null);
+  const [isButtonValid, setIsButtonValid] = useState(true);
   const dispatch = useDispatch();
 
+  // 인증번호 발송버튼
   const handleSendVerifyRequest = (phoneNumber: string) => {
-    dispatch(userverificationNumber(phoneNumber));
+    dispatch(userverificationNumber(phoneNumber))
 
-    if (isButtonDisabled) return;
-
-    setIsButtonDisabled(true);
+    if (isValid) return;
     setCountdown(180);
     clearInterval(countdownInterval!);
 
+    // 카운트 다운 관련 코드
     setCountdownInterval(
       setInterval(() => {
         setCountdown((prevCountdown) => {
           if (prevCountdown === 1) {
             clearInterval(countdownInterval!);
-            setIsButtonDisabled(false);
+            setIsButtonValid(false);
+            setIsValid(false)
             return 0;
           } else if (prevCountdown <= 0) {
             clearInterval(countdownInterval!);
@@ -184,12 +186,26 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   const handleClose = () => {
     setInputValue("");
     setCountdown(180);
-    setIsButtonDisabled(false);
+    setIsButtonValid(false);
+    setIsValid(true)
     if (countdownInterval) {
       clearInterval(countdownInterval);
     }
     onClose();
   };
+
+  // 인증확인 버튼 
+  const handleVerifyCheck = () => {
+    if(selector === inputValue || !isButtonValid) {
+      setIsButtonValid(true)
+      setIsValid(true)
+      setInputValue("")
+      onClose();
+    } else {
+      setIsButtonValid(false)
+      setIsValid(false)
+    }
+  }
 
   // 시간 형식 바꾸기
   const formatTime = (time: number) => {
@@ -204,12 +220,15 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   };
 
   useEffect(() => {
-    if (inputValue === selector) {
-      setIsValid(true);
+    if (selector === inputValue) {
+      setIsButtonValid(true)
+    } else if ( selector !== inputValue && inputValue === "" ) {
+      setIsButtonValid(false)
+      setIsValid(false)
     } else {
-      setIsValid(false);
+      setIsValid(false)
     }
-  }, [inputValue, selector]);
+  }, [inputValue, selector, setIsButtonValid, setIsValid])
 
   return (
     <ModalWrapper open={open} onClick={onClose}>
@@ -220,6 +239,7 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
         <VerifyNumberContentDiv>
           <div>
             <input
+              tabIndex={10}
               type="text"
               id="userverifynumber"
               autoComplete="off"
@@ -233,20 +253,22 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
             <span>{formatTime(countdown)}</span>
           </div>
           <button
+            tabIndex={9}
             onClick={() => handleSendVerifyRequest(phoneNumber)}
-            disabled={isButtonDisabled}
+            disabled={isButtonValid}
           >
             발송
           </button>
         </VerifyNumberContentDiv>
         <VerifyNumberButtonDiv>
-          <button className="closeButton" onClick={handleClose}>
+          <button tabIndex={12} className="closeButton" onClick={handleClose}>
             닫기
           </button>
           <button
+            tabIndex={11}
             className="verifyButton"
-            onClick={handleClose}
-            disabled={!isValid}
+            onClick={handleVerifyCheck}
+            disabled={!isButtonValid}
           >
             인증확인
           </button>
