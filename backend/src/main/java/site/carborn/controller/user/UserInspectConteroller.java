@@ -1,5 +1,8 @@
 package site.carborn.controller.user;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,17 @@ public class UserInspectConteroller {
 
     // 검수 예약 관리
     @GetMapping("/book/list/{page}/{size}")
+    @Operation(description = "사용자의 검수원 예약 목록 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 번호")
+    })
     public ResponseEntity<?> getInspectBookList(@PathVariable("page") int page,
                                                 @PathVariable("size") int size){
         String accountId = "usertest";
         Page<UserInspectBookListMapping> result = userInspectService.inspectBookList(accountId,page,size);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
+
 
 }
