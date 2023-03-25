@@ -41,11 +41,8 @@ export function* takeLoginSaga(
     const response: any = yield call(
       LoginApi,
       action.payload as loginInputType
-    );
+      );
 
-    // 일단 토큰 대신 쓰자
-    const Token = response.captcha;
-    const userid = response.loginid;
     const accountType = {
       USER: "0",
       REPAIR: "1",
@@ -53,9 +50,23 @@ export function* takeLoginSaga(
       INSURANCE: "3",
     };
 
-    localStorage.setItem("accessToken", Token);
-    localStorage.setItem("userid", userid);
-    localStorage.setItem("accountType", String(accountType.USER));
+    const Obj = {
+      value: response.captcha,
+      expire: Date.now() * 180000,
+      userId: response.loginid,
+      accountType: accountType.USER,
+    }
+
+    const ObjString = JSON.stringify(Obj);
+    localStorage.setItem("login-token", ObjString);
+
+    // 밑에는 일부
+    // const Token = response.captcha;
+    // const userid = response.loginid;
+
+    // localStorage.setItem("accessToken", Token);
+    // localStorage.setItem("userid", userid);
+    // localStorage.setItem("accountType", String(accountType.USER));
 
     yield put(loginSuccessAction(response));
   } catch (error: any) {
@@ -73,9 +84,7 @@ export function* takeLogoutSaga() {
     yield put(logoutSuccessAction());
 
     // 세션스토리지에 있는 정보 삭제
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("accountType");
-    localStorage.removeItem("userid");
+    localStorage.removeItem("login-token");
   } catch (error: any) {
     yield put(logoutFailureAction(error));
   }
@@ -90,7 +99,14 @@ const initialState = {
 
 // 로그인, 로그아웃 리듀서
 export function LoginOutReducer(state = initialState, action: any) {
-  const accountType = localStorage.getItem("accountType");
+  const ObjString: any = localStorage.getItem("login-token");
+  let accountType = null;
+  if (ObjString) {
+    const Obj = JSON.parse(ObjString);
+    accountType = Obj.accountType;
+  }
+  // const accountType = localStorage.getItem("accountType");
+
   switch (action.type) {
     case LOGIN_REQUEST:
       return {

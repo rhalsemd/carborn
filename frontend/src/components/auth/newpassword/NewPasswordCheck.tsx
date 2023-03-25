@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
-import { SearchInputPasswordCheckObj } from "../../../routes/auth/NewPassword";
+import { SearchInputPasswordCheckObj } from "../../../routes/auth/NewPasswordReset";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`

@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchIDName from "../../components/auth/searchID/SearchIDName";
 import SearchIDPhoneNumberVerify from "../../components/auth/searchID/SearchIDPhoneNumberVerify";
 import Nav from "./../../components/Nav";
-import { SearchIDCheckAction } from "../../modules/SearchIDModule";
-import { useNavigate } from 'react-router-dom';
+import { SearchIDCheckAction } from "../../modules/searchidModule";
+import { useNavigate } from "react-router-dom";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -58,8 +58,10 @@ export type SearchInputType = {
 const SearchID = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isComplete = useSelector((state:any) => state.SearchIDCheckReducer.verify)
-  const SearchIDdata = useSelector((state:any) => state.SearchIDCheckReducer)
+  const isComplete = useSelector(
+    (state: any) => state.SearchIDCheckReducer.verify
+  );
+  const SearchIDdata = useSelector((state: any) => state.SearchIDCheckReducer);
   const [searchInput, setSearchInput] = useState<SearchInputType>({
     name: "",
     phonenumber: "",
@@ -72,9 +74,9 @@ const SearchID = () => {
 
   useEffect(() => {
     if (isComplete) {
-      navigate('/searchid/searchidcomplete', {state:SearchIDdata})
+      navigate("/searchid/searchidcomplete", { state: SearchIDdata });
     }
-  }, [isComplete])
+  }, [isComplete]);
 
   return (
     <div>
@@ -94,7 +96,12 @@ const SearchID = () => {
           />
           <StyleLoginSignUpBtn
             onClick={handleSearchID}
-            disabled={!Boolean(searchInput.name) && !Boolean(searchInput.phonenumber) && !searchInput.isVerify}>
+            disabled={
+              !Boolean(searchInput.name) &&
+              !Boolean(searchInput.phonenumber) &&
+              !searchInput.isVerify
+            }
+          >
             아이디 찾기
           </StyleLoginSignUpBtn>
         </StyleLoginSignUpBoxDiv>

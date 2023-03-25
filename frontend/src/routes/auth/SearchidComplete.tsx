@@ -3,9 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import carbornLogo from "../../assets/carbornLogo.png";
 import Nav from "../../components/Nav";
 import { StyleBtn } from "./PasswordComplete";
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { SearchIDVerifyReset } from "../../modules/SearchIDModule";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { SearchIDVerifyReset } from "../../modules/searchidModule";
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -37,8 +37,8 @@ const SearchidComplete = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(SearchIDVerifyReset())
-  }, [])
+    dispatch(SearchIDVerifyReset());
+  }, []);
 
   return (
     <div>
