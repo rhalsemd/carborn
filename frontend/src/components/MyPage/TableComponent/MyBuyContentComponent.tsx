@@ -12,6 +12,7 @@ const StyleMyBuyContentTableDiv = styled.div`
 `
 
 const MyBuyContentComponent = () => {
+
   return (
     <StyleMyBuyContentTableDiv>
       <BuyContentPagination itemsPerPage={ITEMS_PER_PAGES} />

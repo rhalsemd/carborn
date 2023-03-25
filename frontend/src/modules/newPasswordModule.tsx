@@ -12,6 +12,7 @@ export const newPasswordAction = (data: Object) => ({
   payload: data,
 });
 
+
 export const newPasswordReset = () => ({
   type: NEWPASSWORD_RESET
 })

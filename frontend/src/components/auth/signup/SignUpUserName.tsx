@@ -23,6 +23,10 @@ const SignUpUserName = ({
       });
     } else {
       alert("한글 이름만 가능합니다. 한영키를 눌러주세요.");
+      setSignupUserFormData({
+        ...signupUserFormData,
+        name: "",
+      });
     }
   };
 

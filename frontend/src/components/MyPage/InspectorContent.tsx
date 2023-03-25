@@ -1,12 +1,13 @@
 import Nav from "../Nav";
-import styled from "@emotion/styled";
-import MyInspectorComponent from "./TableComponent/MyInspectorComponent";
+import styled from '@emotion/styled';
+import MyInspectorContentComponent from "./TableComponent/MyInspectorContentComponent";
+import { useState } from 'react';
 
-const StyleBooking = styled.div`
+const StyleInspectorContent = styled.div`
   width: 100vw;
 `;
 
-const StyleBookingContainer = styled.div`
+const StyleInspectorContentContainer = styled.div`
   width: 100vw;
   height: 80vh;
   border: 1px solid black;
@@ -16,7 +17,7 @@ const StyleBookingContainer = styled.div`
   align-items: center;
 `;
 
-const StyleBookingTitleDiv = styled.div`
+const StyleInspectorContentTitleDiv = styled.div`
   width: 70%;
   height: 20%;
 
@@ -33,18 +34,19 @@ const StyleBookingTitleDiv = styled.div`
   margin-top: 3rem;
 `;
 
+
 const InspectorContent = () => {
   return (
-    <StyleBooking>
+    <StyleInspectorContent>
       <Nav />
-      <StyleBookingContainer>
-        <StyleBookingTitleDiv>
+      <StyleInspectorContentContainer>
+        <StyleInspectorContentTitleDiv>
           <p>검수 내역</p>
-        </StyleBookingTitleDiv>
-        <MyInspectorComponent />
-      </StyleBookingContainer>
-    </StyleBooking>
+        </StyleInspectorContentTitleDiv>
+        <MyInspectorContentComponent />
+      </StyleInspectorContentContainer>
+    </StyleInspectorContent>
   );
-};
+}
 
-export default InspectorContent;
+export default InspectorContent
