@@ -70,7 +70,6 @@ public class InspectorService {
 
     @Transactional
     public void inspectorBookUpdate(InspectBook inspectBook){
-        inspectBook.setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
         inspectBook.setUptDt(LocalDateTime.now());
         inspectBookRepository.save(inspectBook);
     }

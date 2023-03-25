@@ -15,6 +15,7 @@ import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.service.company.RepairShopService;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
 import site.carborn.util.network.NormalResponse;
 
 import java.io.IOException;
@@ -53,15 +54,24 @@ public class RepairShopController {
     @Parameter(name = "repairBookId", description = "예약 번호")
     public ResponseEntity<?> repairBookUpdate(RepairResultRequestDTO dto) throws IOException {
         Optional<RepairBook> updateData = repairShopService.repairBookGetData(dto.getRepairBook().getId());
+        //데이터가 빈 경우
         if (!updateData.isPresent()) {
-            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST, "예약 번호가 잘못되었습니다.");
+            throw new NullPointerException("예약번호에 해당하는 데이터가 없습니다");
         }
+        //BookStatus가 정상적으로 들어오지 않았을때
+        if(updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_CANCEL && updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_COMPLETE){
+            throw new RuntimeException("예약 변경 데이터가 잘못되었습니다.");
+        }
+        //예약 취소
+        else if(updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_CANCEL){
+            repairShopService.repairBookUpdate(updateData.get());
+            return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+        }
+
         //예약 상태 수정
         repairShopService.repairBookUpdate(updateData.get());
-
         //정비 결과 입력
         repairShopService.repairResultInsert(dto);
-
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
