@@ -87,4 +87,18 @@ public class UserInspectService {
         InspectBook save = inspectBookRepository.save(inspectBook);
         return save.getId();
     }
+
+    public void deleteInspectBook(Integer id){
+        InspectBook delete = inspectBookRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("존재하지 않는 데이터입니다")
+        );
+
+        if (delete.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
+            throw new RuntimeException("삭제된 데이터입니다");
+        }
+
+        delete.setStatus(BoardUtils.BOARD_DELETE_STATUS_TRUE);
+        delete.setUptDt(LocalDateTime.now());
+        inspectBookRepository.save(delete);
+    }
 }

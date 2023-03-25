@@ -17,6 +17,7 @@ import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
 import site.carborn.service.user.UserInspectService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
 @Tag(name = "사용자 Inspector 조회", description = "사용자가 Inspector에 대한 정보를 조회하는 경우")
@@ -44,7 +45,7 @@ public class UserInspectConteroller {
     @GetMapping("book/{inspectId}")
     @Operation(description = "사용자의 검수원 예약 단일 조회")
     @Parameter(name = "inspectId", description = "예약글 id")
-    public ResponseEntity<?> getInspectBook(@PathVariable("inspectId") Integer inspectBookId){
+    public ResponseEntity<?> getInspectBook(@PathVariable("inspectId") int inspectBookId){
         UserInspectBookDetailMapping inspectBook = userInspectService.inspectBookDetail(inspectBookId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectBook);
     }
@@ -54,6 +55,14 @@ public class UserInspectConteroller {
     public ResponseEntity<?> createRepairBook(@RequestBody InspectBook inspectBook){
         int result = userInspectService.createInspectBook(inspectBook);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
+    }
+
+    @DeleteMapping ("/book/delete/{inspectId}")
+    @Operation(description = "사용자 검수원 예약 삭제")
+    @Parameter(name = "inspectId", description = "예약 게시글 id")
+    public ResponseEntity<?> deleteRepairBook(@PathVariable("inspectId") int inspectBookId){
+        userInspectService.deleteInspectBook(inspectBookId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
 }
