@@ -3,19 +3,35 @@ package site.carborn.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import site.carborn.entity.account.Account;
+import site.carborn.entity.car.Car;
+import site.carborn.entity.company.Inspector;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
+import site.carborn.repository.account.AccountRepository;
+import site.carborn.repository.car.CarRepository;
+import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class UserInspectService {
     @Autowired
     private InspectBookRepository inspectBookRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private InspectorRepository inspectorRepository;
+    @Autowired
+    private CarRepository carRepository;
     @Autowired
     private InspectResultRepository inspectResultRepository;
 
@@ -35,6 +51,7 @@ public class UserInspectService {
         return inspectBookList;
     }
 
+
     public UserInspectBookDetailMapping inspectBookDetail(Integer id){
         UserInspectBookDetailMapping inspectBook = inspectBookRepository.findAllByIdAndStatus(id,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
@@ -43,5 +60,31 @@ public class UserInspectService {
         }
 
         return inspectBook;
+    }
+
+
+    public int createInspectBook(InspectBook inspectBook){
+
+        if (inspectBook.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+        Account account = accountRepository.findById(inspectBook.getAccount().getId());
+        if (account == null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+
+        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(()->
+                new RuntimeException("존재하지 않는 검수원입니다"));
+
+        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(()->
+                new RuntimeException("등록되지 않은 차입니다"));
+
+        inspectBook.setRegDt(LocalDateTime.now());
+        inspectBook.setUptDt(LocalDateTime.now());
+        inspectBook.setBookStatus(BookUtils.BOOK_STATUS_WAIT);
+        inspectBook.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+
+        InspectBook save = inspectBookRepository.save(inspectBook);
+        return save.getId();
     }
 }
