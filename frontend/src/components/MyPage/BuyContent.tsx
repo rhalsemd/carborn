@@ -1,10 +1,10 @@
-import styled from '@emotion/styled';
-import Nav from './../Nav';
-import MyBuyContentComponent from './TableComponent/MyBuyContentComponent';
+import styled from "@emotion/styled";
+import Nav from "./../Nav";
+import MyBuyContentComponent from "./TableComponent/MyBuyContentComponent";
 
 const StyleBuyContent = styled.div`
   width: 100vw;
-`
+`;
 
 const StyleBuyContentContainer = styled.div`
   width: 100vw;
@@ -14,7 +14,7 @@ const StyleBuyContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const StyleBuyContentTitleDiv = styled.div`
   width: 70%;
@@ -31,20 +31,20 @@ const StyleBuyContentTitleDiv = styled.div`
 
   border-bottom: 2px solid red;
   margin-top: 3rem;
-`
+`;
 
 const BuyContent = () => {
   return (
     <StyleBuyContent>
-      <Nav/>
+      <Nav />
       <StyleBuyContentContainer>
         <StyleBuyContentTitleDiv>
           <p>구매 내역</p>
         </StyleBuyContentTitleDiv>
-        <MyBuyContentComponent/>
+        <MyBuyContentComponent />
       </StyleBuyContentContainer>
     </StyleBuyContent>
-  )
-}
+  );
+};
 
 export default BuyContent;

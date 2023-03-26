@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 
 // 이미지 가져오기
 import Buy from '../assets/Buy.png';
-import Booking from '../assets/Booking.png';
+import inspector from '../assets/Booking.png';
 import Insurance from '../assets/Insurance.png';
 import Gallery from '../assets/Gallery.png';
 import MyCar from '../assets/MyCar.png';
@@ -115,7 +115,10 @@ const StyleMypageCardImg = styled.div`
 `
 
 const MyPage = () => {
-  const userid = localStorage.getItem('userId')
+  const ObjString:any = localStorage.getItem("login-token");
+  const Obj = JSON.parse(ObjString);
+  let userid = Obj.userId;
+  // const userid = localStorage.getItem('userId')
 
   return (
     <div>
@@ -130,20 +133,20 @@ const MyPage = () => {
               <p>내 차 정보</p>
             </StyleMypageCards>
           </Link>
-          <Link to={`/${userid}/mypage/booking`} >
-            <StyleMypageCards>
-              <StyleMypageCardImg>
-                <img src={Booking} alt='BuyReserve'/>
-              </StyleMypageCardImg>
-              <p>예약 정보</p>
-            </StyleMypageCards>
-          </Link>
           <Link to={`/${userid}/mypage/repair`} >
             <StyleMypageCards>
               <StyleMypageCardImg>
                 <img src={Repair} alt='RepairInspector'/>
               </StyleMypageCardImg>
-              <p>정비 및 검수 내역</p>
+              <p>정비 내역</p>
+            </StyleMypageCards>
+          </Link>
+          <Link to={`/${userid}/mypage/inspector`} >
+            <StyleMypageCards>
+              <StyleMypageCardImg>
+                <img src={inspector} alt='inspector'/>
+              </StyleMypageCardImg>
+              <p>검수 내역</p>
             </StyleMypageCards>
           </Link>
           <Link to={`/${userid}/mypage/gallery`} >

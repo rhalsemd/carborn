@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../modules/takeLoginLogoutModule";
+import { useNavigate } from 'react-router-dom';
 
 const StyleMainNav = styled.div`
   width: 100%;
@@ -72,6 +73,7 @@ const StyleLinkText = css`
 `;
 
 function Nav({setIsToken, isToken}:any) {
+  const navigate = useNavigate();
   // Nav 타이틀, 로그인 확인 여부
   const [title, setTitle] = useState<string>("Home");
   // location.pathname마다 다른 타이틀 가져가게 하려고
@@ -79,7 +81,24 @@ function Nav({setIsToken, isToken}:any) {
   // 액션 실행
   const dispatch = useDispatch();
   // 유저아이디랑 토큰 가져오기
-  const userid = localStorage.getItem("userid");
+  useEffect(() => {
+    const ObjString = localStorage.getItem("login-token");
+    let Obj = null;
+    if(ObjString){
+      Obj = JSON.parse(ObjString);
+      if (Date.now() > Obj.expire) {
+        localStorage.removeItem("login-token");
+        alert("로그아웃 되었습니다. 다시 로그인 해주세요.")
+        navigate('/login')
+      }
+    }
+  })
+
+  const ObjString:any = localStorage.getItem("login-token");
+  const Obj = JSON.parse(ObjString);
+  let userid = Obj?.userId || '';
+
+  // const userid = localStorage.getItem("userid");
   // 리듀서
   const { success } = useSelector((state:any) => state.LoginOutReducer)
   
@@ -101,12 +120,9 @@ function Nav({setIsToken, isToken}:any) {
   const handleLogout = () => {
     dispatch(logoutAction());
   };
-  
-  const localToken = localStorage.getItem('accessToken')
 
-  useEffect(() => {
-
-  },[success])
+  let localToken = Obj?.value || '';
+  useEffect(() => {},[])
 
   return (
     <StyleMainNav>

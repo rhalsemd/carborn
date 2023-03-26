@@ -65,7 +65,11 @@ const MyUserWithdrawalButtonDiv = styled.div`
 `;
 
 const MyUserWithdrawalComponent = () => {
-  const userid = localStorage.getItem("userId");
+  const ObjString:any = localStorage.getItem("login-token");
+  const Obj = JSON.parse(ObjString)
+  let userid = Obj.userId
+  // const userid = localStorage.getItem("userId");
+
   const dispatch = useDispatch();
 
   const handleUserInfoDelete = () => {

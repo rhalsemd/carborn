@@ -14,9 +14,22 @@ const StyleSellContentPaginationDiv = styled.div`
   align-items: center;
 `
 
+export interface SellContentPaginationProps {
+  car_model:string,
+  manufacturer:string,
+  mileage:number,
+  car_number:string,
+  year:string,
+  price:number,
+  sales_reserved_date:null|string
+  sales_completed_date:null|string,
+  sales_status:string,
+  buyer:string
+}
+
 const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sellData, setSellData] = useState<Car[]>([]);
+  const [sellData, setSellData] = useState<SellContentPaginationProps[]>([]);
   const totalPages = Math.ceil(sellData.length / itemsPerPage);
 
   const handleRequestSellData = async (page: number, count: number) => {
@@ -45,24 +58,31 @@ const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) =>
         <thead>
           <tr>
             <th>차량모델</th>
+            <th>제조사</th>
             <th>차량번호</th>
-            <th>{`주행 거리(km)`}</th>
             <th>{`연식(년)`}</th>
-            <th>판매가</th>
+            <th>{`주행거리(km)`}</th>
+            <th>{`구매가(만원)`}</th>
             <th>상태</th>
-            <th>{'구매 완료일'}</th>
+            <th>판매 예약 신청일</th>
+            <th>판매 완료일</th>
+            <th>판매상태</th>
+            <th>구매자</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((car: Car, index: number) => (
+          {currentItems.map((car: SellContentPaginationProps, index: number) => (
             <tr key={index}>
-              <td>{car.model}</td>
-              <td>{car.number}</td>
+              <td>{car.car_model}</td>
+              <td>{car.manufacturer}</td>
               <td>{car.mileage}</td>
+              <td>{car.car_number}</td>
               <td>{car.year}</td>
-              <td>{car.sellprice}</td>
-              <td>{car.status ? `판매 완료` : `예약 중`}</td>
-              <td>{car.registrationDate ? car.registrationDate : '-'}</td>
+              <td>{car.price}</td>
+              <td>{car.sales_reserved_date === null ? "-" : car.sales_reserved_date}</td>
+              <td>{car.sales_completed_date === null ? "-" : car.sales_completed_date}</td>
+              <td>{car.sales_status}</td>
+              <td>{car.buyer}</td>
             </tr>
           ))}
         </tbody>

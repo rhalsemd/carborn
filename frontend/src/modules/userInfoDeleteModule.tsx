@@ -41,7 +41,6 @@ export function* userinfoDeleteSaga(): Generator<any, any, any> {
   const userinfoDeleteApi = async () => {
     try {
       localStorage.removeItem("login-token");
-      localStorage.removeItem("userId");
 
       const response = await axios({
         method: "DELETE",

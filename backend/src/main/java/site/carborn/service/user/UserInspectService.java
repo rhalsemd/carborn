@@ -7,8 +7,6 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.user.InspectBook;
-import site.carborn.entity.user.RepairBook;
-import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
 import site.carborn.repository.account.AccountRepository;

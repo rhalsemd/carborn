@@ -7,8 +7,9 @@ import { passwordResetCheckReducer } from "../PasswordCheckModule";
 import { userinfoDeleteReducer } from "../userInfoDeleteModule";
 import { setAccountTypeReducer } from "./../setAccountTypeModule";
 import { IdCheckReducer } from "./../UserIdCheckModule";
-import { SearchIDCheckReducer } from "../SearchIDModule";
-import { newPasswordReducer } from './../PasswordResetModule';
+import { searchIDCheckReducer } from "../searchidModule";
+import { newPasswordReducer } from './../newPasswordModule';
+import { createReviewReducer } from './../createReviewModule';
 
 const rootReducer = combineReducers({
   LoginOutReducer,
@@ -16,10 +17,11 @@ const rootReducer = combineReducers({
   SignUpReducer,
   IdCheckReducer,
   setAccountTypeReducer,
-  SearchIDCheckReducer,
+  searchIDCheckReducer,
   verificationNumberReducer,
   newPasswordReducer,
   passwordResetCheckReducer,
+  createReviewReducer,
   userinfodelete: userinfoDeleteReducer,
 });
 
