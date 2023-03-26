@@ -7,10 +7,7 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.user.InspectBook;
-import site.carborn.mapping.user.UserInspectBookDetailMapping;
-import site.carborn.mapping.user.UserInspectBookListMapping;
-import site.carborn.mapping.user.UserInspectResultListMapping;
-import site.carborn.mapping.user.UserRepairResultListMapping;
+import site.carborn.mapping.user.*;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
@@ -152,5 +149,13 @@ public class UserInspectService {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return inspectResultList;
+    }
+
+    public InspectResultGetDetailMapping inspectResultDetail(int inspectResultId){
+        InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectResultId);
+        if (result == null){
+            throw new RuntimeException("존재하지 않는 데이터입니다");
+        }
+        return result;
     }
 }

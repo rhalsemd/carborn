@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.InspectBook;
-import site.carborn.mapping.user.UserInspectBookDetailMapping;
-import site.carborn.mapping.user.UserInspectBookListMapping;
-import site.carborn.mapping.user.UserInspectResultListMapping;
-import site.carborn.mapping.user.UserRepairResultListMapping;
+import site.carborn.mapping.user.*;
 import site.carborn.service.user.UserInspectService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
@@ -83,6 +80,14 @@ public class UserInspectConteroller {
                                                   @PathVariable("size") int size){
         String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
         Page<UserInspectResultListMapping> result = userInspectService.inspectResultList(accountId,page,size);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+    }
+
+    @GetMapping("/result/{inspectResultId}")
+    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectResultId") int inspectResultId){
+        InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
