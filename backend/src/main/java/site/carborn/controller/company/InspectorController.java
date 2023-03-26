@@ -52,7 +52,7 @@ public class InspectorController {
     @PutMapping("/book")
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "inspectBookId", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(InspectResultRequestDTO dto) throws IOException {
+    public ResponseEntity<?> inspectBookUpdate(@ModelAttribute InspectResultRequestDTO dto) throws IOException {
         Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(dto.getInspectBook().getId());
         //데이터가 빈 경우
         if(!updateData.isPresent()){
