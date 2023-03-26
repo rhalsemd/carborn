@@ -16,16 +16,16 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     RepairShopGetIdMapping findByAccount_Id(String accountId);
 
     @Query(value = """
-    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cnt_point, res.AUTH, IFNULL(ures.cnt_use, 0) as cnt_use
+    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
     FROM
-    	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cnt_point
+    	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
     	FROM\s
     		(SELECT mrs.ID,ma.NAME, ma.AUTH
     		FROM S08P22D209.MWS_REPAIR_SHOP mrs
     		INNER JOIN S08P22D209.MWS_ACCOUNT ma
     		ON mrs.ACCOUNT_ID = ma.ID) idname
     	INNER JOIN
-    		(SELECT mrs.ID, mrs.ADDRESS, mrs.LNG, mrs.LAT,AVG(IFNULL(mrsr.POINT,0)) as avg_point, COUNT(mrsr.POINT) as cnt_point
+    		(SELECT mrs.ID, mrs.ADDRESS, mrs.LNG, mrs.LAT,AVG(IFNULL(mrsr.POINT,0)) as avg_point, COUNT(mrsr.POINT) as cntReview
     		FROM S08P22D209.MWS_REPAIR_SHOP mrs\s
     		LEFT OUTER JOIN S08P22D209.MWS_REPAIR_SHOP_REVIEW mrsr\s
     		ON mrs.ID = mrsr.REPAIR_SHOP_ID
@@ -33,9 +33,9 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     		GROUP BY mrs.ID) addr
     	ON idname.ID = addr.ID) res
     LEFT OUTER JOIN
-    	(SELECT DISTINCT urp.REPAIR_SHOP_ID, SUM(urp.cnt_use) as cnt_use
+    	(SELECT DISTINCT urp.REPAIR_SHOP_ID, SUM(urp.cntTrade) as cntTrade
     	FROM
-    		(SELECT mrb.REPAIR_SHOP_ID, COUNT(DISTINCT REPAIR_SHOP_ID) as cnt_use
+    		(SELECT mrb.REPAIR_SHOP_ID, COUNT(DISTINCT REPAIR_SHOP_ID) as cntTrade
     		FROM S08P22D209.MWS_REPAIR_BOOK mrb\s
     		RIGHT OUTER JOIN S08P22D209.MWS_CAR_SALE mcs
     		ON mcs.CAR_ID = mrb.CAR_ID
@@ -44,16 +44,16 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     	GROUP BY urp.REPAIR_SHOP_ID) ures
     ON res.ID = ures.REPAIR_SHOP_ID
     UNION
-    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cnt_point, res.AUTH, IFNULL(ures.cnt_use, 0)
+    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
     FROM
-    	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cnt_point
+    	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
     	FROM\s
     		(SELECT mi.ID,ma.NAME, ma.AUTH
     		FROM S08P22D209.MWS_INSPECTOR mi
     		INNER JOIN S08P22D209.MWS_ACCOUNT ma
     		ON mi.ACCOUNT_ID = ma.ID) idname
     	INNER JOIN
-    		(SELECT mi.ID, mi.ADDRESS, mi.LNG, mi.LAT,AVG(IFNULL(mir.POINT,0)) as avg_point, COUNT(mir.POINT) as cnt_point
+    		(SELECT mi.ID, mi.ADDRESS, mi.LNG, mi.LAT,AVG(IFNULL(mir.POINT,0)) as avg_point, COUNT(mir.POINT) as cntReview
     		FROM S08P22D209.MWS_INSPECTOR mi\s
     		LEFT OUTER JOIN S08P22D209.MWS_INSPECTOR_REVIEW mir\s
     		ON mi.ID = mir.INSPECTOR_ID
@@ -61,9 +61,9 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     		GROUP BY mi.ID) addr
     	ON idname.ID = addr.ID) res
     LEFT OUTER JOIN
-    	(SELECT DISTINCT urp.INSPECTOR_ID, SUM(urp.cnt_use) as cnt_use
+    	(SELECT DISTINCT urp.INSPECTOR_ID, SUM(urp.cntTrade) as cntTrade
     	FROM
-    		(SELECT mib.INSPECTOR_ID, COUNT(DISTINCT INSPECTOR_ID) as cnt_use
+    		(SELECT mib.INSPECTOR_ID, COUNT(DISTINCT INSPECTOR_ID) as cntTrade
     		FROM S08P22D209.MWS_INSPECT_BOOK mib\s
     		RIGHT OUTER JOIN S08P22D209.MWS_CAR_SALE mcs
     		ON mcs.CAR_ID = mib.CAR_ID
