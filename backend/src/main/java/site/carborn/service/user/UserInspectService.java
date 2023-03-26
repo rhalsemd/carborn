@@ -101,4 +101,39 @@ public class UserInspectService {
         delete.setUptDt(LocalDateTime.now());
         inspectBookRepository.save(delete);
     }
+
+
+    public int updateInspectBook(InspectBook inspectBook, int inspectBookId) {
+
+        if (inspectBook.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+
+        if (accountRepository.findById(inspectBook.getAccount().getId())==null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+        if (inspectBook.getId() != inspectBookId){
+            throw new RuntimeException("잘못된 경로입니다");
+        }
+        InspectBook update = inspectBookRepository.findById(inspectBookId).orElseThrow(()->
+                new RuntimeException("존재하지 않는 데이터입니다"));
+
+        if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다??");
+        }
+
+        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(()->
+                new RuntimeException("존재하지 않는 검수원입니다"));
+
+        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(()->
+                new RuntimeException("등록되지 않은 차입니다"));
+
+        update.setCar(inspectBook.getCar());
+        update.setContent(inspectBook.getContent());
+        update.setBookDt(inspectBook.getBookDt());
+        update.setUptDt(LocalDateTime.now());
+
+        inspectBookRepository.save(update);
+        return update.getId();
+    }
 }

@@ -65,4 +65,10 @@ public class UserInspectConteroller {
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
+    @PutMapping("/book/{inspectId}")
+    @Operation(description = "사용자 검수원 예약 내역 수정")
+    @Parameter(name = "inspectId", description = "예약 게시글 id")
+    public ResponseEntity<?> updateInspectBook(@RequestBody InspectBook inspectBook,@PathVariable("inspectId") int inspectBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK, userInspectService.updateInspectBook(inspectBook,inspectBookId));
+    }
 }
