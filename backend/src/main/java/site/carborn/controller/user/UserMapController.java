@@ -22,7 +22,7 @@ import site.carborn.util.network.NormalResponse;
 @RequestMapping("/api/user/map")
 @RequiredArgsConstructor
 @RestController
-public class MapController {
+public class UserMapController {
 
     @Autowired
     private MapService mapService;
