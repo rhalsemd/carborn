@@ -15,6 +15,7 @@ export const StyleLoginSignUpDiv = styled.div`
   align-items: center;
 `;
 
+
 export const StyleLoginSignUpBoxDiv = styled.div`
   width: 25%;
   padding: 0rem, 0.5rem;

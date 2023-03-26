@@ -25,7 +25,7 @@ const initialState = {
 
 // 사가
 // 유저 아이디 중복 체크
-export function* SearchIDCheckSaga(
+export function* searchidCheckSaga(
   action: ReturnType<typeof SearchIDCheckAction>
 ): Generator<any, any, any> {
   try {
@@ -36,7 +36,7 @@ export function* SearchIDCheckSaga(
   }
 }
 
-export function SearchIDCheckReducer(
+export function searchIDCheckReducer(
   state = initialState,
   action: { type: string; payload: object }
 ) {

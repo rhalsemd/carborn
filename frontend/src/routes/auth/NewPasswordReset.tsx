@@ -8,8 +8,11 @@ import { StyleLoginSignUpBoxDiv } from "./LoginPage";
 import { StyleLoginSignUpDiv } from "./PasswordResetCheck";
 import { StyleLoginSignUpTitle } from "./SearchID";
 import { StyleBtn } from "./PasswordComplete";
-import { passwordResetCheckReset } from "./../../modules/PasswordCheckModule";
-import { newPasswordAction, newPasswordReset } from "./../../modules/PasswordResetModule";
+import { passwordResetCheckReset } from "../../modules/PasswordCheckModule";
+import {
+  newPasswordAction,
+  newPasswordReset,
+} from "../../modules/newPasswordModule";
 import styled from "@emotion/styled";
 
 // 타입 설정
@@ -25,21 +28,22 @@ export interface StyleNewPasswordResetBtnProps
 }
 
 export const StyleNewPasswordResetBtn = styled.button<StyleNewPasswordResetBtnProps>`
-    width: 15rem;
-    text-align: center;
-    font-size: 1.2rem;
-    color: white;
-    background-color: ${(props) => props.backgroundColor};
-    border: none;
-    margin: 0.5rem 0;
-    cursor: pointer;
+  width: 15rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: white;
+  background-color: ${(props) => props.backgroundColor};
+  border: none;
+  margin: 0.5rem 0;
+  cursor: pointer;
 `;
 
 const NewPasswordReset = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isNewPass = useSelector(
-    (state:any) => state.newPasswordReducer.newpasswordcheck );
+    (state: any) => state.newPasswordReducer.newpasswordcheck
+  );
   const [inputObj, setInputObj] = useState<SearchInputPasswordCheckObj>({
     newpassword: "",
     newpasswordcheck: false,
@@ -49,15 +53,15 @@ const NewPasswordReset = () => {
   const [newpassword, setNewpassword] = useState("");
 
   console.log(inputObj);
-  console.log(isNewPass)
+  console.log(isNewPass);
 
   const handlePasswordReset = () => {
     dispatch(newPasswordAction(inputObj));
   };
 
   useEffect(() => {
-    if(isNewPass){
-      navigate('/passwordresetcheck/passwordreset/passwordcomplete')
+    if (isNewPass) {
+      navigate("/passwordresetcheck/passwordreset/passwordcomplete");
     }
     dispatch(passwordResetCheckReset());
   }, [dispatch, isNewPass, navigate]);

@@ -8,7 +8,6 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
-import site.carborn.mapping.user.UserRepairResultDetailMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.RepairBookRepository;
@@ -129,7 +128,7 @@ public class UserRepairService {
     }
 
     public RepairResultGetDetailMapping repairResultDetail(int repairResultId){
-        RepairResultGetDetailMapping result = repairResultRepository.findAllById(repairResultId);
+        RepairResultGetDetailMapping result = repairResultRepository.findAllByRepairBook_Id(repairResultId);
         if (result == null){
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }

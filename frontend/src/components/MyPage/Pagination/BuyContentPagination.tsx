@@ -8,14 +8,16 @@ export interface BuySellContentPaginationProps {
 }
 
 export interface Car {
-  model: string;
-  number: string;
-  mileage: string;
-  year: string;
-  registrationDate?: string;
-  status: boolean;
-  sellprice?: string;
-  buyprice?: string;
+  model:string,
+  manufacturer:string,
+  mileage:number,
+  number:string,
+  year:number,
+  price:number,
+  reserveDate:string,
+  purchaseDate:string,
+  status:string,
+  seller:string
 }
 
 const StyleBuyContentPaginationDiv = styled.div`
@@ -47,6 +49,7 @@ const BuyContentPagination = ({
 
   useEffect(() => {
     handleRequestBuyData(currentPage, itemsPerPage);
+    console.log()
   }, []);
 
   // 페이지 네이션 유효성 검사
@@ -64,24 +67,31 @@ const BuyContentPagination = ({
         <thead>
           <tr>
             <th>차량모델</th>
+            <th>제조사</th>
             <th>차량번호</th>
-            <th>{`주행 거리(km)`}</th>
             <th>{`연식(년)`}</th>
-            <th>구매가</th>
+            <th>{`주행거리(km)`}</th>
+            <th>{`구매가(만원)`}</th>
             <th>상태</th>
-            <th>{"구매 완료일"}</th>
+            <th>구매 예약 신청일</th>
+            <th>구매 완료일</th>
+            <th>구매상태</th>
+            <th>판매자</th>
           </tr>
         </thead>
         <tbody>
           {currentItems.map((car: Car, index: number) => (
             <tr key={index}>
               <td>{car.model}</td>
-              <td>{car.number}</td>
+              <td>{car.manufacturer}</td>
               <td>{car.mileage}</td>
+              <td>{car.number}</td>
               <td>{car.year}</td>
-              <td>{car.buyprice}</td>
-              <td>{car.status ? `구매 완료` : `예약 중`}</td>
-              <td>{car.registrationDate ? car.registrationDate : "-"}</td>
+              <td>{car.price}</td>
+              <td>{car.reserveDate === null ? '-' : car.reserveDate}</td>
+              <td>{car.purchaseDate === null ? '-' : car.purchaseDate}</td>
+              <td>{car.status}</td>
+              <td>{car.seller}</td>
             </tr>
           ))}
         </tbody>

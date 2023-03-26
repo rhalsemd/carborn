@@ -17,15 +17,11 @@ import {
   passwordResetCheckSaga,
   PASSWORD_RESET_CHECK,
 } from "../PasswordCheckModule";
-import { newPasswordSaga, NEWPASSWORD_REQUEST } from "../PasswordResetModule";
-import { SearchIDCheckSaga, SEARCHID_CHECK } from "../SearchIDModule";
+import { newPasswordSaga, NEWPASSWORD_REQUEST } from "../newPasswordModule";
+import { searchidCheckSaga, SEARCHID_CHECK } from "../searchidModule";
+import { companyverificationNumberSaga, COMPANY_VERIFICATION_CHECK_REQUEST, userverificationNumberSaga, USER_VERIFICATION_CHECK_REQUEST } from "../verificationNumberModule";
+import { createReviewSaga, CREATE_REVIEW_REQUEST } from "../createReviewModule";
 
-import {
-  companyverificationNumberSaga,
-  COMPANY_VERIFICATION_CHECK_REQUEST,
-  userverificationNumberSaga,
-  USER_VERIFICATION_CHECK_REQUEST,
-} from "./../verificationNumberModule";
 
 export default function* rootSaga() {
   yield takeEvery(LOGIN_REQUEST, takeLoginSaga);
@@ -33,7 +29,7 @@ export default function* rootSaga() {
   yield takeEvery(GET_TERMSOFUSE, GetAgreementSaga);
   yield takeLatest(USERID_CHECK, UserIdCheckSaga);
   yield takeLatest(COMPANYID_CHECK, CompanyIdCheckSaga);
-  yield takeLatest(SEARCHID_CHECK, SearchIDCheckSaga);
+  yield takeLatest(SEARCHID_CHECK, searchidCheckSaga);
 
   yield takeEvery(USER_VERIFICATION_CHECK_REQUEST, userverificationNumberSaga);
   yield takeEvery(
@@ -42,4 +38,5 @@ export default function* rootSaga() {
   );
   yield takeLatest(PASSWORD_RESET_CHECK, passwordResetCheckSaga);
   yield takeLatest(NEWPASSWORD_REQUEST, newPasswordSaga);
+  yield takeLatest(CREATE_REVIEW_REQUEST, createReviewSaga);
 }

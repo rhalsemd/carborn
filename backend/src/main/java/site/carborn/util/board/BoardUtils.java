@@ -27,6 +27,8 @@ public class BoardUtils {
 
     public static final String BOARD_CRUD_SUCCESS = "SUCCESS";
 
+    public static final String BOARD_CRUD_FAIL = "FAIL";
+
     public static PageRequest pageRequestInit(int pageNum, int rowPerPage, String sortBy, String orderBy) {
         if (orderBy == BoardUtils.ORDER_BY_ASC) {
             return PageRequest.of(pageNum - 1, rowPerPage, Sort.by(sortBy));

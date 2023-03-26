@@ -69,7 +69,6 @@ public class RepairShopService {
 
     @Transactional
     public void repairBookUpdate(RepairBook repairBook) {
-        repairBook.setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
         repairBook.setUptDt(LocalDateTime.now());
         repairBookRepository.save(repairBook);
     }
@@ -103,7 +102,7 @@ public class RepairShopService {
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = repairResult.getRegDt();
-        String alias = "repair-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "repair-"+carId+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
@@ -111,18 +110,9 @@ public class RepairShopService {
 
         repairResultRepository.save(repairResult);
     }
-
     @Transactional
-    public Page<RepairResultGetListMapping> repairResultGetList(Pageable page){
-        //현재는 임시 아이디(아이디 받아오는 부분 필요)
-        String repairShop = "againsburgh28";
-        int repairShopId = repairShopRepository.findByAccount_Id(repairShop).getId();
-
-        return repairResultRepository.findByRepairBook_RepairShop_Id(repairShopId, page);
-    }
-    @Transactional
-    public RepairResultGetDetailMapping repairResultDetailContent(int id){
-        return repairResultRepository.findAllById(id);
+    public RepairResultGetDetailMapping repairResultDetailContent(int resultBookId){
+        return repairResultRepository.findAllByRepairBook_Id(resultBookId);
     }
 
     @Transactional
