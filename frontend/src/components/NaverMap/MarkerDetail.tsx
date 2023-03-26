@@ -1,12 +1,51 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useEffect, useRef } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import MarkerDetailInfo from "./MarkerDetailInfo";
+import MarkerDetailReview from "./MarkerDetailReview";
 
 const roadView = css`
   width: 100%;
-  height: 30vh;
+  height: 50vh;
   background-color: red;
+`;
+
+const toggleBtn = ({ reviewBtn }: { reviewBtn: boolean }) => css`
+  list-style: none;
+  margin: 3% 0 0 0;
+  padding: 0;
+  border: 0;
+  border-top: #555555 2px solid;
+  display: flex;
+  position: sticky;
+  top: 0;
+  background-color: #fafafa;
+  cursor: pointer;
+
+  li {
+    flex: 1;
+    border: 1px solid #cccccc;
+    text-align: center;
+    height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.9rem;
+    color: #555555;
+  }
+  li:nth-of-type(1) {
+    background-color: ${!reviewBtn ? "white" : "#fafafa"};
+    color: ${!reviewBtn ? "111111" : "#rgb(85,85,85)"};
+    border-bottom: ${!reviewBtn ? "transparent" : "#cccccc 1px solid"};
+  }
+  li:nth-of-type(2) {
+    background-color: ${reviewBtn ? "white" : "#fafafa"};
+    color: ${reviewBtn ? "111111" : "#rgb(85,85,85)"};
+    border-bottom: ${reviewBtn ? "transparent" : "#cccccc  1px solid"};
+  }
 `;
 
 const naver = window.naver;
@@ -37,6 +76,7 @@ function MarkerDetail({
 }: Props) {
   // 파노라마 생성 태그
   const roadViewRef = useRef<HTMLDivElement | null>(null);
+  const [reviewBtn, setReviewBtn] = useState<boolean>(false);
 
   useEffect(() => {
     // 파노라마 생성
@@ -52,6 +92,13 @@ function MarkerDetail({
     searchInfoWindows[markerNum].close();
   };
 
+  const watchInfo = () => {
+    setReviewBtn(false);
+  };
+  const watchReview = () => {
+    setReviewBtn(true);
+  };
+
   return (
     <div
       style={{
@@ -60,88 +107,15 @@ function MarkerDetail({
       }}
     >
       <CloseIcon
-        style={{ margin: "0 0 3% 92.5%", cursor: "pointer" }}
+        style={{ margin: "0 0 0.5% 92.5%", cursor: "pointer" }}
         onClick={exit}
       />
       <div css={roadView} ref={roadViewRef}></div>
-      <p
-        style={{
-          fontSize: "1.2rem",
-          marginBottom: "0",
-          fontWeight: "bolder",
-        }}
-      >
-        정비소
-      </p>
-      <p
-        style={{
-          marginTop: "0",
-          color: "#E00000",
-          fontWeight: "bolder",
-        }}
-      >
-        3.9
-        <span>★★★★☆</span>
-        <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}> 리뷰 15</span>
-      </p>
-      <p
-        style={{
-          marginBottom: "0",
-          color: "#606060",
-          fontSize: "0.9rem",
-        }}
-      >
-        경북 구미시 구미중앙로 76
-      </p>
-      <p
-        style={{
-          margin: "0",
-          color: "#C1C1C1",
-          fontSize: "0.9rem",
-        }}
-      >
-        (우) 39301 (지번) 원평동 1008-1
-      </p>
-      <p
-        style={{
-          marginTop: "0",
-          color: "#038400",
-          fontSize: "1rem",
-          fontWeight: "bold",
-        }}
-      >
-        1234-5678
-      </p>
-      <div>
-        <div
-          style={{
-            width: "99%",
-            height: "4vh",
-            border: "1px solid #C1C1C1",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontWeight: "500",
-            fontSize: "1.2rem",
-            color: "#606060",
-            margin: "0 0 5% 0",
-          }}
-        >
-          리뷰
-        </div>
-        <div style={{}}>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-          <div>fsd</div>
-        </div>
-      </div>
+      <ul css={toggleBtn({ reviewBtn })}>
+        <li onClick={watchInfo}>업체정보</li>
+        <li onClick={watchReview}>사용자 리뷰</li>
+      </ul>
+      {!reviewBtn ? <MarkerDetailInfo /> : <MarkerDetailReview />}
     </div>
   );
 }
