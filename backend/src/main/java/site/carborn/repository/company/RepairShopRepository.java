@@ -29,7 +29,7 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     		FROM S08P22D209.MWS_REPAIR_SHOP mrs\s
     		LEFT OUTER JOIN S08P22D209.MWS_REPAIR_SHOP_REVIEW mrsr\s
     		ON mrs.ID = mrsr.REPAIR_SHOP_ID
-    		WHERE ABS(mrs.LNG - 128.3165233) <= 0.14 AND ABS(mrs.LAT - 36.1132002) <= 0.12 AND (mrsr.STATUS = FALSE OR mrsr.STATUS IS NULL)
+    		WHERE ABS(mrs.LNG - :inputLng) <= 0.14 AND ABS(mrs.LAT - :inputLat) <= 0.12 AND (mrsr.STATUS = FALSE OR mrsr.STATUS IS NULL)
     		GROUP BY mrs.ID) addr
     	ON idname.ID = addr.ID) res
     LEFT OUTER JOIN
@@ -57,7 +57,7 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     		FROM S08P22D209.MWS_INSPECTOR mi\s
     		LEFT OUTER JOIN S08P22D209.MWS_INSPECTOR_REVIEW mir\s
     		ON mi.ID = mir.INSPECTOR_ID
-    		WHERE ABS(mi.LNG - 128.3165233) <= 0.14 AND ABS(mi.LAT - 36.1132002) <= 0.12 AND (mir.STATUS = FALSE OR mir.STATUS IS NULL)
+    		WHERE ABS(mi.LNG - :inputLng) <= 0.14 AND ABS(mi.LAT - :inputLat) <= 0.12 AND (mir.STATUS = FALSE OR mir.STATUS IS NULL)
     		GROUP BY mi.ID) addr
     	ON idname.ID = addr.ID) res
     LEFT OUTER JOIN
