@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import site.carborn.entity.company.InsuranceCompany;
 
 import java.time.LocalDateTime;
@@ -43,4 +44,10 @@ public class CarInsuranceHistory {
     private String contractHash;
 
     private LocalDateTime regDt;
+
+    public static CarInsuranceHistory copy(CarInsuranceHistory carInsuranceHistory){
+        CarInsuranceHistory cih = new CarInsuranceHistory();
+        BeanUtils.copyProperties(carInsuranceHistory, cih);
+        return cih;
+    }
 }

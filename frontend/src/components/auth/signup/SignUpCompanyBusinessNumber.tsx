@@ -1,5 +1,5 @@
 import { SetStateAction, Dispatch, useState, ChangeEvent } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 
 type SignUpCompanyBusinessNumberProps = {
@@ -42,6 +42,7 @@ const SignUpCompanyBusinessNumber = ({
       <label htmlFor="businessNumber">사업자등록번호</label>
       <br />
       <input
+        tabIndex={6}
         type="text"
         id="businessNumber"
         name="businessNumber"

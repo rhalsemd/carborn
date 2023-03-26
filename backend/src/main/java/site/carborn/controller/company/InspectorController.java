@@ -1,5 +1,6 @@
 package site.carborn.controller.company;
 
+import com.fasterxml.jackson.core.io.IOContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -7,18 +8,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.InspectResultRequestDTO;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.service.company.InspectorService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
+import site.carborn.util.network.ErrorResponse;
 import site.carborn.util.network.NormalResponse;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
 import java.util.Optional;
 
 @Tag(name = "Inspector", description = "검수원 검수 관련 API")
@@ -40,56 +42,52 @@ public class InspectorController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, inspectorService.inspectBookGetList(pageRequest));
     }
 
-    @GetMapping("book/{inspectBookId}")
+    @GetMapping("/book/{inspectBookId}")
     @Operation(description = "검수원 검수 예약 상세 조회")
     @Parameter(name = "inspectBookId", description = "예약 번호")
     public ResponseEntity<?> inspectBookDetailContent(@PathVariable("inspectBookId") int inspectBookId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectBookDetail(inspectBookId));
     }
 
-    @PutMapping("book/{inspectBookId}")
+    @PutMapping("/book")
     @Operation(description = "검수원 검수 예약 상태 수정 및 검수 데이터 입력")
     @Parameter(name = "inspectBookId", description = "예약 번호")
-    public ResponseEntity<?> inspectBookUpdate(@PathVariable("inspectBookId") int inspectBookId, @RequestBody InspectResult inspectResult){
-        Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(inspectBookId);
-
+    public ResponseEntity<?> inspectBookUpdate(InspectResultRequestDTO dto) throws IOException {
+        Optional<InspectBook> updateData = inspectorService.inspectBookUpdateData(dto.getInspectBook().getId());
+        //데이터가 빈 경우
         if(!updateData.isPresent()){
-            return NormalResponse.toResponseEntity(HttpStatus.BAD_REQUEST,"예약 번호가 잘못되었습니다.");
+            throw new NullPointerException("예약번호에 해당하는 데이터가 없습니다");
         }
+        //BookStatus가 정상적으로 들어오지 않았을때
+        if(updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_CANCEL && updateData.get().getBookStatus() != BookUtils.BOOK_STATUS_COMPLETE){
+            throw new RuntimeException("예약 변경 데이터가 잘못되었습니다.");
+        }
+
+        //예약 상태 취소만
+        else if(updateData.get().getBookStatus() == BookUtils.BOOK_STATUS_CANCEL) {
+            inspectorService.inspectorBookUpdate(updateData.get());
+            return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+        }
+
         //예약 상태 수정
-        updateData.get().setBookStatus(BookUtils.BOOK_STATUS_COMPLETE);
-        updateData.get().setUptDt(LocalDateTime.now());
         inspectorService.inspectorBookUpdate(updateData.get());
+        //정비 결과 입력
+        inspectorService.inspectorResultInsert(dto);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
 
-        //검수 결과 입력
-        inspectResult.setInspectBook(new InspectBook());
-        inspectResult.getInspectBook().setId(inspectBookId);
-        inspectResult.setRegDt(LocalDateTime.now());
-        //multipartfile 입력 부분
-
-        inspectorService.inspectorResultInsert(inspectResult);
-        //caver 입력 부분
-
-        return NormalResponse.toResponseEntity(HttpStatus.OK,"예약 상태 수정 및 데이터 입력 완료");
     }
 
-    @GetMapping("/result/list/{page}/{size}")
-    @Operation(description = "검수원 검수 완료 목록 조회")
-    @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 사이즈")
-    })
-    public ResponseEntity<?> inspectResultList(@PathVariable("page") int page, @PathVariable("size") int size){
-        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultGetList(pageRequest));
-    }
-
-    @GetMapping("result/{inspectResultId}")
+    @GetMapping("result/{inspectBookId}")
     @Operation(description = "검수원 검수 완료 상세 조회")
-    @Parameter(name = "inspectResultId", description = "검수 완료 목록 번호")
-    public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectResultId") int inspectResultId){
-        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectResultId));
+    @Parameter(name = "inspectBookId", description = "검수 완료 예약 번호")
+    public ResponseEntity<?> inspectResultDetailContent(@PathVariable("inspectBookId") int inspectBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultDetail(inspectBookId));
     }
 
-
+    @GetMapping("result/review/{inspectResultId}")
+    @Operation(description = "검수원 검수 완료 리뷰 조회")
+    @Parameter(name = "inspectResultId", description = "검수 완료 목록 번호")
+    public ResponseEntity<?> inspectResultReview(@PathVariable("inspectResultId") int inspectResultId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,inspectorService.inspectResultReview(inspectResultId));
+    }
 }

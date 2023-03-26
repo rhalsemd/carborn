@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
-import { useDispatch } from "react-redux";
-import { logout } from "../modules/loginModule";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutAction } from "../modules/takeLoginLogoutModule";
+import { useNavigate } from 'react-router-dom';
 
 const StyleMainNav = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ const StyleMainNav = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-bottom: 2px solid #D23131;
+  border-bottom: 2px solid #d23131;
 `;
 
 const StyleMainLogo = styled.div`
@@ -56,6 +57,7 @@ const StyleNavLi = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   /* margin-right: 0.25rem; */
 `;
 
@@ -70,15 +72,36 @@ const StyleLinkText = css`
   color: black;
 `;
 
-function Nav() {
+function Nav({setIsToken, isToken}:any) {
+  const navigate = useNavigate();
+  // Nav 타이틀, 로그인 확인 여부
   const [title, setTitle] = useState<string>("Home");
+  // location.pathname마다 다른 타이틀 가져가게 하려고
   const location = useLocation();
+  // 액션 실행
   const dispatch = useDispatch();
-  const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false);
-  const token = sessionStorage.getItem("login-token");
-  const userid = sessionStorage.getItem("userId");
+  // 유저아이디랑 토큰 가져오기
+  useEffect(() => {
+    const ObjString = localStorage.getItem("login-token");
+    let Obj = null;
+    if(ObjString){
+      Obj = JSON.parse(ObjString);
+      if (Date.now() > Obj.expire) {
+        localStorage.removeItem("login-token");
+        alert("로그아웃 되었습니다. 다시 로그인 해주세요.")
+        navigate('/login')
+      }
+    }
+  })
 
-  // API 요청해서 받아오거나, json 파일에 저장해서 바로 임포트 해야할듯
+  const ObjString:any = localStorage.getItem("login-token");
+  const Obj = JSON.parse(ObjString);
+  let userid = Obj?.userId || '';
+
+  // const userid = localStorage.getItem("userid");
+  // 리듀서
+  const { success } = useSelector((state:any) => state.LoginOutReducer)
+  
   useEffect(() => {
     if (location.pathname === "/") {
       setTitle("Home");
@@ -91,18 +114,15 @@ function Nav() {
     } else if (location.pathname === `/${userid}/mypage/mycarinfo`) {
       setTitle(`내 차량 정보`);
     }
-  }, [location.pathname]);
-
+  }, [location.pathname, setTitle, userid]);
+  
   // 로그아웃
   const handleLogout = () => {
-    dispatch(logout());
-    setIsLoggedOut(true);
+    dispatch(logoutAction());
   };
 
-  // 로그인
-  const handleLogIn = () => {
-    setIsLoggedOut(false);
-  }
+  let localToken = Obj?.value || '';
+  useEffect(() => {},[])
 
   return (
     <StyleMainNav>
@@ -113,26 +133,20 @@ function Nav() {
             <Link to="/" css={StyleLinkText}>
               <StyleNavLi>Home</StyleNavLi>
             </Link>
-            {token ? (
+            {success || localToken ? (
               <StyleNavLi css={StyleLinkText} onClick={handleLogout}>
                 Logout
               </StyleNavLi>
             ) : (
               <Link to="/login" css={StyleLinkText}>
-                <StyleNavLi onClick={handleLogIn}>
-                  Login
-                </StyleNavLi>
+                <StyleNavLi>Login</StyleNavLi>
               </Link>
             )}
-            {token ? (
+            {success || localToken? (
               <Link to={`/${userid}/mypage`} css={StyleLinkText}>
-                <StyleNavLi>
-                  Mypage
-                </StyleNavLi>
+                <StyleNavLi>Mypage</StyleNavLi>
               </Link>
-            ) : (
-              null
-            )}
+            ) : null}
             <Link to="/myvehicle/registration" css={StyleLinkText}>
               <StyleNavLi>regist</StyleNavLi>
             </Link>

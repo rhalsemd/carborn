@@ -6,16 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import site.carborn.dto.request.BoardRequestDTO;
+import site.carborn.dto.request.RepairResultRequestDTO;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
-import site.carborn.mapping.user.RepairBookGetDetailMapping;
-import site.carborn.mapping.user.RepairBookGetListMapping;
-import site.carborn.mapping.user.RepairResultGetDetailMapping;
-import site.carborn.mapping.user.RepairResultGetListMapping;
+import site.carborn.mapping.company.RepairShopReviewMapping;
+import site.carborn.mapping.user.*;
+import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.RepairShopRepository;
+import site.carborn.repository.company.RepairShopReviewRepository;
 import site.carborn.repository.user.RepairBookRepository;
 import site.carborn.repository.user.RepairResultRepository;
+import site.carborn.service.common.KlaytnService;
+import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -30,6 +38,15 @@ public class RepairShopService {
 
     @Autowired
     private RepairResultRepository repairResultRepository;
+
+    @Autowired
+    private RepairShopReviewRepository repairShopReviewRepository;
+
+    @Autowired
+    private CarRepository carRepository;
+
+    @Autowired
+    private KlaytnService klaytnService;
 
     @Transactional
     public Page<RepairBookGetListMapping> repairBookList(Pageable page){
@@ -46,30 +63,60 @@ public class RepairShopService {
     }
 
     @Transactional
-    public Optional<RepairBook> repairBookUpdateData(int id){
+    public Optional<RepairBook> repairBookGetData(int id){
         return repairBookRepository.findById(id);
     }
 
     @Transactional
-    public void repairBookUpdate(RepairBook repairBook){
+    public void repairBookUpdate(RepairBook repairBook) {
+        repairBook.setUptDt(LocalDateTime.now());
         repairBookRepository.save(repairBook);
     }
 
     @Transactional
-    public void repairResultInsert(RepairResult repairResult){
+    public void repairResultInsert(RepairResultRequestDTO dto) throws IOException {
+        dto.setRegDt(LocalDateTime.now());
+
+        //bookId를 통해 carHash를 가져오는 부분
+        String carVin = repairBookRepository.findAllById(dto.getRepairBook().getId()).getCarVin();
+        int carId = carRepository.findByVin(carVin).getId();
+
+        //carId를 통해 carHash를 가져오는 부분
+        String carHash = carRepository.findAllById(carId).getWalletHash();
+
+        //multipartfile 입력 부분
+        String beforeImgNm = BoardUtils.singleFileSave((dto.getBeforeImg()));
+        String afterImgNm = BoardUtils.singleFileSave((dto.getAfterImg()));
+        String receiptImgNm = BoardUtils.singleFileSave((dto.getReceiptImg()));
+
+        dto.setBeforeImgNm(beforeImgNm);
+        dto.setAfterImgNm(afterImgNm);
+        dto.setReceiptImgNm(receiptImgNm);
+
+        RepairResult repairResult = RepairResult.copy(dto);
+
+        //caver 입력 부분
+        //kas api 호출
+        //metaData 등록
+        String metaDataUri = klaytnService.getUri(repairResult).get("uri").toString();
+
+        //데이터 저장 및 alias 규칙에 따라 alias 생성
+        LocalDateTime aliastime = repairResult.getRegDt();
+        String alias = "repair-"+carId+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+
+        //contract 배포
+        klaytnService.requestContract(metaDataUri, carHash, alias);
+        repairResult.setContractHash(alias);
+
         repairResultRepository.save(repairResult);
     }
-
     @Transactional
-    public Page<RepairResultGetListMapping> repairResultGetList(Pageable page){
-        //현재는 임시 아이디(아이디 받아오는 부분 필요)
-        String repairShop = "againsburgh28";
-        int repairShopId = repairShopRepository.findByAccount_Id(repairShop).getId();
-
-        return repairResultRepository.findByRepairBook_RepairShop_Id(repairShopId, page);
+    public RepairResultGetDetailMapping repairResultDetailContent(int resultBookId){
+        return repairResultRepository.findAllByRepairBook_Id(resultBookId);
     }
+
     @Transactional
-    public RepairResultGetDetailMapping repairResultDetailContent(int id){
-        return repairResultRepository.findAllById(id);
+    public RepairShopReviewMapping repairResultReview(int id){
+        return repairShopReviewRepository.findByStatusAndRepairResult_Id(false, id);
     }
 }

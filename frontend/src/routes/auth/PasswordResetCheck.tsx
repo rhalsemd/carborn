@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import PasswordResetVerify from "../../components/auth/passwordreset/PasswordResetVerify";
 import PasswordResetID from "../../components/auth/passwordreset/PasswordResetID";
-import { passwordResetCheck } from "../../modules/passwordResetCheckModule";
-import Nav from './../../components/Nav';
+import { passwordResetCheck } from "../../modules/PasswordCheckModule";
+import Nav from "./../../components/Nav";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -14,6 +14,7 @@ export const StyleLoginSignUpDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 
 export const StyleLoginSignUpBoxDiv = styled.div`
   width: 25%;
@@ -58,14 +59,7 @@ export type PasswordResetInputObj = {
 const PasswordResetCheck = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selector = useSelector(
-    (state: { passwordResetCheck: { isVerify: boolean } }) =>
-      state.passwordResetCheck
-  );
-  const [isPasswordResetValid, setIsPasswordResetValid] = useState<
-    null | boolean
-  >(null);
-
+  const isverify = useSelector((state: any) => state.passwordResetCheckReducer.isVerify);
   const [inputObj, setinputObj] = useState<PasswordResetInputObj>({
     userid: "",
     phonenumber: "",
@@ -77,16 +71,10 @@ const PasswordResetCheck = () => {
   };
 
   useEffect(() => {
-    if (selector.isVerify) {
-      setIsPasswordResetValid(selector.isVerify);
-    }
-  }, [selector.isVerify]);
-
-  useEffect(() => {
-    if (isPasswordResetValid) {
+    if (isverify) {
       navigate("/passwordresetcheck/passwordreset");
     }
-  }, [isPasswordResetValid, navigate, selector]);
+  }, [navigate, isverify]);
 
   return (
     <div>

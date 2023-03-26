@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 
@@ -40,4 +41,10 @@ public class InspectResult {
     private String contractHash;
 
     private LocalDateTime regDt;
+
+    public static InspectResult copy(InspectResult inspectResult) {
+        InspectResult ir = new InspectResult();
+        BeanUtils.copyProperties(inspectResult, ir);
+        return ir;
+    }
 }

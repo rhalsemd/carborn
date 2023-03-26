@@ -1,17 +1,25 @@
 server:
-  port: 80
+  port: 443
+  http:
+    port: 80
+
   servlet:
     context-path: /
     encoding:
       charset: UTF-8
       enabled: true
       force: true
-#  ssl:
-#    enabled: true
-#    key-store: classpath:keystore.p12
-#    key-store-password: ssafy123
-#    key-store-type: PKCS12
-#    key-alias: 1
+
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: ssafy123
+    key-store-type: PKCS12
+    key-alias: 1
+
+tomcat:
+  protocol_header: x-forwarded-proto
+  remote_ip_header: x-forwarded-for
 
 logging:
   level:
@@ -45,7 +53,7 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://rigizer.iptime.org:53306/S08P22D209?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mariadb://carborn.site:3306/S08P22D209?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
     username: ssafy
     password: ssafy123
 
@@ -85,3 +93,9 @@ naver:
 
 business-registration-number-verification:
   serviceKey: 6gySi+blFPcHBT8gEPjE0eHTAuce2xs6nDw+IlZSQnYMq925qN9opkE4aDZRME3VB2gqZt/Khqg28B4nYC3juQ==
+
+klaytn:
+  accessKeyId: KASKUIIPRW139WBZAXT657H0
+  secretAccessKey: 8fxpWhYFGmYW3Fz1uXT5MiZ_Mw9qhFmojpS94psy
+  authorization: Basic S0FTS1VJSVBSVzEzOVdCWkFYVDY1N0gwOjhmeHBXaFlGR21ZVzNGejF1WFQ1TWlaX013OXFoRm1vanBTOTRwc3k=
+  chainId: 1001

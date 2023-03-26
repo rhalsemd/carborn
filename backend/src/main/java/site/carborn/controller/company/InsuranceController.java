@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
 import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
@@ -19,35 +19,29 @@ import site.carborn.service.company.InsuranceService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+import java.io.IOException;
+
 
 @Tag(name = "Insurance History", description = "보험회사 손상 내역 관련 API")
 @RequestMapping("/api/insurance")
 @RequiredArgsConstructor
 @RestController
 public class InsuranceController {
-
     @Autowired
     private InsuranceService insuranceService;
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistory history){
-        history.setRegDt(LocalDateTime.now());
-        //multipartfile 들어가야 되는 부분
-
-        //caver 입력 부분
-
-        insuranceService.insertCarInsuranceHistory(history);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, "등록 되었습니다.");
+    public ResponseEntity<?> insertCarInsuranceHistory(CarInsuranceHistoryRequestDTO dto) throws IOException {
+        insuranceService.insertCarInsuranceHistory(dto);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
     @GetMapping("/list/{page}/{size}")
     @Operation(description = "보험회사 손상 내역 목록 조회")
     @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "한 페이지 개수")
+            @Parameter(name = "page", description = "페이지 번호")
+            ,@Parameter(name = "size", description = "한 페이지 개수")
     })
     public ResponseEntity<?> carInsuranceHistoryList(@PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);

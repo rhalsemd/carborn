@@ -1,4 +1,4 @@
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import React, { useEffect } from "react";
 import { SignupFormData } from "./SignUpButton";
 
@@ -67,6 +67,7 @@ const SignUpUserPasswordCheck = ({
         type="password"
         name="userpasswordcheck"
         id="userpasswordcheck"
+        tabIndex={4}
         placeholder="비밀번호를 입력해주세요(ex. ssafy123)"
         autoComplete="off"
         required

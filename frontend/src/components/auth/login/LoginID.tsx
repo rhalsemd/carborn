@@ -1,25 +1,29 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { LoginProps } from "../../../routes/auth/Login";
+import { LoginInputProps } from "../../../routes/auth/LoginPage";
 
-// input DIV
+// CSS
 const StyleLoginInputDiv = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const LoginID = ({ setinputObj }: LoginProps) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setinputObj((prevState) => ({ ...prevState, userid: value }));
+// 로그인 아이디 데이터 받아오는 컴포넌트
+const LoginID = ({ setLoginInput, loginInput }: LoginInputProps) => {
+  // 값이 변화함에 따라서 바뀜
+  const handleChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginInput({ ...loginInput, loginid: value });
   };
 
   return (
     <StyleLoginInputDiv>
-      <span>아이디</span>
+      <label htmlFor="loginid">아이디</label>
       <input
         type="text"
         id="loginid"
+        name="loginid"
         autoComplete="off"
         placeholder="아이디"
         onChange={handleChange}

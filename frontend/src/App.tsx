@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global } from "@emotion/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Login from "./routes/auth/Login";
-import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import { QueryClientProvider, QueryClient } from "react-query";
+
+import MyVehicleRegistration from "./routes/userUseFnc/MyVehicleRegistration";
 import VehiclePurchase from "./routes/userUseFnc/VehiclePurchase";
-import Signup from "./routes/auth/Signup";
+import Signup from "./routes/auth/SignupPage";
 import UserHome from "./routes/userUseFnc/UserHome";
 import GarageHome from "./routes/company/garage/GarageHome";
 import InspectorHome from "./routes/company/inspector/InspectorHome";
@@ -16,15 +15,12 @@ import BookList from "./routes/company/BookList";
 import ViewHistory from "./routes/company/ViewHistory";
 import SaleRegistration from "./routes/userUseFnc/SaleRegistration";
 import Register from "./routes/company/Register";
-import TermsOfUse from "./routes/auth/TermsOfUse";
 import Searchid from "./routes/auth/SearchID";
 import SearchidComplete from "./routes/auth/SearchidComplete";
 import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
-import PasswordReset from "./routes/auth/PasswordReset";
 import PasswordComplete from "./routes/auth/PasswordComplete";
 import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
-import Booking from "./components/MyPage/Booking";
 import Repair from "./components/MyPage/Repair";
 import MyGallery from "./components/MyPage/MyGallery";
 import BuyContent from "./components/MyPage/BuyContent";
@@ -32,6 +28,12 @@ import SellContent from "./components/MyPage/SellContent";
 import Insurance from "./components/MyPage/Insurance";
 import UserWithdrawal from "./components/MyPage/UserWithdrawal";
 import PasswordModify from "./components/MyPage/PasswordModify";
+import LoginPages from "./routes/auth/LoginPage";
+import GetAgreementPage from "./routes/auth/GetAgreementPage";
+import NewPasswordReset from "./routes/auth/NewPasswordReset";
+import MyInspectorDetail from "./components/MyPage/DetailComponent/MyInspectorDetail";
+import MyInspectorBookDetail from './components/MyPage/DetailComponent/MyInspectorBookDetail';
+import InspectorContent from './components/MyPage/InspectorContent';
 
 const globalStyles = css`
   body {
@@ -46,20 +48,22 @@ const queryClient = new QueryClient();
 // 경로 지정
 const routes = [
   { path: "/", element: <UserHome /> },
-  { path: "/login", element: <Login /> },
-  { path: "/termsofuse", element: <TermsOfUse /> },
+  { path: "/login", element: <LoginPages /> },
+  { path: "/getagreement", element: <GetAgreementPage /> },
   { path: "/signup", element: <Signup /> },
   { path: "/searchid", element: <Searchid /> },
   { path: "/searchid/searchidcomplete", element: <SearchidComplete /> },
   { path: "/passwordresetcheck", element: <PasswordResetCheck /> },
-  { path: "/passwordresetcheck/passwordreset", element: <PasswordReset /> },
+  { path: "/passwordresetcheck/passwordreset", element: <NewPasswordReset /> },
   {
     path: "/passwordresetcheck/passwordreset/passwordcomplete",
     element: <PasswordComplete />,
   },
   { path: "/:userid/mypage", element: <MyPage /> },
   { path: "/:userid/mypage/mycarinfo", element: <MyCarInfo /> },
-  { path: "/:userid/mypage/booking", element: <Booking /> },
+  { path: "/:userid/mypage/inspector", element: <InspectorContent /> },
+  { path: "/:userid/mypage/inspector/:carId/completedetail", element: <MyInspectorDetail /> },
+  { path: "/:userid/mypage/inspector/:carId/bookdetail", element: <MyInspectorBookDetail /> },
   { path: "/:userid/mypage/repair", element: <Repair /> },
   { path: "/:userid/mypage/gallery", element: <MyGallery /> },
   { path: "/:userid/mypage/buycontent", element: <BuyContent /> },
@@ -82,7 +86,6 @@ const routes = [
 
 function App() {
   return (
-    // <div className="App"></div>
     <>
       <QueryClientProvider client={queryClient}>
         <Global styles={globalStyles}></Global>

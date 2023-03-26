@@ -30,12 +30,12 @@ public class BoardController {
     }
 
     @PostMapping("/api/board")
-    public ResponseEntity<?> insert(BoardRequestDTO boardRequestDTO) {
+    public ResponseEntity<?> insert(@RequestBody BoardRequestDTO boardRequestDTO) {
         return NormalResponse.toResponseEntity(HttpStatus.OK, boardService.insert(boardRequestDTO));
     }
 
     @PatchMapping("/api/board")
-    public ResponseEntity<?> update(Board board) {
+    public ResponseEntity<?> update(@RequestBody Board board) {
         return NormalResponse.toResponseEntity(HttpStatus.OK, boardService.update(board));
     }
 
