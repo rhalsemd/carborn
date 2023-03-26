@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { useState } from "react";
 import hand from "../../assets/hand.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
 import ReserveForm from "../../components/NaverMap/ReserveForm";
@@ -87,7 +86,8 @@ var markers: any[] = [],
   infoWindows: any[] = [];
 
 const naver = window.naver;
-const API = `https://jsonplaceholder.typicode.com/todos/1`;
+const API_USER_INFO = `https://jsonplaceholder.typicode.com/todos/1`;
+const API_MARKER_INFO = `https://jsonplaceholder.typicode.com/todos/1`;
 
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -97,7 +97,8 @@ function NaverMap() {
   const [reserve, setReserve] = useState<boolean>(false);
   const [markerNum, setMarkerNum] = useState<number>(-1);
 
-  const getUserCarInfo = useAPI("get", API);
+  const getUserCarInfo = useAPI("get", API_USER_INFO);
+  const getMapMarkerInfo = useAPI("get", API_MARKER_INFO);
   const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {});
 
   const queries = useQueries([
@@ -108,6 +109,14 @@ function NaverMap() {
       cacheTime: 1000 * 300,
       staleTime: 1000 * 300,
       refetchOnMount: false,
+      retry: false,
+      keepPreviousData: true,
+    },
+    {
+      // 현재 위치 정비소 및 검수소 가져온다.
+      queryKey: "get-marker-info",
+      queryFn: () => getMapMarkerInfo,
+      cacheTime: 1000 * 300,
       retry: false,
       keepPreviousData: true,
     },
@@ -224,7 +233,9 @@ function NaverMap() {
           hideMarker(map, marker);
           infoWindow.close();
           setReserve(false);
-          setMarkerNum(-1);
+          // setMarkerNum(-1);
+
+          console.log(i, markerNum, "여기");
         }
 
         if (marker.map) {
