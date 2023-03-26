@@ -16,7 +16,7 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     RepairShopGetIdMapping findByAccount_Id(String accountId);
 
     @Query(value = """
-    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cnt_point, res.AUTH, IFNULL(ures.cnt_use, 0)
+    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cnt_point, res.AUTH, IFNULL(ures.cnt_use, 0) as cnt_use
     FROM
     	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cnt_point
     	FROM\s
