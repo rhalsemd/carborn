@@ -1,13 +1,13 @@
-import axios from "axios";
-import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import axios from 'axios';
+import styled from '@emotion/styled';
+import { useParams, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
 // 다른 디렉토리에서 임포트
-import Nav from "../../Nav";
-import { API_URL } from "./../../../lib/api";
-import { createInspectorReviewAction } from './../../../modules/createReviewModule';
+import Nav from './../../Nav';
+import { API_URL } from './../../../lib/api';
+import { createRepairReviewAction } from '../../../modules/createReviewModule';
 
 // 이미지 캐러셀용
 // CarStatus 이미지 import 해오기
@@ -15,7 +15,7 @@ import before from "../../../assets/carousel/CarStatus1.jpg";
 import After from "../../../assets/carousel/CarStatus2.jpg";
 import Document from "../../../assets/carousel/CarStatus4.jpg";
 
-const StyleMyInspectorDetailDiv = styled.div`
+const StyleMyRepairDetailDiv = styled.div`
   width: 100vw;
 
   display: flex;
@@ -24,7 +24,7 @@ const StyleMyInspectorDetailDiv = styled.div`
   align-items: center;
 `;
 
-const StyleMyInspectorDetailContainerDiv = styled.div`
+const StyleMyRepairDetailContainerDiv = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   width: 80%;
@@ -37,7 +37,7 @@ const StyleMyInspectorDetailContainerDiv = styled.div`
   padding-top: 3rem;
 `;
 
-const StyleMyInspectorDetailTitleDiv = styled.div`
+const StyleMyRepairDetailTitleDiv = styled.div`
   width: 50%;
   height: 5rem;
   border-bottom: 2px solid red;
@@ -50,15 +50,15 @@ const StyleMyInspectorDetailTitleDiv = styled.div`
   }
 `;
 
-const StyleInspectorImg = styled.img`
+const StyleRepairImg = styled.img`
   width: 100%;
 `;
 
-const StyleMyInspectorResultDiv = styled.div`
+const StyleMyRepairResultDiv = styled.div`
   background-color: #adadad;
 `;
 
-const StyleMyInspectorReviewDiv = styled.div`
+const StyleMyRepairReviewDiv = styled.div`
   margin-top: 3rem;
   width: 100%;
   height: 50vh;
@@ -70,27 +70,27 @@ const StyleMyInspectorReviewDiv = styled.div`
   justify-content: space-evenly;
 `;
 
-const StyleMyInspectorReviewStarDiv = styled.div`
+const StyleMyRepairReviewStarDiv = styled.div`
   margin-left: 2rem;
   display: flex;
 `;
 
-const StyleMyInspectorReviewContentDiv = styled.div`
+const StyleMyRepairReviewContentDiv = styled.div`
   margin-left: 2rem;
   display: flex;
   flex-direction: column;
 `;
 
-const StyleGetMyInspectorReviewDiv = styled.div`
+const StyleGetMyRepairReviewDiv = styled.div`
   width: 100%;
   height: 30vh;
   margin-left: 2rem;
   border: 1px solid black;
 `;
 
-export type inspectorResultType = {
-  setInspectorResult: React.SetStateAction<any[]>;
-  inspectorResult: any;
+export type repairResultType = {
+  setRepairResult: React.SetStateAction<any[]>;
+  repairResult: any;
 };
 
 export type reviewInputType = {
@@ -100,7 +100,7 @@ export type reviewInputType = {
   >;
 };
 
-const MyInspectorDetail = () => {
+const MyRepairDetail = () => {
   const param = useParams();
   const carId = param.carId;
 
@@ -109,10 +109,10 @@ const MyInspectorDetail = () => {
   const ReviewedData = useSelector((state: any) => state.createReviewReducer);
   const detail = location.state;
 
-  const [isInspectorReviews, setIsInspectorReviews] = useState<boolean>(false);
-  const [inspectorResult, setInspectorResult] = useState<any[]>([]);
+  const [isRepairReviews, setIsRepairReviews] = useState<boolean>(false);
+  const [repairResult, setRepairResult] = useState<any[]>([]);
   // 리뷰 가져오기용
-  const [inspectorReviews, setInspectorReviews] = useState<any>("");
+  const [repairReviews, setRepairReviews] = useState<any>("");
 
   // 검수 결과 보여주기 위한 데이터 가져오기.
   useEffect(() => {
@@ -120,9 +120,9 @@ const MyInspectorDetail = () => {
       try {
         const response = await axios({
           method: "GET",
-          url: `${API_URL}/myinspectordetail`,
+          url: `${API_URL}/myrepairdetail`,
         });
-        setInspectorResult(response.data);
+        setRepairResult(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -134,23 +134,25 @@ const MyInspectorDetail = () => {
       try {
         const response = await axios({
           method: "GET",
-          url: `${API_URL}/inspectorreviewwrite`,
+          url: `${API_URL}/repairreviewwrite`,
         });
-        setInspectorReviews(response.data[response.data.length-1]);
+        setRepairReviews(response.data[response.data.length-1]);
       } catch (error) {
         console.log(error);
       }
     };
     getData();
-  }, [location.state, ReviewedData, dispatch, carId, setIsInspectorReviews]);
+
+    
+  }, [location.state, ReviewedData, dispatch, carId, setRepairReviews]);
 
   useEffect(() => {
-    if (inspectorReviews) {
-      setIsInspectorReviews(true)
+    if (repairReviews) {
+      setIsRepairReviews(true)
     } else {
-      setIsInspectorReviews(false)
+      setIsRepairReviews(false)
     }
-  }, [inspectorReviews, setIsInspectorReviews])
+  }, [setIsRepairReviews, repairReviews])
 
   // 리뷰달기 버튼 활성화 및 textarea 값 보여주기
   const [reviewInput, setReviewInput] = useState<string>("");
@@ -175,16 +177,16 @@ const MyInspectorDetail = () => {
 
   // DB로 작성 내용 보내기
   const createReview = () => {
-    dispatch(createInspectorReviewAction({ reviewInput, rating, carId }));
+    dispatch(createRepairReviewAction({ reviewInput, rating, carId }));
   };
 
   return (
-    <StyleMyInspectorDetailDiv>
+    <StyleMyRepairDetailDiv>
       <Nav />
-      <StyleMyInspectorDetailContainerDiv>
-        <StyleMyInspectorDetailTitleDiv>
+      <StyleMyRepairDetailContainerDiv>
+        <StyleMyRepairDetailTitleDiv>
           <span>정비(검수) 상세 내역</span>
-        </StyleMyInspectorDetailTitleDiv>
+        </StyleMyRepairDetailTitleDiv>
         {/* 디테일 정보  */}
         <table>
           <thead>
@@ -238,13 +240,13 @@ const MyInspectorDetail = () => {
           <tbody>
             <tr>
               <td>
-                <StyleInspectorImg src={before} alt="before" />
+                <StyleRepairImg src={before} alt="before" />
               </td>
               <td>
-                <StyleInspectorImg src={After} alt="After" />
+                <StyleRepairImg src={After} alt="After" />
               </td>
               <td>
-                <StyleInspectorImg src={Document} alt="Document" />
+                <StyleRepairImg src={Document} alt="Document" />
               </td>
             </tr>
           </tbody>
@@ -252,18 +254,18 @@ const MyInspectorDetail = () => {
         {/* 검수 결과 */}
         <div>
           <p>정비 결과</p>
-          <StyleMyInspectorResultDiv>
-          {inspectorResult.map((result, index) => (
+          <StyleMyRepairResultDiv>
+          {repairResult.map((result, index) => (
             <li key={index}>
               {result.category} : {result.detail}
             </li>
           ))}
-          </StyleMyInspectorResultDiv>
+          </StyleMyRepairResultDiv>
         </div>
         {/* 리뷰 작성 및 조회 */}
-        <StyleMyInspectorReviewDiv>
-        {!isInspectorReviews ? <div>
-            <StyleMyInspectorReviewStarDiv>
+        <StyleMyRepairReviewDiv>
+        {!isRepairReviews? <div>
+            <StyleMyRepairReviewStarDiv>
               <span>평점</span>
               {starArr.map((star) => (
                 <span
@@ -278,8 +280,8 @@ const MyInspectorDetail = () => {
                 </span>
               ))}
               {rating}점
-            </StyleMyInspectorReviewStarDiv>
-            <StyleMyInspectorReviewContentDiv>
+            </StyleMyRepairReviewStarDiv>
+            <StyleMyRepairReviewContentDiv>
               <span>
                 상세 조회{" "}
                 {`(현재 작성 글자 수: ${
@@ -297,19 +299,19 @@ const MyInspectorDetail = () => {
               <button disabled={!isReview} onClick={createReview}>
                 리뷰 달기
               </button>
-            </StyleMyInspectorReviewContentDiv>
-          </div> :
-          <StyleGetMyInspectorReviewDiv>
+            </StyleMyRepairReviewContentDiv>
+          </div> : 
+          <StyleGetMyRepairReviewDiv>
             <span>평점</span>
             <span style={{ color: "gold" }}>
-              {`★`.repeat(inspectorReviews.rating)}
+              {`★`.repeat(repairReviews.rating)}
             </span>
-            <p>{inspectorReviews.reviewInput}</p>
-          </StyleGetMyInspectorReviewDiv>}
-        </StyleMyInspectorReviewDiv>
-      </StyleMyInspectorDetailContainerDiv>
-    </StyleMyInspectorDetailDiv>
-  );
-};
+            <p>{repairReviews.reviewInput}</p>
+          </StyleGetMyRepairReviewDiv>}
+        </StyleMyRepairReviewDiv>
+      </StyleMyRepairDetailContainerDiv>
+    </StyleMyRepairDetailDiv>
+  )
+}
 
-export default MyInspectorDetail;
+export default MyRepairDetail

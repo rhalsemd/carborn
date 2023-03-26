@@ -1,10 +1,10 @@
-import Nav from './../Nav';
-import styled from '@emotion/styled';
-import MyUserWithdrawalComponent from './ModalComponent/MyUserWithdrawalComponent';
+import Nav from "../Nav";
+import styled from "@emotion/styled";
+import MyUserInfoDeleteComponent from "./ModalComponent/MyUserInfoDeleteComponent";
 
 const StyleUserWithdrawal = styled.div`
   width: 100vw;
-`
+`;
 
 const StyleUserWithdrawalContainer = styled.div`
   width: 100vw;
@@ -14,7 +14,7 @@ const StyleUserWithdrawalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const StyleUserWithdrawalTitleDiv = styled.div`
   width: 70%;
@@ -31,9 +31,9 @@ const StyleUserWithdrawalTitleDiv = styled.div`
 
   border-bottom: 2px solid red;
   margin-top: 3rem;
-`
+`;
 
-const UserWithdrawal = () => {
+const UserInfoDelete = () => {
   return (
     <StyleUserWithdrawal>
       <Nav />
@@ -41,10 +41,10 @@ const UserWithdrawal = () => {
         <StyleUserWithdrawalTitleDiv>
           <p>회원 탈퇴</p>
         </StyleUserWithdrawalTitleDiv>
-        <MyUserWithdrawalComponent/>
+        <MyUserInfoDeleteComponent />
       </StyleUserWithdrawalContainer>
     </StyleUserWithdrawal>
   );
 };
 
-export default UserWithdrawal;
+export default UserInfoDelete;

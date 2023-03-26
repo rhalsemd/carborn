@@ -7,10 +7,12 @@ import styled from '@emotion/styled';
 import Buy from '../assets/Buy.png';
 import inspector from '../assets/Booking.png';
 import Insurance from '../assets/Insurance.png';
-import Gallery from '../assets/Gallery.png';
+import Community from '../assets/Gallery.png';
 import MyCar from '../assets/MyCar.png';
 import Repair from '../assets/Repair.png';
 import Sell from '../assets/Sell.png';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export const StyleMyPageDiv = styled.div`
   a {
@@ -118,7 +120,17 @@ const MyPage = () => {
   const ObjString:any = localStorage.getItem("login-token");
   const Obj = JSON.parse(ObjString);
   let userid = Obj.userId;
-  // const userid = localStorage.getItem('userId')
+  const [userType, seUserType] = useState<string | number>("0");
+  const [isUser, setIsUser] = useState<boolean>(true);
+
+  useEffect(() => {
+    seUserType(parseInt(Obj.accountType))
+    if (userType === 0) {
+      setIsUser(true)
+    } else {
+      setIsUser(false)
+    }
+  }, [setIsUser, seUserType, userType, Obj.accountType])
 
   return (
     <div>
@@ -149,10 +161,10 @@ const MyPage = () => {
               <p>검수 내역</p>
             </StyleMypageCards>
           </Link>
-          <Link to={`/${userid}/mypage/gallery`} >
+          <Link to={`/${userid}/mypage/community`} >
             <StyleMypageCards>
               <StyleMypageCardImg>
-                <img src={Gallery} alt='Gallery'/>
+                <img src={Community} alt='Community'/>
               </StyleMypageCardImg>
               <p>내가 쓴 글</p>
             </StyleMypageCards>
@@ -181,16 +193,26 @@ const MyPage = () => {
               <p>손상 내역</p>
             </StyleMypageCards>
           </Link>
-          <Link to={`/${userid}/mypage/userwithdrawal`} >
+          {isUser ? <Link to={`/${userid}/mypage/userinfodelete`} >
             <StyleMypageSmallCards>
-              <p>회원 탈퇴</p>
+              <p>{`회원 탈퇴(유저)`}</p>
             </StyleMypageSmallCards>
-          </Link>
-          <Link to={`/${userid}/mypage/passwordmodify`} >
+          </Link> :
+          <Link to={`/${userid}/mypage/companyinfodelete`} >
+            <StyleMypageSmallCards>
+              <p>{`회원 탈퇴(기업)`}</p>
+            </StyleMypageSmallCards>
+          </Link>}
+          {isUser ? <Link to={`/${userid}/mypage/userpasswordmodify`} >
             <StyleMypageSmallCards>
               <p>비밀번호 변경</p>
             </StyleMypageSmallCards>
-          </Link>
+          </Link> : 
+          <Link to={`/${userid}/mypage/companypasswordmodify`} >
+            <StyleMypageSmallCards>
+              <p>비밀번호 변경</p>
+            </StyleMypageSmallCards>
+          </Link>}
         </StyleMyPageDiv>
       </StyleLoginSignUpDiv>
     </div>

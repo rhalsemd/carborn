@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
 import Nav from "../../components/Nav";
 import { loginAction } from "../../modules/takeLoginLogoutModule";
+import { userInfoDeleteReset } from "../../modules/userInfoDeleteModule";
+import { companyInfoDeleteReset } from "../../modules/companyInfoDeleteModule";
+import { companyModifyPasswordReset, userModifyPasswordReset } from "../../modules/modifyPasswordModule";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -133,6 +136,13 @@ const LoginPages = () => {
     }
   }, [success, isAccountType, navigate]);
 
+  useEffect(() => {
+    dispatch(userInfoDeleteReset())
+    dispatch(companyInfoDeleteReset())
+    dispatch(userModifyPasswordReset())
+    dispatch(companyModifyPasswordReset())
+  }, [dispatch])
+
   return (
     <div>
       <Nav isToken={isToken} setIsToken={setIsToken} />
@@ -170,15 +180,3 @@ const LoginPages = () => {
 };
 
 export default LoginPages;
-
-// const initialSignupFormData = {
-//   accountType: USER,
-//   name: "",
-//   userid: "",
-//   idcheck: null,
-//   password: "",
-//   passwordcheck: false,
-//   identifynumber: "",
-//   address: "",
-//   isVarify: false,
-// };

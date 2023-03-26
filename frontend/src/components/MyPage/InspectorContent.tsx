@@ -1,7 +1,6 @@
 import Nav from "../Nav";
 import styled from '@emotion/styled';
 import MyInspectorContentComponent from "./TableComponent/MyInspectorContentComponent";
-import { useState } from 'react';
 
 const StyleInspectorContent = styled.div`
   width: 100vw;
