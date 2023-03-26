@@ -20,7 +20,10 @@ import {
 import { newPasswordSaga, NEWPASSWORD_REQUEST } from "../newPasswordModule";
 import { searchidCheckSaga, SEARCHID_CHECK } from "../searchidModule";
 import { companyverificationNumberSaga, COMPANY_VERIFICATION_CHECK_REQUEST, userverificationNumberSaga, USER_VERIFICATION_CHECK_REQUEST } from "../verificationNumberModule";
-import { createReviewSaga, CREATE_REVIEW_REQUEST } from "../createReviewModule";
+import { createInspectorReviewSaga, createRepairReviewSaga, CREATE_INSPECTOR_REVIEW_REQUEST, CREATE_REPAIR_REVIEW_REQUEST } from './../createReviewModule';
+import { userinfoDeleteSaga, USERINFO_DELETE } from './../userInfoDeleteModule';
+import { companyinfoDeleteSaga, COMPANYINFO_DELETE } from './../companyInfoDeleteModule';
+import { companyModifyPasswordSaga, COMPANY_MODIFY_PASSWORD_REQUEST, userModifyPasswordSaga, USER_MODIFY_PASSWORD_REQUEST } from './../modifyPasswordModule';
 
 
 export default function* rootSaga() {
@@ -38,5 +41,10 @@ export default function* rootSaga() {
   );
   yield takeLatest(PASSWORD_RESET_CHECK, passwordResetCheckSaga);
   yield takeLatest(NEWPASSWORD_REQUEST, newPasswordSaga);
-  yield takeLatest(CREATE_REVIEW_REQUEST, createReviewSaga);
+  yield takeLatest(CREATE_INSPECTOR_REVIEW_REQUEST, createInspectorReviewSaga);
+  yield takeLatest(CREATE_REPAIR_REVIEW_REQUEST, createRepairReviewSaga);
+  yield takeLatest(USERINFO_DELETE, userinfoDeleteSaga);
+  yield takeLatest(COMPANYINFO_DELETE, companyinfoDeleteSaga);
+  yield takeLatest(USER_MODIFY_PASSWORD_REQUEST, userModifyPasswordSaga);
+  yield takeLatest(COMPANY_MODIFY_PASSWORD_REQUEST, companyModifyPasswordSaga);
 }

@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchIDName from "../../components/auth/searchID/SearchIDName";
 import SearchIDPhoneNumberVerify from "../../components/auth/searchID/SearchIDPhoneNumberVerify";
 import Nav from "./../../components/Nav";
-import { SearchIDCheckAction } from "../../modules/searchidModule";
 import { useNavigate } from "react-router-dom";
+import { SearchIDCheckAction } from "../../modules/searchidModule";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
