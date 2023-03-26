@@ -32,7 +32,7 @@ public class InsuranceController {
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(CarInsuranceHistoryRequestDTO dto) throws IOException {
+    public ResponseEntity<?> insertCarInsuranceHistory(@ModelAttribute CarInsuranceHistoryRequestDTO dto) throws IOException {
         insuranceService.insertCarInsuranceHistory(dto);
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
