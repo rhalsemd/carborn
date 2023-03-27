@@ -35,6 +35,8 @@ public class InspectResult {
     @Column(length = 200)
     private String receiptImgNm;
 
+    private int inspectPrice;
+
     private LocalDateTime inspectDt;
 
     @Column(length = 200)

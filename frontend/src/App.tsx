@@ -21,19 +21,23 @@ import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
 import PasswordComplete from "./routes/auth/PasswordComplete";
 import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
-import Repair from "./components/MyPage/Repair";
-import MyGallery from "./components/MyPage/MyGallery";
+import RepairContent from "./components/MyPage/RepairContent";
 import BuyContent from "./components/MyPage/BuyContent";
 import SellContent from "./components/MyPage/SellContent";
-import Insurance from "./components/MyPage/Insurance";
-import UserWithdrawal from "./components/MyPage/UserWithdrawal";
-import PasswordModify from "./components/MyPage/PasswordModify";
-import LoginPages from "./routes/auth/LoginPage";
+import UserInfoDelete from "./components/MyPage/UserInfoDelete";
+import CompanyInfoDelete from "./components/MyPage/CompanyInfoDelete";
+import LoginPage from "./routes/auth/LoginPage";
 import GetAgreementPage from "./routes/auth/GetAgreementPage";
 import NewPasswordReset from "./routes/auth/NewPasswordReset";
 import MyInspectorDetail from "./components/MyPage/DetailComponent/MyInspectorDetail";
-import MyInspectorBookDetail from './components/MyPage/DetailComponent/MyInspectorBookDetail';
 import InspectorContent from './components/MyPage/InspectorContent';
+import MyRepairDetail from "./components/MyPage/DetailComponent/MyRepairDetail";
+import InsuranceContent from "./components/MyPage/InsuranceContent";
+import MyInsuranceDetail from "./components/MyPage/DetailComponent/MyInsuranceDetail";
+import MyCommunityContent from "./components/MyPage/MyCommunityContent";
+import UserPasswordModify from "./components/MyPage/UserPasswordModify";
+import MyInspectorBookDetail from "./components/MyPage/DetailComponent/MyInspectorBookDetail";
+import MyRepairBookDetail from "./components/MyPage/DetailComponent/MyRepairBookDetail";
 
 const globalStyles = css`
   body {
@@ -48,7 +52,7 @@ const queryClient = new QueryClient();
 // 경로 지정
 const routes = [
   { path: "/", element: <UserHome /> },
-  { path: "/login", element: <LoginPages /> },
+  { path: "/login", element: <LoginPage /> },
   { path: "/getagreement", element: <GetAgreementPage /> },
   { path: "/signup", element: <Signup /> },
   { path: "/searchid", element: <Searchid /> },
@@ -62,15 +66,36 @@ const routes = [
   { path: "/:userid/mypage", element: <MyPage /> },
   { path: "/:userid/mypage/mycarinfo", element: <MyCarInfo /> },
   { path: "/:userid/mypage/inspector", element: <InspectorContent /> },
-  { path: "/:userid/mypage/inspector/:carId/completedetail", element: <MyInspectorDetail /> },
+  {
+    path: "/:userid/mypage/inspector/:carId/completedetail",
+    element: <MyInspectorDetail />,
+  },
   { path: "/:userid/mypage/inspector/:carId/bookdetail", element: <MyInspectorBookDetail /> },
-  { path: "/:userid/mypage/repair", element: <Repair /> },
-  { path: "/:userid/mypage/gallery", element: <MyGallery /> },
+  { path: "/:userid/mypage/repair", element: <RepairContent /> },
+  {
+    path: "/:userid/mypage/repair/:carId/completedetail",
+    element: <MyRepairDetail />,
+  },
+  { path: "/:userid/mypage/repair/:carId/bookdetail", element: <MyRepairBookDetail /> },
+  { path: "/:userid/mypage/insurance", element: <InsuranceContent /> },
+  {
+    path: "/:userid/mypage/insurance/:carId/completedetail",
+    element: <MyInsuranceDetail />,
+  },
+  { path: "/:userid/mypage/community", element: <MyCommunityContent /> },
   { path: "/:userid/mypage/buycontent", element: <BuyContent /> },
   { path: "/:userid/mypage/sellcontent", element: <SellContent /> },
-  { path: "/:userid/mypage/insurance", element: <Insurance /> },
-  { path: "/:userid/mypage/userwithdrawal", element: <UserWithdrawal /> },
-  { path: "/:userid/mypage/passwordmodify", element: <PasswordModify /> },
+  { path: "/:userid/mypage/insurance", element: <InsuranceContent /> },
+  { path: "/:userid/mypage/userinfodelete", element: <UserInfoDelete /> },
+  { path: "/:userid/mypage/companyinfodelete", element: <CompanyInfoDelete /> },
+  {
+    path: "/:userid/mypage/userpasswordmodify",
+    element: <UserPasswordModify />,
+  },
+  {
+    path: "/:userid/mypage/companypasswordmodify",
+    element: <UserPasswordModify />,
+  },
   { path: "/garage", element: <GarageHome /> },
   { path: "/inspector", element: <InspectorHome /> },
   { path: "/inspector/reserve", element: <BookList /> },

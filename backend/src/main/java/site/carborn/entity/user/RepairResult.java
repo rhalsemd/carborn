@@ -37,6 +37,8 @@ public class RepairResult {
     @Column(length = 200)
     private String receiptImgNm;
 
+    private int repairPrice;
+
     private LocalDateTime repairDt;
 
     @Column(length = 200)

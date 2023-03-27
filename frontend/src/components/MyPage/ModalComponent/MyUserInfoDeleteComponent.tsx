@@ -64,23 +64,28 @@ const MyUserWithdrawalButtonDiv = styled.div`
   }
 `;
 
-const MyUserWithdrawalComponent = () => {
+const MyUserInfoDeleteComponent = () => {
   const ObjString:any = localStorage.getItem("login-token");
   const Obj = JSON.parse(ObjString)
-  let userid = Obj.userId
-  // const userid = localStorage.getItem("userId");
-
+  const isSuccess = useSelector((state:any) => state.userinfoDeleteReducer.success)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleUserInfoDelete = () => {
     dispatch(userinfoDelete());
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/login')
+    }
+  }, [isSuccess])
+
   return (
     <StyleMyUserWithdrawalComponentDiv>
       <p>회원탈퇴를 진행하시겠습니까?</p>
       <MyUserWithdrawalButtonDiv>
-        <Link to={`/${userid}/mypage`}>
+        <Link to={`/${Obj.userId}/mypage`}>
           <button>취소</button>
         </Link>
         <button onClick={handleUserInfoDelete}>회원탈퇴</button>
@@ -89,4 +94,4 @@ const MyUserWithdrawalComponent = () => {
   );
 };
 
-export default MyUserWithdrawalComponent;
+export default MyUserInfoDeleteComponent;

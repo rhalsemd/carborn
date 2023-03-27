@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from './../../../lib/api';
+import { API_URL } from "./../../../lib/api";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
@@ -7,17 +7,17 @@ export interface BuySellContentPaginationProps {
   itemsPerPage: number;
 }
 
-export interface Car {
-  model:string,
-  manufacturer:string,
-  mileage:number,
-  number:string,
-  year:number,
-  price:number,
-  reserveDate:string,
-  purchaseDate:string,
-  status:string,
-  seller:string
+export interface BuyContentType {
+  carModel: string;
+  manufacturer: string;
+  plateNumber: string;
+  year: number;
+  mileage: number;
+  purchasePrice: number;
+  reservationDate: string;
+  purchaseDate: string;
+  purchaseStatus: string;
+  seller: string;
 }
 
 const StyleBuyContentPaginationDiv = styled.div`
@@ -33,7 +33,7 @@ const BuyContentPagination = ({
   itemsPerPage,
 }: BuySellContentPaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [buyData, setBuyData] = useState<Car[]>([]);
+  const [buyData, setBuyData] = useState<BuyContentType[]>([]);
   const totalPages = Math.ceil(buyData.length / itemsPerPage);
 
   const handleRequestBuyData = async (page: number, count: number) => {
@@ -49,7 +49,7 @@ const BuyContentPagination = ({
 
   useEffect(() => {
     handleRequestBuyData(currentPage, itemsPerPage);
-    console.log()
+    console.log();
   }, []);
 
   // 페이지 네이션 유효성 검사
@@ -72,7 +72,6 @@ const BuyContentPagination = ({
             <th>{`연식(년)`}</th>
             <th>{`주행거리(km)`}</th>
             <th>{`구매가(만원)`}</th>
-            <th>상태</th>
             <th>구매 예약 신청일</th>
             <th>구매 완료일</th>
             <th>구매상태</th>
@@ -80,18 +79,18 @@ const BuyContentPagination = ({
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((car: Car, index: number) => (
+          {currentItems.map((buy: BuyContentType, index: number) => (
             <tr key={index}>
-              <td>{car.model}</td>
-              <td>{car.manufacturer}</td>
-              <td>{car.mileage}</td>
-              <td>{car.number}</td>
-              <td>{car.year}</td>
-              <td>{car.price}</td>
-              <td>{car.reserveDate === null ? '-' : car.reserveDate}</td>
-              <td>{car.purchaseDate === null ? '-' : car.purchaseDate}</td>
-              <td>{car.status}</td>
-              <td>{car.seller}</td>
+              <td>{buy.carModel}</td>
+              <td>{buy.manufacturer}</td>
+              <td>{buy.plateNumber}</td>
+              <td>{buy.year}</td>
+              <td>{buy.mileage}</td>
+              <td>{buy.purchasePrice}</td>
+              <td>{buy.reservationDate === null ? "-" : buy.reservationDate}</td>
+              <td>{buy.purchaseDate === null ? "-" : buy.purchaseDate}</td>
+              <td>{buy.purchaseStatus}</td>
+              <td>{buy.seller}</td>
             </tr>
           ))}
         </tbody>
