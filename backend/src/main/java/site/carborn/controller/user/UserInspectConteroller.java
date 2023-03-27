@@ -84,7 +84,7 @@ public class UserInspectConteroller {
     }
 
     @GetMapping("/result/{inspectResultId}")
-    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @Operation(description = "사용자의 정비 완료 단일 조회")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
     public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectResultId") int inspectResultId){
         InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectResultId);
