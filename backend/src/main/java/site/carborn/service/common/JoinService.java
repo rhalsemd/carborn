@@ -1,6 +1,7 @@
 package site.carborn.service.common;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,8 +11,16 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.account.Company;
 import site.carborn.entity.account.User;
 import site.carborn.entity.common.SmsAuth;
+import site.carborn.entity.company.Inspector;
+import site.carborn.entity.company.InsuranceCompany;
+import site.carborn.entity.company.RepairShop;
 import site.carborn.repository.account.AccountRepository;
+import site.carborn.repository.account.CompanyRepository;
+import site.carborn.repository.account.UserRepository;
 import site.carborn.repository.common.SmsAuthRepository;
+import site.carborn.repository.company.InspectorRepository;
+import site.carborn.repository.company.InsuranceCompanyRepository;
+import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.util.common.AuthUtils;
 
 import java.util.regex.Pattern;
@@ -19,12 +28,18 @@ import java.util.regex.Pattern;
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class JoinService {
-    @Autowired AccountRepository accountRepository;
-    @Autowired SmsAuthRepository smsAuthRepository;
-    @Autowired PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
+    private final RepairShopRepository repairShopRepository;
+    private final InspectorRepository inspectorRepository;
+    private final InsuranceCompanyRepository insuranceCompanyRepository;
+    private final SmsAuthRepository smsAuthRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public void join(AccountRequestDTO dto) {
+    public void join(AccountRequestDTO dto, double lat, double lng) {
         Account account = Account.copy(dto);
         String id = account.getId();
         String pwd = account.getPwd();
@@ -53,9 +68,7 @@ public class JoinService {
         switch(account.getAuth()) {
             case AuthUtils.AUTH_USER:
                 User user = new User();
-                user.setAccount(account);
                 user.setBirth(dto.getBirth());
-
                 joinUser(account, user);
                 break;
 
@@ -63,25 +76,45 @@ public class JoinService {
             case AuthUtils.AUTH_INSPECTOR:
             case AuthUtils.AUTH_INSURANCE:
                 Company company = new Company();
-                company.setAccount(account);
-                company.setBrn(dto.getBRN());
-
-                joinCompany(account, company, dto);
+                company.setBrn(dto.getBrn());
+                joinCompany(account, company, dto, lat, lng);
                 break;
         }
     }
 
     private void joinUser(Account account, User user) {
-
-
-
+        accountRepository.save(account);
+        user.setAccount(account);
+        userRepository.save(user);
     }
 
-    private void joinCompany(Account account, Company company, AccountRequestDTO dto) {
+    private void joinCompany(Account account, Company company, AccountRequestDTO dto, double lat, double lng) {
+        accountRepository.save(account);
+        company.setAccount(account);
+        companyRepository.save(company);
 
-
-
-
+        switch (account.getAuth()) {
+            case AuthUtils.AUTH_REPAIR_SHOP -> {
+                RepairShop repairShop = new RepairShop();
+                repairShop.setAccount(account);
+                repairShop.setAddress(dto.getAddress());
+                repairShop.setLat(lat);
+                repairShop.setLng(lng);
+                repairShopRepository.save(repairShop);
+            }
+            case AuthUtils.AUTH_INSPECTOR -> {
+                Inspector inspector = new Inspector();
+                inspector.setAccount(account);
+                inspector.setAddress(dto.getAddress());
+                inspector.setLat(lat);
+                inspector.setLng(lng);
+                inspectorRepository.save(inspector);
+            }
+            case AuthUtils.AUTH_INSURANCE -> {
+                InsuranceCompany insuranceCompany = new InsuranceCompany();
+                insuranceCompanyRepository.save(insuranceCompany);
+            }
+        }
     }
 
     private void checkAccountIdFormat(String id) {

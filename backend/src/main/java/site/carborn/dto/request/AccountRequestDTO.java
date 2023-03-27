@@ -12,5 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AccountRequestDTO extends Account {
     private LocalDate birth;
-    private String BRN;
+    private String brn;
+    private String address;
 }
