@@ -29,6 +29,7 @@ import { API_URL, ContentType } from "../../lib/api";
 import Nav from "../../components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { SetIsSignupAction } from "../../modules/signUpModule";
+import { userSignUpSendAction, companySignUpSendAction } from './../../modules/signUpModule';
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -85,6 +86,7 @@ const SignupPages: React.FC = () => {
   const [signupUserFormData, setSignupUserFormData] = useState<SignupFormData>(
     initialSignupFormData
   );
+  
   const [signupCompanyFormData, setSignupCompanyFormData] =
     useState<SignupFormData>(initialSignupFormData);
 
@@ -98,64 +100,60 @@ const SignupPages: React.FC = () => {
     }
   };
 
+  // formData 만들어 놓기
+  const formData = new FormData();
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
-    // 일반 정보들을 여기에 담는다 (일단 유저인 경우)
-    const formData = new FormData();
+    ) => {
+      e.preventDefault();
+      
+      // 일반 정보들을 여기에 담는다 (일단 유저인 경우)
     if (isUser) {
-      formData.append("accountType", JSON.stringify(String(signupUserFormData.accountType)));
-      formData.append("name", JSON.stringify(signupUserFormData.name));
-      formData.append("id", JSON.stringify(signupUserFormData.userid));
-      formData.append("password", JSON.stringify(signupUserFormData.password));
+      formData.append("accountType", String(signupUserFormData.accountType));
+      formData.append("name", (signupUserFormData.name));
+      formData.append("id", (signupUserFormData.userid));
+      formData.append("password", (signupUserFormData.password));
       formData.append(
         "passwordcheck",
-        JSON.stringify(String(signupUserFormData.passwordcheck))
+        (String(signupUserFormData.passwordcheck))
       );
-      formData.append("identifynumber", JSON.stringify(signupUserFormData.identifynumber));
-      formData.append("address", JSON.stringify(signupUserFormData.address));
-      formData.append("isVarify", JSON.stringify(String(signupUserFormData.isVarify)));
+      formData.append("identifynumber", (signupUserFormData.identifynumber));
+      formData.append("address", (signupUserFormData.address));
+      formData.append("isVarify", (String(signupUserFormData.isVarify)));
     } else {
-      formData.append("accountType", JSON.stringify(String(signupCompanyFormData.accountType)));
-      formData.append("name", JSON.stringify(signupCompanyFormData.name));
-      formData.append("id", JSON.stringify(signupCompanyFormData.userid));
-      formData.append("password", JSON.stringify(signupCompanyFormData.password));
+      formData.append("accountType", (String(signupCompanyFormData.accountType)));
+      formData.append("name", (signupCompanyFormData.name));
+      formData.append("id", (signupCompanyFormData.userid));
+      formData.append("password", (signupCompanyFormData.password));
       formData.append(
         "passwordcheck",
         JSON.stringify(String(signupCompanyFormData.passwordcheck))
       );
-      formData.append("identifynumber", JSON.stringify(signupCompanyFormData.identifynumber));
-      formData.append("address", JSON.stringify(signupCompanyFormData.address));
-      formData.append("isVarify", JSON.stringify(String(signupCompanyFormData.isVarify)));
-      formData.append("images", JSON.stringify(selectedFiles))
+      formData.append("identifynumber", (signupCompanyFormData.identifynumber));
+      formData.append("address", (signupCompanyFormData.address));
+      formData.append("isVarify", (String(signupCompanyFormData.isVarify)));
+      formData.append("images", selectedFiles[0])
     }
 
     // // formdata 확인하는 방법
     // for (const pair of formData.entries()) {
     //   console.log(pair[0]+ ', ' + pair[1]);
     // }
-
-    const multipart_formData = "multipart/form-data";
-
-    // 액션 작업해야할듯
-    // 그리고 액션 끝나고 나면, 다시 버튼 회색으로 바꾸기
-    try {
-      const response = await axios({
-        method: "POST",
-        url: `${API_URL}/signup`,
-        headers: {
-          [ContentType]: multipart_formData,
-        },
-        data: formData,
-      });
-
-      return response.data;
-    } catch (error) {
-      console.error(error); // 오류 처리
-    }
   };
+
+  useEffect(() => {
+    if (isUser) {
+      dispatch(userSignUpSendAction(formData));
+    } else {
+      dispatch(companySignUpSendAction(formData));
+    }
+    
+    // formData 초기화
+    for (const key of formData.keys()) {
+      formData.delete(key);
+    }
+  }, [dispatch, formData, isUser])
 
   // 회원가입 버튼 색깔 바꾸기 기능
   const SignUpisValid = useSelector((state: any) => state.SignUpReducer.success);

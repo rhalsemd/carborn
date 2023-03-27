@@ -1,9 +1,86 @@
 import axios from "axios";
 
+// export const API_URL = "https://carborn.site";
+export const CARBORN_SITE = "https://carborn.site";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
 export const Authorization = 'Authorization';
+export const multipart_formData = "multipart/form-data";
+
+// 로그인
+export const LoginApi = async (payload: Object): Promise<any> => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `http://localhost:3001/users`,
+      headers: {
+        [ContentType]: applicationjson,
+      },
+      data: payload,
+    });
+
+    console.log(response)
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 로그아웃
+export const LogoutApi = async (): Promise<any> => {
+  const ObjString: string | null = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
+
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${API_URL}/logout`,
+      headers: {
+        [Authorization]: `Bearer ${Obj.value}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 유저 회원가입 요청
+export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
+
+  try {
+    const response = await fetch(`${API_URL}/user/signup`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        [ContentType]: multipart_formData,
+      }
+    })
+
+    return response.body;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// 기업 회원가입 요청
+export const companySignUpSendApi = async (formData:FormData): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}/company/signup`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        [ContentType]: multipart_formData,
+      }
+    })
+
+    return response.body;
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // 아이디 중복체크
 export const UserIdCheckApi = async (id: string): Promise<any> => {
@@ -48,37 +125,7 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
   }
 };
 
-// 로그인
-export const LoginApi = async (payload: Object): Promise<any> => {
-  try {
-    const response = await axios({
-      method: "POST",
-      url: `${API_URL}/users`,
-      headers: {
-        [ContentType]: applicationjson,
-        // 로그인을 해야만 이용가능한 서비스관련 axios에 모두 들어가야함.
-        // Authorization: `Bearer ${요기에는 토큰 해쉬값이 들어가야함}`,
-      },
-      data: payload,
-    });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-// 로그아웃
-export const LogoutApi = async (): Promise<any> => {
-  try {
-    const response = await axios({
-      method: "POST",
-      url: `${API_URL}/logout`,
-    });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 type PayloadType = {
   userid: string;
