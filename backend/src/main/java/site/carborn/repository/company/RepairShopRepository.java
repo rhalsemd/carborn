@@ -16,7 +16,7 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     RepairShopGetIdMapping findByAccount_Id(String accountId);
 
     @Query(value = """
-    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.PHONE_NO, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
+    SELECT res.ID, res.NAME, res.AUTH, res.PHONE_NO,res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
     FROM
     	(SELECT idname.ID, idname.NAME, idname.AUTH, idname.PHONE_NO, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
     	FROM\s
@@ -46,7 +46,7 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     UNION
     SELECT res.ID, res.NAME, res.AUTH, res.PHONE_NO,res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
     FROM
-    	(SELECT idname.ID, idname.NAME, idname.AUTH, idname.PHONE_NO,addr.ADDRESS,addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
+    	(SELECT idname.ID, idname.NAME, idname.AUTH, idname.PHONE_NO, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
     	FROM\s
     		(SELECT mi.ID,ma.NAME, ma.AUTH, ma.PHONE_NO
     		FROM S08P22D209.MWS_INSPECTOR mi
