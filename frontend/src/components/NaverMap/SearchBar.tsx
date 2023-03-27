@@ -1,9 +1,10 @@
 interface SearchBarType {
   index: number;
+  item: any;
   searchBarItemClick: (index: number) => void;
 }
 
-function SearchBar({ index, searchBarItemClick }: SearchBarType) {
+function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
   return (
     <div
       style={{
@@ -20,7 +21,7 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
           fontWeight: "bolder",
         }}
       >
-        정비소
+        {item.NAME}
       </p>
       <p
         style={{
@@ -29,9 +30,12 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
           fontWeight: "bolder",
         }}
       >
-        3.9
-        <span>★★★★☆</span>
-        <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}> 리뷰 15</span>
+        {item.avg_point}
+        <span>★</span>
+        <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
+          {" "}
+          리뷰 ${item.cntReview}
+        </span>
       </p>
       <p
         style={{
@@ -40,7 +44,7 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
           fontSize: "0.9rem",
         }}
       >
-        경북 구미시 구미중앙로 76
+        {item.ADDRESS}
       </p>
       <p
         style={{
@@ -59,7 +63,7 @@ function SearchBar({ index, searchBarItemClick }: SearchBarType) {
           fontWeight: "bold",
         }}
       >
-        1234-5678
+        {item.PHONE_NO}
       </p>
       <div
         style={{

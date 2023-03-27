@@ -39,29 +39,6 @@ const searchResult = css`
   }
 `;
 
-const 좌표 = [
-  {
-    lat: 37.565525,
-    lng: 126.976915,
-  },
-  {
-    lat: 37.563551,
-    lng: 126.976926,
-  },
-  {
-    lat: 37.565636,
-    lng: 126.977328,
-  },
-  {
-    lat: 37.565364,
-    lng: 126.977339,
-  },
-  {
-    lat: 37.565564,
-    lng: 126.977339,
-  },
-];
-
 // 현재 지도에 마커 정보가 없을 때 나타나는 컴포넌트
 const NoContentComponent = () => {
   return (
@@ -97,6 +74,7 @@ function NaverMap() {
   const [mapObject, setMapObject] = useState<any>(null);
   const [reserve, setReserve] = useState<boolean>(false);
   const [markerNum, setMarkerNum] = useState<number>(-1);
+  const [markerArr, setMarkerArr] = useState<any[]>([]);
 
   const getUserCarInfo = useAPI("get", API_USER_INFO);
 
@@ -137,7 +115,7 @@ function NaverMap() {
    */
   const drawingMap = (lat: number, lng: number, markerInfo: any) => {
     const center = new naver.maps.LatLng(lat, lng);
-    console.log(markerInfo);
+
     // 네이버 맵 생성
     const mapDiv = mapRef.current;
     const map = new naver.maps.Map(mapDiv, {
@@ -159,6 +137,8 @@ function NaverMap() {
    * 마커 생성 함수
    */
   const setMarker = (map: any, markerInfo: any) => {
+    setMarkerArr(markerInfo);
+
     markerInfo.forEach((key: any) => {
       var position = new naver.maps.LatLng(key.LAT, key.LNG);
       var marker = new naver.maps.Marker({
@@ -228,9 +208,6 @@ function NaverMap() {
           hideMarker(map, marker);
           infoWindow.close();
           setReserve(false);
-          // setMarkerNum(-1);
-
-          console.log(i, markerNum, "여기");
         }
 
         if (marker.map) {
@@ -316,11 +293,12 @@ function NaverMap() {
                   markerNum={markerNum}
                 />
               ) : (
-                searchMarkers.map((item, index) => {
+                markerArr.map((item, index) => {
                   return (
                     <SearchBar
-                      key={index}
+                      key={item.ADDRESS + item.PHONE_NO + item.NAME}
                       index={index}
+                      item={item}
                       searchBarItemClick={searchBarItemClick}
                     />
                   );
