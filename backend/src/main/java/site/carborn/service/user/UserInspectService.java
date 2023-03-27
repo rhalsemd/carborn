@@ -157,8 +157,14 @@ public class UserInspectService {
         return inspectResultList;
     }
 
-    public InspectResultGetDetailMapping inspectResultDetail(int inspectResultId){
-        InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectResultId);
+    public InspectResultGetDetailMapping inspectResultDetail(int inspectBookId){
+        int bookStatus = inspectBookRepository.findById(inspectBookId).get().getBookStatus();
+        if (bookStatus == 0){
+            throw new RuntimeException("검사가 완료되지 않았습니다");
+        } else if (bookStatus == 2) {
+            throw new RuntimeException("취소된 예약입니다");
+        }
+        InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectBookId);
         if (result == null){
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }

@@ -85,11 +85,11 @@ public class UserInspectConteroller {
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
-    @GetMapping("/result/{inspectResultId}")
+    @GetMapping("/result/{inspectBookId}")
     @Operation(description = "사용자의 검수 완료 단일 조회")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
-    public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectResultId") int inspectResultId){
-        InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectResultId);
+    public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectBookId") int inspectBookId){
+        InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectBookId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
