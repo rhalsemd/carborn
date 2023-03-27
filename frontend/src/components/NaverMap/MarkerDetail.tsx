@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import MarkerDetailInfo from "./MarkerDetailInfo";
 import MarkerDetailReview from "./MarkerDetailReview";
+import { useAPI } from "./../../hooks/useAPI";
+import { useQuery } from "react-query";
 
 const roadView = css`
   width: 100%;
@@ -69,6 +71,18 @@ function MarkerDetail({
   const roadViewRef = useRef<HTMLDivElement | null>(null);
   const [reviewBtn, setReviewBtn] = useState<boolean>(false);
 
+  const REVIEW_API = `https://carborn.site/api/user/map/review/${
+    markerArr[markerNum].ID
+  }/${markerArr[markerNum].AUTH}/${1}/${5}`;
+  const getReviewAPI = useAPI("get", REVIEW_API);
+
+  const { data } = useQuery("get_review", () => getReviewAPI, {
+    retry: false,
+    select: (data) => {
+      return data.data.message.content;
+    },
+  });
+
   // 파노라마 옵션
   var panoramaOptions = {
     position: new naver.maps.LatLng(
@@ -122,7 +136,9 @@ function MarkerDetail({
       {!reviewBtn ? (
         <MarkerDetailInfo markerNum={markerNum} markerArr={markerArr} />
       ) : (
-        <MarkerDetailReview />
+        data.map((data: any) => {
+          return <MarkerDetailReview data={data} />;
+        })
       )}
     </div>
   );
