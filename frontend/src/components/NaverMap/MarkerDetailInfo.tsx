@@ -1,4 +1,24 @@
-function MarkerDetailInfo() {
+interface Props {
+  markerNum: number;
+  markerArr: any[];
+}
+
+function MarkerDetailInfo({ markerNum, markerArr }: Props) {
+  let star: string = "";
+  if (markerArr[markerNum].avg_point >= 4.5) {
+    star = "★★★★★";
+  } else if (markerArr[markerNum].avg_point >= 3.5) {
+    star = "★★★★☆";
+  } else if (markerArr[markerNum].avg_point >= 2.5) {
+    star = "★★★☆☆";
+  } else if (markerArr[markerNum].avg_point >= 1.5) {
+    star = "★★☆☆☆";
+  } else if (markerArr[markerNum].avg_point >= 0.5) {
+    star = "★☆☆☆☆";
+  } else {
+    star = "☆☆☆☆☆";
+  }
+
   return (
     <>
       <p
@@ -8,7 +28,7 @@ function MarkerDetailInfo() {
           fontWeight: "bolder",
         }}
       >
-        정비소
+        {markerArr[markerNum].NAME}
       </p>
       <p
         style={{
@@ -17,9 +37,12 @@ function MarkerDetailInfo() {
           fontWeight: "bolder",
         }}
       >
-        3.9
-        <span>★★★★☆</span>
-        <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}> 리뷰 15</span>
+        {markerArr[markerNum].avg_point}
+        <span>{star}</span>
+        <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
+          {" "}
+          리뷰 {markerArr[markerNum].cntReview}
+        </span>
       </p>
       <p
         style={{
@@ -28,7 +51,7 @@ function MarkerDetailInfo() {
           fontSize: "0.9rem",
         }}
       >
-        경북 구미시 구미중앙로 76
+        {markerArr[markerNum].ADDRESS}
       </p>
       <p
         style={{
@@ -47,7 +70,7 @@ function MarkerDetailInfo() {
           fontWeight: "bold",
         }}
       >
-        1234-5678
+        {markerArr[markerNum].PHONE_NO}
       </p>
     </>
   );

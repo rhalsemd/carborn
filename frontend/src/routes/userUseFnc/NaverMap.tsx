@@ -299,6 +299,7 @@ function NaverMap() {
                   setReserve={setReserve}
                   setMarkerNum={setMarkerNum}
                   markerNum={markerNum}
+                  markerArr={markerArr}
                 />
               ) : (
                 markerArr.map((item, index) => {

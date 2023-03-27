@@ -50,22 +50,12 @@ const toggleBtn = ({ reviewBtn }: { reviewBtn: boolean }) => css`
 
 const naver = window.naver;
 
-// 파노라마 옵션
-var panoramaOptions = {
-  position: new naver.maps.LatLng(37.565525, 126.976915),
-  // size: new naver.maps.Size(310, 350),
-  pov: {
-    pan: -75,
-    tilt: 10,
-    fov: 100,
-  },
-};
-
 interface Props {
   setReserve: React.Dispatch<React.SetStateAction<boolean>>;
   setMarkerNum: React.Dispatch<React.SetStateAction<number>>;
   searchInfoWindows: any;
   markerNum: number;
+  markerArr: any;
 }
 
 function MarkerDetail({
@@ -73,11 +63,25 @@ function MarkerDetail({
   setMarkerNum,
   searchInfoWindows,
   markerNum,
+  markerArr,
 }: Props) {
   // 파노라마 생성 태그
   const roadViewRef = useRef<HTMLDivElement | null>(null);
   const [reviewBtn, setReviewBtn] = useState<boolean>(false);
 
+  // 파노라마 옵션
+  var panoramaOptions = {
+    position: new naver.maps.LatLng(
+      markerArr[markerNum].LAT,
+      markerArr[markerNum].LNG
+    ),
+    // size: new naver.maps.Size(310, 350),
+    pov: {
+      pan: -75,
+      tilt: 10,
+      fov: 100,
+    },
+  };
   useEffect(() => {
     // 파노라마 생성
     if (roadViewRef.current) {
@@ -115,7 +119,11 @@ function MarkerDetail({
         <li onClick={watchInfo}>업체정보</li>
         <li onClick={watchReview}>사용자 리뷰</li>
       </ul>
-      {!reviewBtn ? <MarkerDetailInfo /> : <MarkerDetailReview />}
+      {!reviewBtn ? (
+        <MarkerDetailInfo markerNum={markerNum} markerArr={markerArr} />
+      ) : (
+        <MarkerDetailReview />
+      )}
     </div>
   );
 }
