@@ -8,6 +8,7 @@ import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.user.InspectBook;
+import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.repository.account.AccountRepository;
@@ -120,18 +121,11 @@ public class UserInspectService {
         }
         InspectBook update = inspectBookRepository.findById(inspectBookId).orElseThrow(()->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-
+//
         if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())){
             throw new RuntimeException("권한이 없습니다??");
         }
 
-        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(()->
-                new RuntimeException("존재하지 않는 검수원입니다"));
-
-        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(()->
-                new RuntimeException("등록되지 않은 차입니다"));
-
-        update.setCar(inspectBook.getCar());
         update.setContent(inspectBook.getContent());
         update.setBookDt(inspectBook.getBookDt());
         update.setUptDt(LocalDateTime.now());
@@ -176,28 +170,30 @@ public class UserInspectService {
         return result;
     }
 
-    public InspectorReview createInspectReview(InspectorReview inspectorReview){
-//        InspectorReview form = inspectorReviewRepository.findById(inspectResultId).orElseThrow(()->
-//                new RuntimeException("수리결과가 없습니다"));
-//
-//        if (inspectorReview.getAccount().getId().isBlank()) {
-//            throw new RuntimeException("세션이 만료되었습니다");
-//        }
-//        Account account = accountRepository.findById(inspectorReview.getAccount().getId());
-//        if (account == null){
-//            throw new RuntimeException("존재하지 않는 아이디입니다");
-//        }
-//
-//        Inspector inspector = inspectorRepository.findById(inspectorReview.getInspector().getId()).orElseThrow(()->
-//                new RuntimeException("존재하지 않는 검수원입니다"));
-//        inspectorReview.setInspectResult(form.getInspectResult());
-//        inspectorReview.setInspector(form.getInspector());
+    public int createInspectReview(int inspectResultId,InspectorReview inspectorReview){
+        InspectResult result = inspectResultRepository.findById(inspectResultId).orElseThrow(()->
+                new RuntimeException("수리결과가 없습니다"));
+
+        if (inspectorReview.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+        Account account = accountRepository.findById(inspectorReview.getAccount().getId());
+        if (account == null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+        if (!account.getId().equals(inspectorReview.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다");
+        }
+
+        inspectorReview.setInspectResult(result);
+        inspectorReview.setInspector(result.getInspectBook().getInspector());
+        inspectorReview.setAccount(result.getInspectBook().getAccount());
+
         inspectorReview.setRegDt(LocalDateTime.now());
         inspectorReview.setUptDt(LocalDateTime.now());
         inspectorReview.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
-////
+
         InspectorReview save = inspectorReviewRepository.save(inspectorReview);
-//        return save.getId();
-        return save;
+        return save.getId();
     }
 }

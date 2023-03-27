@@ -96,21 +96,20 @@ public class UserInspectConteroller {
 
 
     //리뷰
-    @PostMapping("/result/review")
-    @Operation(description = "사용자의 검수완료 리뷰 작성")
-    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
-    public ResponseEntity<?> getInspectReviewList(@RequestBody InspectorReview inspectorReview){
-        InspectorReview result = userInspectService.createInspectReview(inspectorReview);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
-
-    }
-
     @GetMapping("/result/review/{inspectResultId}")
     @Operation(description = "사용자의 검수완료 리뷰 조회")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
     public ResponseEntity<?> getInspectReviewDetail(@PathVariable int inspectResultId){
         InspectorReviewMapping detail = userInspectService.getInspectReviewDetail(inspectResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
+    }
 
+    @PostMapping("/result/review/{inspectResultId}")
+    @Operation(description = "사용자의 검수완료 리뷰 작성")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectReviewList(@PathVariable int inspectResultId,
+                                                  @RequestBody InspectorReview inspectorReview){
+        int result = userInspectService.createInspectReview(inspectResultId,inspectorReview);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 }
