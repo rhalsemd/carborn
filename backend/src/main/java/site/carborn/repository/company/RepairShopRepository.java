@@ -73,4 +73,6 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     ON res.ID = ures.INSPECTOR_ID
     """,nativeQuery = true)
     List<Map<String,String>> getMapData(@Param("inputLat") double inputLat,@Param("inputLng") double inputLng);
+
+    Long countBy();
 }
