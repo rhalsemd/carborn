@@ -13,9 +13,9 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("SELECT a FROM Account a WHERE a.id = :id")
     Account findById(@Param("id") String accountId);
 
-    @Query("SELECT a FROM Account a WHERE a.phoneNo like :phoneNo and u.name like :name")
+    @Query(value = "SELECT a FROM Account a WHERE a.phoneNo like :phoneNo and u.name like :name", nativeQuery = true)
     Optional<Account> findByPhoneNoAndName(@Param("phoneNo") String phoneNo, @Param("name") String name);
 
-    @Query("SELECT a FROM Account a WHERE a.id like :id and a.phoneNo like :phoneNo and u.name like :name")
+    @Query(value = "SELECT a FROM Account a WHERE a.id like :id and a.phoneNo like :phoneNo and u.name like :name", nativeQuery = true)
     Optional<Account> findByIdAndPhoneNoAndName(@Param("id") String id, @Param("phoneNo") String phoneNo, @Param("name") String name);
 }
