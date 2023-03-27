@@ -34,7 +34,7 @@ public class UserHomeService {
         return inspectorRepository.countBy();
     }
 
-    public Long getCarSaleCount(){
-        return carSaleRepository.countBy();
+    public Long getCarSaleCount(int saleStatus){
+        return carSaleRepository.countBySaleStatus(saleStatus);
     }
 }

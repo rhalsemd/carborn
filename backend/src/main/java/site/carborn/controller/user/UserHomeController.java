@@ -43,6 +43,6 @@ public class UserHomeController {
     @GetMapping("/car-trade/count")
     @Operation(description = "누적 차량 거래 수")
     public ResponseEntity<?> getCarSaleCount(){
-        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getCarSaleCount());
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getCarSaleCount(1));
     }
 }
