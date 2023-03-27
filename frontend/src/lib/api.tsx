@@ -2,7 +2,8 @@ import axios from "axios";
 
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
-const applicationjson = "application/json";
+export const applicationjson = "application/json";
+export const Authorization = 'Authorization';
 
 // 아이디 중복체크
 export const UserIdCheckApi = async (id: string): Promise<any> => {
@@ -206,8 +207,8 @@ export const GetAgreementApi = async (): Promise<any> => {
   }
 };
 
-// 정비 및 검수 리뷰 작성
-export const createReviewApi = async (data:any): Promise<any> => {
+// 검수 리뷰 작성
+export const createInspectorReviewApi = async (data:any): Promise<any> => {
   const ObjString:any = localStorage.getItem('login-token')
   const Obj = JSON.parse(ObjString);
   let userid = Obj.userId
@@ -222,7 +223,7 @@ export const createReviewApi = async (data:any): Promise<any> => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${API_URL}/reviewrite`,
+      url: `${API_URL}/inspectorreviewwrite`,
       data: reviewObj,
     });
 
@@ -232,18 +233,59 @@ export const createReviewApi = async (data:any): Promise<any> => {
   }
 }
 
+// 정비 리뷰 작성
+export const createRepairReviewApi = async (data:any): Promise<any> => {
+  const ObjString:any = localStorage.getItem('login-token')
+  const Obj = JSON.parse(ObjString);
+  let userid = Obj.userId
 
+  let reviewObj = {
+    reviewInput:data.reviewInput,
+    userId:userid,
+    carId:parseInt(data.carId),
+    rating:data.rating
+  }
 
-// 회원 탈퇴
-export const DeleteUserApi = async () => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${API_URL}/repairreviewwrite`,
+      data: reviewObj,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// 사용자 회원 탈퇴
+export const userinfoDeleteApi = async (userId:string) => {
   try {
     const response = await axios({
       method: "DELETE",
-      url: `${API_URL}/users`,
+      // url: `${API_URL}/users/${userid}`,
+      url: `${API_URL}/userdelete/${userId}`,
     });
     return response.data;
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+};
+
+// 기업 회원 탈퇴
+export const companyinfoDeleteApi = async (userId:string) => {
+  try {
+    const response = await axios({
+      method: "DELETE",
+      // url: `${API_URL}/users/${userid}`,
+      url: `${API_URL}/companydelete/${userId}`,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };
 
@@ -266,5 +308,57 @@ export const getReviewedCheckingApi = async (payload:any) => {
     return payload
   } catch (error) {
     console.log(error)
+  }
+}
+
+// 마이페이지에서 유저 비밀번호 바꾸기
+export const userModifyPasswordApi = async (payload:any) => {
+  const {oldPassword, newPassword} = payload
+  const ObjString = localStorage.getItem('login-token');
+  const Obj = ObjString ? JSON.parse(ObjString) : null
+
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${API_URL}/mypage/${Obj.userId}`,
+      data: {
+        oldPassword,
+        newPassword
+      },
+      headers: {
+        [ContentType]: applicationjson,
+        [Authorization] : `Bearer ${Obj.value}`
+      }
+    })
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// 마이페이지에서 기업 비밀번호 바꾸기
+export const companyModifyPasswordApi = async (payload:any) => {
+  const {oldPassword, newPassword} = payload
+  const ObjString = localStorage.getItem('login-token');
+  const Obj = ObjString ? JSON.parse(ObjString) : null
+
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${API_URL}/mypage/${Obj.userId}`,
+      data: {
+        oldPassword,
+        newPassword
+      },
+      headers: {
+        [ContentType]: applicationjson,
+        [Authorization] : `Bearer ${Obj.value}`
+      }
+    })
+
+    return response.data
+  } catch (error) {
+    console.error(error)
   }
 }

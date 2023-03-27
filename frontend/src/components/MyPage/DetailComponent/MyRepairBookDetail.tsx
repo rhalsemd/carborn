@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL } from "./../../../lib/api";
-import Nav from "./../../Nav";
+import { API_URL } from "../../../lib/api";
+import Nav from "../../Nav";
 
 const StyleMyInspectorBookDetailContainer = styled.div`
   width: 100vw;
@@ -47,68 +47,61 @@ export interface bookDetailType {
   reservationDate: number;
 }
 
-const MyInspectorBookDetail = () => {
+const MyRepairBookDetail = () => {
   const itemsPerPage = 5;
+  // 정비
+  const [repairBookData, setRapairBookData] = useState<any[]>([]);
+  const [currentRepairPage, setCurrentRepairPage] = useState(1);
+  const [isRepairBookChange, setIsRepairBookChange] = useState<boolean>(false);
+  const [isRepairBookDelete, setIsRepairBookDelete] = useState<boolean>(false);
+  const [isRepairBookid, setIsRepairBookid] = useState<string | number>(0);
+  const totalRepairPages = Math.ceil(repairBookData.length / itemsPerPage);
 
-  // 검수
-  const [inspectorBookData, setInspectorBookData] = useState<any[]>([]);
-  const [currentInspectorPage, setCurrentInspectorPage] = useState(1);
-  const [isInspectorBookChange, setIsInspectorBookChange] =
-    useState<boolean>(false);
-  const [isInspectorBookDelete, setIsInspectorBookDelete] =
-    useState<boolean>(false);
-  const [isInspectorBookid, setIsInspectorBookid] = useState<string | number>(
-    0
-  );
-  const totalInspectorPages = Math.ceil(
-    inspectorBookData.length / itemsPerPage
-  );
-
-  // 검수
-  const handleInspectorPaging = async (page: number, count: number) => {
+  // 정비
+  const handleRepairPaging = async (page: number, count: number) => {
     try {
-      const response = await axios.get(`${API_URL}/myinspectorbook`);
-      setInspectorBookData(response.data);
-      setCurrentInspectorPage(page);
+      const response = await axios.get(`${API_URL}/myrepairbook`);
+      setRapairBookData(response.data);
+      setCurrentRepairPage(page);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 페이지 네이션 유효성 검사(검수)
-  const startInspectorIndex = (currentInspectorPage - 1) * itemsPerPage;
-  const endInspectorIndex = startInspectorIndex + itemsPerPage;
-  const currentInspectorItems = inspectorBookData.slice(
-    startInspectorIndex,
-    endInspectorIndex
+  // 페이지 네이션 유효성 검사(정비)
+  const startRepairIndex = (currentRepairPage - 1) * itemsPerPage;
+  const endRepairIndex = startRepairIndex + itemsPerPage;
+  const currentRepairItems = repairBookData.slice(
+    startRepairIndex,
+    endRepairIndex
   );
 
   // 정비, 검수
   useEffect(() => {
-    handleInspectorPaging(currentInspectorPage, itemsPerPage);
-  }, [currentInspectorPage]);
+    handleRepairPaging(currentRepairPage, itemsPerPage);
+  }, [currentRepairPage]);
 
   // 데이터 없을때
-  if (inspectorBookData.length === 0) {
+  if (repairBookData.length === 0) {
     return <div>No data Found!</div>;
   }
 
-  // 예약 변경 모달 나오게하기(검수)
-  const handleInspectorBookChange = (id: number) => {
-    setIsInspectorBookChange(true);
-    setIsInspectorBookid(id);
+  // 예약 변경 모달 나오게하기(정비)
+  const handleRepairBookChange = (id: number) => {
+    setIsRepairBookChange(true);
+    setIsRepairBookid(id);
   };
-
-  // 예약 취소 모달 나오게 하기(검수)
-  const handleInspectorBookDelete = (id:number) => {
-    setIsInspectorBookDelete(true);
-    setIsInspectorBookid(id);
-  }
+  
+  // 예약 취소 모달 나오게 하기(정비)
+  const handleRepairBookDelete = (id:number) => {
+    setIsRepairBookDelete(true);
+    setIsRepairBookid(id);
+  };  
 
   // 모달창 닫을 때
   const handleCloseModal = () => {
-    setIsInspectorBookChange(false);
-    setIsInspectorBookDelete(false);
+    setIsRepairBookChange(false);
+    setIsRepairBookDelete(false);
   };
 
   // 예약 변경 로직 구현
@@ -128,7 +121,7 @@ const MyInspectorBookDetail = () => {
     <StyleMyInspectorBookDetailContainer>
       <Nav />
       <StyleMyBookDetailTitleDiv>
-        <span>검수 예약 리스트</span>
+        <span>정비 예약 리스트</span>
       </StyleMyBookDetailTitleDiv>
       <StyleMyBookDetailTable>
         <thead>
@@ -141,11 +134,10 @@ const MyInspectorBookDetail = () => {
             <th>차량가격</th>
             <th>예약신청일자</th>
             <th>예약변경신청</th>
-            <th>예약취소신청</th>
           </tr>
         </thead>
         <tbody>
-          {currentInspectorItems.map((data: bookDetailType, index: number) => (
+          {currentRepairItems.map((data: bookDetailType, index: number) => (
             <tr key={index}>
               <td>{data.model}</td>
               <td>{data.manufacturer}</td>
@@ -155,12 +147,12 @@ const MyInspectorBookDetail = () => {
               <td>{data.price}</td>
               <td>{data.reservationDate}</td>
               <td>
-                <button onClick={() => handleInspectorBookChange(data.id)}>
+                <button onClick={() => handleRepairBookChange(data.id)}>
                   변경하기
                 </button>
               </td>
               <td>
-                <button onClick={() => handleInspectorBookDelete(data.id)}>
+                <button onClick={() => handleRepairBookDelete(data.id)}>
                   취소하기
                 </button>
               </td>
@@ -170,55 +162,55 @@ const MyInspectorBookDetail = () => {
       </StyleMyBookDetailTable>
       <StyleMyBookDetailPaginationButton>
         <button
-          disabled={currentInspectorPage === 1}
+          disabled={currentRepairPage === 1}
           onClick={() =>
-            handleInspectorPaging(currentInspectorPage - 1, itemsPerPage)
+            handleRepairPaging(currentRepairPage - 1, itemsPerPage)
           }
         >
           Previous
         </button>
-        {Array.from({ length: totalInspectorPages }, (_, i) => {
-          if (i >= currentInspectorPage + 2 || i <= currentInspectorPage - 2)
+        {Array.from({ length: totalRepairPages }, (_, i) => {
+          if (i >= currentRepairPage + 2 || i <= currentRepairPage - 2)
             return null;
           return (
             <button
               key={i}
-              disabled={currentInspectorPage === i + 1}
-              onClick={() => handleInspectorPaging(i + 1, itemsPerPage)}
+              disabled={currentRepairPage === i + 1}
+              onClick={() => handleRepairPaging(i + 1, itemsPerPage)}
             >
               {i + 1}
             </button>
           );
         })}
         <button
-          disabled={currentInspectorPage === totalInspectorPages}
+          disabled={currentRepairPage === totalRepairPages}
           onClick={() =>
-            handleInspectorPaging(currentInspectorPage + 1, itemsPerPage)
+            handleRepairPaging(currentRepairPage + 1, itemsPerPage)
           }
         >
           Next
         </button>
       </StyleMyBookDetailPaginationButton>
-      {isInspectorBookChange && (
+      {isRepairBookChange && (
         <MyModalComponent
-          isModalOpen={isInspectorBookChange}
+          isModalOpen={isRepairBookChange}
           onClose={handleCloseModal}
-          id={isInspectorBookid}
+          id={isRepairBookid}
           onReservationChange={handleReservationChange}
         />
       )}
-      {isInspectorBookDelete && (
+      {isRepairBookDelete && (
         <WarningModal
-          message="검수예약을 취소하시겠습니까?"
+          message="정비예약을 취소하시겠습니까?"
           onClose={handleCloseModal}
-          id={isInspectorBookid}
+          id={isRepairBookid}
         />
       )}
     </StyleMyInspectorBookDetailContainer>
   );
 };
 
-export default MyInspectorBookDetail;
+export default MyRepairBookDetail;
 
 // 예약 일자 변경 모달
 

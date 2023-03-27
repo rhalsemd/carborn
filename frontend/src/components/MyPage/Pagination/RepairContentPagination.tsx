@@ -1,10 +1,11 @@
-import axios from "axios";
-import { API_URL } from "./../../../lib/api";
-import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+import { API_URL } from './../../../lib/api';
+import { useEffect } from 'react';
 
-export interface InspectorContentPaginationProps {
+export interface RepairContentPaginationProps {
   itemsPerPage: number;
 }
 
@@ -22,7 +23,7 @@ export interface Car {
   maintenanceCompany: string;
 }
 
-const StyleInspectorPaginationDiv = styled.div`
+const StyleRepairPaginationDiv = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -30,18 +31,16 @@ const StyleInspectorPaginationDiv = styled.div`
   align-items: center;
 `;
 
-const InspectorContentPagination = ({
-  itemsPerPage,
-}: InspectorContentPaginationProps) => {
+const RepairContentPagination = ({itemsPerPage} : RepairContentPaginationProps) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [inspectorData, setInspectorData] = useState<Car[]>([]);
-  const totalPages = Math.ceil(inspectorData.length / itemsPerPage);
-
-  const handleRequestInspectorData = async (page: number, count: number) => {
+  const [repairData, setRepairData] = useState<Car[]>([]);
+  const totalPages = Math.ceil(repairData.length / itemsPerPage);
+  
+  const handleRequestRepairData = async (page: number, count: number) => {
     try {
-      const response = await axios.get(`${API_URL}/inspector`);
-      setInspectorData(response.data);
+      const response = await axios.get(`${API_URL}/repair`);
+      setRepairData(response.data);
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
@@ -52,34 +51,34 @@ const InspectorContentPagination = ({
   const Obj = ObjString ? JSON.parse(ObjString) : null;
 
   useEffect(() => {
-    handleRequestInspectorData(currentPage, itemsPerPage);
+    handleRequestRepairData(currentPage, itemsPerPage);
   }, [currentPage]);
 
   // 페이지 네이션 유효성 검사
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = inspectorData.slice(startIndex, endIndex);
+  const currentItems = repairData.slice(startIndex, endIndex);
 
-  if (inspectorData.length === 0) {
+  if (repairData.length === 0) {
     return <div>No data Found!</div>;
   }
 
-  const getInspectorDetail = (carId: number) => {
+  const getRepairDetail = (carId: number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/inspector/${carId}/completedetail`, {
-        state: inspectorData[carId - 1],
-      });
+      navigate(`/${Obj.userId}/mypage/repair/${carId}/completedetail`, {
+        state: repairData[carId - 1] },
+      );
     }
   };
 
-  const getInspectorBookDetail = (carId: number) => {
+  const getRepairBookDetail = (carId:number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/inspector/${carId}/bookdetail`);
+      navigate(`/${Obj.userId}/mypage/repair/${carId}/bookdetail`)
     }
-  };
+  }
 
   return (
-    <StyleInspectorPaginationDiv>
+    <StyleRepairPaginationDiv>
       <table>
         <thead>
           <tr>
@@ -88,10 +87,10 @@ const InspectorContentPagination = ({
             <th>{`주행거리(km)`}</th>
             <th>차량번호</th>
             <th>{`연식(년)`}</th>
-            <th>검수예약신청일</th>
-            <th>검수완료일</th>
-            <th>검수상태</th>
-            <th>검수업체</th>
+            <th>정비예약신청일</th>
+            <th>정비완료일</th>
+            <th>정비상태</th>
+            <th>정비업체</th>
             <th>예약상세조회</th>
             <th>완료상세조회</th>
           </tr>
@@ -119,12 +118,14 @@ const InspectorContentPagination = ({
                 {car.maintenanceCompany === null ? "-" : car.maintenanceCompany}
               </td>
               <td>
-                <button onClick={() => getInspectorBookDetail(car.id)}>
+                <button onClick={() => getRepairBookDetail(car.id)}>
                   조회
                 </button>
               </td>
               <td>
-                <button onClick={() => getInspectorDetail(car.id)}>조회</button>
+                <button onClick={() => getRepairDetail(car.id)}>
+                  조회
+                </button>
               </td>
             </tr>
           ))}
@@ -133,9 +134,7 @@ const InspectorContentPagination = ({
       <div>
         <button
           disabled={currentPage === 1}
-          onClick={() =>
-            handleRequestInspectorData(currentPage - 1, itemsPerPage)
-          }
+          onClick={() => handleRequestRepairData(currentPage - 1, itemsPerPage)}
         >
           Previous
         </button>
@@ -145,7 +144,7 @@ const InspectorContentPagination = ({
             <button
               key={i}
               disabled={currentPage === i + 1}
-              onClick={() => handleRequestInspectorData(i + 1, itemsPerPage)}
+              onClick={() => handleRequestRepairData(i + 1, itemsPerPage)}
             >
               {i + 1}
             </button>
@@ -153,15 +152,13 @@ const InspectorContentPagination = ({
         })}
         <button
           disabled={currentPage === totalPages}
-          onClick={() =>
-            handleRequestInspectorData(currentPage + 1, itemsPerPage)
-          }
+          onClick={() => handleRequestRepairData(currentPage + 1, itemsPerPage)}
         >
           Next
         </button>
       </div>
-    </StyleInspectorPaginationDiv>
-  );
-};
+    </StyleRepairPaginationDiv>
+  )
+}
 
-export default InspectorContentPagination;
+export default RepairContentPagination;
