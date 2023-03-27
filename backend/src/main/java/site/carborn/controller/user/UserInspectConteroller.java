@@ -106,9 +106,9 @@ public class UserInspectConteroller {
     }
 
     @GetMapping("/result/review/{inspectResultId}")
-    @Operation(description = "사용자의 검수완료 리뷰 작성")
+    @Operation(description = "사용자의 검수완료 리뷰 조회")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
-    public ResponseEntity<?> getInspectReviewDetail(int inspectResultId){
+    public ResponseEntity<?> getInspectReviewDetail(@PathVariable int inspectResultId){
         InspectorReviewMapping detail = userInspectService.getInspectReviewDetail(inspectResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
 
