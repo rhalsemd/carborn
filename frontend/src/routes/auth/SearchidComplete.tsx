@@ -1,8 +1,11 @@
 import styled from "@emotion/styled";
 import { Link, useLocation } from "react-router-dom";
 import carbornLogo from "../../assets/carbornLogo.png";
-import { StyleLoginSignUpBtn } from "./Login";
-import Nav from './../../components/Nav';
+import Nav from "../../components/Nav";
+import { StyleBtn } from "./PasswordComplete";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { SearchIDVerifyReset } from "../../modules/searchidModule";
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -31,6 +34,11 @@ const StyleSearchidCompleteContainer = styled.div`
 
 const SearchidComplete = () => {
   const { state } = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(SearchIDVerifyReset());
+  }, []);
 
   return (
     <div>
@@ -48,7 +56,7 @@ const SearchidComplete = () => {
           </span>
         </div>
         <Link to="/login">
-          <StyleLoginSignUpBtn>로그인</StyleLoginSignUpBtn>
+          <StyleBtn>로그인</StyleBtn>
         </Link>
       </StyleSearchidCompleteContainer>
     </div>

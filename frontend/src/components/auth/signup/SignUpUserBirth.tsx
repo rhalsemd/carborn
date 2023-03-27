@@ -1,4 +1,4 @@
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import { useState } from "react";
 
@@ -33,7 +33,7 @@ const SignUpUserBirth = ({
     <StyleSignUpInputDiv>
       <label htmlFor="userbirth">생년월일</label>
       <br />
-      <input type="date" onChange={(e) => handleDateChange(e)} />
+      <input tabIndex={5} type="date" onChange={(e) => handleDateChange(e)} />
     </StyleSignUpInputDiv>
   );
 };

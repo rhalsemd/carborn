@@ -1,22 +1,21 @@
-import axios from "axios";
-import { API_URL } from "./../../lib/loginApi";
-import { useState, useEffect } from "react";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // 스타일 시트를 import 해야함
+import { API_URL } from '../../lib/api';
+import { useState } from "react";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // 스타일 시트를 import 해야함
 
 import Nav from "./../Nav";
 import MyCarDataComponent from "./TableComponent/MyCarDataComponent";
 
 // CarStatus 이미지 import 해오기
-import carousel1 from "../../assets/carousel/CarStatus1.jpg";
-import carousel2 from "../../assets/carousel/CarStatus2.jpg";
-import carousel4 from "../../assets/carousel/CarStatus4.jpg";
-import carousel5 from "../../assets/carousel/CarStatus5.jpg";
-import carousel7 from "../../assets/carousel/CarStatus7.jpg";
-import carousel8 from "../../assets/carousel/CarStatus8.jpg";
-import carousel9 from "../../assets/carousel/CarStatus9.jpg";
-import carousel10 from "../../assets/carousel/CarStatus10.jpg";
-import styled from "@emotion/styled";
+import carousel1 from '../../assets/carousel/CarStatus1.jpg';
+import carousel2 from '../../assets/carousel/CarStatus2.jpg';
+import carousel4 from '../../assets/carousel/CarStatus4.jpg';
+import carousel5 from '../../assets/carousel/CarStatus5.jpg';
+import carousel7 from '../../assets/carousel/CarStatus7.jpg';
+import carousel8 from '../../assets/carousel/CarStatus8.jpg';
+import carousel9 from '../../assets/carousel/CarStatus9.jpg';
+import carousel10 from '../../assets/carousel/CarStatus10.jpg';
+import styled from '@emotion/styled';
 
 // 캐러셀 CSS
 

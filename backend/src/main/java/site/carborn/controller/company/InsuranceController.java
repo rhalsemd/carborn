@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
 import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
 import site.carborn.mapping.car.CarInsuranceHistoryGetListMapping;
@@ -26,22 +27,21 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RestController
 public class InsuranceController {
-
     @Autowired
     private InsuranceService insuranceService;
 
     @PostMapping
     @Operation(description = "보험회사 손상 내역 등록")
-    public ResponseEntity<?> insertCarInsuranceHistory(@RequestBody CarInsuranceHistory carInsuranceHistory) throws IOException {
-        insuranceService.insertCarInsuranceHistory(carInsuranceHistory);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, "등록 되었습니다.");
+    public ResponseEntity<?> insertCarInsuranceHistory(@ModelAttribute CarInsuranceHistoryRequestDTO dto) throws IOException {
+        insuranceService.insertCarInsuranceHistory(dto);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
     @GetMapping("/list/{page}/{size}")
     @Operation(description = "보험회사 손상 내역 목록 조회")
     @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "한 페이지 개수")
+            @Parameter(name = "page", description = "페이지 번호")
+            ,@Parameter(name = "size", description = "한 페이지 개수")
     })
     public ResponseEntity<?> carInsuranceHistoryList(@PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);

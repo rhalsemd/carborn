@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 
 //타입 지정
@@ -27,6 +27,7 @@ const SignUpCompanyName = ({
         <label htmlFor="companyname">회사명</label>
         <br />
         <input
+          tabIndex={1}
           type="text"
           id="companyname"
           autoComplete="off"

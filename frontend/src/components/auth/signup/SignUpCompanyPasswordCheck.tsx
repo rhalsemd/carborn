@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSignUpInputDiv } from "../../../routes/auth/Signup";
+import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 
 export type SignUpCompanyPasswordCheckProps = {
@@ -68,6 +68,7 @@ const SignUpCompanyPasswordCheck = ({
       {isPasswordValid ? <span>비밀번호가 일치합니다.</span> : null}
       <br />
       <input
+        tabIndex={5}
         type="password"
         name="companypasswordcheck"
         id="companypasswordcheck"

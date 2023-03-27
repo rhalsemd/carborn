@@ -5,12 +5,14 @@ import styled from '@emotion/styled';
 
 // 이미지 가져오기
 import Buy from '../assets/Buy.png';
-import Booking from '../assets/Booking.png';
+import inspector from '../assets/Booking.png';
 import Insurance from '../assets/Insurance.png';
-import Gallery from '../assets/Gallery.png';
+import Community from '../assets/Gallery.png';
 import MyCar from '../assets/MyCar.png';
 import Repair from '../assets/Repair.png';
 import Sell from '../assets/Sell.png';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export const StyleMyPageDiv = styled.div`
   a {
@@ -115,7 +117,20 @@ const StyleMypageCardImg = styled.div`
 `
 
 const MyPage = () => {
-  const userid = sessionStorage.getItem('userId')
+  const ObjString:any = localStorage.getItem("login-token");
+  const Obj = JSON.parse(ObjString);
+  let userid = Obj.userId;
+  const [userType, seUserType] = useState<string | number>("0");
+  const [isUser, setIsUser] = useState<boolean>(true);
+
+  useEffect(() => {
+    seUserType(parseInt(Obj.accountType))
+    if (userType === 0) {
+      setIsUser(true)
+    } else {
+      setIsUser(false)
+    }
+  }, [setIsUser, seUserType, userType, Obj.accountType])
 
   return (
     <div>
@@ -130,26 +145,26 @@ const MyPage = () => {
               <p>내 차 정보</p>
             </StyleMypageCards>
           </Link>
-          <Link to={`/${userid}/mypage/booking`} >
-            <StyleMypageCards>
-              <StyleMypageCardImg>
-                <img src={Booking} alt='BuyReserve'/>
-              </StyleMypageCardImg>
-              <p>예약 정보</p>
-            </StyleMypageCards>
-          </Link>
           <Link to={`/${userid}/mypage/repair`} >
             <StyleMypageCards>
               <StyleMypageCardImg>
                 <img src={Repair} alt='RepairInspector'/>
               </StyleMypageCardImg>
-              <p>정비 및 검수 내역</p>
+              <p>정비 내역</p>
             </StyleMypageCards>
           </Link>
-          <Link to={`/${userid}/mypage/gallery`} >
+          <Link to={`/${userid}/mypage/inspector`} >
             <StyleMypageCards>
               <StyleMypageCardImg>
-                <img src={Gallery} alt='Gallery'/>
+                <img src={inspector} alt='inspector'/>
+              </StyleMypageCardImg>
+              <p>검수 내역</p>
+            </StyleMypageCards>
+          </Link>
+          <Link to={`/${userid}/mypage/community`} >
+            <StyleMypageCards>
+              <StyleMypageCardImg>
+                <img src={Community} alt='Community'/>
               </StyleMypageCardImg>
               <p>내가 쓴 글</p>
             </StyleMypageCards>
@@ -178,16 +193,26 @@ const MyPage = () => {
               <p>손상 내역</p>
             </StyleMypageCards>
           </Link>
-          <Link to={`/${userid}/mypage/userwithdrawal`} >
+          {isUser ? <Link to={`/${userid}/mypage/userinfodelete`} >
             <StyleMypageSmallCards>
-              <p>회원 탈퇴</p>
+              <p>{`회원 탈퇴(유저)`}</p>
             </StyleMypageSmallCards>
-          </Link>
-          <Link to={`/${userid}/mypage/passwordmodify`} >
+          </Link> :
+          <Link to={`/${userid}/mypage/companyinfodelete`} >
+            <StyleMypageSmallCards>
+              <p>{`회원 탈퇴(기업)`}</p>
+            </StyleMypageSmallCards>
+          </Link>}
+          {isUser ? <Link to={`/${userid}/mypage/userpasswordmodify`} >
             <StyleMypageSmallCards>
               <p>비밀번호 변경</p>
             </StyleMypageSmallCards>
-          </Link>
+          </Link> : 
+          <Link to={`/${userid}/mypage/companypasswordmodify`} >
+            <StyleMypageSmallCards>
+              <p>비밀번호 변경</p>
+            </StyleMypageSmallCards>
+          </Link>}
         </StyleMyPageDiv>
       </StyleLoginSignUpDiv>
     </div>
