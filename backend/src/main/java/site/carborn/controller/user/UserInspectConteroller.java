@@ -38,7 +38,7 @@ public class UserInspectConteroller {
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
-    @GetMapping("book/{inspectId}")
+    @GetMapping("/book/{inspectId}")
     @Operation(description = "사용자의 검수원 예약 단일 조회")
     @Parameter(name = "inspectId", description = "예약글 id")
     public ResponseEntity<?> getInspectBook(@PathVariable("inspectId") int inspectBookId){

@@ -1,0 +1,30 @@
+package site.carborn.controller.user;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import site.carborn.service.user.UserHomeService;
+import site.carborn.util.board.BoardUtils;
+import site.carborn.util.network.NormalResponse;
+
+@Tag(name = "사용자 홈 화면", description = "사용자 홈 화면 부가요소")
+@RequestMapping("/api/user")
+@RequiredArgsConstructor
+@RestController
+public class UserHomeController {
+
+    @Autowired
+    private UserHomeService userHomeService;
+
+    @GetMapping("/car/count")
+    @Operation(description = "홈 화면 등록된 차량 수")
+    public ResponseEntity<?> getCarCount(){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getCarCount());
+    }
+}
