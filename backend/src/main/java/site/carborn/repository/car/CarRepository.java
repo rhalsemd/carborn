@@ -11,4 +11,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     CarGetIdMapping findByVin(String vin);
 
     CarGetHashMapping findAllById(int Id);
+
+    Long countBy();
 }
