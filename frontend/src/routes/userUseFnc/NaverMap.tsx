@@ -4,13 +4,15 @@ import { css } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 
 import hand from "../../assets/hand.png";
+import gumsu from "../../assets/gumsu.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
 import ReserveForm from "../../components/NaverMap/ReserveForm";
 import SearchBar from "../../components/NaverMap/SearchBar";
 import { useAPI } from "../../hooks/useAPI";
 import SearchForm from "./../../components/NaverMap/SearchForm";
-import { useQueries, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import MarkerDetail from "../../components/NaverMap/MarkerDetail";
+import axios from "axios";
 
 const container = css`
   display: flex;
@@ -87,7 +89,6 @@ var markers: any[] = [],
 
 const naver = window.naver;
 const API_USER_INFO = `https://jsonplaceholder.typicode.com/todos/1`;
-const API_MARKER_INFO = `https://jsonplaceholder.typicode.com/todos/1`;
 
 function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -98,29 +99,14 @@ function NaverMap() {
   const [markerNum, setMarkerNum] = useState<number>(-1);
 
   const getUserCarInfo = useAPI("get", API_USER_INFO);
-  const getMapMarkerInfo = useAPI("get", API_MARKER_INFO);
-  const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {});
 
-  const queries = useQueries([
-    {
-      // 사용자 자동차 정보 가져온다.
-      queryKey: "get-user-car-info",
-      queryFn: () => getUserCarInfo,
-      cacheTime: 1000 * 300,
-      staleTime: 1000 * 300,
-      refetchOnMount: false,
-      retry: false,
-      keepPreviousData: true,
-    },
-    {
-      // 현재 위치 정비소 및 검수소 가져온다.
-      queryKey: "get-marker-info",
-      queryFn: () => getMapMarkerInfo,
-      cacheTime: 1000 * 300,
-      retry: false,
-      keepPreviousData: true,
-    },
-  ]);
+  const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {
+    cacheTime: 1000 * 300,
+    staleTime: 1000 * 300,
+    refetchOnMount: false,
+    retry: false,
+    keepPreviousData: true,
+  });
 
   /**
    * 현재 위치를 받는 함수
@@ -131,7 +117,15 @@ function NaverMap() {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
-        drawingMap(lat, lng);
+        axios({
+          method: "get",
+          url: `https://carborn.site/api/user/map/list/${lat}/${lng}`,
+        })
+          .then((res) => res.data)
+          .then((data) => {
+            const markerInfo = data.message;
+            drawingMap(lat, lng, markerInfo);
+          });
       },
       null,
       options
@@ -141,10 +135,9 @@ function NaverMap() {
   /**
    * 지도를 그리는 함수
    */
-  const drawingMap = (lat: number, lng: number) => {
-    // const center = new naver.maps.LatLng(lat, lng);
-    const center = new naver.maps.LatLng(37.565525, 126.976915);
-
+  const drawingMap = (lat: number, lng: number, markerInfo: any) => {
+    const center = new naver.maps.LatLng(lat, lng);
+    console.log(markerInfo);
     // 네이버 맵 생성
     const mapDiv = mapRef.current;
     const map = new naver.maps.Map(mapDiv, {
@@ -159,20 +152,20 @@ function NaverMap() {
       return [];
     });
 
-    setMarker(map);
+    setMarker(map, markerInfo);
   };
 
   /**
    * 마커 생성 함수
    */
-  const setMarker = (map: any) => {
-    좌표.forEach((key: any) => {
-      var position = new naver.maps.LatLng(key.lat, key.lng);
+  const setMarker = (map: any, markerInfo: any) => {
+    markerInfo.forEach((key: any) => {
+      var position = new naver.maps.LatLng(key.LAT, key.LNG);
       var marker = new naver.maps.Marker({
         map: map,
         position,
         icon: {
-          url: hand,
+          url: key.AUTH === 2 ? gumsu : hand,
           size: new naver.maps.Size(50, 52),
           scaledSize: new naver.maps.Size(50, 52),
           origin: new naver.maps.Point(0, 0),
@@ -184,15 +177,17 @@ function NaverMap() {
       var infoWindow = new naver.maps.InfoWindow({
         content: [
           '<div style="width:28vw; padding:10px; height: 28vh; margin-left:2.5vw;">',
-          '<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">정비소</p>',
+          `<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">${key.NAME}</p>`,
           '<p style="margin-top: 0; color: #E00000; font-weight: bolder;">',
-          "3.9<span>★★★★☆</span>",
-          '<span style="color: #BBBBBB; font-size: 0.9rem; "> 리뷰 15</span>',
+          `<span style="font-size: 1.2rem">★</span><span style="color: #242424">${key.avg_point}</span><span style="color: #8F8F8F">/5</span>`,
+          `<span style="color: #BBBBBB; font-size: 0.9rem; "> 리뷰 ${key.cntReview}</span>`,
           "</p>",
-          '<p style="margin-bottom: 0; color: #606060; font-size: 0.9rem">경북 구미시 구미중앙로 76</p>',
+          `<p style="margin-bottom: 0; color: #606060; font-size: 0.9rem">${key.ADDRESS}</p>`,
           '<p style="margin: 0; color: #C1C1C1; font-size: 0.9rem">(우) 39301 (지번) 원평동 1008-1</p>',
-          '<p style="margin-top: 0; color: #038400; font-size: 1rem; font-weight: bold;">1234-5678</p>',
-          `<button class="fix-shop" style="background-color: red; width: 90%; height: 22%; border-radius: 10px; border: 0; font-size: 1.1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
+          `<p style="margin-top: 0; color: #038400; font-size: 1rem; font-weight: bold;">${key.PHONE_NO}</p>`,
+          `<button class="fix-shop" style="background-color: ${
+            key.AUTH === 2 ? "#9C27B0" : "#2196F3"
+          }; width: 90%; height: 22%; border-radius: 10px; border: 0; font-size: 1.1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
           "</div>",
         ].join(""),
       });
