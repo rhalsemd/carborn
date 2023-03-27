@@ -21,6 +21,8 @@ public interface InspectResultGetDetailMapping {
 
     String getReceiptImgNm();
 
+    int getInspectPrice();
+
     LocalDateTime getInspectDt();
 
     LocalDateTime getRegDt();
