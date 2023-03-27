@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.RepairShopRepository;
+import site.carborn.repository.user.CarSaleRepository;
 
 @Service
 public class UserHomeService {
@@ -18,6 +19,9 @@ public class UserHomeService {
     @Autowired
     private InspectorRepository inspectorRepository;
 
+    @Autowired
+    private CarSaleRepository carSaleRepository;
+
     public Long getCarCount(){
         return carRepository.countBy();
     }
@@ -28,5 +32,9 @@ public class UserHomeService {
 
     public Long getInspectorCount(){
         return inspectorRepository.countBy();
+    }
+
+    public Long getCarSaleCount(){
+        return carSaleRepository.countBy();
     }
 }
