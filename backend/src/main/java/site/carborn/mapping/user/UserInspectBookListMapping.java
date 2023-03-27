@@ -14,10 +14,11 @@ public interface UserInspectBookListMapping {
     String getCarRegNm();
     //상태정보조회(정비예약상태)
     int getBookStatus();
-
     //정비예약일정
     LocalDate getBookDt();
     // 정비업체이름
     String getInspectorAccountName();
+    //메이커
+    String getCarMaker();
 
 }

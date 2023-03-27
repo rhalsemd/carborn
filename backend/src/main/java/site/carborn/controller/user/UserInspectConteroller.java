@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.user.InspectBook;
+import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.service.user.UserInspectService;
 import site.carborn.util.board.BoardUtils;
@@ -84,11 +86,31 @@ public class UserInspectConteroller {
     }
 
     @GetMapping("/result/{inspectResultId}")
-    @Operation(description = "사용자의 정비 완료 단일 조회")
+    @Operation(description = "사용자의 검수 완료 단일 조회")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
     public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectResultId") int inspectResultId){
         InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
+
+
+    //리뷰
+    @PostMapping("/result/review")
+    @Operation(description = "사용자의 검수완료 리뷰 작성")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectReviewList(@RequestBody InspectorReview inspectorReview){
+        InspectorReview result = userInspectService.createInspectReview(inspectorReview);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
+
+    }
+
+    @GetMapping("/result/review/{inspectResultId}")
+    @Operation(description = "사용자의 검수완료 리뷰 작성")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectReviewDetail(int inspectResultId){
+        InspectorReviewMapping detail = userInspectService.getInspectReviewDetail(inspectResultId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
+
+    }
 }
