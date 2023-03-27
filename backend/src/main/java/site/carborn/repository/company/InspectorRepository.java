@@ -9,4 +9,6 @@ import site.carborn.mapping.company.InspectorGetIdMapping;
 @Repository
 public interface InspectorRepository extends JpaRepository<Inspector, Integer> {
     InspectorGetIdMapping findByAccount_Id(String accountId);
+
+    Long countBy();
 }

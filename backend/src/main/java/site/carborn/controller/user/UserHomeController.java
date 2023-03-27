@@ -34,5 +34,9 @@ public class UserHomeController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getRepairCount());
     }
 
-    
+    @GetMapping("/inspector/count")
+    @Operation(description = "검사소 수")
+    public ResponseEntity<?> getInspectorCount(){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getInspectorCount());
+    }
 }
