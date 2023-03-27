@@ -11,8 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.InspectBook;
-import site.carborn.mapping.user.UserInspectBookDetailMapping;
-import site.carborn.mapping.user.UserInspectBookListMapping;
+import site.carborn.mapping.user.*;
 import site.carborn.service.user.UserInspectService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
@@ -68,4 +67,28 @@ public class UserInspectConteroller {
     public ResponseEntity<?> updateInspectBook(@RequestBody InspectBook inspectBook,@PathVariable("inspectId") int inspectBookId){
         return NormalResponse.toResponseEntity(HttpStatus.OK, userInspectService.updateInspectBook(inspectBook,inspectBookId));
     }
+
+
+    // 검수 완료 조회
+    @GetMapping("/result/list/{page}/{size}")
+    @Operation(description = "사용자의 검수 완료 목록 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 번호")
+    })
+    public ResponseEntity<?> getInspectResultList(@PathVariable("page") int page,
+                                                  @PathVariable("size") int size){
+        String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
+        Page<UserInspectResultListMapping> result = userInspectService.inspectResultList(accountId,page,size);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+    }
+
+    @GetMapping("/result/{inspectResultId}")
+    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectResultId") int inspectResultId){
+        InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectResultId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+    }
+
 }

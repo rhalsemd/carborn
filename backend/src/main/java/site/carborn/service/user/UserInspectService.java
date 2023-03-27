@@ -7,8 +7,7 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.user.InspectBook;
-import site.carborn.mapping.user.UserInspectBookDetailMapping;
-import site.carborn.mapping.user.UserInspectBookListMapping;
+import site.carborn.mapping.user.*;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
@@ -23,6 +22,8 @@ import java.time.LocalDateTime;
 public class UserInspectService {
     @Autowired
     private InspectBookRepository inspectBookRepository;
+    @Autowired
+    private InspectResultRepository inspectResultRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -30,8 +31,6 @@ public class UserInspectService {
     private InspectorRepository inspectorRepository;
     @Autowired
     private CarRepository carRepository;
-    @Autowired
-    private InspectResultRepository inspectResultRepository;
 
     public Page<UserInspectBookListMapping> inspectBookList(String accountId, int page, int size){
         Page<UserInspectBookListMapping> inspectBookList = inspectBookRepository.findByStatusAndAccount_Id(
@@ -133,5 +132,30 @@ public class UserInspectService {
 
         inspectBookRepository.save(update);
         return update.getId();
+    }
+
+    //검수완료
+    public Page<UserInspectResultListMapping> inspectResultList(String accountId, int page, int size) {
+        Page<UserInspectResultListMapping> inspectResultList = inspectResultRepository.findByInspectBook_StatusAndInspectBook_Account_Id(
+                BoardUtils.BOARD_DELETE_STATUS_FALSE,
+                accountId
+                ,BoardUtils.pageRequestInit(
+                        page
+                        ,size
+                        ,"inspectDt", BoardUtils.ORDER_BY_DESC
+                )
+        );
+        if(inspectResultList.isEmpty()){
+            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
+        }
+        return inspectResultList;
+    }
+
+    public InspectResultGetDetailMapping inspectResultDetail(int inspectResultId){
+        InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectResultId);
+        if (result == null){
+            throw new RuntimeException("존재하지 않는 데이터입니다");
+        }
+        return result;
     }
 }

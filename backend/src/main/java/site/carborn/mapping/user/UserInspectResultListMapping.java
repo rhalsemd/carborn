@@ -1,20 +1,14 @@
 package site.carborn.mapping.user;
 
+import jakarta.persistence.Column;
+
 import java.time.LocalDateTime;
 
-public interface InspectResultGetDetailMapping {
-
+public interface UserInspectResultListMapping {
     int getId();
-    //차량모델
-    String getInspectBookCarModelNm();
-
-    //정비소이름
-    String getInspectBookInspectorAccountName();
-
+    int getInspectBookId();
     String getContent();
-
     int getMileage();
-
     String getBeforeImgNm();
 
     String getAfterImgNm();
