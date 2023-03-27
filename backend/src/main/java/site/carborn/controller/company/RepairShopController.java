@@ -81,14 +81,14 @@ public class RepairShopController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, repairShopService.repairResultGetList(pageRequest));
     }
 
-    @GetMapping("result/{repairResultId}")
+    @GetMapping("/result/{repairResultId}")
     @Operation(description = "정비소 정비 완료 상세 조회")
     @Parameter(name = "repairResultId", description = "정비 예약 목록 번호")
     public ResponseEntity<?> repairResultDetailContent(@PathVariable("repairResultId") int repairResultId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,repairShopService.repairResultDetailContent(repairResultId));
     }
 
-    @GetMapping("result/review/{repairResultId}")
+    @GetMapping("/result/review/{repairResultId}")
     @Operation(description = "정비소 정비 완료 리뷰 조회")
     @Parameter(name = "repairResultId", description = "정비 완료 정비 번호")
     public ResponseEntity<?> repairResultReview(@PathVariable("repairResultId") int repairResultId){
