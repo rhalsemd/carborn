@@ -1,7 +1,10 @@
 package site.carborn.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import site.carborn.mapping.user.CarSaleGetListMapping;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.RepairShopRepository;
@@ -34,7 +37,11 @@ public class UserHomeService {
         return inspectorRepository.countBy();
     }
 
-    public Long getCarSaleCount(int saleStatus){
-        return carSaleRepository.countBySaleStatus(saleStatus);
+    public Long getCarSaleCount(){
+        return carSaleRepository.countByStatusAndSaleStatus(false,1);
+    }
+
+    public Page<CarSaleGetListMapping> getNewCarSaleList(Pageable page){
+        return carSaleRepository.findAllByStatusAndSaleStatus(false, 0, page);
     }
 }
