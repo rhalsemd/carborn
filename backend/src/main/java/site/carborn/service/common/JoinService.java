@@ -3,7 +3,6 @@ package site.carborn.service.common;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.AccountRequestDTO;
@@ -23,6 +22,7 @@ import site.carborn.repository.company.InsuranceCompanyRepository;
 import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.util.common.AuthUtils;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -39,7 +39,7 @@ public class JoinService {
     private final SmsAuthRepository smsAuthRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void join(AccountRequestDTO dto, double lat, double lng) {
+    public void join(AccountRequestDTO dto, Map<String, Object> geo) {
         Account account = Account.copy(dto);
         String id = account.getId();
         String pwd = account.getPwd();
@@ -77,7 +77,7 @@ public class JoinService {
             case AuthUtils.AUTH_INSURANCE:
                 Company company = new Company();
                 company.setBrn(dto.getBrn());
-                joinCompany(account, company, dto, lat, lng);
+                joinCompany(account, company, dto, geo);
                 break;
         }
     }
@@ -88,7 +88,10 @@ public class JoinService {
         userRepository.save(user);
     }
 
-    private void joinCompany(Account account, Company company, AccountRequestDTO dto, double lat, double lng) {
+    private void joinCompany(Account account, Company company, AccountRequestDTO dto, Map<String, Object> geo) {
+        double lat = geo == null ? 0 : (double) geo.get("lat");
+        double lng = geo == null ? 0 : (double) geo.get("lng");
+
         accountRepository.save(account);
         company.setAccount(account);
         companyRepository.save(company);
@@ -120,7 +123,7 @@ public class JoinService {
     private void checkAccountIdFormat(String id) {
         String pattern = "^[a-z0-9]*$";
         if (id.length() < 8 || id.length() > 20) {
-            throw new RuntimeException("아이디는 8~20자로 설정해야합니다");
+            throw new RuntimeException("아이디는 8~20자로 설정해야 합니다");
         }
 
         if (Pattern.matches(pattern, id) == false) {
@@ -131,7 +134,7 @@ public class JoinService {
     private void checkAccountPwdFormat(String pwd) {
         String pattern = "^(?=^.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[!@#$%^&*])[a-z0-9!@#$%^&*]*$";
         if (pwd.length() < 8 || pwd.length() > 20) {
-            throw new RuntimeException("비밀번호는 8~20자로 설정해야합니다");
+            throw new RuntimeException("비밀번호는 8~20자로 설정해야 합니다");
         }
 
         if (Pattern.matches(pattern, pwd) == false) {

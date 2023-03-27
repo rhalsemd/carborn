@@ -1,5 +1,6 @@
 package site.carborn.service.common;
 
+import jakarta.validation.constraints.Null;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +25,10 @@ public class AddressService {
     private String clientSecret;
 
     public Map<String, Object> getGeoAddress(String address) {
+        if (address == null || address.isBlank()) {
+            throw new NullPointerException("변환할 주소 데이터를 입력해주세요");
+        }
+
         try {
             JSONObject geoData = requestGeo(address);
             if (geoData == null) {
