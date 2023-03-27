@@ -21,7 +21,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
           fontWeight: "bolder",
         }}
       >
-        {item.NAME}
+        {item?.NAME}
       </p>
       <p
         style={{
@@ -34,7 +34,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
         <span>★</span>
         <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
           {" "}
-          리뷰 ${item.cntReview}
+          리뷰 ${item?.cntReview}
         </span>
       </p>
       <p
@@ -44,7 +44,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
           fontSize: "0.9rem",
         }}
       >
-        {item.ADDRESS}
+        {item?.ADDRESS}
       </p>
       <p
         style={{
@@ -63,7 +63,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
           fontWeight: "bold",
         }}
       >
-        {item.PHONE_NO}
+        {item?.PHONE_NO}
       </p>
       <div
         style={{

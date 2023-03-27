@@ -138,6 +138,7 @@ function NaverMap() {
    */
   const setMarker = (map: any, markerInfo: any) => {
     setMarkerArr(markerInfo);
+    let newMarkerArr: any[] = markerInfo;
 
     markerInfo.forEach((key: any) => {
       var position = new naver.maps.LatLng(key.LAT, key.LNG);
@@ -196,6 +197,7 @@ function NaverMap() {
       var mapBounds = map.getBounds();
       var marker: any, position, infoWindow;
       let newMarker: any[] = [];
+      let updateMarker: any[] = [];
 
       for (var i = 0; i < markers.length; i++) {
         marker = markers[i];
@@ -212,9 +214,14 @@ function NaverMap() {
 
         if (marker.map) {
           newMarker[newMarker.length] = marker;
+          updateMarker[updateMarker.length] = newMarkerArr[i];
+        } else {
+          newMarker[newMarker.length] = null;
+          updateMarker[updateMarker.length] = null;
         }
         setSearchMarkers(newMarker);
       }
+      setMarkerArr(updateMarker);
     }
 
     function showMarker(map: any, marker: any) {
@@ -276,7 +283,8 @@ function NaverMap() {
           </div>
           <div css={searchResult}>
             {/* 검색 결과 */}
-            {searchMarkers.length ? (
+            {searchMarkers.filter((item) => item === null).length !==
+            searchMarkers.length ? (
               reserve ? (
                 <ReserveForm
                   data={data}
@@ -294,14 +302,14 @@ function NaverMap() {
                 />
               ) : (
                 markerArr.map((item, index) => {
-                  return (
+                  return item ? (
                     <SearchBar
                       key={item.ADDRESS + item.PHONE_NO + item.NAME}
                       index={index}
                       item={item}
                       searchBarItemClick={searchBarItemClick}
                     />
-                  );
+                  ) : null;
                 })
               )
             ) : (
