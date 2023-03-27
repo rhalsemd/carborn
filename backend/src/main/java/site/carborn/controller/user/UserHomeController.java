@@ -27,4 +27,12 @@ public class UserHomeController {
     public ResponseEntity<?> getCarCount(){
         return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getCarCount());
     }
+
+    @GetMapping("/repair/count")
+    @Operation(description = "정비업체 수")
+    public ResponseEntity<?> getRepairCount(){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getRepairCount());
+    }
+
+    
 }
