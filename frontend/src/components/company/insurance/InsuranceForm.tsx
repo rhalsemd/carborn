@@ -6,6 +6,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import FileUpload from "../../FileUpload";
 import Carousels from "../Carousels";
+import { useMutation } from "react-query";
 
 type ImageType = string[];
 
@@ -62,25 +63,51 @@ const container = css`
 
 export default function InsuranceForm() {
   const [selectTime, setSelectTime] = useState<any>("");
-  const [beforeImage, setbeforeImage] = useState<string>("");
-  const [afterImage, setAfterImage] = useState<string>("");
   const [reciptImage, setReciptImage] = useState<string>("");
+  const [reciptImageFile, setReciptImageFile] = useState<string>("");
   const [연비, set연비] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
 
   // const { id } = useLocation().state;
+  // const id = "15";
 
-  const change연비 = (e: any) => {
-    if (/^[0-9]+$/.test(e.target.value)) {
-      set연비(e.target.value);
-    } else {
-      set연비("");
-      alert("숫자만 입력하세요");
-    }
+  const URL = "http://192.168.100.176/api/insurance";
+
+  const fileUpLoadAPI = async (data: FormData) => {
+    return fetch(URL, {
+      method: "PUT",
+      body: data,
+      // url: "http://192.168.100.176/api/repair-shop/book",
+      //   data: data,
+      //   headers: { "Content-Type": "multipart/form-data" },
+      /// axios 코드
+    });
   };
+
+  const { mutate } = useMutation(fileUpLoadAPI);
+
+  const submit = () => {
+    const formData = new FormData();
+
+    formData.append("receiptImg", reciptImageFile);
+    formData.append("mileage", 연비); // 직렬화하여 객체 저장
+    formData.append("inspectDt", selectTime); // 직렬화하여 객체 저장 // 하면 안됨
+    mutate(formData);
+  };
+
+  const changeCategory = (e: any) => {
+    setCategory(e.target.value);
+  };
+
+  const changeContent = (e: any) => {
+    setContent(e.target.value);
+  };
+
   return (
     <div css={container}>
       <div className="section1">
-        <Carousels<ImageType> images={[beforeImage, afterImage, reciptImage]} />
+        <Carousels<ImageType> images={[reciptImage]} />
       </div>
       <div className="section2">
         <div className="formDetail">
@@ -99,6 +126,7 @@ export default function InsuranceForm() {
               InputProps={{
                 readOnly: true,
               }}
+              onChange={changeContent}
             />
             <TimePicker setSelectTime={setSelectTime} />
           </div>
@@ -109,9 +137,8 @@ export default function InsuranceForm() {
             id="standard-basic"
             variant="standard"
             size="small"
-            value={연비}
             placeholder="사고 유형을 입력해 주세요"
-            onChange={change연비}
+            onChange={changeCategory}
           />
         </div>
         <div className="formDetail">
@@ -122,11 +149,17 @@ export default function InsuranceForm() {
             rows={3}
             size="small"
             placeholder={"사고 내용을 입력해 주세요"}
+            onChange={changeContent}
           />
         </div>
         <div className="formDetail upload">
           사진 등록
-          <FileUpload size={20} row={1} setImage={setbeforeImage} />
+          <FileUpload
+            size={20}
+            row={1}
+            setImage={setReciptImage}
+            setFile={setReciptImageFile}
+          />
         </div>
       </div>
     </div>

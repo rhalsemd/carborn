@@ -52,11 +52,10 @@ export default function HistoryTable() {
   let queryKey;
 
   if (isGarage) {
-    URL = "http://localhost:3001/history";
-    // URL = `http://192.168.100.176:80/api/repair-shop/result/list/${page + 1}/7`;
+    URL = `http://carborn.site/api/repair-shop/result/list/${page + 1}/7`;
     queryKey = "getGarageHistory";
   } else {
-    URL = "http://localhost:3001/history";
+    URL = `http://carborn.site/api/inspector/result/list/${page + 1}/7`;
     queryKey = "getInspectorHistory";
   }
 
@@ -66,8 +65,8 @@ export default function HistoryTable() {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
-      return data.data;
-      // return data.data.message;
+      // return data.data;
+      return data.data.message;
     },
     onError: (err) => {
       console.log(err);
@@ -79,7 +78,7 @@ export default function HistoryTable() {
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
-
+  console.log(data);
   useEffect(() => {
     refetch();
   }, [page]);
@@ -97,8 +96,7 @@ export default function HistoryTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {data?.content?.map( */}
-            {data?.map(
+            {data?.content?.map(
               ({ id, regDt, inspectDt, mileage }: MapType, idx: number) => (
                 <TableRow key={idx}>
                   <TableCell sx={{ minWidth: "20px" }}>{id}</TableCell>
@@ -115,8 +113,8 @@ export default function HistoryTable() {
           <TableFooter>
             <TableRow>
               <TablePagination
-                // count={data.totalElements}
-                count={15}
+                count={data.totalElements}
+                // count={15}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}

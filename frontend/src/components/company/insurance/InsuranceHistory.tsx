@@ -29,11 +29,13 @@ interface Data {
   size: number;
   density: number;
 }
+
 interface MapType {
   id: string;
-  regDt: string;
-  mileage: string;
-  inspectDt: string;
+  carVin: string;
+  category: string;
+  content: string;
+  insuranceDt: string;
 }
 
 const container = css`
@@ -45,8 +47,7 @@ export default function InsuranceHistory() {
   const [page, setPage] = useState<number>(0);
   const rowsPerPage = 7;
 
-  const URL = "http://localhost:3001/history";
-  //const URL = `http://192.168.100.176:80/api/insurance/list/${page + 1}/7`;
+  const URL = `http://carborn.site/api/insurance/list/${page + 1}/7`;
   const queryKey = "getInsuranceHistory";
 
   const getInsuranceHistory = useAPI("get", URL);
@@ -55,11 +56,10 @@ export default function InsuranceHistory() {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
-      return data.data;
-      // return data.data.message;
+      return data.data.message;
     },
     onError: (err) => {
-      console.log(err);
+      console.log(err, "에러");
     },
 
     suspense: true,
@@ -68,9 +68,9 @@ export default function InsuranceHistory() {
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
-
   useEffect(() => {
     refetch();
+    console.log(data, "데이터");
   }, [page]);
   return (
     <div css={container}>
@@ -86,25 +86,29 @@ export default function InsuranceHistory() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {data?.content?.map( */}
-            {/* {data?.map(
-              ({ id, regDt, inspectDt, mileage }: MapType, idx: number) => (
+            {data?.content?.map(
+              (
+                { id, carVin, category, content, insuranceDt }: MapType,
+                idx: number
+              ) => (
                 <TableRow key={idx}>
                   <TableCell sx={{ minWidth: "20px" }}>{id}</TableCell>
-                  <TableCell>{inspectDt}</TableCell>
-                  <TableCell>{category}</TableCell> */}
-            <TableCell align="center">
-              <InsuranceModal id={"10"} />
-            </TableCell>
-            {/* </TableRow>
+                  <TableCell>{insuranceDt}</TableCell>
+                  <TableCell>{carVin}</TableCell>
+                  <TableCell align="center" sx={{ minWidth: "30px" }}>
+                    {category}
+                  </TableCell>
+                  <TableCell align="center">
+                    <InsuranceModal id={id} content={content} />
+                  </TableCell>
+                </TableRow>
               )
-            )} */}
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                // count={data.totalElements}
-                count={15}
+                count={data.totalElements}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}

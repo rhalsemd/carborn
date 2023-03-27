@@ -7,13 +7,13 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { TablePagination, TableFooter } from "@mui/material";
 import { useState } from "react";
 import DetailModal from "./DetailModal";
 import { useQuery } from "react-query";
 import { useAPI } from "../../hooks/useAPI";
 import { useLocation } from "react-router-dom";
+import ReviewModal from "./ReviewModal";
 import { useEffect } from "react";
 
 interface MapType {
@@ -29,53 +29,55 @@ interface MapType {
 
 const container = css`
   position: relative;
-  opacity: 0.85;
 `;
 
 export default function ReserveTable() {
   const [page, setPage] = useState<number>(0);
   const rowsPerPage = 7;
   const isGarage = useLocation().pathname == "/garage/reserve";
-  const handleChangePage = (e: any, newPage: any) => {
-    setPage(() => newPage);
-  };
   // 페이지 상태 표시를 바꿔주는 함수
   let URL;
   let queryKey;
   // 컴포넌트 재사용을 위해 url로 분기 만들기
   if (isGarage) {
-    // URL = `http://192.168.100.176:80/api/repair-shop/book/list/${page + 1}/7`;
-    URL = `http://localhost:3001/${page + 1}`;
+    URL = `http://carborn.site/api/repair-shop/book/list/${page + 1}/7`;
     queryKey = "getRepairReserveData";
   } else {
-    URL = "http://localhost:3001/content";
+    URL = `http://carborn.site/api/inspector/book/list/${page + 1}/7`;
     queryKey = "getInspectorData";
-    console.log("여기는 인스펙터");
     //URL = `http://192.168.100.176:80/api/inspector/book/${page}/7`;
   }
+
   const getReserveData = useAPI("get", URL);
   const { data, refetch } = useQuery(queryKey, () => getReserveData, {
     cacheTime: 1000 * 300,
-    staleTime: 0,
+    staleTime: 1000 * 300,
+    refetchOnWindowFocus: false,
     select: (data) => {
-      // return data.data.message.content;
-      return data.data;
+      return data.data.message;
     },
-    onSuccess: (res) => {},
     onError: (error: Error) => {
-      // setError(error);
       console.log(error);
     },
-    // suspense: true,
+    onSuccess: (res) => {
+      // console.log(res);
+    },
+    suspense: true,
     // useErrorBoundary: true,
   });
+  // console.log(data);
   useEffect(() => {
     refetch();
   }, [page]);
 
+  const handleChangePage = (e: any, newPage: any) => {
+    setPage(() => newPage);
+    // refetch();
+    console.log(newPage);
+  };
   return (
     <div css={container}>
-      <TableContainer component={Paper}>
+      <TableContainer sx={{ backgroundColor: "rgba(246, 246, 246, 0.85)" }}>
         <Table sx={{ minWidth: "60vw", minHeight: "60vh" }}>
           <TableHead>
             <TableRow>
@@ -88,10 +90,11 @@ export default function ReserveTable() {
               <TableCell align="center">차대 번호</TableCell>
               <TableCell align="center">전화 번호</TableCell>
               <TableCell align="center">자세히 보기</TableCell>
+              <TableCell align="center">리뷰 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map(
+            {data?.content?.map(
               (
                 {
                   id,
@@ -111,8 +114,7 @@ export default function ReserveTable() {
                   sx={
                     bookStatus
                       ? {
-                          backgroundColor: "gray",
-                          opacity: "0.8",
+                          backgroundColor: "rgba(166, 166, 166, 0.85)",
                         }
                       : null
                   }
@@ -128,7 +130,10 @@ export default function ReserveTable() {
                   <TableCell>{carVin}</TableCell>
                   <TableCell>01020100209</TableCell>
                   <TableCell align="center">
-                    {bookStatus ? null : <DetailModal id={id} />}
+                    <DetailModal id={id} status={bookStatus} />
+                  </TableCell>
+                  <TableCell align="center">
+                    {!bookStatus ? null : <ReviewModal id={id} />}
                   </TableCell>
                 </TableRow>
               )
@@ -137,7 +142,7 @@ export default function ReserveTable() {
           <TableFooter>
             <TableRow>
               <TablePagination
-                count={13} //임시 나중에 서버에서 totalElement 받아야함
+                count={data?.totalElements} //임시 나중에 서버에서 totalElement 받아야함
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}

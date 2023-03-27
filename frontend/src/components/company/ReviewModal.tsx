@@ -6,17 +6,20 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
+import { useLocation } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
+import { useAPI } from "../../hooks/useAPI";
 import { useState } from "react";
-import { useAPI } from "./../../../hooks/useAPI";
 
 interface Props {
   id: string;
-  content: string;
+}
+
+interface MapType {
+  accountId: string;
 }
 
 const tableStyle = css`
@@ -34,42 +37,76 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function InsuranceModal({ id }: Props) {
-  const [open, setOpen] = React.useState(false);
-
+export default function ReviewModal({ id }: Props) {
   const client = useQueryClient();
 
-  const queryKey: string = `getGarageHistoryDetail${id}`;
-  const URL = `http://carborn.site/api/insurance/list/${id}`;
+  let URL;
+  let queryKey: any;
 
-  const { data }: any = useQuery(queryKey, () => getDetailData, {
+  const isGarage = useLocation().pathname == "/garage/reserve";
+
+  if (isGarage) {
+    URL = `http://carborn.site/api/repair-shop/result/review/${id}`;
+    queryKey = `getRepairReview${id}`;
+  } else {
+    URL = `http://carborn.site/api/inspector/result/review/${id}`;
+    queryKey = `getInspectorReview${id}`;
+    //URL = `http://192.168.100.176:80/api/inspector/book/${id}`;
+  }
+  const getRepairDetail = useAPI("get", URL);
+
+  const { data } = useQuery(queryKey, () => getRepairDetail, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
       return data.data.message;
     },
-    onError: (err) => {
-      console.log(err);
+    onError: (error: Error) => {
+      console.log(error);
     },
+
     enabled: false,
   });
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
     client.fetchQuery(queryKey);
   };
 
-  const handleClose = () => {
+  const handleCancel = () => {
     setOpen(false);
   };
 
-  const getDetailData = useAPI("get", URL);
-  console.log(data);
+  let score;
+
+  switch (data?.point) {
+    case 0:
+      score = "☆☆☆☆☆";
+      break;
+    case 1:
+      score = "★☆☆☆☆";
+      break;
+    case 2:
+      score = "★★☆☆☆";
+      break;
+    case 3:
+      score = "★★★☆☆";
+      break;
+    case 4:
+      score = "★★★★☆";
+      break;
+    case 5:
+      score = "★★★★★";
+      break;
+    default:
+      score = "";
+  }
   return (
-    <div>
+    <div css={{ width: "10vw" }}>
       <Button
-        variant="contained"
-        sx={{ backgroundColor: "#d23131" }}
+        variant="outlined"
+        color="inherit"
         onClick={handleClickOpen}
         size="small"
       >
@@ -79,40 +116,27 @@ export default function InsuranceModal({ id }: Props) {
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        onClose={handleCancel}
         aria-describedby="alert-dialog-slide-description"
-        sx={{ minWidth: "10vw" }}
       >
-        <DialogTitle>사진</DialogTitle>
-        <DialogContent>
+        <DialogTitle>Review</DialogTitle>
+        <DialogContent sx={{ minWidth: "300px" }}>
           <table css={tableStyle}>
             <thead></thead>
             <tbody>
               <tr>
-                <td>사고 번호</td>
-                <td> : {data?.id}</td>
+                <td>
+                  {data ? data?.content : "아직 리뷰가 등록되지 않았습니다."}
+                </td>
               </tr>
               <tr>
-                <td>사고 날짜</td>
-                <td> : {data?.insuranceDt}</td>
-              </tr>
-              <tr>
-                <td>사고 유형</td>
-                <td> : {data?.category}</td>
-              </tr>
-              <tr>
-                <td>사고 내용</td>
-                <td> : {data?.content}</td>
-              </tr>
-              <tr>
-                <td>차대 번호</td>
-                <td> : {data?.carVin}</td>
+                <td css={{ color: "#ff9600", fontSize: "20px" }}>{score}</td>
               </tr>
             </tbody>
           </table>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" onClick={handleCancel}>
             닫기
           </Button>
         </DialogActions>

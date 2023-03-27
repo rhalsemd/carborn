@@ -16,6 +16,7 @@ import { useState } from "react";
 
 interface Props {
   id: string;
+  status: string;
 }
 
 interface MapType {
@@ -37,10 +38,9 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DetailModal({ id }: Props) {
+export default function DetailModal({ id, status }: Props) {
   const client = useQueryClient();
-  const [data, setData] = useState<any>(null);
-  // const URL = `http://localhost:3001/test`;
+
   let URL;
   let queryKey: any;
 
@@ -48,21 +48,20 @@ export default function DetailModal({ id }: Props) {
   const navigate = useNavigate();
 
   if (isGarage) {
-    //URL = `http://192.168.100.176:80/api/repair-shop/book/${id}`;
-    URL = `http://localhost:3001/${id}`;
+    URL = `http://carborn.site/api/repair-shop/book/${id}`;
     queryKey = `getRepairDetailData${id}`;
   } else {
-    URL = "http://localhost:3001/test";
+    URL = `http://carborn.site/api/inspector/book/${id}`;
     queryKey = `getInspectorDetailData${id}`;
     //URL = `http://192.168.100.176:80/api/inspector/book/${id}`;
   }
   const getRepairDetail = useAPI("get", URL);
 
-  const { refetch } = useQuery(queryKey, () => getRepairDetail, {
+  const { data } = useQuery(queryKey, () => getRepairDetail, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
-      return data.data;
+      return data.data.message;
     },
     onError: (error: Error) => {
       console.log(error);
@@ -74,10 +73,7 @@ export default function DetailModal({ id }: Props) {
 
   const handleClickOpen = () => {
     setOpen(true);
-    (async () => {
-      const res: any = await client.fetchQuery(queryKey);
-      setData(res.data);
-    })();
+    client.fetchQuery(queryKey);
   };
   const handleRegister = () => {
     setOpen(false);
@@ -91,9 +87,8 @@ export default function DetailModal({ id }: Props) {
   const handleCancel = () => {
     setOpen(false);
   };
-
   return (
-    <>
+    <div css={{ width: "10vw" }}>
       <Button
         variant="contained"
         sx={{ backgroundColor: "#d23131" }}
@@ -110,7 +105,7 @@ export default function DetailModal({ id }: Props) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>수리 요청 내역</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ minWidth: "300px" }}>
           <table css={tableStyle}>
             <thead></thead>
             <tbody>
@@ -148,14 +143,22 @@ export default function DetailModal({ id }: Props) {
           {/* </DialogContentText> */}
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleCancel}>
-            취소
-          </Button>
-          <Button variant="contained" onClick={handleRegister}>
-            {isGarage ? "정비 내역 등록" : "검수 내역 등록"}
-          </Button>
+          {!status ? (
+            <>
+              <Button variant="outlined" onClick={handleCancel}>
+                취소
+              </Button>
+              <Button variant="contained" onClick={handleRegister}>
+                {isGarage ? "정비 내역 등록" : "검수 내역 등록"}
+              </Button>
+            </>
+          ) : (
+            <Button variant="outlined" onClick={handleCancel}>
+              닫기
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 }

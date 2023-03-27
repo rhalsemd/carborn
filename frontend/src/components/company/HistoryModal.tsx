@@ -1,9 +1,11 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
@@ -11,6 +13,13 @@ import { useLocation } from "react-router-dom";
 import { useAPI } from "./../../hooks/useAPI";
 import { useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
+
+const tableStyle = css`
+  tr {
+    border-spacing: 10px;
+  }
+  width: 20vw;
+`;
 
 interface Props {
   id: string;
@@ -27,7 +36,6 @@ const Transition = React.forwardRef(function Transition(
 
 export default function HistoryModal({ id }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [data, setData] = useState<any>(null);
 
   const client = useQueryClient();
 
@@ -36,20 +44,18 @@ export default function HistoryModal({ id }: Props) {
   const isGarage = useLocation().pathname == "/garage/history";
 
   if (isGarage) {
-    URL = "http://localhost:3001/history";
-    // URL = `http://192.168.100.176:80/api/repair-shop/result/${id}`;
+    URL = `http://carborn.site/api/repair-shop/result/${id}`;
     queryKey = `getGarageHistoryDetail${id}`;
   } else {
-    URL = "http://localhost:3001/history";
+    URL = `http://carborn.site/api/inspector/result/${id}`;
     queryKey = `getInspectorHistoryDetail${id}`;
   }
 
-  const {} = useQuery(queryKey, () => getDetailData, {
+  const { data } = useQuery(queryKey, () => getDetailData, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
-      return data.data;
-      // return data.data.message;
+      return data.data.message;
     },
     onError: (err) => {
       console.log(err);
@@ -59,16 +65,13 @@ export default function HistoryModal({ id }: Props) {
 
   const handleClickOpen = () => {
     setOpen(true);
-    (async () => {
-      const res: any = await client.fetchQuery(queryKey);
-      setData(res.data);
-    })();
+    client.fetchQuery(queryKey);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log(data);
   const getDetailData = useAPI("get", URL);
 
   return (
@@ -90,9 +93,27 @@ export default function HistoryModal({ id }: Props) {
       >
         <DialogTitle>사진</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            사진들
-          </DialogContentText>
+          <table css={tableStyle}>
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td>내용</td>
+                <td> : {data?.content}</td>
+              </tr>
+              <tr>
+                <td>차종</td>
+                <td> : {data?.inspectBookCarModelNm}</td>
+              </tr>
+              <tr>
+                <td>예약자명</td>
+                <td> : {data?.inspectBookInspectorAccountName}</td>
+              </tr>
+              <tr>
+                <td>날짜</td>
+                <td> : {data?.inspectDt}</td>
+              </tr>
+            </tbody>
+          </table>
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleClose}>

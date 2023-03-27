@@ -68,29 +68,35 @@ const container = css`
 export default function RegisterForm() {
   const [selectTime, setSelectTime] = useState<any>("");
   const [beforeImage, setbeforeImage] = useState<string>("");
+  const [beforeImageFile, setbeforeImageFile] = useState<string>("");
   const [afterImage, setAfterImage] = useState<string>("");
+  const [afterImageFile, setAfterImageFile] = useState<string>("");
   const [reciptImage, setReciptImage] = useState<string>("");
+  const [reciptImageFile, setReciptImageFile] = useState<string>("");
   const [연비, set연비] = useState<string>("");
   const [content, setContent] = useState<string>("123123");
-  const [mileage, setMileage] = useState<number>(39);
 
-  // const URL = "http://192.168.100.176/api/repair-shop/book"
-  // const submitInspector = useAPI("post", URL, "data: ")
+  const URL = "http://192.168.100.176/api/repair-shop/book";
 
-  const fileUpLoadAPI = (data: FormData) => {
-    return axios({
-      method: "put",
-      url: "http://192.168.100.176/api/repair-shop/book",
-      data: data,
-      headers: { "Content-Type": "multipart/form-data" },
+  const handleTextInput = (e: any) => {
+    setContent(e.target.value);
+  };
+
+  const fileUpLoadAPI = async (data: FormData) => {
+    return fetch(URL, {
+      method: "PUT",
+      body: data,
+      // url: "http://192.168.100.176/api/repair-shop/book",
+      //   data: data,
+      //   headers: { "Content-Type": "multipart/form-data" },
+      /// axios 코드
     });
   };
 
   const { mutate } = useMutation(fileUpLoadAPI);
 
   const isGarage = useLocation().pathname == "/garage/register";
-  // const { id } = useLocation().state;
-  const id = 10;
+  const { id } = useLocation().state;
 
   const change연비 = (e: any) => {
     if (/^[0-9]+$/.test(e.target.value)) {
@@ -103,28 +109,14 @@ export default function RegisterForm() {
 
   const submit = () => {
     const formData = new FormData();
-    // console.log(beforeImage);
 
-    formData.append("beforeImg", beforeImage);
-    formData.append("afterImg", afterImage);
-    formData.append("receiptImg", reciptImage);
-
-    const submitForm = {
-      "inspectBook.id": id,
-      content,
-      mileage,
-      inspectDt: selectTime,
-    };
-
-    formData.append("inspectorReg", JSON.stringify(submitForm)); // 직렬화하여 객체 저장
-    // formData.append("inspectBook.id", JSON.stringify(id)); // 직렬화하여 객체 저장
-    // formData.append("content", JSON.stringify(content)); // 직렬화하여 객체 저장
-    // formData.append("mileage", JSON.stringify(mileage)); // 직렬화하여 객체 저장
-    // formData.append("inspectDt", JSON.stringify(selectTime)); // 직렬화하여 객체 저장
-    // console.log(formData);
-    // for (let i of formData) {
-    //   console.log(i);
-    // }
+    formData.append("beforeImg", beforeImageFile);
+    formData.append("afterImg", afterImageFile);
+    formData.append("receiptImg", reciptImageFile);
+    formData.append("repairBook.id", id); // 직렬화하여 객체 저장
+    formData.append("content", content); // 직렬화하여 객체 저장
+    formData.append("mileage", 연비); // 직렬화하여 객체 저장
+    formData.append("inspectDt", selectTime); // 직렬화하여 객체 저장 // 하면 안됨
     mutate(formData);
   };
 
@@ -161,6 +153,7 @@ export default function RegisterForm() {
             multiline
             rows={3}
             size="small"
+            onChange={handleTextInput}
             placeholder={
               isGarage
                 ? "수리 내역을 입력해 주세요"
@@ -181,15 +174,30 @@ export default function RegisterForm() {
         </div>
         <div className="formDetail upload">
           {isGarage ? "수리 전 사진 등록" : "검수 전 사진 등록"}
-          <FileUpload size={20} row={1} setImage={setbeforeImage} />
+          <FileUpload
+            size={20}
+            row={1}
+            setImage={setbeforeImage}
+            setFile={setbeforeImageFile}
+          />
         </div>
         <div className="formDetail upload">
           {isGarage ? "수리 후 사진 등록" : "검수 후 사진 등록"}
-          <FileUpload size={20} row={1} setImage={setAfterImage} />
+          <FileUpload
+            size={20}
+            row={1}
+            setImage={setAfterImage}
+            setFile={setAfterImageFile}
+          />
         </div>
         <div className="formDetail upload">
           영수증 등록
-          <FileUpload size={20} row={1} setImage={setReciptImage} />
+          <FileUpload
+            size={20}
+            row={1}
+            setImage={setReciptImage}
+            setFile={setReciptImageFile}
+          />
         </div>
         <Button variant="contained" sx={{ maxWidth: "50%" }} onClick={submit}>
           제출
