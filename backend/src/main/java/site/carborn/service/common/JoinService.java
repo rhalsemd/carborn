@@ -46,7 +46,7 @@ public class JoinService {
         }
 
         SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
-        if (smsAuth == null) {
+        if (smsAuth == null || smsAuth.isStatus() == false) {
             throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
         }
 
