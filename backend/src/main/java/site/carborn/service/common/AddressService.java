@@ -1,5 +1,6 @@
 package site.carborn.service.common;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,9 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class AddressService {
-
     @Value("${naver.naver-cloud-map.X-NCP-APIGW-API-KEY-ID}")
     private String clientId;
     @Value("${naver.naver-cloud-map.X-NCP-APIGW-API-KEY}")
@@ -38,10 +39,10 @@ public class AddressService {
 
             return map;
         } catch (IOException e) {
-            System.out.println(e);
+            log.warn(e.getMessage());
         }
 
-        throw new NullPointerException();
+        throw new NullPointerException("위도 및 경도 정보를 확인할 수 없습니다");
     }
 
     public Map<String, Object> getReverseGeo(double lat, double lng) {
@@ -63,10 +64,10 @@ public class AddressService {
 
             return map;
         } catch (IOException e) {
-            System.out.println(e);
+            log.warn(e.getMessage());
         }
 
-        throw new NullPointerException();
+        throw new NullPointerException("주소 정보를 확인할 수 없습니다");
     }
 
     public JSONObject requestGeo(String address) throws IOException {
@@ -103,7 +104,7 @@ public class AddressService {
 
         int responseCode = get.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new NullPointerException();
+            throw new NullPointerException("올바른 데이터 요청이 아닙니다");
         }
 
         String content = get.get();
