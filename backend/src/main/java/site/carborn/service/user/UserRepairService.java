@@ -4,8 +4,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import site.carborn.entity.account.Account;
+import site.carborn.entity.company.InspectorReview;
+import site.carborn.entity.company.RepairShopReview;
+import site.carborn.entity.user.InspectResult;
 import site.carborn.entity.user.RepairBook;
+import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.company.RepairShopReviewMapping;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookDetailMapping;
@@ -146,4 +151,30 @@ public class UserRepairService {
         return  result;
     }
 
+    public int createInspectReview(int repairResultId, RepairShopReview repairShopReview){
+        RepairResult result = repairResultRepository.findById(repairResultId).orElseThrow(()->
+                new RuntimeException("수리결과가 없습니다"));
+
+        if (repairShopReview.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+        Account account = accountRepository.findById(repairShopReview.getAccount().getId());
+        if (account == null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+        if (!account.getId().equals(repairShopReview.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다");
+        }
+
+        repairShopReview.setRepairResult(result);
+        repairShopReview.setRepairShop(result.getRepairBook().getRepairShop());
+        repairShopReview.setAccount(result.getRepairBook().getAccount());
+
+        repairShopReview.setRegDt(LocalDateTime.now());
+        repairShopReview.setUptDt(LocalDateTime.now());
+        repairShopReview.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+
+        RepairShopReview save = repairShopReviewRepository.save(repairShopReview);
+        return save.getId();
+    }
 }

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.entity.company.InspectorReview;
+import site.carborn.entity.company.RepairShopReview;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.company.RepairShopReviewMapping;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
@@ -101,6 +103,15 @@ public class UserRepairController {
     public ResponseEntity<?> getRepairReviewDetail(@PathVariable int repairResultId){
         RepairShopReviewMapping detail = userRepairService.getRepairReviewDetail(repairResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
+    }
+
+    @PostMapping("/result/review/{repairResultId}")
+    @Operation(description = "사용자의 검수완료 리뷰 작성")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectReviewList(@PathVariable int repairResultId,
+                                                  @RequestBody RepairShopReview repairShopReview){
+        int result = userRepairService.createInspectReview(repairResultId,repairShopReview);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
 }
