@@ -17,4 +17,5 @@ public interface CarInsuranceHistoryRepository extends JpaRepository<CarInsuranc
 
     Page<UserInsuranceListMapping> findByCar_Account_Id(String accountId,Pageable page);
 
+
 }

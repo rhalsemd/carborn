@@ -1,7 +1,5 @@
 package site.carborn.mapping.user;
 
-import jakarta.persistence.Column;
-
 import java.time.LocalDateTime;
 
 public interface UserInsuranceListMapping {
@@ -11,7 +9,6 @@ public interface UserInsuranceListMapping {
     String getInsuranceCompanyAccountId();
 
     //차정보
-    String getCarAccountId();
     String getCarMaker();
     String getCarModelNm();
     String getCarModelYear();
@@ -19,8 +16,6 @@ public interface UserInsuranceListMapping {
 
     //보험수리관련
     String getCategory();
-    String getContent();
-    String getInsuranceImgNm();
     LocalDateTime getInsuranceDt();
     LocalDateTime getRegDt();
 

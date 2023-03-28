@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.carborn.mapping.car.CarInsuranceHistoryGetDetailMapping;
+import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
 import site.carborn.mapping.user.UserInsuranceListMapping;
 import site.carborn.service.user.UserInsuranceService;
@@ -39,6 +41,12 @@ public class UserInsuranceController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
-
+    @GetMapping("/{insuranceId}")
+    @Operation(description = "사용자의 보험내역 단일 조회")
+    @Parameter(name = "inspectId", description = "보험내역 id")
+    public ResponseEntity<?> getInspectBook(@PathVariable("insuranceId") int insuranceId){
+        CarInsuranceHistoryGetDetailMapping insuranceDetail = userInsuranceService.insuranceDetail(insuranceId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,insuranceDetail);
+    }
 
 }
