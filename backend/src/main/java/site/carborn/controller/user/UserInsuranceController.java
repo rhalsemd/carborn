@@ -32,7 +32,7 @@ public class UserInsuranceController {
     @Operation(description = "사용자의 보험 목록 조회")
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 번호")
+            @Parameter(name = "size", description = "페이지 당 게시물 수")
     })
     public ResponseEntity<?> getInsuranceList(@PathVariable("page") int page,
                                                 @PathVariable("size") int size){
