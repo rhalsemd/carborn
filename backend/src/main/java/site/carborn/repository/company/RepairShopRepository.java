@@ -16,11 +16,11 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     RepairShopGetIdMapping findByAccount_Id(String accountId);
 
     @Query(value = """
-    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
+    SELECT res.ID, res.NAME, res.AUTH, res.PHONE_NO,res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
     FROM
-    	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
+    	(SELECT idname.ID, idname.NAME, idname.AUTH, idname.PHONE_NO, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
     	FROM\s
-    		(SELECT mrs.ID,ma.NAME, ma.AUTH
+    		(SELECT mrs.ID,ma.NAME, ma.AUTH, ma.PHONE_NO
     		FROM S08P22D209.MWS_REPAIR_SHOP mrs
     		INNER JOIN S08P22D209.MWS_ACCOUNT ma
     		ON mrs.ACCOUNT_ID = ma.ID) idname
@@ -44,11 +44,11 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     	GROUP BY urp.REPAIR_SHOP_ID) ures
     ON res.ID = ures.REPAIR_SHOP_ID
     UNION
-    SELECT res.ID, res.NAME, res.AUTH, res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
+    SELECT res.ID, res.NAME, res.AUTH, res.PHONE_NO,res.ADDRESS, res.LNG, res.LAT, res.avg_point, res.cntReview, res.AUTH, IFNULL(ures.cntTrade, 0) as cntTrade
     FROM
-    	(SELECT idname.ID, idname.NAME, idname.AUTH, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
+    	(SELECT idname.ID, idname.NAME, idname.AUTH, idname.PHONE_NO, addr.ADDRESS, addr.LNG, addr.LAT, addr.avg_point, addr.cntReview
     	FROM\s
-    		(SELECT mi.ID,ma.NAME, ma.AUTH
+    		(SELECT mi.ID,ma.NAME, ma.AUTH, ma.PHONE_NO
     		FROM S08P22D209.MWS_INSPECTOR mi
     		INNER JOIN S08P22D209.MWS_ACCOUNT ma
     		ON mi.ACCOUNT_ID = ma.ID) idname
@@ -73,4 +73,6 @@ public interface RepairShopRepository extends JpaRepository<RepairShop, Integer>
     ON res.ID = ures.INSPECTOR_ID
     """,nativeQuery = true)
     List<Map<String,String>> getMapData(@Param("inputLat") double inputLat,@Param("inputLng") double inputLng);
+
+    Long countBy();
 }

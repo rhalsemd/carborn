@@ -6,11 +6,15 @@ import org.springframework.stereotype.Service;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
+import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.user.InspectBook;
+import site.carborn.entity.user.InspectResult;
+import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
+import site.carborn.repository.company.InspectorReviewRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.util.board.BoardUtils;
@@ -24,6 +28,9 @@ public class UserInspectService {
     private InspectBookRepository inspectBookRepository;
     @Autowired
     private InspectResultRepository inspectResultRepository;
+
+    @Autowired
+    private InspectorReviewRepository inspectorReviewRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -114,18 +121,11 @@ public class UserInspectService {
         }
         InspectBook update = inspectBookRepository.findById(inspectBookId).orElseThrow(()->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-
+//
         if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())){
             throw new RuntimeException("권한이 없습니다??");
         }
 
-        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(()->
-                new RuntimeException("존재하지 않는 검수원입니다"));
-
-        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(()->
-                new RuntimeException("등록되지 않은 차입니다"));
-
-        update.setCar(inspectBook.getCar());
         update.setContent(inspectBook.getContent());
         update.setBookDt(inspectBook.getBookDt());
         update.setUptDt(LocalDateTime.now());
@@ -151,11 +151,49 @@ public class UserInspectService {
         return inspectResultList;
     }
 
-    public InspectResultGetDetailMapping inspectResultDetail(int inspectResultId){
-        InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectResultId);
+    public InspectResultGetDetailMapping inspectResultDetail(int inspectBookId){
+        int bookStatus = inspectBookRepository.findById(inspectBookId).get().getBookStatus();
+        if (bookStatus == 0){
+            throw new RuntimeException("검사가 완료되지 않았습니다");
+        } else if (bookStatus == 2) {
+            throw new RuntimeException("취소된 예약입니다");
+        }
+        InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectBookId);
         if (result == null){
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
         return result;
+    }
+
+    public InspectorReviewMapping getInspectReviewDetail(int inspectResultId){
+        InspectorReviewMapping result = inspectorReviewRepository.findByStatusAndInspectResult_Id(BoardUtils.BOARD_DELETE_STATUS_FALSE, inspectResultId);
+        return result;
+    }
+
+    public int createInspectReview(int inspectResultId,InspectorReview inspectorReview){
+        InspectResult result = inspectResultRepository.findById(inspectResultId).orElseThrow(()->
+                new RuntimeException("수리결과가 없습니다"));
+
+        if (inspectorReview.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+        Account account = accountRepository.findById(inspectorReview.getAccount().getId());
+        if (account == null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+        if (!account.getId().equals(inspectorReview.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다");
+        }
+
+        inspectorReview.setInspectResult(result);
+        inspectorReview.setInspector(result.getInspectBook().getInspector());
+        inspectorReview.setAccount(result.getInspectBook().getAccount());
+
+        inspectorReview.setRegDt(LocalDateTime.now());
+        inspectorReview.setUptDt(LocalDateTime.now());
+        inspectorReview.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+
+        InspectorReview save = inspectorReviewRepository.save(inspectorReview);
+        return save.getId();
     }
 }
