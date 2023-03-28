@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
+import site.carborn.mapping.company.RepairShopReviewMapping;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.repository.account.AccountRepository;
+import site.carborn.repository.company.RepairShopReviewRepository;
 import site.carborn.repository.user.RepairBookRepository;
 import site.carborn.repository.user.RepairResultRepository;
 import site.carborn.util.board.BoardUtils;
@@ -28,6 +30,8 @@ public class UserRepairService {
     AccountRepository accountRepository;
     @Autowired
     private RepairResultRepository repairResultRepository;
+    @Autowired
+    private RepairShopReviewRepository repairShopReviewRepository;
 
     public Page<UserRepairBookListMapping> repairBookList(String accountId, int page, int size) {
         Page<UserRepairBookListMapping> repairBookList = repairBookRepository.findByStatusAndAccount_Id(
@@ -134,6 +138,12 @@ public class UserRepairService {
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
         return result;
+    }
+
+
+    public RepairShopReviewMapping getRepairReviewDetail(int repairResultId){
+        RepairShopReviewMapping result = repairShopReviewRepository.findByStatusAndRepairResult_Id(BoardUtils.BOARD_DELETE_STATUS_FALSE, repairResultId);
+        return  result;
     }
 
 }

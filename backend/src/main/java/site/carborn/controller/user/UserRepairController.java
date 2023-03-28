@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.RepairBook;
+import site.carborn.mapping.company.RepairShopReviewMapping;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
 import site.carborn.mapping.user.UserRepairBookDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
@@ -90,6 +91,16 @@ public class UserRepairController {
     public ResponseEntity<?> getRepairResultDetail(@PathVariable("repairResultId") int repairResultId){
         RepairResultGetDetailMapping result = userRepairService.repairResultDetail(repairResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+    }
+
+
+    // 리뷰 관리
+    @GetMapping("result/review/{repairResultId}")
+    @Operation(description = "사용자의 정비완료에 대한 리뷰 조회")
+    @Parameter(name = "repairResultId", description = "정비 결과 게시글 id")
+    public ResponseEntity<?> getRepairReviewDetail(@PathVariable int repairResultId){
+        RepairShopReviewMapping detail = userRepairService.getRepairReviewDetail(repairResultId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
     }
 
 }
