@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.user.RepairResultGetDetailMapping;
+import site.carborn.mapping.user.UserRepairBookDetailMapping;
 import site.carborn.mapping.user.UserRepairBookListMapping;
 import site.carborn.mapping.user.UserRepairResultListMapping;
 import site.carborn.repository.account.AccountRepository;
@@ -28,29 +29,29 @@ public class UserRepairService {
     @Autowired
     private RepairResultRepository repairResultRepository;
 
-    public Page<UserRepairBookListMapping> repairBookList(String accountId, int page) {
-        Page<UserRepairBookListMapping> repairBooks = repairBookRepository.findByStatusAndAccount_Id(
+    public Page<UserRepairBookListMapping> repairBookList(String accountId, int page, int size) {
+        Page<UserRepairBookListMapping> repairBookList = repairBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
                 ,BoardUtils.pageRequestInit(
                         page
-                        ,BoardUtils.PAGE_PER_ROW_20
+                        ,size
                         ,"id", BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(repairBooks.isEmpty()){
+        if(repairBookList.isEmpty()){
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
-        return repairBooks;
+        return repairBookList;
     }
 
-    public UserRepairBookListMapping repairBook(Integer id){
+    public UserRepairBookDetailMapping repairBook(Integer id){
         //게시글이 없을때
-        RepairBook repairBook = repairBookRepository.findById(id).orElseThrow(()->
-                new RuntimeException("존재하지 않는 데이터입니다"));
+        UserRepairBookDetailMapping repairBook = repairBookRepository.findByStatusAndId(BoardUtils.BOARD_DELETE_STATUS_FALSE, id);
 
-        if (repairBook.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE){
-            throw new RuntimeException("삭제된 데이터입니다.");
+
+        if (repairBook == null){
+            throw new RuntimeException("존재하지 않는 데이터입니다");
         }
 
         return repairBookRepository.findByStatusAndId(BoardUtils.BOARD_DELETE_STATUS_FALSE, id);
