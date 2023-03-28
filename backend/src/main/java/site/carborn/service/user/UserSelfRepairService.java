@@ -20,7 +20,7 @@ public class UserSelfRepairService {
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"id", BoardUtils.ORDER_BY_DESC
+                        ,"regDt", BoardUtils.ORDER_BY_DESC
                 )
         );
         if(selfRepairsList.isEmpty()){
@@ -29,6 +29,14 @@ public class UserSelfRepairService {
         return selfRepairsList;
     }
 
+    public SelfRepair selfRepairDetail(int selfRepairId){
+    SelfRepair SelfRepair = selfRepairRepository.findByIdAndStatus(selfRepairId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
+    if (SelfRepair == null){
+        throw new RuntimeException("존재하지 않는 데이터입니다");
+    }
+
+    return SelfRepair;
+    }
 
 }

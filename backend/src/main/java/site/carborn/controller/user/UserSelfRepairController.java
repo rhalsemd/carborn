@@ -33,10 +33,18 @@ public class UserSelfRepairController {
             @Parameter(name = "page", description = "페이지 번호"),
             @Parameter(name = "size", description = "페이지 당 게시물 수")
     })
-    public ResponseEntity<?> getInspectBookList(@PathVariable("page") int page,
+    public ResponseEntity<?> getSelfRepairsList(@PathVariable("page") int page,
                                                 @PathVariable("size") int size){
         Page<SelfRepair> selfRepairsList = userSelfRepairService.selfRepairsList(page,size);
         return NormalResponse.toResponseEntity(HttpStatus.OK,selfRepairsList);
+    }
+
+    @GetMapping("/{selfRepairId}")
+    @Operation(description = "사용자의 셀프 수리 단일 조회")
+    @Parameter(name = "selfRepairId", description = "글 id")
+    public ResponseEntity<?> selfRepairDetail(@PathVariable("selfRepairId") int selfRepairId){
+        SelfRepair selfRepair = userSelfRepairService.selfRepairDetail(selfRepairId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,selfRepair);
     }
 
 

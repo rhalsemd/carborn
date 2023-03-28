@@ -12,4 +12,6 @@ public interface SelfRepairRepository extends JpaRepository<SelfRepair, Integer>
 
     Page<SelfRepair> findAllByStatus(@Param("status") boolean status, Pageable page);
 
+    SelfRepair findByIdAndStatus(@Param("selfRepairId") int selfRepairId,@Param("status") boolean status);
+
 }
