@@ -10,6 +10,7 @@ import { loginAction } from "../../modules/takeLoginLogoutModule";
 import { userInfoDeleteReset } from "../../modules/userInfoDeleteModule";
 import { companyInfoDeleteReset } from "../../modules/companyInfoDeleteModule";
 import { companyModifyPasswordReset, userModifyPasswordReset } from "../../modules/modifyPasswordModule";
+import { IsCanSignUpReset } from "../../modules/signUpModule";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -141,6 +142,7 @@ const LoginPages = () => {
     dispatch(companyInfoDeleteReset())
     dispatch(userModifyPasswordReset())
     dispatch(companyModifyPasswordReset())
+    dispatch(IsCanSignUpReset())
   }, [dispatch])
 
   return (

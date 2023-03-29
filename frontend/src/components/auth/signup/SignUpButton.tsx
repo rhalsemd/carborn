@@ -63,8 +63,6 @@ const SignUpButton = ({
   // 액션
   const dispatch = useDispatch();
   const accountType = useSelector((state:any) => state.setAccountTypeReducer.accountType)
-  console.log(accountType)
-  console.log(typeof accountType)
 
   const resetFormData = () => {
     dispatch(useridCheckReset());

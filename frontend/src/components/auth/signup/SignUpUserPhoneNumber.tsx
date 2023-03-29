@@ -23,7 +23,6 @@ const SignUpUserPhoneNumber = ({
   isValid,
 }: SignUpUserPhoneNumberProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setPhoneNumber(value);

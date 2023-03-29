@@ -53,19 +53,7 @@ export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
   try {
     const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
-      body: formData 
-      // {
-      //   id: formData.has("id") && formData.getAll("id").length > 0 ? formData.getAll("id")[0] : "",
-      //   pwd: formData.has("pwd") && formData.getAll("pwd").length > 0 ? formData.getAll("pwd")[0] : "",
-      //   name: formData.has("name") && formData.getAll("name").length > 0 ? formData.getAll("name")[0] : "",
-      //   phoneNo: formData.has("phoneNo") && formData.getAll("phoneNo").length > 0 ? formData.getAll("phoneNo")[0] : "",
-      //   auth: formData.has("auth") && formData.getAll("auth").length > 0 ? formData.getAll("auth")[0] : "",
-      //   birth: formData.has("birth") && formData.getAll("birth").length > 0 ? formData.getAll("birth")[0] : "",
-      // }
-      ,
-      headers: {
-        [ContentType]: multipart_formData,
-      }
+      body: formData,
     })
 
     return response.body;
@@ -80,9 +68,6 @@ export const companySignUpSendApi = async (formData:FormData): Promise<any> => {
     const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
       body: formData,
-      headers: {
-        [ContentType]: multipart_formData,
-      }
     })
     console.log(response)
 
@@ -98,9 +83,6 @@ export const UserIdCheckApi = async (id: string): Promise<any> => {
     const response = await axios({
       method: "GET",
       url: `${CARBORN_SITE}/api/check-id/${id}`,
-      // headers: {
-      //   "Access-Control-Allow-Origin": "*",
-      // },
     });
 
     // true는 가입할수 있는 상태, false는 가입 못하는 상태
@@ -118,9 +100,6 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
     const response = await axios({
       method: "GET",
       url: `${CARBORN_SITE}/api/check-id/${id}`,
-      // headers: {
-      //   "Access-Control-Allow-Origin": "*",
-      // },
     });
 
     // true는 가입할수 있는 상태, false는 가입 못하는 상태
@@ -196,9 +175,11 @@ export const PhoneNumberCheckApi = async (
 ): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${CARBORN_SITE}/api`,
-      data: phonenumber,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/sms-auth-send`,
+      data: {
+        phoneNm: phonenumber
+      },
       headers: {
         [ContentType]: applicationjson,
       },
@@ -233,20 +214,19 @@ export const SearchIdCheckApi = async (payload: any): Promise<any> => {
 export const smsAuthApi = async (payload: any): Promise<any> => {
   try {
     // 전화번호, 인증번호 넘겨주기
-    const response = await axios({
+    const response:any = await axios({
       method: 'POST',
       // 수정해야함
-      url: `${API_URL}/users}`,
+      url: `${CARBORN_SITE}/api/sms-auth-join`,
       data: {
-        phoneNo : payload.phonenumber,
-        authNo : payload.inputValue
+        phoneNm : payload.phoneNumber,
+        authNm : payload.inputValue
       },
       headers: {
         [ContentType]: applicationjson,
       }
     })
-
-    return response
+    return response.data.message
   } catch (error) {
     console.log(error)
   }
