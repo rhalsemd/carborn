@@ -5,18 +5,23 @@ interface Props {
 
 function MarkerDetailInfo({ markerNum, markerArr }: Props) {
   let star: string = "";
-  if (markerArr[markerNum].avg_point >= 4.5) {
+  let blankStar: string = "";
+  if (markerArr[markerNum]?.avg_point >= 4.5) {
     star = "★★★★★";
-  } else if (markerArr[markerNum].avg_point >= 3.5) {
-    star = "★★★★☆";
-  } else if (markerArr[markerNum].avg_point >= 2.5) {
-    star = "★★★☆☆";
-  } else if (markerArr[markerNum].avg_point >= 1.5) {
-    star = "★★☆☆☆";
-  } else if (markerArr[markerNum].avg_point >= 0.5) {
-    star = "★☆☆☆☆";
+  } else if (markerArr[markerNum]?.avg_point >= 3.5) {
+    star = "★★★★";
+    blankStar = "☆";
+  } else if (markerArr[markerNum]?.avg_point >= 2.5) {
+    star = "★★★";
+    blankStar = "☆☆";
+  } else if (markerArr[markerNum]?.avg_point >= 1.5) {
+    star = "★★";
+    blankStar = "☆☆☆";
+  } else if (markerArr[markerNum]?.avg_point >= 0.5) {
+    star = "★";
+    blankStar = "☆☆☆☆";
   } else {
-    star = "☆☆☆☆☆";
+    blankStar = "☆☆☆☆☆";
   }
 
   return (
@@ -28,7 +33,7 @@ function MarkerDetailInfo({ markerNum, markerArr }: Props) {
           fontWeight: "bolder",
         }}
       >
-        {markerArr[markerNum].NAME}
+        {markerArr[markerNum]?.NAME}
       </p>
       <p
         style={{
@@ -37,11 +42,14 @@ function MarkerDetailInfo({ markerNum, markerArr }: Props) {
           fontWeight: "bolder",
         }}
       >
-        {markerArr[markerNum].avg_point}
-        <span>{star}</span>
+        {markerArr[markerNum]?.avg_point}
+        <span style={{ fontSize: "1.2rem", marginLeft: "1%" }}>
+          {star}
+          <span style={{ color: "#BBBBBB" }}>{blankStar}</span>
+        </span>
         <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
           {" "}
-          리뷰 {markerArr[markerNum].cntReview}
+          리뷰 {markerArr[markerNum]?.cntReview}
         </span>
       </p>
       <p
@@ -51,7 +59,7 @@ function MarkerDetailInfo({ markerNum, markerArr }: Props) {
           fontSize: "0.9rem",
         }}
       >
-        {markerArr[markerNum].ADDRESS}
+        {markerArr[markerNum]?.ADDRESS}
       </p>
       <p
         style={{
@@ -70,7 +78,7 @@ function MarkerDetailInfo({ markerNum, markerArr }: Props) {
           fontWeight: "bold",
         }}
       >
-        {markerArr[markerNum].PHONE_NO}
+        {markerArr[markerNum]?.PHONE_NO}
       </p>
     </>
   );

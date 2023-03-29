@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MarkerDetailInfo from "./MarkerDetailInfo";
 import MarkerDetailReview from "./MarkerDetailReview";
 import { useAPI } from "./../../hooks/useAPI";
-import { useQuery } from "react-query";
+import { useQueries } from "react-query";
 
 const roadView = css`
   width: 100%;
@@ -60,6 +60,9 @@ interface Props {
   markerArr: any;
 }
 
+const clientID = process.env.REACT_APP_NAVER_CLIENT_ID;
+const clientSecret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
+
 function MarkerDetail({
   setReserve,
   setMarkerNum,
@@ -72,22 +75,31 @@ function MarkerDetail({
   const [reviewBtn, setReviewBtn] = useState<boolean>(false);
 
   const REVIEW_API = `https://carborn.site/api/user/map/review/${
-    markerArr[markerNum].ID
-  }/${markerArr[markerNum].AUTH}/${1}/${5}`;
+    markerArr[markerNum]?.ID
+  }/${markerArr[markerNum]?.AUTH}/${1}/${5}`;
+
   const getReviewAPI = useAPI("get", REVIEW_API);
 
-  const { data } = useQuery("get_review", () => getReviewAPI, {
-    retry: false,
-    select: (data) => {
-      return data.data.message.content;
+  const [{ data, refetch }] = useQueries([
+    {
+      queryKey: "get-review",
+      queryFn: () => getReviewAPI,
+      retry: false,
+      select: (data: any) => {
+        return data?.data?.message?.content;
+      },
+      keepPreviousData: true,
+      cacheTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     },
-  });
+  ]);
 
   // 파노라마 옵션
   var panoramaOptions = {
     position: new naver.maps.LatLng(
-      markerArr[markerNum].LAT,
-      markerArr[markerNum].LNG
+      markerArr[markerNum]?.LAT,
+      markerArr[markerNum]?.LNG
     ),
     // size: new naver.maps.Size(310, 350),
     pov: {
@@ -101,7 +113,8 @@ function MarkerDetail({
     if (roadViewRef.current) {
       var pano = new naver.maps.Panorama(roadViewRef.current, panoramaOptions);
     }
-  }, []);
+    refetch();
+  }, [markerArr[markerNum]?.LAT, markerArr[markerNum]?.LNG]);
 
   // 나가기 버튼 클릭
   const exit = () => {
@@ -137,7 +150,18 @@ function MarkerDetail({
         <MarkerDetailInfo markerNum={markerNum} markerArr={markerArr} />
       ) : (
         data.map((data: any) => {
-          return <MarkerDetailReview data={data} />;
+          return (
+            <MarkerDetailReview
+              data={data}
+              key={
+                data.accountId +
+                data.content +
+                data.point +
+                data.regDt +
+                data.uptDt
+              }
+            />
+          );
         })
       )}
     </div>

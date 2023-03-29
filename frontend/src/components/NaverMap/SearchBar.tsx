@@ -34,7 +34,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
         <span>★</span>
         <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
           {" "}
-          리뷰 ${item?.cntReview}
+          리뷰 {item?.cntReview}
         </span>
       </p>
       <p

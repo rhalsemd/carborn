@@ -1,7 +1,7 @@
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Props, ReserveInfoType } from "./ReserveForm";
+import { Props } from "./ReserveForm";
 
 function MyCarInformation({ data, setReserveInfo, reserveInfo }: Props) {
   const handleChange = (event: SelectChangeEvent) => {

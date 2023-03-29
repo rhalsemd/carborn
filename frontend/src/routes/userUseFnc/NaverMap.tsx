@@ -198,6 +198,7 @@ function NaverMap() {
       var marker: any, position, infoWindow;
       let newMarker: any[] = [];
       let updateMarker: any[] = [];
+      let openInfoIndex: number = -1;
 
       for (var i = 0; i < markers.length; i++) {
         marker = markers[i];
@@ -210,6 +211,7 @@ function NaverMap() {
           hideMarker(map, marker);
           infoWindow.close();
           setReserve(false);
+          setMarkerNum(-1);
         }
 
         if (marker.map) {
@@ -219,9 +221,15 @@ function NaverMap() {
           newMarker[newMarker.length] = null;
           updateMarker[updateMarker.length] = null;
         }
+        if (infoWindow._isAdded) {
+          openInfoIndex = i;
+        }
         setSearchMarkers(newMarker);
       }
       setMarkerArr(updateMarker);
+      if (openInfoIndex !== -1) {
+        setMarkerNum(openInfoIndex);
+      }
     }
 
     function showMarker(map: any, marker: any) {

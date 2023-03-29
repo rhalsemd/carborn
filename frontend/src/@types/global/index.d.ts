@@ -5,3 +5,11 @@ declare module "*.jpg";
 declare module "gsap/all";
 declare module "*.module.css";
 declare module "jwt-decode";
+
+declare namespace NodeJS {
+  interface ProcessEnv {
+    readonly REACT_NAVER_CLIENT_ID: string;
+    readonly REACT_NAVER_CLIENT_SECRET: string;
+    readonly REACT_IMG_URL: string;
+  }
+}
