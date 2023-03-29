@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL } from "../../../lib/api";
+import { API_URL, CARBORN_SITE } from "../../../lib/api";
 import Nav from "../../Nav";
+import { ContentType, applicationjson } from "./../../../lib/api";
 
 const StyleMyInspectorBookDetailContainer = styled.div`
   width: 100vw;
@@ -49,37 +50,68 @@ export interface bookDetailType {
 
 const MyRepairBookDetail = () => {
   const itemsPerPage = 5;
+
   // 정비
   const [repairBookData, setRapairBookData] = useState<any[]>([]);
   const [currentRepairPage, setCurrentRepairPage] = useState(1);
+  const [totalPageCnt, setTotalPageCnt] = useState(0);
   const [isRepairBookChange, setIsRepairBookChange] = useState<boolean>(false);
   const [isRepairBookDelete, setIsRepairBookDelete] = useState<boolean>(false);
   const [isRepairBookid, setIsRepairBookid] = useState<string | number>(0);
-  const totalRepairPages = Math.ceil(repairBookData.length / itemsPerPage);
+  const totalRepairPages = totalPageCnt;
 
   // 정비
   const handleRepairPaging = async (page: number, count: number) => {
     try {
-      const response = await axios.get(`${API_URL}/myrepairbook`);
-      setRapairBookData(response.data);
+      const response = await axios.get(
+        `${CARBORN_SITE}/api/user/repair/book/list/${page}`
+      );
+      setTotalPageCnt(response.data.message.totalPages);
+
+      console.log(response.data.message);
+
+      const modifiedContent = response.data.message.content.map(
+        (content: any) => {
+          let modifiedBookStatus = "";
+          let modifiedBookStatusNum = 0;
+          switch (content.repairBookBookStatus) {
+            case 0:
+              modifiedBookStatus = "예약 중";
+              modifiedBookStatusNum = 0;
+              break;
+            case 1:
+              modifiedBookStatus = "정비 완료";
+              modifiedBookStatusNum = 1;
+              break;
+            case 2:
+              modifiedBookStatus = "예약 취소";
+              modifiedBookStatusNum = 2;
+              break;
+            default:
+              modifiedBookStatus = content.repairBookBookStatus;
+              modifiedBookStatusNum = 0;
+              break;
+          }
+
+          return {
+            ...content,
+            repairBookBookStatus: modifiedBookStatus,
+            modifiedBookStatusNum,
+          };
+        }
+      );
+
+      setRapairBookData(modifiedContent);
       setCurrentRepairPage(page);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 페이지 네이션 유효성 검사(정비)
-  const startRepairIndex = (currentRepairPage - 1) * itemsPerPage;
-  const endRepairIndex = startRepairIndex + itemsPerPage;
-  const currentRepairItems = repairBookData.slice(
-    startRepairIndex,
-    endRepairIndex
-  );
-
   // 정비, 검수
   useEffect(() => {
     handleRepairPaging(currentRepairPage, itemsPerPage);
-  }, [currentRepairPage]);
+  }, [currentRepairPage, itemsPerPage]);
 
   // 데이터 없을때
   if (repairBookData.length === 0) {
@@ -91,30 +123,17 @@ const MyRepairBookDetail = () => {
     setIsRepairBookChange(true);
     setIsRepairBookid(id);
   };
-  
+
   // 예약 취소 모달 나오게 하기(정비)
-  const handleRepairBookDelete = (id:number) => {
+  const handleRepairBookDelete = (id: number) => {
     setIsRepairBookDelete(true);
     setIsRepairBookid(id);
-  };  
+  };
 
   // 모달창 닫을 때
   const handleCloseModal = () => {
     setIsRepairBookChange(false);
     setIsRepairBookDelete(false);
-  };
-
-  // 예약 변경 로직 구현
-  const handleReservationChange = async (id: string | number, newDate: string) => {
-    try {
-      const response = await axios.put(`API_ENDPOINT/${id}`, {
-        reservationDate: newDate,
-      });
-      console.log(response.data); // 변경된 예약 정보 확인
-      // 변경된 예약 정보를 반영하는 로직 구현
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
@@ -126,25 +145,26 @@ const MyRepairBookDetail = () => {
       <StyleMyBookDetailTable>
         <thead>
           <tr>
-            <th>차량모델</th>
-            <th>제조사</th>
-            <th>차량번호</th>
+            {/* <th>차량모델</th> */}
+            {/* <th>제조사</th> */}
+            {/* <th>차량번호</th> */}
             <th>연식</th>
             <th>{`주행거리(km)`}</th>
-            <th>차량가격</th>
+            {/* <th>정비비용</th> */}
             <th>예약신청일자</th>
             <th>예약변경신청</th>
+            <th>예약취소신청</th>
           </tr>
         </thead>
         <tbody>
-          {currentRepairItems.map((data: bookDetailType, index: number) => (
+          {repairBookData.map((data: bookDetailType, index: number) => (
             <tr key={index}>
-              <td>{data.model}</td>
-              <td>{data.manufacturer}</td>
-              <td>{data.registrationNumber}</td>
+              {/* <td>{data.model}</td> */}
+              {/* <td>{data.manufacturer}</td> */}
+              {/* <td>{data.registrationNumber}</td> */}
               <td>{data.year}</td>
               <td>{data.mileage}</td>
-              <td>{data.price}</td>
+              {/* <td>{data.price}</td> */}
               <td>{data.reservationDate}</td>
               <td>
                 <button onClick={() => handleRepairBookChange(data.id)}>
@@ -195,15 +215,14 @@ const MyRepairBookDetail = () => {
         <MyModalComponent
           isModalOpen={isRepairBookChange}
           onClose={handleCloseModal}
-          id={isRepairBookid}
-          onReservationChange={handleReservationChange}
+          bookid={isRepairBookid}
         />
       )}
       {isRepairBookDelete && (
         <WarningModal
           message="정비예약을 취소하시겠습니까?"
           onClose={handleCloseModal}
-          id={isRepairBookid}
+          bookid={isRepairBookid}
         />
       )}
     </StyleMyInspectorBookDetailContainer>
@@ -271,55 +290,82 @@ const ModalCancelButton = styled(ModalButton)`
 const MyModalComponent = ({
   isModalOpen,
   onClose,
-  id,
-  onReservationChange,
+  bookid,
 }: {
   isModalOpen: boolean;
   onClose: () => void;
-  id: string | number;
-  onReservationChange: (id: string | number, newDate: string) => void;
+  bookid: string | number;
 }) => {
   const [newReservationDate, setNewReservationDate] = useState("");
+  const [reservationChangeContent, setReservationChangeContent] = useState("");
 
-  const handleReservationDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewReservationDate(event.target.value);
+  const handleReservationDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = event.target;
+    const date = new Date(value);
+    //년-월-일 형태로 줌
+    const formattedDate = date.toISOString().substring(0, 10);
+    setNewReservationDate(formattedDate);
   };
 
   const handleSubmit = async () => {
     // 토큰 가져오기
-    const ObjString: string|null = localStorage.getItem('login-token')
+    const ObjString: string | null = localStorage.getItem("login-token");
     const Obj = ObjString ? JSON.parse(ObjString) : null;
 
     try {
-      await axios.put(`API_ENDPOINT/${id}`, {
-        reservationDate: newReservationDate,
-      },
-      { headers : {
-        "Content-Type" : "application/json",
-        Authorization : `Bearer ${Obj.value}`
-      }});
-      onReservationChange(id, newReservationDate);
+      await axios.put(
+        `${CARBORN_SITE}/api/user/repair/book/${bookid}`,
+        // {
+        //   id:bookid,
+        //   content: reservationChangeContent,
+        //   account: Obj.userId,
+        //   bookDt: newReservationDate,
+        // },
+        {
+          headers: {
+            [ContentType]: applicationjson,
+            Authorization: `Bearer ${Obj.value}`,
+          },
+        }
+      );
+
       onClose();
     } catch (error) {
       console.error(error);
     }
   };
 
+  const handleReservationChangeContent = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { value } = e.target;
+    setReservationChangeContent(value);
+  };
+
   return (
     <>
       {isModalOpen && (
         <ModalContainer>
-        <ModalContent>
-          <ModalTitle>정비 예약시간 변경</ModalTitle>
-          <ModalInput
-            type="datetime-local"
-            value={newReservationDate}
-            onChange={handleReservationDateChange}
-          />
-          <ModalButton onClick={handleSubmit}>변경</ModalButton>
-          <ModalCancelButton onClick={onClose}>취소</ModalCancelButton>
-        </ModalContent>
-      </ModalContainer>
+          <ModalContent>
+            <ModalTitle>정비 예약시간 변경</ModalTitle>
+            <ModalInput
+              type="date"
+              value={newReservationDate}
+              onChange={handleReservationDateChange}
+            />
+            <textarea
+              cols={30}
+              rows={5}
+              onChange={(e) => handleReservationChangeContent(e)}
+            />
+            <div>
+              <ModalButton onClick={handleSubmit}>변경</ModalButton>
+              <ModalCancelButton onClick={onClose}>취소</ModalCancelButton>
+            </div>
+          </ModalContent>
+        </ModalContainer>
       )}
     </>
   );
@@ -370,34 +416,37 @@ const StyledModalContent = styled.div`
 `;
 
 export type WarningModalType = {
-  message:string,
-  onClose:any,
-  id: string | number
-} 
+  message: string;
+  onClose: any;
+  bookid: string | number;
+};
 
-const WarningModal = ({ message, onClose, id }:WarningModalType) => {
-
-  const DeleteBook = async (id:string | number) => {
+const WarningModal = ({ message, onClose, bookid }: WarningModalType) => {
+  const DeleteBook = async (id: string | number) => {
     try {
-      const ObjString: string | null = localStorage.getItem('login-token');
+      const ObjString: string | null = localStorage.getItem("login-token");
       const Obj = ObjString ? JSON.parse(ObjString) : null;
 
-      await axios.delete(`API_ENDPOINT/${id}`, {
-        headers: {
-          Authorization: `Bearer ${Obj.value}`,
-        },
-      });
+      await axios.delete(
+        `${CARBORN_SITE}/api/user/repair/book/delete/${bookid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Obj.value}`,
+          },
+        }
+      );
+
       console.log(`예약이 삭제되었습니다.`);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <StyledModalContainer>
       <StyledModalContent>
         <p>{message}</p>
-        <button onClick={() => DeleteBook(id)}>예</button>
+        <button onClick={() => DeleteBook(bookid)}>예</button>
         <button onClick={onClose}>아니오</button>
       </StyledModalContent>
     </StyledModalContainer>

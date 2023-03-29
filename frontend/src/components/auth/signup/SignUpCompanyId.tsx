@@ -20,6 +20,7 @@ const SignUpCompanyId = ({
 }: SignUpCompanyIdProps) => {
   const dispatch = useDispatch();
   const { companyidcheck } = useSelector((state: any) => state.IdCheckReducer);
+  console.log(companyidcheck)
 
   // 입력되는거 formdata에 넘겨주기
   const handleUserId = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,14 +77,13 @@ const SignUpCompanyId = ({
       alert("사용가능한 아이디 입니다.");
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        idcheck: true,
+        idcheck: companyidcheck,
       });
     } else if (companyidcheck === false) {
       alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
       setSignupCompanyFormData({
         ...signupCompanyFormData,
-        idcheck: false,
-        userid: "",
+        idcheck: companyidcheck,
       });
     }
     dispatch(useridCheckReset());

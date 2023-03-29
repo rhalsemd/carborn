@@ -10,7 +10,7 @@ let year = now.getFullYear();
 
 function CarYear({
   setRegistrationInfo,
-}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
+}: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
   const inputTyping = (e: any) => {
     const inputValue = e.$y;
     setRegistrationInfo((registrationInfo) => {

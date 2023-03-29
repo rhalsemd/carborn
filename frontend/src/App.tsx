@@ -21,16 +21,18 @@ import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
 import PasswordComplete from "./routes/auth/PasswordComplete";
 import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
+import MyCarInfoDetail from "./components/MyPage/DetailComponent/MyCarInfoDetail";
 import RepairContent from "./components/MyPage/RepairContent";
 import BuyContent from "./components/MyPage/BuyContent";
 import SellContent from "./components/MyPage/SellContent";
 import UserInfoDelete from "./components/MyPage/UserInfoDelete";
 import CompanyInfoDelete from "./components/MyPage/CompanyInfoDelete";
 import LoginPage from "./routes/auth/LoginPage";
+import NaverMap from "./routes/userUseFnc/NaverMap";
 import GetAgreementPage from "./routes/auth/GetAgreementPage";
 import NewPasswordReset from "./routes/auth/NewPasswordReset";
 import MyInspectorDetail from "./components/MyPage/DetailComponent/MyInspectorDetail";
-import InspectorContent from './components/MyPage/InspectorContent';
+import InspectorContent from "./components/MyPage/InspectorContent";
 import MyRepairDetail from "./components/MyPage/DetailComponent/MyRepairDetail";
 import InsuranceContent from "./components/MyPage/InsuranceContent";
 import MyInsuranceDetail from "./components/MyPage/DetailComponent/MyInsuranceDetail";
@@ -38,6 +40,7 @@ import MyCommunityContent from "./components/MyPage/MyCommunityContent";
 import UserPasswordModify from "./components/MyPage/UserPasswordModify";
 import MyInspectorBookDetail from "./components/MyPage/DetailComponent/MyInspectorBookDetail";
 import MyRepairBookDetail from "./components/MyPage/DetailComponent/MyRepairBookDetail";
+import Community from "./routes/userUseFnc/Community";
 
 const globalStyles = css`
   body {
@@ -65,18 +68,28 @@ const routes = [
   },
   { path: "/:userid/mypage", element: <MyPage /> },
   { path: "/:userid/mypage/mycarinfo", element: <MyCarInfo /> },
+  {
+    path: "/:userid/mypage/mycarinfo/:carId/detail",
+    element: <MyCarInfoDetail />,
+  },
   { path: "/:userid/mypage/inspector", element: <InspectorContent /> },
   {
     path: "/:userid/mypage/inspector/:carId/completedetail",
     element: <MyInspectorDetail />,
   },
-  { path: "/:userid/mypage/inspector/:carId/bookdetail", element: <MyInspectorBookDetail /> },
+  {
+    path: "/:userid/mypage/inspector/:carId/bookdetail",
+    element: <MyInspectorBookDetail />,
+  },
   { path: "/:userid/mypage/repair", element: <RepairContent /> },
   {
     path: "/:userid/mypage/repair/:carId/completedetail",
     element: <MyRepairDetail />,
   },
-  { path: "/:userid/mypage/repair/:carId/bookdetail", element: <MyRepairBookDetail /> },
+  {
+    path: "/:userid/mypage/repair/:carId/bookdetail",
+    element: <MyRepairBookDetail />,
+  },
   { path: "/:userid/mypage/insurance", element: <InsuranceContent /> },
   {
     path: "/:userid/mypage/insurance/:carId/completedetail",
@@ -111,6 +124,8 @@ const routes = [
   { path: "/user/car/list", element: <VehiclePurchase /> },
   { path: "/user/car/:carId", element: <VehiclePurchaseDetail /> },
   { path: "/user/car/sale", element: <SaleRegistration /> },
+  { path: "/user/map", element: <NaverMap /> },
+  { path: "/user/community", element: <Community /> },
 ];
 
 function App() {

@@ -10,6 +10,7 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.account.Company;
 import site.carborn.entity.account.User;
 import site.carborn.entity.common.SmsAuth;
+import site.carborn.entity.company.Cbr;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.company.InsuranceCompany;
 import site.carborn.entity.company.RepairShop;
@@ -17,11 +18,15 @@ import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.account.CompanyRepository;
 import site.carborn.repository.account.UserRepository;
 import site.carborn.repository.common.SmsAuthRepository;
+import site.carborn.repository.company.CbrRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.InsuranceCompanyRepository;
 import site.carborn.repository.company.RepairShopRepository;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.AuthUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -33,6 +38,7 @@ public class JoinService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final CbrRepository cbrRepository;
     private final RepairShopRepository repairShopRepository;
     private final InspectorRepository inspectorRepository;
     private final InsuranceCompanyRepository insuranceCompanyRepository;
@@ -60,10 +66,10 @@ public class JoinService {
             throw new RuntimeException("중복된 휴대전화 번호가 존재합니다");
         }
 
-        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
-        if (smsAuth == null || smsAuth.isStatus() == false) {
-            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
-        }
+//        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
+//        if (smsAuth == null || smsAuth.isStatus() == false) {
+//            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
+//        }
 
         switch(account.getAuth()) {
             case AuthUtils.AUTH_USER:
@@ -89,12 +95,15 @@ public class JoinService {
     }
 
     private void joinCompany(Account account, Company company, AccountRequestDTO dto, Map<String, Object> geo) {
-        double lat = geo == null ? 0 : (double) geo.get("lat");
-        double lng = geo == null ? 0 : (double) geo.get("lng");
+        double lat = geo == null ? 0 : Double.parseDouble((String) geo.get("lat"));
+        double lng = geo == null ? 0 : Double.parseDouble((String) geo.get("lng"));
 
-        accountRepository.save(account);
-        company.setAccount(account);
-        companyRepository.save(company);
+        Account accountSave = accountRepository.save(account);
+        company.setAccount(accountSave);
+        Company companySave = companyRepository.save(company);
+
+        // 사업자등록증 이미지 저장
+        saveCbrImage(companySave, dto);
 
         switch (account.getAuth()) {
             case AuthUtils.AUTH_REPAIR_SHOP -> {
@@ -120,6 +129,21 @@ public class JoinService {
         }
     }
 
+    private void saveCbrImage(Company company, AccountRequestDTO dto) {
+        if (dto.getCbr() == null || dto.getCbr().isEmpty()) {
+            throw new NullPointerException("사업자등록증 이미지를 첨부해주세요");
+        }
+
+        String cbrImgNm = BoardUtils.singleFileSave(dto.getCbr());
+
+        Cbr cbr = new Cbr();
+        cbr.setCompany(company);
+        cbr.setImgNm(cbrImgNm);
+        cbr.setRegDt(LocalDateTime.now());
+
+        cbrRepository.save(cbr);
+    }
+
     public boolean smsAuthJoin(SmsAuth smsAuth) {
         String phoneNm = smsAuth.getPhoneNm();
         Account account = accountRepository.findByPhoneNo(phoneNm);
@@ -138,18 +162,18 @@ public class JoinService {
     }
 
     private void checkAccountIdFormat(String id) {
-        String pattern = "^[a-z0-9]*$";
+        String pattern = "^[a-z0-9_]+$";
         if (id.length() < 8 || id.length() > 20) {
             throw new RuntimeException("아이디는 8~20자로 설정해야 합니다");
         }
 
         if (Pattern.matches(pattern, id) == false) {
-            throw new RuntimeException("아이디는 영문 소문자, 숫자만 가능합니다");
+            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
         }
     }
 
     private void checkAccountPwdFormat(String pwd) {
-        String pattern = "^(?=^.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[!@#$%^&*])[a-z0-9!@#$%^&*]*$";
+        String pattern = "^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$";
         if (pwd.length() < 8 || pwd.length() > 20) {
             throw new RuntimeException("비밀번호는 8~20자로 설정해야 합니다");
         }
@@ -157,5 +181,13 @@ public class JoinService {
         if (Pattern.matches(pattern, pwd) == false) {
             throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
         }
+    }
+
+    public boolean checkId(String id) {
+        Account account = accountRepository.findById(id);
+        if (account != null) {
+            return false;
+        }
+        return true;
     }
 }
