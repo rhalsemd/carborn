@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_INSPECTOR_REVIEW")
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class InspectorReview {
     @Id

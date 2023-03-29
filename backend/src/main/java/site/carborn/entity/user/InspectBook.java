@@ -9,8 +9,7 @@ import site.carborn.entity.account.Account;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
+
 @Entity
 @Table(name = "MWS_INSPECT_BOOK")
 @Getter
