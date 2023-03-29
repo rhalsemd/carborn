@@ -162,18 +162,18 @@ public class JoinService {
     }
 
     private void checkAccountIdFormat(String id) {
-        String pattern = "^[a-z0-9]*$";
+        String pattern = "^[a-z0-9_]+$";
         if (id.length() < 8 || id.length() > 20) {
             throw new RuntimeException("아이디는 8~20자로 설정해야 합니다");
         }
 
         if (Pattern.matches(pattern, id) == false) {
-            throw new RuntimeException("아이디는 영문 소문자, 숫자만 가능합니다");
+            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
         }
     }
 
     private void checkAccountPwdFormat(String pwd) {
-        String pattern = "^(?=^.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[!@#$%^&*])[a-z0-9!@#$%^&*]*$";
+        String pattern = "^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$";
         if (pwd.length() < 8 || pwd.length() > 20) {
             throw new RuntimeException("비밀번호는 8~20자로 설정해야 합니다");
         }
