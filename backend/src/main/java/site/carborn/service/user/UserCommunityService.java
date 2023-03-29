@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import site.carborn.entity.account.Account;
-import site.carborn.entity.car.Car;
-import site.carborn.entity.company.Inspector;
 import site.carborn.entity.user.Community;
-import site.carborn.entity.user.InspectBook;
+import site.carborn.entity.user.CommunityReview;
 import site.carborn.mapping.user.UserCommunityListMapping;
-import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.CommunityRepository;
+import site.carborn.repository.user.CommunityReviewRepository;
 import site.carborn.util.board.BoardUtils;
-import site.carborn.util.common.BookUtils;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +20,8 @@ public class UserCommunityService {
     private CommunityRepository communityRepository;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private CommunityReviewRepository communityReviewRepository;
 
     public Page<UserCommunityListMapping> getBoardList(int page, int size){
         Page<UserCommunityListMapping> getBoardList = communityRepository.findByStatus(
@@ -107,5 +106,26 @@ public class UserCommunityService {
         delete.setStatus(BoardUtils.BOARD_DELETE_STATUS_TRUE);
         delete.setUptDt(LocalDateTime.now());
         communityRepository.save(delete);
+    }
+
+
+    //리뷰
+    public int createcomment(CommunityReview communityReview){
+
+        if (communityReview.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+
+        Account account = accountRepository.findById(communityReview.getAccount().getId());
+        if (account == null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+
+        communityReview.setRegDt(LocalDateTime.now());
+        communityReview.setUptDt(LocalDateTime.now());
+        communityReview.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+
+        CommunityReview save = communityReviewRepository.save(communityReview);
+        return save.getId();
     }
 }

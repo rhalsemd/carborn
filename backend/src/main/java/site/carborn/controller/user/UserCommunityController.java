@@ -11,9 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.Community;
-import site.carborn.entity.user.InspectBook;
+import site.carborn.entity.user.CommunityReview;
 import site.carborn.mapping.user.UserCommunityListMapping;
-import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.service.user.UserCommunityService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
@@ -68,5 +67,13 @@ public class UserCommunityController{
     public ResponseEntity<?> deleteRepairBook(@PathVariable("communityId") int communityId){
         userCommunityService.deleteBoard(communityId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+    }
+
+    //댓글
+    @PostMapping("/comment")
+    @Operation(description = "댓글 작성")
+    public ResponseEntity<?> createcomment(@RequestBody CommunityReview communityReview){
+        int result = userCommunityService.createcomment(communityReview);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 }

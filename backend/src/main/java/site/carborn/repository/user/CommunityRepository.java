@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.Community;
 import site.carborn.mapping.user.UserCommunityListMapping;
-import site.carborn.util.board.BoardUtils;
 
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Integer> {
