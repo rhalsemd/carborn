@@ -86,7 +86,7 @@ public class InspectorService {
         int carId = carRepository.findByVin(carVin).getId();
 
         //carId를 통해 carHash를 가져오는 부분
-        String carHash = carRepository.findAllById(carId).getWalletHash();
+        String carHash = carRepository.findAllByStatusAndId(false,carId).getWalletHash();
 
         Optional<Car> car = carRepository.findById(carId);
         if(car.isEmpty()){
