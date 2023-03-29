@@ -3,7 +3,7 @@ package site.carborn.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import site.carborn.dto.request.UserInspectInsertDTO;
+import site.carborn.dto.request.UserInspectRequestDTO;
 import site.carborn.dto.request.UserInspectUpdateDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
@@ -69,7 +69,7 @@ public class UserInspectService {
     }
 
 
-    public int createInspectBook(UserInspectInsertDTO dto){
+    public int createInspectBook(UserInspectRequestDTO dto){
 
         if (dto.getAccountId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
@@ -120,7 +120,7 @@ public class UserInspectService {
     }
 
 
-    public int updateInspectBook(UserInspectUpdateDTO dto, int inspectBookId) {
+    public int updateInspectBook(UserInspectRequestDTO dto, int inspectBookId) {
 
         if (dto.getAccountId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");

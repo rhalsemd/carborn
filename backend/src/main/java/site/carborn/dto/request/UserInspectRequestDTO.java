@@ -9,7 +9,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserInspectInsertDTO {
+public class UserInspectRequestDTO {
+    private int id;
     private int carId;
     private int inspectorId;
     private String accountId;
