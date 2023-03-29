@@ -31,26 +31,12 @@ const StyleMyCarInfoTitleDiv = styled.div`
 `;
 
 const MyCarDataComponent = () => {
-  const [carData, setCarData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`${API_URL}/mycardata`);
-      setCarData(result.data);
-    };
-    fetchData();
-  }, []);
-
-  if (carData.length === 0) {
-    return <div>No data Found</div>;
-  }
-
   return (
     <StyleMyCarInfoTableDiv>
       <StyleMyCarInfoTitleDiv>
         <p>내 차량 정보</p>
       </StyleMyCarInfoTitleDiv>
-      <MyCarInfoPagination data={carData} itemsPerPage={ITEMS_PER_PAGE} />
+      <MyCarInfoPagination itemsPerPage={ITEMS_PER_PAGE}/>
     </StyleMyCarInfoTableDiv>
   );
 };

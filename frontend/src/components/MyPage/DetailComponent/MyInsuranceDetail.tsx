@@ -1,17 +1,14 @@
 import styled from "@emotion/styled";
 import Nav from './../../Nav';
 
-// 이미지 캐러셀용
 // CarStatus 이미지 import 해오기
 import Document from "../../../assets/carousel/CarStatus4.jpg";
 import { useParams, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import axios from "axios";
 import { API_URL } from './../../../lib/api';
 import { useState } from 'react';
-
 
 const StyleMyInsuranceDetailDiv = styled.div`
 width: 100vw;

@@ -48,12 +48,12 @@ export function* UserIdCheckSaga(
     if (response === false) {
       yield put({ 
         type: USERID_CHECK_FAILURE, 
-        payload: { ...action.payload, success: false }
+        payload: { ...action.payload, success: response }
       });
     } else {
       yield put({ 
         type: USERID_CHECK_SUCCESS, 
-        payload: { ...action.payload, success: true }
+        payload: { ...action.payload, success: response }
       });
     }
   } catch (error) {
@@ -71,12 +71,12 @@ export function* CompanyIdCheckSaga(
     if (response === false) {
       yield put({
         type: COMPANYID_CHECK_FAILURE,
-        payload: { ...action.payload, success: false }
+        payload: { ...action.payload, success: response }
       });
     } else {
       yield put({
         type: COMPANYID_CHECK_SUCCESS,
-        payload: { ...action.payload, success: true }
+        payload: { ...action.payload, success: response }
       });
     }
   } catch (error) {

@@ -21,6 +21,7 @@ import PasswordResetCheck from "./routes/auth/PasswordResetCheck";
 import PasswordComplete from "./routes/auth/PasswordComplete";
 import MyPage from "./routes/MyPage";
 import MyCarInfo from "./components/MyPage/MyCarInfo";
+import MyCarInfoDetail from './components/MyPage/DetailComponent/MyCarInfoDetail';
 import RepairContent from "./components/MyPage/RepairContent";
 import BuyContent from "./components/MyPage/BuyContent";
 import SellContent from "./components/MyPage/SellContent";
@@ -65,6 +66,7 @@ const routes = [
   },
   { path: "/:userid/mypage", element: <MyPage /> },
   { path: "/:userid/mypage/mycarinfo", element: <MyCarInfo /> },
+  { path: "/:userid/mypage/mycarinfo/:carId/detail", element: <MyCarInfoDetail /> },
   { path: "/:userid/mypage/inspector", element: <InspectorContent /> },
   {
     path: "/:userid/mypage/inspector/:carId/completedetail",
