@@ -20,6 +20,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorResponse> noHandlerFoundException(NoHandlerFoundException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.NOT_FOUND, e);
     }
@@ -27,6 +28,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, e);
     }
@@ -34,6 +36,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> methodArgumentNotValidation(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, e);
     }
@@ -41,6 +44,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MissingPathVariableException.class)
     public ResponseEntity<ErrorResponse> missingPathVariableException(MissingPathVariableException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
@@ -48,6 +52,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ErrorResponse> nullPointerException(NullPointerException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
@@ -55,6 +60,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.METHOD_NOT_ALLOWED, e);
     }
@@ -62,6 +68,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> illegalArgumentException(IllegalArgumentException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
@@ -69,6 +76,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MultipartException.class)
     public ResponseEntity<ErrorResponse> multipartException(MultipartException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
@@ -76,6 +84,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> runtimeException(RuntimeException e) {
+        e.printStackTrace();
         log.error(e.getMessage());
         return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
