@@ -18,7 +18,7 @@ public class UserCommunityService {
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"regDt", BoardUtils.ORDER_BY_DESC
+                        ,"id", BoardUtils.ORDER_BY_DESC
                 )
         );
         if(getBoardList.isEmpty()){
