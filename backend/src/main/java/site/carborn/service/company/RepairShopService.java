@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.BoardRequestDTO;
 import site.carborn.dto.request.RepairResultRequestDTO;
+import site.carborn.entity.account.Account;
+import site.carborn.entity.car.Car;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.company.RepairShopReviewMapping;
@@ -85,6 +87,16 @@ public class RepairShopService {
         //carId를 통해 carHash를 가져오는 부분
         String carHash = carRepository.findAllById(carId).getWalletHash();
 
+        Optional<Car> car = carRepository.findById(carId);
+        if(car.isEmpty()){
+            throw new RuntimeException("해당 하는 차량의 데이터가 없습니다.");
+        }
+        car.get().setMileage(dto.getMileage());
+        car.get().setUptDt(LocalDateTime.now());
+
+        //CarId에 해당하는 차량의 주행거리를 업데이트
+        carRepository.save(car.get());
+
         //multipartfile 입력 부분
         String beforeImgNm = BoardUtils.singleFileSave((dto.getBeforeImg()));
         String afterImgNm = BoardUtils.singleFileSave((dto.getAfterImg()));
@@ -95,7 +107,6 @@ public class RepairShopService {
         dto.setReceiptImgNm(receiptImgNm);
 
         RepairResult repairResult = RepairResult.copy(dto);
-
         //caver 입력 부분
         //kas api 호출
         //metaData 등록
