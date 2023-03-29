@@ -84,7 +84,7 @@ naver:
   #naver-cloud-sms:
   #  accessKey: hZMpYNUxSNTcNY73KTBW
   #  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
-  #  serviceId: ncp:sms:kr:257282460554:car-born
+  #  serviceId: ncp:sms:kr:257282496643:sms_example
   #  senderPhone: 01085241881
 
   #naver-cloud-ocr:
