@@ -120,6 +120,23 @@ public class JoinService {
         }
     }
 
+    public boolean smsAuthJoin(SmsAuth smsAuth) {
+        String phoneNm = smsAuth.getPhoneNm();
+        Account account = accountRepository.findByPhoneNo(phoneNm);
+        if (account != null) {
+            throw new RuntimeException("이미 회원가입 되어있는 사용자입니다");
+        }
+
+        SmsAuth data = smsAuthRepository.checkSmsAuth(phoneNm);
+        if (data != null && data.getAuthNm().equals(smsAuth.getAuthNm())) {
+            // 인증 만료시간 내 입력 및 인증번호 일치
+            return true;
+        }
+
+        // 인증 만료시간 초과 혹은 인증번호 불일치
+        return false;
+    }
+
     private void checkAccountIdFormat(String id) {
         String pattern = "^[a-z0-9]*$";
         if (id.length() < 8 || id.length() > 20) {
