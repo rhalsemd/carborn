@@ -71,17 +71,6 @@ public class JoinController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, joinService.checkId(id));
     }
 
-    @PostMapping("/sms-auth-send")
-    public ResponseEntity<?> smsAuthSend(@RequestBody SmsAuth smsAuth) {
-        String phoneNm = smsAuth.getPhoneNm();
-        if (phoneNm == null || phoneNm.isBlank()) {
-            throw new NullPointerException("휴대전화 번호를 입력해주세요");
-        }
-
-        smsService.smsAuthSend(smsAuth);
-        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
-    }
-
     @PostMapping("/sms-auth-join")
     public ResponseEntity<?> smsAuthJoin(@RequestBody SmsAuth smsAuth) {
         String phoneNm = smsAuth.getPhoneNm();
