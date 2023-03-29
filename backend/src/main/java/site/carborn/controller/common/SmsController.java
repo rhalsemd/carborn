@@ -45,13 +45,13 @@ public class SmsController {
         }
 
         String msg = smsService.makeSmsAuthMsg(receivePhone, authNm.toString());
+        //        smsService.smsAuthSend(smsAuth, msg);
 
-        String to = "tmdwns950428@naver.com";
-        String title = "";
+        String to = "ssafy8th.gumi@gmail.com";
+        String title = "CarBorn 인증번호";
         msg = String.format("인증번호 [%s]", authNm);
+        mailService.mailAuthSend(to, title, msg);
 
-//        mailService.mailAuthSend(to, title, msg);
-//        smsService.smsAuthSend(smsAuth, msg);
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 }

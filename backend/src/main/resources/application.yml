@@ -99,3 +99,20 @@ klaytn:
   secretAccessKey: 8fxpWhYFGmYW3Fz1uXT5MiZ_Mw9qhFmojpS94psy
   authorization: Basic S0FTS1VJSVBSVzEzOVdCWkFYVDY1N0gwOjhmeHBXaFlGR21ZVzNGejF1WFQ1TWlaX013OXFoRm1vanBTOTRwc3k=
   chainId: 1001
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: jakarta.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+
+admin:
+  mail: ssafy8th.gumi@gmail.com
+  name: CarBorn 관리자
+  password: mgskcmzufwphqyua
