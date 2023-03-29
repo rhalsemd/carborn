@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import site.carborn.entity.account.Account;
 
 import java.time.LocalDateTime;
@@ -42,9 +43,18 @@ public class Car {
 
     private int mileage;
 
+    @Column(length = 200)
+    private String contractHash;
+
     private LocalDateTime regDt;
 
     private LocalDateTime uptDt;
 
     private boolean status;
+
+    public static Car copy(Car car) {
+        Car ir = new Car();
+        BeanUtils.copyProperties(car, ir);
+        return ir;
+    }
 }
