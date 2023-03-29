@@ -25,6 +25,8 @@ import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.AuthUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -93,8 +95,8 @@ public class JoinService {
     }
 
     private void joinCompany(Account account, Company company, AccountRequestDTO dto, Map<String, Object> geo) {
-        double lat = geo == null ? 0 : (double) geo.get("lat");
-        double lng = geo == null ? 0 : (double) geo.get("lng");
+        double lat = geo == null ? 0 : Double.parseDouble((String) geo.get("lat"));
+        double lng = geo == null ? 0 : Double.parseDouble((String) geo.get("lng"));
 
         Account accountSave = accountRepository.save(account);
         company.setAccount(accountSave);
@@ -137,6 +139,7 @@ public class JoinService {
         Cbr cbr = new Cbr();
         cbr.setCompany(company);
         cbr.setImgNm(cbrImgNm);
+        cbr.setRegDt(LocalDateTime.now());
 
         cbrRepository.save(cbr);
     }
