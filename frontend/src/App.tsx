@@ -33,8 +33,9 @@ import LoginPages from "./routes/auth/LoginPage";
 import GetAgreementPage from "./routes/auth/GetAgreementPage";
 import NewPasswordReset from "./routes/auth/NewPasswordReset";
 import MyInspectorDetail from "./components/MyPage/DetailComponent/MyInspectorDetail";
-import MyInspectorBookDetail from './components/MyPage/DetailComponent/MyInspectorBookDetail';
-import InspectorContent from './components/MyPage/InspectorContent';
+import MyInspectorBookDetail from "./components/MyPage/DetailComponent/MyInspectorBookDetail";
+import InspectorContent from "./components/MyPage/InspectorContent";
+import Community from "./routes/userUseFnc/Community";
 
 const globalStyles = css`
   body {
@@ -63,8 +64,14 @@ const routes = [
   { path: "/:userid/mypage", element: <MyPage /> },
   { path: "/:userid/mypage/mycarinfo", element: <MyCarInfo /> },
   { path: "/:userid/mypage/inspector", element: <InspectorContent /> },
-  { path: "/:userid/mypage/inspector/:carId/completedetail", element: <MyInspectorDetail /> },
-  { path: "/:userid/mypage/inspector/:carId/bookdetail", element: <MyInspectorBookDetail /> },
+  {
+    path: "/:userid/mypage/inspector/:carId/completedetail",
+    element: <MyInspectorDetail />,
+  },
+  {
+    path: "/:userid/mypage/inspector/:carId/bookdetail",
+    element: <MyInspectorBookDetail />,
+  },
   { path: "/:userid/mypage/repair", element: <Repair /> },
   { path: "/:userid/mypage/gallery", element: <MyGallery /> },
   { path: "/:userid/mypage/buycontent", element: <BuyContent /> },
@@ -84,6 +91,7 @@ const routes = [
   { path: "/garage/register", element: <Register /> },
   { path: "/user/car/sale", element: <SaleRegistration /> },
   { path: "/user/map", element: <NaverMap /> },
+  { path: "/user/community", element: <Community /> },
 ];
 
 function App() {
