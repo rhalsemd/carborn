@@ -163,4 +163,12 @@ public class JoinService {
             throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
         }
     }
+
+    public boolean checkId(String id) {
+        Account account = accountRepository.findById(id);
+        if (account != null) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -58,6 +58,19 @@ public class JoinController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
+    @GetMapping("/check-id")
+    public ResponseEntity<?> checkId() {
+        return checkId(null);
+    }
+
+    @GetMapping("/check-id/{id}")
+    public ResponseEntity<?> checkId(@PathVariable String id) {
+        if (id == null || id.isBlank()) {
+            throw new NullPointerException("조회할 아이디 정보를 입력하세요");
+        }
+        return NormalResponse.toResponseEntity(HttpStatus.OK, joinService.checkId(id));
+    }
+
     @PostMapping("/sms-auth-send")
     public ResponseEntity<?> smsAuthSend(@RequestBody SmsAuth smsAuth) {
         String phoneNm = smsAuth.getPhoneNm();
