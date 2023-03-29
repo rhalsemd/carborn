@@ -2,7 +2,7 @@ import axios from "axios";
 
 // export const API_URL = "https://carborn.site";
 // export const CARBORN_SITE = "https://carborn.site";
-export const CARBORN_SITE = "https://192.168.100.80";
+export const CARBORN_SITE = "https://172.30.1.91";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
@@ -98,6 +98,9 @@ export const UserIdCheckApi = async (id: string): Promise<any> => {
     const response = await axios({
       method: "GET",
       url: `${CARBORN_SITE}/api/check-id/${id}`,
+      // headers: {
+      //   "Access-Control-Allow-Origin": "*",
+      // },
     });
 
     // true는 가입할수 있는 상태, false는 가입 못하는 상태
@@ -115,6 +118,9 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
     const response = await axios({
       method: "GET",
       url: `${CARBORN_SITE}/api/check-id/${id}`,
+      // headers: {
+      //   "Access-Control-Allow-Origin": "*",
+      // },
     });
 
     // true는 가입할수 있는 상태, false는 가입 못하는 상태
@@ -191,7 +197,8 @@ export const PhoneNumberCheckApi = async (
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/users`,
+      url: `${CARBORN_SITE}/api`,
+      data: phonenumber,
       headers: {
         [ContentType]: applicationjson,
       },
@@ -215,22 +222,35 @@ export const SearchIdCheckApi = async (payload: any): Promise<any> => {
         [ContentType]: applicationjson,
       },
     });
-    let Obj: UserType | null = null;
-    for (let user of response.data) {
-      if (user.phone === payload.phonenumber) {
-        Obj = {
-          name: user.name,
-          phone: user.phone,
-          verify: true,
-        };
-        break;
-      }
-    }
-    return Obj;
+    
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
+
+// 유저 인증번호랑 전화번호 보내주면서, 인증여부 확인하기
+export const smsAuthApi = async (payload: any): Promise<any> => {
+  try {
+    // 전화번호, 인증번호 넘겨주기
+    const response = await axios({
+      method: 'POST',
+      // 수정해야함
+      url: `${API_URL}/users}`,
+      data: {
+        phoneNo : payload.phonenumber,
+        authNo : payload.inputValue
+      },
+      headers: {
+        [ContentType]: applicationjson,
+      }
+    })
+
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // 약관 동의 불러오기
 export const GetAgreementApi = async (): Promise<any> => {

@@ -1,7 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-import { userverificationNumber } from "../../../../modules/verificationNumberModule";
+import {
+  userSmsAuthAction,
+  userverificationNumber,
+} from "../../../../modules/verificationNumberModule";
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
   display: ${(props) => (props.open ? "flex" : "none")};
@@ -127,8 +130,8 @@ export interface SignUpUserPhoneNumberModalProps {
   open: boolean;
   onClose: () => void;
   phoneNumber: any;
-  setIsValid: any,
-  isValid:boolean
+  setIsValid: any;
+  isValid: boolean;
 }
 
 export interface ModalWrapperProps {
@@ -141,12 +144,13 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   onClose,
   phoneNumber,
   setIsValid,
-  isValid
+  isValid,
 }) => {
-
   const selector = useSelector(
     (state: any) => state.verificationNumberReducer.certificatedNum
   );
+  const isVerification = useSelector((state:any) => state.verificationNumberReducer)
+  console.log(isVerification)
   const [inputValue, setInputValue] = useState("");
   const [countdown, setCountdown] = useState(180);
   const [countdownInterval, setCountdownInterval] = useState<ReturnType<
@@ -157,7 +161,7 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
 
   // 인증번호 발송버튼
   const handleSendVerifyRequest = (phoneNumber: string) => {
-    dispatch(userverificationNumber(phoneNumber))
+    dispatch(userverificationNumber(phoneNumber));
 
     if (isValid) return;
     setCountdown(180);
@@ -170,7 +174,7 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
           if (prevCountdown === 1) {
             clearInterval(countdownInterval!);
             setIsButtonValid(false);
-            setIsValid(false)
+            setIsValid(false);
             return 0;
           } else if (prevCountdown <= 0) {
             clearInterval(countdownInterval!);
@@ -187,25 +191,27 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
     setInputValue("");
     setCountdown(180);
     setIsButtonValid(false);
-    setIsValid(true)
+    setIsValid(true);
     if (countdownInterval) {
       clearInterval(countdownInterval);
     }
     onClose();
   };
 
-  // 인증확인 버튼 
-  const handleVerifyCheck = () => {
-    if(selector === inputValue || !isButtonValid) {
-      setIsButtonValid(true)
-      setIsValid(true)
-      setInputValue("")
+  // 인증확인 버튼
+  const handleVerifyCheck = ({ phoneNumber, inputValue }: any) => {
+    const payload = { phoneNumber, inputValue };
+    dispatch(userSmsAuthAction(payload));
+    if (selector === inputValue || !isButtonValid) {
+      setIsButtonValid(true);
+      setIsValid(true);
+      setInputValue("");
       onClose();
     } else {
-      setIsButtonValid(false)
-      setIsValid(false)
+      setIsButtonValid(false);
+      setIsValid(false);
     }
-  }
+  };
 
   // 시간 형식 바꾸기
   const formatTime = (time: number) => {
@@ -221,14 +227,14 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
 
   useEffect(() => {
     if (selector === inputValue) {
-      setIsButtonValid(true)
-    } else if ( selector !== inputValue && inputValue === "" ) {
-      setIsButtonValid(false)
-      setIsValid(false)
+      setIsButtonValid(true);
+    } else if (selector !== inputValue && inputValue === "") {
+      setIsButtonValid(false);
+      setIsValid(false);
     } else {
-      setIsValid(false)
+      setIsValid(false);
     }
-  }, [inputValue, selector, setIsButtonValid, setIsValid])
+  }, [inputValue, selector, setIsButtonValid, setIsValid]);
 
   return (
     <ModalWrapper open={open} onClick={onClose}>
@@ -267,7 +273,7 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
           <button
             tabIndex={11}
             className="verifyButton"
-            onClick={handleVerifyCheck}
+            onClick={() => handleVerifyCheck({ phoneNumber, inputValue })}
             disabled={!isButtonValid}
           >
             인증확인
