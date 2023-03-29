@@ -59,4 +59,14 @@ public class AccountRequestDTO extends Account {
 
         }
     };
+
+    @Override
+    public String toString() {
+        return "AccountRequestDTO{" +
+                "birth=" + birth +
+                ", brn='" + brn + '\'' +
+                ", address='" + address + '\'' +
+                ", cbr=" + cbr +
+                '}';
+    }
 }
