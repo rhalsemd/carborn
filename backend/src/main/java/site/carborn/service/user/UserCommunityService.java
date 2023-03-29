@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import site.carborn.mapping.user.UserCommunityListMapping;
+import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.repository.user.CommunityRepository;
 import site.carborn.util.board.BoardUtils;
 
@@ -25,5 +26,15 @@ public class UserCommunityService {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return getBoardList;
+    }
+
+    public UserCommunityListMapping getBoardDetail(int communityId){
+        UserCommunityListMapping boardDetail = communityRepository.findAllByIdAndStatus(communityId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
+
+        if (boardDetail == null){
+            throw new RuntimeException("존재하지 않는 데이터입니다");
+        }
+
+        return boardDetail;
     }
 }

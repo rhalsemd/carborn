@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.carborn.mapping.user.UserCommunityListMapping;
+import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.service.user.UserCommunityService;
 import site.carborn.util.network.NormalResponse;
 
@@ -36,6 +37,14 @@ public class UserCommunityController{
                                                 @PathVariable("size") int size){
         Page<UserCommunityListMapping> boardList = userCommunityService.getBoardList(page,size);
         return NormalResponse.toResponseEntity(HttpStatus.OK,boardList);
+    }
+
+    @GetMapping("/{communityId}")
+    @Operation(description = "커뮤니티 글 단일 조회")
+    @Parameter(name = "inspectId", description = "예약글 id")
+    public ResponseEntity<?> getBoardDetail(@PathVariable("communityId") int communityId){
+        UserCommunityListMapping boardDetail = userCommunityService.getBoardDetail(communityId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,boardDetail);
     }
 
 }
