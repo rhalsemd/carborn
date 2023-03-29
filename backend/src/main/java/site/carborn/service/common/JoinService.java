@@ -25,7 +25,6 @@ import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.AuthUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -170,9 +169,9 @@ public class JoinService {
             throw new RuntimeException("아이디는 8~20자로 설정해야 합니다");
         }
 
-        if (Pattern.matches(pattern, id) == false) {
-            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
-        }
+//        if (Pattern.matches(pattern, id) == false) {
+//            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
+//        }
     }
 
     private void checkAccountPwdFormat(String pwd) {
@@ -181,9 +180,9 @@ public class JoinService {
             throw new RuntimeException("비밀번호는 8~20자로 설정해야 합니다");
         }
 
-        if (Pattern.matches(pattern, pwd) == false) {
-            throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
-        }
+//        if (Pattern.matches(pattern, pwd) == false) {
+//            throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
+//        }
     }
 
     public boolean checkId(String id) {
