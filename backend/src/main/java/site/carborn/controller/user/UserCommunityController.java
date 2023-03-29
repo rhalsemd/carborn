@@ -15,6 +15,7 @@ import site.carborn.entity.user.InspectBook;
 import site.carborn.mapping.user.UserCommunityListMapping;
 import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.service.user.UserCommunityService;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
 @Tag(name = "커뮤니티")
@@ -61,4 +62,11 @@ public class UserCommunityController{
         return NormalResponse.toResponseEntity(HttpStatus.OK, userCommunityService.updateBoard(community, communityId));
     }
 
+    @DeleteMapping ("/delete/{communityId}")
+    @Operation(description = "커뮤니티 글 삭제")
+    @Parameter(name = "communityId", description = "게시글 id")
+    public ResponseEntity<?> deleteRepairBook(@PathVariable("communityId") int communityId){
+        userCommunityService.deleteBoard(communityId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+    }
 }
