@@ -3,19 +3,19 @@ package site.carborn.mapping.user;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface UserInspectBookDetailMapping {
+public interface UserRepairBookDetailMapping {
     int getId();
 
-    // 유저 차정보
+    //유저 차 정보
     int getCarId();
 
     //기업 정보
-    int getInspectorId();
-    String getInspectorAddress();
-    String getInspectorAccountName();
-    String getInspectorAccountPhoneNo();
+    int getRepairShopId();
+    String getRepairShopAddress();
+    String getRepairShopAccountName();
+    String getRepairShopAccountPhoneNo();
 
-    //유저예약 정보
+    //유저 예약 정보
     String getAccountId();
     String getContent();
     int getBookStatus();
