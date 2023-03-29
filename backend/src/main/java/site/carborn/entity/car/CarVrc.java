@@ -25,5 +25,8 @@ public class CarVrc {
     @Column(length = 200)
     private String imgNm;
 
+    @Column(length = 200)
+    private String contractHash;
+
     private LocalDateTime regDt;
 }
