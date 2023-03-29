@@ -9,14 +9,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import { useAPI } from "../../hooks/useAPI";
 import { useState } from "react";
 
 interface Props {
   id: string;
-  status: string;
 }
 
 interface MapType {
@@ -38,21 +37,20 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DetailModal({ id, status }: Props) {
+export default function ReviewModal({ id }: Props) {
   const client = useQueryClient();
 
   let URL;
   let queryKey: any;
 
-  const isGarage = useLocation().pathname == "/garage/reserve";
-  const navigate = useNavigate();
+  const isGarage = useLocation().pathname == "/garage/history";
 
   if (isGarage) {
-    URL = `http://carborn.site/api/repair-shop/book/${id}`;
-    queryKey = `getRepairDetailData${id}`;
+    URL = `http://carborn.site/api/repair-shop/result/review/${id}`;
+    queryKey = `getRepairReview${id}`;
   } else {
-    URL = `http://carborn.site/api/inspector/book/${id}`;
-    queryKey = `getInspectorDetailData${id}`;
+    URL = `http://carborn.site/api/inspector/result/review/${id}`;
+    queryKey = `getInspectorReview${id}`;
     //URL = `http://192.168.100.176:80/api/inspector/book/${id}`;
   }
   const getRepairDetail = useAPI("get", URL);
@@ -75,23 +73,39 @@ export default function DetailModal({ id, status }: Props) {
     setOpen(true);
     client.fetchQuery(queryKey);
   };
-  const handleRegister = () => {
-    setOpen(false);
-    if (isGarage) {
-      navigate("/garage/register", { state: { id } });
-    } else {
-      navigate("/inspector/register", { state: { id } });
-    }
-  };
 
   const handleCancel = () => {
     setOpen(false);
   };
+
+  let score;
+  switch (data?.point) {
+    case 0:
+      score = "☆☆☆☆☆";
+      break;
+    case 1:
+      score = "★☆☆☆☆";
+      break;
+    case 2:
+      score = "★★☆☆☆";
+      break;
+    case 3:
+      score = "★★★☆☆";
+      break;
+    case 4:
+      score = "★★★★☆";
+      break;
+    case 5:
+      score = "★★★★★";
+      break;
+    default:
+      score = "";
+  }
   return (
-    <div css={{ width: "10vw" }}>
+    <div>
       <Button
-        variant="contained"
-        sx={{ backgroundColor: "#d23131" }}
+        variant="outlined"
+        color="inherit"
         onClick={handleClickOpen}
         size="small"
       >
@@ -104,59 +118,26 @@ export default function DetailModal({ id, status }: Props) {
         onClose={handleCancel}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{isGarage ? "수리 요청" : "검수 요청"}</DialogTitle>
+        <DialogTitle>Review</DialogTitle>
         <DialogContent sx={{ minWidth: "300px" }}>
           <table css={tableStyle}>
             <thead></thead>
             <tbody>
               <tr>
-                <td>아이디</td>
-                <td> : {data?.accountId}</td>
+                <td>
+                  {data ? data?.content : "아직 리뷰가 등록되지 않았습니다."}
+                </td>
               </tr>
               <tr>
-                <td>이름</td>
-                <td> : {data?.accountName}</td>
-              </tr>
-              <tr>
-                <td>전화번호</td>
-                <td> : {data?.accountPhoneNo}</td>
-              </tr>
-              <tr>
-                <td>차종</td>
-                <td> : {data?.carModelNm}</td>
-              </tr>
-              <tr>
-                <td>차번호</td>
-                <td> : {data?.carRegNm}</td>
-              </tr>
-              <tr>
-                <td>차대 번호</td>
-                <td> : {data?.carVin}</td>
-              </tr>
-              <tr>
-                <td>내용</td>
-                <td> : {data?.content}</td>
+                <td css={{ color: "#ff9600", fontSize: "20px" }}>{score}</td>
               </tr>
             </tbody>
           </table>
-
-          {/* </DialogContentText> */}
         </DialogContent>
         <DialogActions>
-          {!status ? (
-            <>
-              <Button variant="outlined" onClick={handleCancel}>
-                취소
-              </Button>
-              <Button variant="contained" onClick={handleRegister}>
-                {isGarage ? "정비 내역 등록" : "검수 내역 등록"}
-              </Button>
-            </>
-          ) : (
-            <Button variant="outlined" onClick={handleCancel}>
-              닫기
-            </Button>
-          )}
+          <Button variant="outlined" onClick={handleCancel}>
+            닫기
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
