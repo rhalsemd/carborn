@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   companyidCheckReset,
   useridCheckReset,
@@ -9,11 +9,12 @@ import { setUserAccountType } from "../../../modules/setAccountTypeModule";
 
 // 타입
 export type SignupFormData = {
-  accountType: number;
+  accountType: number | string;
   name: string;
   userid: string;
   idcheck: boolean | null;
   password: string;
+  phonenumber: string;
   passwordcheck: boolean;
   identifynumber: string;
   address: string;
@@ -61,6 +62,9 @@ const SignUpButton = ({
 
   // 액션
   const dispatch = useDispatch();
+  const accountType = useSelector((state:any) => state.setAccountTypeReducer.accountType)
+  console.log(accountType)
+  console.log(typeof accountType)
 
   const resetFormData = () => {
     dispatch(useridCheckReset());
@@ -98,6 +102,7 @@ const SignUpButton = ({
         idcheck: null,
         password: "",
         passwordcheck: false,
+        phonenumber:"",
         identifynumber: "",
         address: "",
         isVarify: false,
@@ -112,6 +117,7 @@ const SignUpButton = ({
         password: "",
         passwordcheck: false,
         identifynumber: "",
+        phonenumber:"",
         address: "",
         isVarify: false,
       });

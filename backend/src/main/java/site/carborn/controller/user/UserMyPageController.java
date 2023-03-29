@@ -68,4 +68,26 @@ public class UserMyPageController {
 
         return NormalResponse.toResponseEntity(HttpStatus.OK, returnData);
     }
+
+    @GetMapping("/sell/list/{page}/{size}")
+    @Operation(description = "차량 판매 내역")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 사이즈")
+    })
+    public ResponseEntity<?> getCarSellList(@PathVariable("page") int page, @PathVariable("size") int size){
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page, size, "id", BoardUtils.ORDER_BY_DESC);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.getCarSellList(pageRequest));
+    }
+
+    @GetMapping("/sell/list/{page}/{size}")
+    @Operation(description = "차량 구매 내역")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 사이즈")
+    })
+    public ResponseEntity<?> getCarBuyList(@PathVariable("page") int page, @PathVariable("size") int size){
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page, size, "id", BoardUtils.ORDER_BY_DESC);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.getCarBuyList(pageRequest));
+    }
 }

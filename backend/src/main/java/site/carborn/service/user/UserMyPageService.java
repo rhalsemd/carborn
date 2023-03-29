@@ -16,9 +16,13 @@ import site.carborn.mapping.car.CarGetDetailMapping;
 import site.carborn.mapping.car.CarGetListMapping;
 import site.carborn.mapping.car.CarImageGetDataMapping;
 import site.carborn.mapping.car.CarVrcGetDataMapping;
+import site.carborn.mapping.user.CarSaleBookGetListMapping;
+import site.carborn.mapping.user.CarSaleGetListMapping;
 import site.carborn.repository.car.CarImageRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.car.CarVrcRepository;
+import site.carborn.repository.user.CarSaleBookRepository;
+import site.carborn.repository.user.CarSaleRepository;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.board.BoardUtils;
 
@@ -43,6 +47,12 @@ public class UserMyPageService {
 
     @Autowired
     private CarVrcRepository carVrcRepository;
+
+    @Autowired
+    private CarSaleRepository carSaleRepository;
+
+    @Autowired
+    private CarSaleBookRepository carSaleBookRepository;
 
     @Transactional
     public Car insertCar(CarRequestDTO dto) throws IOException {
@@ -205,5 +215,19 @@ public class UserMyPageService {
     @Transactional
     public List<CarImageGetDataMapping> getImageList(int carId){
         return carImageRepository.findAllByCar_Id(carId);
+    }
+
+    public Page<CarSaleGetListMapping> getCarSellList(Pageable page){
+        //아이디 받는 부분 현재는 임시
+        String userId = "testuser2";
+
+        return carSaleRepository.findAllByStatusAndAccountId(false, userId, page);
+    }
+
+    public Page<CarSaleBookGetListMapping> getCarBuyList(Pageable page){
+        //아이디 받는 부분 현재는 임시
+        String userId = "testuser2";
+
+        return carSaleBookRepository.findAllByStatusAndAccountId(false, userId, page);
     }
 }

@@ -13,4 +13,6 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     Long countByStatusAndSaleStatus(@Param("status") boolean status,@Param("saleStatus") int saleStatus);
 
     Page<CarSaleGetListMapping> findAllByStatusAndSaleStatus(@Param("status") boolean status, @Param("saleStatus") int saleStatus, Pageable page);
+
+    Page<CarSaleGetListMapping> findAllByStatusAndAccountId(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
 }

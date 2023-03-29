@@ -26,8 +26,13 @@ const SignUpCompanyPhoneNumber = ({
 }: SignUpCompanyPhoneNumberProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const handleChange = (value: string) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
     setPhoneNumber(value);
+    setSignupCompanyFormData({
+      ...signupCompanyFormData,
+      phonenumber: value
+    })
   };
 
   // 모달 관련
@@ -65,7 +70,7 @@ const SignUpCompanyPhoneNumber = ({
         id="phoneNumber"
         value={phoneNumber}
         autoComplete="off"
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => handleChange(e)}
         maxLength={11}
       />
       <button tabIndex={9} onClick={openModal}>

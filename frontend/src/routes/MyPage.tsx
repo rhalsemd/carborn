@@ -99,7 +99,7 @@ const StyleMypageSmallCards = styled.div`
 
   p {
     color: #000000c3;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 900;
   }
 `
@@ -205,12 +205,12 @@ const MyPage = () => {
           </Link>}
           {isUser ? <Link to={`/${userid}/mypage/userpasswordmodify`} >
             <StyleMypageSmallCards>
-              <p>비밀번호 변경</p>
+              <p>{`비밀번호 변경(유저)`}</p>
             </StyleMypageSmallCards>
           </Link> : 
           <Link to={`/${userid}/mypage/companypasswordmodify`} >
             <StyleMypageSmallCards>
-              <p>비밀번호 변경</p>
+              <p>{`비밀번호 변경(기업)`}</p>
             </StyleMypageSmallCards>
           </Link>}
         </StyleMyPageDiv>

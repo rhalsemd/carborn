@@ -1,17 +1,17 @@
-import axios from 'axios';
-import styled from '@emotion/styled';
-import { useParams, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import styled from "@emotion/styled";
+import { useParams, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 // 다른 디렉토리에서 임포트
-import Nav from './../../Nav';
-import { API_URL } from './../../../lib/api';
-import { createRepairReviewAction } from '../../../modules/createReviewModule';
+import Nav from "./../../Nav";
+import { API_URL, CARBORN_SITE } from "./../../../lib/api";
+import { createRepairReviewAction } from "../../../modules/createReviewModule";
 
 // 이미지 캐러셀용
 // CarStatus 이미지 import 해오기
-import before from "../../../assets/carousel/CarStatus1.jpg";
+import Before from "../../../assets/carousel/CarStatus1.jpg";
 import After from "../../../assets/carousel/CarStatus2.jpg";
 import Document from "../../../assets/carousel/CarStatus4.jpg";
 
@@ -55,6 +55,12 @@ const StyleRepairImg = styled.img`
 `;
 
 const StyleMyRepairResultDiv = styled.div`
+  width: 80vw;
+  height: 50vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #adadad;
 `;
 
@@ -106,11 +112,16 @@ const MyRepairDetail = () => {
 
   const location = useLocation();
   const dispatch = useDispatch();
-  const ReviewedData = useSelector((state: any) => state.createReviewReducer);
   const detail = location.state;
+  console.log(detail);
+  console.log(detail.id);
 
+  const ReviewedData = useSelector((state: any) => state.createReviewReducer);
+  const [before, setBefore] = useState<string>("");
+  const [after, setAfter] = useState<string>("");
+  const [document, setDocument] = useState<string>("");
   const [isRepairReviews, setIsRepairReviews] = useState<boolean>(false);
-  const [repairResult, setRepairResult] = useState<any[]>([]);
+  const [repairResult, setRepairResult] = useState<any>("");
   // 리뷰 가져오기용
   const [repairReviews, setRepairReviews] = useState<any>("");
 
@@ -120,9 +131,14 @@ const MyRepairDetail = () => {
       try {
         const response = await axios({
           method: "GET",
-          url: `${API_URL}/myrepairdetail`,
+          url: `${CARBORN_SITE}/api/user/repair/result/${detail.id}`,
         });
-        setRepairResult(response.data);
+
+        // 이미지 받아오기 용
+        // setBefore(response.data.message.beforeImgNm)
+        // setAfter(response.data.message.afterImgNm)
+        // setDocument(response.data.message.receiptImgNm)
+        setRepairResult(response.data.message);
       } catch (error) {
         console.log(error);
       }
@@ -130,55 +146,53 @@ const MyRepairDetail = () => {
     fetchData();
 
     // 리뷰 들고올때, axios 요청은 userid, carid 둘다 줘야함.
-    const getData = async () => {
-      try {
-        const response = await axios({
-          method: "GET",
-          url: `${API_URL}/repairreviewwrite`,
-        });
-        setRepairReviews(response.data[response.data.length-1]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getData();
-
-    
+    // const getData = async () => {
+    //   try {
+    //     const response = await axios({
+    //       method: "GET",
+    //       url: `${API_URL}/repairreviewwrite`,
+    //     });
+    //     setRepairReviews(response.data[response.data.length-1]);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // getData();
   }, [location.state, ReviewedData, dispatch, carId, setRepairReviews]);
 
-  useEffect(() => {
-    if (repairReviews) {
-      setIsRepairReviews(true)
-    } else {
-      setIsRepairReviews(false)
-    }
-  }, [setIsRepairReviews, repairReviews])
+  // useEffect(() => {
+  //   if (repairReviews) {
+  //     setIsRepairReviews(true)
+  //   } else {
+  //     setIsRepairReviews(false)
+  //   }
+  // }, [setIsRepairReviews, repairReviews])
 
   // 리뷰달기 버튼 활성화 및 textarea 값 보여주기
   const [reviewInput, setReviewInput] = useState<string>("");
-  const [isReview, setIsReview] = useState<Boolean>(false);
+  // const [isReview, setIsReview] = useState<Boolean>(false);
 
   // 입력하기
-  const handleReviewRegister = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.currentTarget;
-    setReviewInput(value);
-    if (value.length >= 30) {
-      setIsReview(true);
-    }
-  };
+  // const handleReviewRegister = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   const { value } = e.currentTarget;
+  //   setReviewInput(value);
+  //   if (value.length >= 30) {
+  //     setIsReview(true);
+  //   }
+  // };
 
   // 평점만들기
-  const [rating, setRating] = useState(1);
-  const starArr = [1, 2, 3, 4, 5];
+  // const [rating, setRating] = useState(1);
+  // const starArr = [1, 2, 3, 4, 5];
 
-  const handleStarClick = (value: number) => {
-    setRating(value);
-  };
+  // const handleStarClick = (value: number) => {
+  //   setRating(value);
+  // };
 
-  // DB로 작성 내용 보내기
-  const createReview = () => {
-    dispatch(createRepairReviewAction({ reviewInput, rating, carId }));
-  };
+  // // DB로 작성 내용 보내기
+  // const createReview = () => {
+  //   dispatch(createRepairReviewAction({ reviewInput, rating, carId }));
+  // };
 
   return (
     <StyleMyRepairDetailDiv>
@@ -192,39 +206,37 @@ const MyRepairDetail = () => {
           <thead>
             <tr>
               <th>차량모델</th>
-              <th>제조사</th>
+              {/* <th>제조사</th> */}
               <th>{`주행거리(km)`}</th>
               <th>차량번호</th>
               <th>{`연식(년)`}</th>
               <th>검수예약신청일</th>
-              <th>검수완료일</th>
+              {/* <th>검수완료일</th> */}
               <th>검수상태</th>
-              <th>검수업체</th>
+              {/* <th>검수업체</th> */}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{detail.model}</td>
-              <td>{detail.manufacturer}</td>
+              <td>{detail.repairBookCarModelNm}</td>
+              {/* <td>{detail.manufacturer}</td> */}
               <td>{detail.mileage}</td>
-              <td>{detail.plateNumber}</td>
-              <td>{detail.year}</td>
+              <td>{detail.repairBookCarRegNm}</td>
+              <td>{detail.repairBookCarModelYear}</td>
               <td>
-                {detail.maintenanceSchedule === null
-                  ? "-"
-                  : detail.maintenanceSchedule}
+                {detail.repairDt === null ? "-" : detail.repairDt.slice(0, 10)}
               </td>
-              <td>
+              {/* <td>
                 {detail.lastMaintenanceDate === null
                   ? "-"
                   : detail.lastMaintenanceDate}
-              </td>
-              <td>{detail.maintenanceStatus}</td>
-              <td>
+              </td> */}
+              <td>{detail.repairBookBookStatus}</td>
+              {/* <td>
                 {detail.maintenanceCompany === null
                   ? "-"
                   : detail.maintenanceCompany}
-              </td>
+              </td> */}
             </tr>
           </tbody>
         </table>
@@ -240,7 +252,7 @@ const MyRepairDetail = () => {
           <tbody>
             <tr>
               <td>
-                <StyleRepairImg src={before} alt="before" />
+                <StyleRepairImg src={Before} alt="before" />
               </td>
               <td>
                 <StyleRepairImg src={After} alt="After" />
@@ -255,15 +267,11 @@ const MyRepairDetail = () => {
         <div>
           <p>정비 결과</p>
           <StyleMyRepairResultDiv>
-          {repairResult.map((result, index) => (
-            <li key={index}>
-              {result.category} : {result.detail}
-            </li>
-          ))}
+            {repairResult.content}
           </StyleMyRepairResultDiv>
         </div>
         {/* 리뷰 작성 및 조회 */}
-        <StyleMyRepairReviewDiv>
+        {/* <StyleMyRepairReviewDiv>
         {!isRepairReviews? <div>
             <StyleMyRepairReviewStarDiv>
               <span>평점</span>
@@ -308,10 +316,10 @@ const MyRepairDetail = () => {
             </span>
             <p>{repairReviews.reviewInput}</p>
           </StyleGetMyRepairReviewDiv>}
-        </StyleMyRepairReviewDiv>
+        </StyleMyRepairReviewDiv> */}
       </StyleMyRepairDetailContainerDiv>
     </StyleMyRepairDetailDiv>
-  )
-}
+  );
+};
 
-export default MyRepairDetail
+export default MyRepairDetail;

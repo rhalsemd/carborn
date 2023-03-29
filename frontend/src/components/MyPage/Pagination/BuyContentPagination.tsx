@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "./../../../lib/api";
+import { API_URL, CARBORN_SITE } from "./../../../lib/api";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
@@ -34,28 +34,57 @@ const BuyContentPagination = ({
 }: BuySellContentPaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [buyData, setBuyData] = useState<BuyContentType[]>([]);
-  const totalPages = Math.ceil(buyData.length / itemsPerPage);
+  const [totalPageCnt, setTotalPageCnt] = useState(0);
 
   const handleRequestBuyData = async (page: number, count: number) => {
     try {
-      // const response = await axios.get(`${API_URL}/buycontent/${page}/${count}`);
-      const response = await axios.get(`${API_URL}/buycontent`);
-      setBuyData(response.data);
+      const response = await axios.get(`${CARBORN_SITE}/buycontent/${page}/${count}`);
+      // const response = await axios.get(`${API_URL}/buycontent`);
+      // setTotalPageCnt(response.data.message.totalPages);
+
+      const modifiedContent = response.data.message.content.map((content: any) => {
+        let modifiedBookStatus = '';
+        let modifiedBookStatusNum = 0;
+        switch (content.bookStatus) {
+          case 0:
+            modifiedBookStatus = '예약 중';
+            modifiedBookStatusNum = 0;
+            break;
+          case 1:
+            modifiedBookStatus = '구매 완료';
+            modifiedBookStatusNum = 1;
+            break;
+          case 2:
+            modifiedBookStatus = '구매 취소';
+            modifiedBookStatusNum = 2;
+            break;
+          default:
+            modifiedBookStatus = content.bookStatus;
+            modifiedBookStatusNum = 0;
+            break
+        }
+  
+        return {
+          ...content,
+          bookStatus: modifiedBookStatus,
+          modifiedBookStatusNum,
+        };
+      });
+
+      setBuyData(modifiedContent);
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const ObjString: string | null = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
+  const totalPages = totalPageCnt;
+
   useEffect(() => {
     handleRequestBuyData(currentPage, itemsPerPage);
-    console.log();
-  }, []);
-
-  // 페이지 네이션 유효성 검사
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = buyData.slice(startIndex, endIndex);
+  }, [currentPage, itemsPerPage]);
 
   if (buyData.length === 0) {
     return <div>No data Found!</div>;
@@ -79,7 +108,7 @@ const BuyContentPagination = ({
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((buy: BuyContentType, index: number) => (
+          {buyData.map((buy: BuyContentType, index: number) => (
             <tr key={index}>
               <td>{buy.carModel}</td>
               <td>{buy.manufacturer}</td>
@@ -87,7 +116,9 @@ const BuyContentPagination = ({
               <td>{buy.year}</td>
               <td>{buy.mileage}</td>
               <td>{buy.purchasePrice}</td>
-              <td>{buy.reservationDate === null ? "-" : buy.reservationDate}</td>
+              <td>
+                {buy.reservationDate === null ? "-" : buy.reservationDate}
+              </td>
               <td>{buy.purchaseDate === null ? "-" : buy.purchaseDate}</td>
               <td>{buy.purchaseStatus}</td>
               <td>{buy.seller}</td>
