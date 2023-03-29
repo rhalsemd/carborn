@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.Community;
 import site.carborn.entity.user.CommunityReview;
+import site.carborn.mapping.user.UserCommunityCommentListMapping;
 import site.carborn.mapping.user.UserCommunityListMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.CommunityRepository;
@@ -127,5 +128,21 @@ public class UserCommunityService {
 
         CommunityReview save = communityReviewRepository.save(communityReview);
         return save.getId();
+    }
+
+    public Page<UserCommunityCommentListMapping> getcommentList(int page, int size,int communityId){
+        Page<UserCommunityCommentListMapping> getcommentList = communityReviewRepository.findByCommunity_IdAndStatus(
+                communityId,
+                BoardUtils.BOARD_DELETE_STATUS_FALSE
+                ,BoardUtils.pageRequestInit(
+                        page
+                        ,size
+                        ,"id", BoardUtils.ORDER_BY_DESC
+                )
+        );
+        if(getcommentList.isEmpty()){
+            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
+        }
+        return getcommentList;
     }
 }

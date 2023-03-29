@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.entity.user.Community;
 import site.carborn.entity.user.CommunityReview;
+import site.carborn.mapping.user.UserCommunityCommentListMapping;
 import site.carborn.mapping.user.UserCommunityListMapping;
 import site.carborn.service.user.UserCommunityService;
 import site.carborn.util.board.BoardUtils;
@@ -76,4 +77,19 @@ public class UserCommunityController{
         int result = userCommunityService.createcomment(communityReview);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
+
+    @GetMapping("{communityId}/comment/{page}/{size}")
+    @Operation(description = "댓글 목록 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 당 게시물 수")
+    })
+    public ResponseEntity<?> getcommentList(@PathVariable("page") int page,
+                                          @PathVariable("size") int size,
+                                            @PathVariable("communityId") int communityId){
+        Page<UserCommunityCommentListMapping> commentList = userCommunityService.getcommentList(page,size,communityId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,commentList);
+    }
+
+
 }
