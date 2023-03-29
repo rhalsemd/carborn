@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.UserInspectRequestDTO;
-import site.carborn.dto.request.UserInspectUpdateDTO;
+import site.carborn.dto.request.UserInspectReviewRequestDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
@@ -183,28 +183,39 @@ public class UserInspectService {
         return result;
     }
 
-    public int createInspectReview(int inspectResultId,InspectorReview inspectorReview){
+    public int createInspectReview(int inspectResultId, UserInspectReviewRequestDTO dto){
         InspectResult result = inspectResultRepository.findById(inspectResultId).orElseThrow(()->
                 new RuntimeException("수리결과가 없습니다"));
 
-        if (inspectorReview.getAccount().getId().isBlank()) {
+        if (dto.getAccountId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
-        Account account = accountRepository.findById(inspectorReview.getAccount().getId());
+        Account account = accountRepository.findById(dto.getAccountId());
         if (account == null){
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (!account.getId().equals(inspectorReview.getAccount().getId())){
+        if (!account.getId().equals(dto.getAccountId())){
             throw new RuntimeException("권한이 없습니다");
         }
 
-        inspectorReview.setInspectResult(result);
-        inspectorReview.setInspector(result.getInspectBook().getInspector());
-        inspectorReview.setAccount(result.getInspectBook().getAccount());
+        InspectorReview inspectorReview = InspectorReview.builder()
+                .inspectResult(result)
+                .inspector(result.getInspectBook().getInspector())
+                .account(account)
+                .content(dto.getContent())
+                .point(dto.getPoint())
+                .regDt(LocalDateTime.now())
+                .uptDt(LocalDateTime.now())
+                .status(BoardUtils.BOARD_DELETE_STATUS_FALSE)
+                .build();
 
-        inspectorReview.setRegDt(LocalDateTime.now());
-        inspectorReview.setUptDt(LocalDateTime.now());
-        inspectorReview.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+//        UserInspectReviewRequestDTO.setInspectResult(result);
+//        UserInspectReviewRequestDTO.setInspector(result.getInspectBook().getInspector());
+//        UserInspectReviewRequestDTO.setAccount(result.getInspectBook().getAccount());
+//
+//        UserInspectReviewRequestDTO.setRegDt(LocalDateTime.now());
+//        UserInspectReviewRequestDTO.setUptDt(LocalDateTime.now());
+//        UserInspectReviewRequestDTO.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         InspectorReview save = inspectorReviewRepository.save(inspectorReview);
         return save.getId();

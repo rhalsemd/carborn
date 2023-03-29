@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.carborn.dto.request.UserInspectRequestDTO;
-import site.carborn.dto.request.UserInspectUpdateDTO;
+import site.carborn.dto.request.UserInspectReviewRequestDTO;
 import site.carborn.entity.company.InspectorReview;
 import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.*;
@@ -109,8 +109,8 @@ public class UserInspectConteroller {
     @Operation(description = "사용자의 검수완료 리뷰 작성")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
     public ResponseEntity<?> getInspectReviewList(@PathVariable int inspectResultId,
-                                                  @RequestBody InspectorReview inspectorReview){
-        int result = userInspectService.createInspectReview(inspectResultId,inspectorReview);
+                                                  @RequestBody UserInspectReviewRequestDTO dto){
+        int result = userInspectService.createInspectReview(inspectResultId,dto);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 }

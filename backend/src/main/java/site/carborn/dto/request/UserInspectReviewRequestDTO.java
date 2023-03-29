@@ -9,9 +9,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserInspectUpdateDTO {
-    private int id;
+public class UserInspectReviewRequestDTO {
     private String accountId;
     private String content;
-    private LocalDate bookDt;
+    private int point;
 }

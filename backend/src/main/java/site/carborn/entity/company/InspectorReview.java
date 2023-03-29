@@ -1,9 +1,7 @@
 package site.carborn.entity.company;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.InspectResult;
 
@@ -13,6 +11,8 @@ import java.time.LocalDateTime;
 @Table(name = "MWS_INSPECTOR_REVIEW")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class InspectorReview {
     @Id
