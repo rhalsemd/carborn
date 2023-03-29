@@ -22,6 +22,7 @@ public class CommunityReview {
     @JoinColumn(name = "COMMUNITY_ID")
     private Community community;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;

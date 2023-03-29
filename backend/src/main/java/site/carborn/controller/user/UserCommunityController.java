@@ -91,5 +91,12 @@ public class UserCommunityController{
         return NormalResponse.toResponseEntity(HttpStatus.OK,commentList);
     }
 
+    @PutMapping("/{commentId}")
+    @Operation(description = "커뮤니티 글 수정")
+    @Parameter(name = "communityId", description = "게시글 id")
+    public ResponseEntity<?> updateComment(@RequestBody CommunityReview communityReview,
+                                         @PathVariable("commentId") int commentId) {
+        return NormalResponse.toResponseEntity(HttpStatus.OK, userCommunityService.updateComment(communityReview, commentId));
+    }
 
 }

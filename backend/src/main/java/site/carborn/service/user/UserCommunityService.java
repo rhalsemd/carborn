@@ -3,6 +3,7 @@ package site.carborn.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.Community;
 import site.carborn.entity.user.CommunityReview;
@@ -144,5 +145,31 @@ public class UserCommunityService {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return getcommentList;
+    }
+
+    public int updateComment(CommunityReview communityReview, int commentId) {
+
+        if (communityReview.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+
+        if (accountRepository.findById(communityReview.getAccount().getId())==null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+        if (communityReview.getId() != commentId){
+            throw new RuntimeException("잘못된 경로입니다");
+        }
+        Community update = communityRepository.findById(commentId).orElseThrow(()->
+                new RuntimeException("존재하지 않는 데이터입니다"));
+//
+        if (!communityReview.getAccount().getId().equals(update.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다");
+        }
+
+        update.setContent(communityReview.getContent());
+        update.setUptDt(LocalDateTime.now());
+
+        communityRepository.save(update);
+        return update.getId();
     }
 }
