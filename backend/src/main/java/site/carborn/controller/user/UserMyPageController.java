@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @Tag(name = "UserMyPage", description = "UserMypage 관련 API")
@@ -61,11 +61,11 @@ public class UserMyPageController {
         List<CarImageGetDataMapping> cigdm = userMyPageService.getImageList(carId);
         CarVrcGetDataMapping cvgdm = userMyPageService.getCarVrcData(carId);
 
-        JSONObject returnData = new JSONObject();
+        HashMap<String, Object> returnData = new HashMap<>();
         returnData.put("detail",cgdm);
         returnData.put("img",cigdm);
         returnData.put("vrc",cvgdm);
 
-        return NormalResponse.toResponseEntity(HttpStatus.OK,returnData);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, returnData);
     }
 }

@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface CarImageRepository extends JpaRepository<CarImage, Integer> {
 
-    List<CarImageGetDataMapping> findAllById(@Param("id") int id);
+    List<CarImageGetDataMapping> findAllByCar_Id(@Param("carId") int carIds);
 
 }

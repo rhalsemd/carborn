@@ -199,11 +199,11 @@ public class UserMyPageService {
 
     @Transactional
     public CarVrcGetDataMapping getCarVrcData(int carId){
-        return carVrcRepository.findAllById(carId);
+        return carVrcRepository.findAllByCar_Id(carId);
     }
 
     @Transactional
     public List<CarImageGetDataMapping> getImageList(int carId){
-        return carImageRepository.findAllById(carId);
+        return carImageRepository.findAllByCar_Id(carId);
     }
 }

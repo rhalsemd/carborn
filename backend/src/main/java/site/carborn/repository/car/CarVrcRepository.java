@@ -9,6 +9,6 @@ import site.carborn.mapping.car.CarVrcGetDataMapping;
 @Repository
 public interface CarVrcRepository extends JpaRepository<CarVrc, Integer> {
 
-    CarVrcGetDataMapping findAllById(@Param("id") int id);
+    CarVrcGetDataMapping findAllByCar_Id(@Param("carId") int carId);
 
 }
