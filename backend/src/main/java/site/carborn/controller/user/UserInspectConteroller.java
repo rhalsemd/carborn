@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.user.InspectBook;
+import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.service.user.UserInspectService;
 import site.carborn.util.board.BoardUtils;
@@ -29,7 +31,7 @@ public class UserInspectConteroller {
     @Operation(description = "사용자의 검수원 예약 목록 조회")
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 번호")
+            @Parameter(name = "size", description = "페이지내 게시글 수")
     })
     public ResponseEntity<?> getInspectBookList(@PathVariable("page") int page,
                                                 @PathVariable("size") int size){
@@ -74,7 +76,7 @@ public class UserInspectConteroller {
     @Operation(description = "사용자의 검수 완료 목록 조회")
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 번호")
+            @Parameter(name = "size", description = "페이지 당 게시물 수")
     })
     public ResponseEntity<?> getInspectResultList(@PathVariable("page") int page,
                                                   @PathVariable("size") int size){
@@ -83,12 +85,31 @@ public class UserInspectConteroller {
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
-    @GetMapping("/result/{inspectResultId}")
-    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @GetMapping("/result/{inspectBookId}")
+    @Operation(description = "사용자의 검수 완료 단일 조회")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
-    public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectResultId") int inspectResultId){
-        InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectResultId);
+    public ResponseEntity<?> getInspectResultDetail(@PathVariable("inspectBookId") int inspectBookId){
+        InspectResultGetDetailMapping result = userInspectService.inspectResultDetail(inspectBookId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
+
+
+    //리뷰
+    @GetMapping("/result/review/{inspectResultId}")
+    @Operation(description = "사용자의 검수완료 리뷰 조회")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectReviewDetail(@PathVariable int inspectResultId){
+        InspectorReviewMapping detail = userInspectService.getInspectReviewDetail(inspectResultId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
+    }
+
+    @PostMapping("/result/review/{inspectResultId}")
+    @Operation(description = "사용자의 검수완료 리뷰 작성")
+    @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
+    public ResponseEntity<?> getInspectReviewList(@PathVariable int inspectResultId,
+                                                  @RequestBody InspectorReview inspectorReview){
+        int result = userInspectService.createInspectReview(inspectResultId,inspectorReview);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
+    }
 }

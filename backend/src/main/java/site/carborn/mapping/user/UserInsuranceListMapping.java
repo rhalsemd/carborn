@@ -1,30 +1,22 @@
-package site.carborn.mapping.car;
+package site.carborn.mapping.user;
 
 import java.time.LocalDateTime;
 
-public interface CarInsuranceHistoryGetDetailMapping {
-
-    String getId();
+public interface UserInsuranceListMapping {
+    int getId();
 
     //기업정보
     String getInsuranceCompanyAccountId();
 
     //차정보
-    String getCarAccountId();
     String getCarMaker();
     String getCarModelNm();
     String getCarModelYear();
     String getCarRegNm();
 
-    String getCarVin();
-
+    //보험수리관련
     String getCategory();
-
-    String getContent();
-
-    String getInsuranceImgNm();
-
     LocalDateTime getInsuranceDt();
-
     LocalDateTime getRegDt();
+
 }
