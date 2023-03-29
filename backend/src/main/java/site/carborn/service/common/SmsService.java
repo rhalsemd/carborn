@@ -59,9 +59,8 @@ public class SmsService {
 
     private final SmsAuthRepository smsAuthRepository;
 
-    public void smsAuthSend(SmsAuth smsAuth) {
+    public void smsAuthSend(SmsAuth smsAuth, String msg) {
         String receivePhone = smsAuth.getPhoneNm();
-        String msg = makeSmsAuthMsg(receivePhone);
 
         String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
         String requestUrl= "/sms/v2/services/";                   		// 요청 URL
@@ -165,7 +164,7 @@ public class SmsService {
         return encodeBase64String;
     }
 
-    private String makeSmsAuthMsg(String phoneNm) {
+    public String makeSmsAuthMsg(String phoneNm) {
         Random random = new Random();
 
         StringBuilder authNm = new StringBuilder();

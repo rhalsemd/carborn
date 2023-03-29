@@ -66,10 +66,10 @@ public class JoinService {
             throw new RuntimeException("중복된 휴대전화 번호가 존재합니다");
         }
 
-//        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
-//        if (smsAuth == null || smsAuth.isStatus() == false) {
-//            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
-//        }
+        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
+        if (smsAuth == null || smsAuth.isStatus() == false) {
+            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
+        }
 
         switch(account.getAuth()) {
             case AuthUtils.AUTH_USER:
@@ -151,9 +151,12 @@ public class JoinService {
             throw new RuntimeException("이미 회원가입 되어있는 사용자입니다");
         }
 
-        SmsAuth data = smsAuthRepository.checkSmsAuth(phoneNm);
+        SmsAuth data = smsAuthRepository.getSmsAuth(phoneNm);
         if (data != null && data.getAuthNm().equals(smsAuth.getAuthNm())) {
             // 인증 만료시간 내 입력 및 인증번호 일치
+            data.setStatus(true);
+            smsAuthRepository.save(data);
+
             return true;
         }
 

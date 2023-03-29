@@ -31,7 +31,10 @@ public class SmsController {
             throw new NullPointerException("휴대전화 번호를 입력해주세요");
         }
 
-        smsService.smsAuthSend(smsAuth);
+        String receivePhone = smsAuth.getPhoneNm();
+        String msg = smsService.makeSmsAuthMsg(receivePhone);
+
+        smsService.smsAuthSend(smsAuth, msg);
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 }
