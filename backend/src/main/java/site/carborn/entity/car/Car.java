@@ -53,8 +53,8 @@ public class Car {
     private boolean status;
 
     public static Car copy(Car car) {
-        Car ir = new Car();
-        BeanUtils.copyProperties(car, ir);
-        return ir;
+        Car c = new Car();
+        BeanUtils.copyProperties(car, c);
+        return c;
     }
 }
