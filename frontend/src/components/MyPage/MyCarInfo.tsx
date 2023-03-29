@@ -16,18 +16,14 @@ const MyCarInfo = () => {
       <Nav />
       {/* 이거 클릭하면, 차량 판매등록 페이지로 가기 */}
       <Link to="/">
-        <button>
-          판매 등록
-        </button>
+        <button>판매 등록</button>
       </Link>
       {/* 이거 클릭하면, 차량 내차등록 페이지로 가기 */}
       <Link to="/">
-        <button>
-          내차 등록
-        </button>
+        <button>내차 등록</button>
       </Link>
       <StyleMyCarInfoContainer>
-        <MyCarDataComponent/>
+        <MyCarDataComponent />
       </StyleMyCarInfoContainer>
     </>
   );

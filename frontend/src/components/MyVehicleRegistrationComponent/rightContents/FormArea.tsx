@@ -9,6 +9,7 @@ import CarNumber from "./CarNumber";
 import CarYear from "./CarYear";
 import DistanceDriven from "./DistanceDriven";
 import ManufacturingCompany from "./ManufacturingCompany";
+import RegistrationBtn from "./RegistrationBtn";
 
 const rightContent = css`
   border: 1px solid black;
@@ -16,10 +17,19 @@ const rightContent = css`
   height: 90vh;
 `;
 
+const API = `http://192.168.100.176:8080/uploadFiles`;
+
 function FormArea({
   registrationInfo,
   setRegistrationInfo,
-}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
+}: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
+  const newRegistrationInfo = {
+    manufacturingCompany: registrationInfo?.manufacturingCompany,
+    carNumber: registrationInfo?.carNumber,
+    carYear: registrationInfo?.carYear,
+    distanceDriven: registrationInfo?.distanceDriven,
+  };
+
   return (
     <div css={rightContent}>
       <h2 style={{ textAlign: "center" }}>차량 등록</h2>
@@ -37,6 +47,13 @@ function FormArea({
       <AdditionalSubmissionFiles
         registrationInfo={registrationInfo}
         setRegistrationInfo={setRegistrationInfo}
+      />
+      {/* 등록하기 버튼 */}
+      <RegistrationBtn
+        registrationInfo={registrationInfo}
+        setRegistrationInfo={setRegistrationInfo}
+        newRegistrationInfo={newRegistrationInfo}
+        API={API}
       />
     </div>
   );
