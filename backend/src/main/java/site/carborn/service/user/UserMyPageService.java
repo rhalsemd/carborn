@@ -25,6 +25,7 @@ import site.carborn.repository.user.CarSaleBookRepository;
 import site.carborn.repository.user.CarSaleRepository;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
 import site.carborn.util.common.BuyUtils;
 
 import java.io.IOException;
@@ -218,6 +219,7 @@ public class UserMyPageService {
         return carImageRepository.findAllByCar_Id(carId);
     }
 
+    @Transactional
     public Page<CarSaleGetListMapping> getCarSellList(Pageable page){
         //아이디 받는 부분 현재는 임시
         String userId = "testuser2";
@@ -225,6 +227,7 @@ public class UserMyPageService {
         return carSaleRepository.findAllByStatusAndAccountId(false, userId, page);
     }
 
+    @Transactional
     public Page<CarSaleBookGetListMapping> getCarBuyList(Pageable page){
         //아이디 받는 부분 현재는 임시
         String userId = "testuser2";
@@ -232,7 +235,16 @@ public class UserMyPageService {
         return carSaleBookRepository.findAllByStatusAndAccountId(false, userId, page);
     }
 
-    public int updateBookCancel(int carSaleBookId){
-        return carSaleBookRepository.updateBookStatusCancel(carSaleBookId, BuyUtils.BUY_STATUS_CANCEL, LocalDateTime.now());
+    @Transactional
+    public String updateBookCancel(int carSaleBookId){
+        carSaleBookRepository.updateBookStatusCancel(carSaleBookId, BuyUtils.BUY_STATUS_CANCEL, false ,LocalDateTime.now());
+        return BoardUtils.BOARD_CRUD_SUCCESS;
+    }
+
+    @Transactional
+    public String updateSaleCancel(int carSaleId){
+        carSaleRepository.updateSaleCancel(carSaleId, false ,BuyUtils.BUY_STATUS_CANCEL ,LocalDateTime.now());
+        carSaleBookRepository.updateSaleCancel(carSaleId,BuyUtils.BUY_STATUS_CANCEL, false, LocalDateTime.now());
+        return BoardUtils.BOARD_CRUD_SUCCESS;
     }
 }

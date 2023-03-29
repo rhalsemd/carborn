@@ -17,6 +17,10 @@ public interface CarSaleBookRepository extends JpaRepository<CarSaleBook, Intege
     Page<CarSaleBookGetListMapping> findAllByStatusAndAccountId(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.id = :id")
-    int updateBookStatusCancel(@Param("id") int id,@Param("bookStatus") int bookStatus, @Param("uptDt") LocalDateTime uptDt);
+    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.id = :id AND csb.status = :status")
+    void updateBookStatusCancel(@Param("id") int id,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.carSale.id = :carSaleId AND csb.status = :status")
+    void updateSaleCancel(@Param("carSaleId") int carSaleId,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt);
 }

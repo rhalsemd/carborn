@@ -96,7 +96,16 @@ public class UserMyPageController {
     @Parameters({
             @Parameter(name = "carSaleBookId", description = "차량 구매 내역 페이지 번호")
     })
-    public ResponseEntity<?> updateSaleCancel(@PathVariable("carSaleBookId") int carSaleBookId){
+    public ResponseEntity<?> updateSaleBookCancel(@PathVariable("carSaleBookId") int carSaleBookId){
         return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.updateBookCancel(carSaleBookId));
+    }
+
+    @PutMapping("/sell/cancel/{carSaleId}")
+    @Operation(description = "차량 판매 취소")
+    @Parameters({
+            @Parameter(name = "carSaleId", description = "차량 판매 내역 페이지 번호")
+    })
+    public ResponseEntity<?> updateSaleCancel(@PathVariable("carSaleId") int carSaleId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.updateSaleCancel(carSaleId));
     }
 }
