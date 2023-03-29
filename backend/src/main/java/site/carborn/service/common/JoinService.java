@@ -25,7 +25,6 @@ import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.AuthUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -66,10 +65,10 @@ public class JoinService {
             throw new RuntimeException("중복된 휴대전화 번호가 존재합니다");
         }
 
-//        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
-//        if (smsAuth == null || smsAuth.isStatus() == false) {
-//            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
-//        }
+        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
+        if (smsAuth == null || smsAuth.isStatus() == false) {
+            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
+        }
 
         switch(account.getAuth()) {
             case AuthUtils.AUTH_USER:
@@ -151,9 +150,12 @@ public class JoinService {
             throw new RuntimeException("이미 회원가입 되어있는 사용자입니다");
         }
 
-        SmsAuth data = smsAuthRepository.checkSmsAuth(phoneNm);
+        SmsAuth data = smsAuthRepository.getSmsAuth(phoneNm);
         if (data != null && data.getAuthNm().equals(smsAuth.getAuthNm())) {
             // 인증 만료시간 내 입력 및 인증번호 일치
+            data.setStatus(true);
+            smsAuthRepository.save(data);
+
             return true;
         }
 
@@ -167,9 +169,9 @@ public class JoinService {
             throw new RuntimeException("아이디는 8~20자로 설정해야 합니다");
         }
 
-        if (Pattern.matches(pattern, id) == false) {
-            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
-        }
+//        if (Pattern.matches(pattern, id) == false) {
+//            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
+//        }
     }
 
     private void checkAccountPwdFormat(String pwd) {
@@ -178,9 +180,9 @@ public class JoinService {
             throw new RuntimeException("비밀번호는 8~20자로 설정해야 합니다");
         }
 
-        if (Pattern.matches(pattern, pwd) == false) {
-            throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
-        }
+//        if (Pattern.matches(pattern, pwd) == false) {
+//            throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
+//        }
     }
 
     public boolean checkId(String id) {

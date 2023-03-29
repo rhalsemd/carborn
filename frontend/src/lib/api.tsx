@@ -2,7 +2,7 @@ import axios from "axios";
 
 // export const API_URL = "https://carborn.site";
 // export const CARBORN_SITE = "https://carborn.site";
-export const CARBORN_SITE = "https://192.168.100.80";
+export const CARBORN_SITE = "https://172.30.1.91";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
@@ -53,19 +53,7 @@ export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
   try {
     const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
-      body: formData 
-      // {
-      //   id: formData.has("id") && formData.getAll("id").length > 0 ? formData.getAll("id")[0] : "",
-      //   pwd: formData.has("pwd") && formData.getAll("pwd").length > 0 ? formData.getAll("pwd")[0] : "",
-      //   name: formData.has("name") && formData.getAll("name").length > 0 ? formData.getAll("name")[0] : "",
-      //   phoneNo: formData.has("phoneNo") && formData.getAll("phoneNo").length > 0 ? formData.getAll("phoneNo")[0] : "",
-      //   auth: formData.has("auth") && formData.getAll("auth").length > 0 ? formData.getAll("auth")[0] : "",
-      //   birth: formData.has("birth") && formData.getAll("birth").length > 0 ? formData.getAll("birth")[0] : "",
-      // }
-      ,
-      headers: {
-        [ContentType]: multipart_formData,
-      }
+      body: formData,
     })
 
     return response.body;
@@ -80,9 +68,6 @@ export const companySignUpSendApi = async (formData:FormData): Promise<any> => {
     const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
       body: formData,
-      headers: {
-        [ContentType]: multipart_formData,
-      }
     })
     console.log(response)
 
@@ -190,8 +175,11 @@ export const PhoneNumberCheckApi = async (
 ): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${API_URL}/users`,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/sms-auth-send`,
+      data: {
+        phoneNm: phonenumber
+      },
       headers: {
         [ContentType]: applicationjson,
       },
@@ -215,22 +203,34 @@ export const SearchIdCheckApi = async (payload: any): Promise<any> => {
         [ContentType]: applicationjson,
       },
     });
-    let Obj: UserType | null = null;
-    for (let user of response.data) {
-      if (user.phone === payload.phonenumber) {
-        Obj = {
-          name: user.name,
-          phone: user.phone,
-          verify: true,
-        };
-        break;
-      }
-    }
-    return Obj;
+    
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
+
+// 유저 인증번호랑 전화번호 보내주면서, 인증여부 확인하기
+export const smsAuthApi = async (payload: any): Promise<any> => {
+  try {
+    // 전화번호, 인증번호 넘겨주기
+    const response:any = await axios({
+      method: 'POST',
+      // 수정해야함
+      url: `${CARBORN_SITE}/api/sms-auth-join`,
+      data: {
+        phoneNm : payload.phoneNumber,
+        authNm : payload.inputValue
+      },
+      headers: {
+        [ContentType]: applicationjson,
+      }
+    })
+    return response.data.message
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // 약관 동의 불러오기
 export const GetAgreementApi = async (): Promise<any> => {

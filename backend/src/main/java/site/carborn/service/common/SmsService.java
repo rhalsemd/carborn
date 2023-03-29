@@ -59,9 +59,8 @@ public class SmsService {
 
     private final SmsAuthRepository smsAuthRepository;
 
-    public void smsAuthSend(SmsAuth smsAuth) {
+    public void smsAuthSend(SmsAuth smsAuth, String msg) {
         String receivePhone = smsAuth.getPhoneNm();
-        String msg = makeSmsAuthMsg(receivePhone);
 
         String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
         String requestUrl= "/sms/v2/services/";                   		// 요청 URL
@@ -165,14 +164,7 @@ public class SmsService {
         return encodeBase64String;
     }
 
-    private String makeSmsAuthMsg(String phoneNm) {
-        Random random = new Random();
-
-        StringBuilder authNm = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            authNm.append((random.nextInt(10)));
-        }
-
+    public String makeSmsAuthMsg(String phoneNm, String authNm) {
         StringBuilder sb = new StringBuilder();
         sb.append("[CarBorn]\n");
         sb.append("인증번호 : ");
@@ -180,7 +172,7 @@ public class SmsService {
 
         SmsAuth smsAuth = new SmsAuth();
         smsAuth.setPhoneNm(phoneNm);
-        smsAuth.setAuthNm(authNm.toString());
+        smsAuth.setAuthNm(authNm);
         smsAuth.setStatus(false);
         smsAuth.setRegDt(LocalDateTime.now());
         smsAuth.setExpDt(LocalDateTime.now().plusMinutes(3));
