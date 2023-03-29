@@ -113,6 +113,9 @@ public class UserInspectService {
         if (delete.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
             throw new RuntimeException("삭제된 데이터입니다");
         }
+        if (delete.getBookStatus() != BookUtils.BOOK_STATUS_WAIT){
+            throw new RuntimeException("거래가 진행중이거나 완료된 상태입니다");
+        }
 
         delete.setStatus(BoardUtils.BOARD_DELETE_STATUS_TRUE);
         delete.setUptDt(LocalDateTime.now());
