@@ -107,13 +107,15 @@ export type reviewInputType = {
 };
 
 const MyInspectorDetail = () => {
-  const location = useLocation();
-  const dispatch = useDispatch();
   const param = useParams();
   const carId = param.carId;
+  
+  const location = useLocation();
+  const dispatch = useDispatch();
   // 게시글 id 받아오기
   const detail = location.state;
   console.log(detail)
+  console.log(detail.id)
   
   const ReviewedData = useSelector((state: any) => state.createReviewReducer);
   const [before, setBefore] = useState<string>('');
@@ -133,17 +135,18 @@ const MyInspectorDetail = () => {
           url: `${CARBORN_SITE}/api/user/inspect/result/${detail.id}`,
         });
 
-        setBefore(response.data.message.beforeImgNm)
-        setAfter(response.data.message.afterImgNm)
-        setDocument(response.data.message.receiptImgNm)
         console.log(response.data.message.content)
+        // setBefore(response.data.message.beforeImgNm)
+        // setAfter(response.data.message.afterImgNm)
+        // setDocument(response.data.message.receiptImgNm)
+        // console.log(response.data.message.content)
         setInspectorResult(response.data.message);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-    console.log(inspectorResult);
+    // console.log(inspectorResult);
     // 리뷰 들고올때, axios 요청은 userid, carid 둘다 줘야함.
     // const getData = async () => {
     //   try {
@@ -253,15 +256,15 @@ const MyInspectorDetail = () => {
           <tbody>
             <tr>
               <td>
-                <StyleInspectorImg src={`${CARBORN_SITE}/images/${before}`} alt="before" />
+                {/* <StyleInspectorImg src={`${CARBORN_SITE}/images/${before}`} alt="before" /> */}
                 <StyleInspectorImg src={Before} alt="before" />
               </td>
               <td>
-                <StyleInspectorImg src={`${CARBORN_SITE}/images/${after}`} alt="After" />
+                {/* <StyleInspectorImg src={`${CARBORN_SITE}/images/${after}`} alt="After" /> */}
                 <StyleInspectorImg src={After} alt="After" />
               </td>
               <td>
-                <StyleInspectorImg src={`${CARBORN_SITE}/images/${document}`} alt="Document" />
+                {/* <StyleInspectorImg src={`${CARBORN_SITE}/images/${document}`} alt="Document" /> */}
                 <StyleInspectorImg src={Document} alt="Document" />
               </td>
             </tr>
@@ -272,11 +275,6 @@ const MyInspectorDetail = () => {
           <p>정비 결과</p>
           <StyleMyInspectorResultDiv>
             {inspectorResult.content}
-          {/* {inspectorResult.map((result, index) => (
-            <li key={index}>
-              {result.category} : {result.detail}
-            </li>
-          ))} */}
           </StyleMyInspectorResultDiv>
         </div>
         {/* 리뷰 작성 및 조회 */}

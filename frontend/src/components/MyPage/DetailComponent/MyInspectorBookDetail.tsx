@@ -71,6 +71,8 @@ const MyInspectorBookDetail = () => {
       );
       setTotalPageCnt(response.data.message.totalPages);
 
+      console.log(response.data.message)
+
       const modifiedContent = response.data.message.content.map(
         (content: any) => {
           let modifiedBookStatus = "";
@@ -232,6 +234,16 @@ const MyInspectorBookDetail = () => {
 
 export default MyInspectorBookDetail;
 
+
+
+
+
+
+
+
+
+
+
 // 예약 일자 변경 모달
 
 const ModalContainer = styled.div`
@@ -303,6 +315,7 @@ const MyModalComponent = ({
 }) => {
   const [newReservationDate, setNewReservationDate] = useState("");
   const [reservationChangeContent, setReservationChangeContent] = useState("");
+
   const handleReservationDateChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -317,26 +330,26 @@ const MyModalComponent = ({
     // 토큰 가져오기
     const ObjString: string | null = localStorage.getItem("login-token");
     const Obj = ObjString ? JSON.parse(ObjString) : null;
+
     try {
       // id는 bookid
       await axios.put(
         `${CARBORN_SITE}/api/user/inspect/book/${bookid}`,
-        {
-          bookDt: newReservationDate,
-          content: reservationChangeContent,
-          account: {
-            id: Obj.userId,
-          },
-        },
+        // { 
+        //   id:bookid,
+        //   content: reservationChangeContent,
+        //   account: Obj.userId,
+        //   bookDt: newReservationDate,
+        // },
         {
           headers: {
             [ContentType]: applicationjson,
             Authorization: `Bearer ${Obj.value}`,
           },
         }
-      );
-
-      onClose();
+        );
+        
+        onClose();
     } catch (error) {
       console.error(error);
     }
@@ -344,13 +357,13 @@ const MyModalComponent = ({
 
   const handleReservationChangeContent = (
     e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const { value } = e.target;
-    setReservationChangeContent(value);
-  };
+    ) => {
+      const { value } = e.target;
+      setReservationChangeContent(value);
+    };
 
-  return (
-    <>
+    return (
+      <>
       {isModalOpen && (
         <ModalContainer>
           <ModalContent>
@@ -375,6 +388,16 @@ const MyModalComponent = ({
     </>
   );
 };
+
+
+
+
+
+
+
+
+
+
 
 // 취소 관련 모달
 
@@ -432,11 +455,12 @@ const WarningModal = ({ message, onClose, bookid }: WarningModalType) => {
       const ObjString: string | null = localStorage.getItem("login-token");
       const Obj = ObjString ? JSON.parse(ObjString) : null;
 
-      await axios.delete(`API_ENDPOINT/${bookid}`, {
+      await axios.delete(`${CARBORN_SITE}/api/user/inspect/book/delete/${bookid}`, {
         headers: {
           Authorization: `Bearer ${Obj.value}`,
         },
       });
+      
       console.log(`예약이 삭제되었습니다.`);
     } catch (error) {
       console.error(error);

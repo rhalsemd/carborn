@@ -1,8 +1,3 @@
-//MUI 컴포넌트
-import * as React from 'react';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-
 import axios from "axios";
 import { API_URL, CARBORN_SITE } from "./../../../lib/api";
 import { useEffect, useState } from "react";
@@ -47,6 +42,7 @@ const InspectorContentPagination = ({
     try {
       const response = await axios.get(`${CARBORN_SITE}/api/user/inspect/book/list/${page}/${count}`);
       setTotalPageCnt(response.data.message.totalPages);
+      
       const modifiedContent = response.data.message.content.map((content: any) => {
         let modifiedBookStatus = '';
         let modifiedBookStatusNum = 0;
@@ -189,29 +185,9 @@ const InspectorContentPagination = ({
           Next
         </button>
       </div>
-      <div>
-        <Stack direction="row" spacing={2}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            color="primary"
-            onChange={(event, page) =>
-              handleRequestInspectorData(page, itemsPerPage)
-            }
-          />
-        </Stack>
-      </div>
     </StyleInspectorPaginationDiv>
   );
 };
 
 export default InspectorContentPagination;
 
-// 페이지네이션 컴포넌트 
-export const BasicPagination = () => {
-  return (
-    <Stack spacing={2}>
-      <Pagination count={10} color="primary" />
-    </Stack>
-  );
-}

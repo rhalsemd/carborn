@@ -45,6 +45,8 @@ const initialState = {
 export function* userSignUpActionSaga(
   action: ReturnType<typeof userSignUpSendAction>
 ): Generator<any, void, unknown> {
+
+  console.log(action.payload)
   try {
     const response:any = yield call(userSignUpSendApi, action.payload)
     

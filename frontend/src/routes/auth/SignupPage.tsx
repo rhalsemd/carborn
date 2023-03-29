@@ -19,17 +19,19 @@ import SignUpUserPasswordCheck from "../../components/auth/signup/SignUpUserPass
 import SignUpCompanyPasswordCheck from "../../components/auth/signup/SignUpCompanyPasswordCheck";
 import SignUpUserBirth from "../../components/auth/signup/SignUpUserBirth";
 import SignUpCompanyBusinessNumber from "../../components/auth/signup/SignUpCompanyBusinessNumber";
-import SignUpUserAddress from "../../components/auth/signup/SignUpUserAddress";
+// import SignUpUserAddress from "../../components/auth/signup/SignUpUserAddress";
 import SignUpCompanyAddress from "../../components/auth/signup/SignUpCompanyAddress";
 import SignUpUserPhoneNumber from "../../components/auth/signup/SignUpUserPhoneNumber";
 import SignUpCompanyPhoneNumber from "../../components/auth/signup/SignUpCompanyPhoneNumber";
 import SignUpCompanyDocument from "../../components/auth/signup/SignUpCompanyDocument";
-import axios from "axios";
-import { API_URL, ContentType } from "../../lib/api";
 import Nav from "../../components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { SetIsSignupAction } from "../../modules/signUpModule";
-import { userSignUpSendAction, companySignUpSendAction } from './../../modules/signUpModule';
+import {
+  userSignUpSendAction,
+  companySignUpSendAction,
+} from "./../../modules/signUpModule";
+import { ContentType, multipart_formData, CARBORN_SITE } from "./../../lib/api";
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -67,9 +69,9 @@ const SignupPages: React.FC = () => {
   const [isUser, setIsUser] = useState<boolean>(true);
   // 상수화
   const USER: number = 0;
-
   // 회원구분 세팅 및 전송 데이터 형태 구축
   const [selectedButton, setSelectedButton] = useState(USER);
+  
   // 회원가입 초기값
   const initialSignupFormData = {
     accountType: USER,
@@ -78,20 +80,19 @@ const SignupPages: React.FC = () => {
     idcheck: null,
     password: "",
     passwordcheck: false,
+    phonenumber: "",
     identifynumber: "",
     address: "",
     isVarify: false,
   };
-
   const [signupUserFormData, setSignupUserFormData] = useState<SignupFormData>(
     initialSignupFormData
   );
-  
   const [signupCompanyFormData, setSignupCompanyFormData] =
     useState<SignupFormData>(initialSignupFormData);
 
+  // 파일 담기
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
@@ -101,64 +102,78 @@ const SignupPages: React.FC = () => {
   };
 
   // formData 만들어 놓기
-  const formData = new FormData();
+  const formData: any = new FormData();
 
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-      e.preventDefault();
-      
-      // 일반 정보들을 여기에 담는다 (일단 유저인 경우)
+  ) => {
+    e.preventDefault();
+    // 일반 정보들을 여기에 담는다 (일단 유저인 경우)
     if (isUser) {
-      formData.append("accountType", String(signupUserFormData.accountType));
-      formData.append("name", (signupUserFormData.name));
-      formData.append("id", (signupUserFormData.userid));
-      formData.append("password", (signupUserFormData.password));
-      formData.append(
-        "passwordcheck",
-        (String(signupUserFormData.passwordcheck))
-      );
-      formData.append("identifynumber", (signupUserFormData.identifynumber));
-      formData.append("address", (signupUserFormData.address));
-      formData.append("isVarify", (String(signupUserFormData.isVarify)));
+      formData.append("id", signupUserFormData.userid);
+      formData.append("pwd", signupUserFormData.password);
+      formData.append("name", signupUserFormData.name);
+      formData.append("phoneNo", signupUserFormData.phonenumber);
+      formData.append("auth", signupUserFormData.accountType);
+      formData.append("birth", signupUserFormData.identifynumber);
     } else {
-      formData.append("accountType", (String(signupCompanyFormData.accountType)));
-      formData.append("name", (signupCompanyFormData.name));
-      formData.append("id", (signupCompanyFormData.userid));
-      formData.append("password", (signupCompanyFormData.password));
-      formData.append(
-        "passwordcheck",
-        JSON.stringify(String(signupCompanyFormData.passwordcheck))
-      );
-      formData.append("identifynumber", (signupCompanyFormData.identifynumber));
-      formData.append("address", (signupCompanyFormData.address));
-      formData.append("isVarify", (String(signupCompanyFormData.isVarify)));
-      formData.append("images", selectedFiles[0])
+    // 기업 정보들은 여기에 담는다.
+      formData.append("id", signupCompanyFormData.userid);
+      formData.append("pwd", signupCompanyFormData.password);
+      formData.append("name", signupCompanyFormData.name);
+      formData.append("phoneNo", signupCompanyFormData.phonenumber);
+      formData.append("auth", signupCompanyFormData.accountType);
+      formData.append("brn", signupCompanyFormData.identifynumber);
+      formData.append("address", signupCompanyFormData.address);
+      formData.append("cbr", selectedFiles[0]);
     }
 
-    // // formdata 확인하는 방법
-    // for (const pair of formData.entries()) {
-    //   console.log(pair[0]+ ', ' + pair[1]);
-    // }
-  };
-
-  useEffect(() => {
+    // formdata에 회원가입 정보를 넣어서 서버에 요청한다.
     if (isUser) {
+      try {
+        const response = await fetch(`${CARBORN_SITE}/api/join`, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+        console.log(response);
+        return response.body;
+      } catch (error) {
+        console.log(error);
+      }
+
       dispatch(userSignUpSendAction(formData));
     } else {
+      try {
+        const response = await fetch(`${CARBORN_SITE}/api/join`, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+
+        console.log(response);
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+      
       dispatch(companySignUpSendAction(formData));
     }
-    
+
     // formData 초기화
     for (const key of formData.keys()) {
       formData.delete(key);
     }
-  }, [dispatch, formData, isUser])
+  };
 
   // 회원가입 버튼 색깔 바꾸기 기능
-  const SignUpisValid = useSelector((state: any) => state.SignUpReducer.success);
-  const accountType = useSelector((state:any) => state.setAccountTypeReducer.accountType)
-  
+  const SignUpisValid = useSelector(
+    (state: any) => state.SignUpReducer.success
+  );
+  const accountType = useSelector(
+    (state: any) => state.setAccountTypeReducer.accountType
+  );
+
   // isValid 값을 업데이트하는 함수
   const updateIsValid = useCallback(() => {
     let valid: boolean = false;
@@ -166,24 +181,25 @@ const SignupPages: React.FC = () => {
       valid = Boolean(
         signupUserFormData.name &&
           signupUserFormData.userid &&
-          signupUserFormData.idcheck &&
           signupUserFormData.password &&
           signupUserFormData.passwordcheck &&
+          signupUserFormData.phonenumber &&
           signupUserFormData.identifynumber &&
-          signupUserFormData.address &&
-          signupUserFormData.isVarify
+          signupUserFormData.idcheck
+        // signupUserFormData.isVarify
       );
     } else {
       valid = Boolean(
         signupCompanyFormData.name &&
-        signupCompanyFormData.userid &&
-        signupCompanyFormData.idcheck &&
-        signupCompanyFormData.password &&
-        signupCompanyFormData.passwordcheck &&
-        signupCompanyFormData.identifynumber &&
-        signupCompanyFormData.address &&
-        signupCompanyFormData.isVarify &&
-        selectedFiles.length
+          signupCompanyFormData.userid &&
+          signupCompanyFormData.password &&
+          signupCompanyFormData.passwordcheck &&
+          signupCompanyFormData.phonenumber &&
+          signupCompanyFormData.identifynumber &&
+          signupCompanyFormData.address &&
+          signupCompanyFormData.idcheck &&
+          // signupCompanyFormData.isVarify &&
+          selectedFiles.length
       );
     }
     dispatch(SetIsSignupAction(valid));
@@ -191,17 +207,31 @@ const SignupPages: React.FC = () => {
 
   useEffect(() => {
     updateIsValid();
+    console.log(SignUpisValid);
     // console.log(isValid)
     // console.log(Boolean(signupCompanyFormData.name));
     // console.log(Boolean(signupCompanyFormData.userid));
-    // console.log(Boolean(signupCompanyFormData.idcheck));
+    // console.log(Boolean(signupUserFormData.idcheck));
     // console.log(Boolean(signupCompanyFormData.password));
     // console.log(Boolean(signupCompanyFormData.passwordcheck));
+    // console.log(Boolean(signupCompanyFormData.phonenumber));
     // console.log(Boolean(signupCompanyFormData.identifynumber));
     // console.log(Boolean(signupCompanyFormData.address));
-    // console.log(Boolean(signupCompanyFormData.isVarify));
+
+    
+    console.log((signupCompanyFormData.userid));
+    console.log((signupCompanyFormData.idcheck));
+    console.log((signupCompanyFormData.password));
+    console.log((signupCompanyFormData.passwordcheck));
+    console.log((signupCompanyFormData.phonenumber));
+    console.log((signupCompanyFormData.identifynumber));
+    console.log((signupCompanyFormData.address));
+
+
+
+    // console.log(Boolean(signupUserFormData.isVarify));
     // console.log(selectedFiles.length === 0 ? false : true, "회사용");
-    // console.log(selectedFiles.length);
+    console.log(selectedFiles.length);
   }, [updateIsValid, SignUpisValid, signupCompanyFormData]);
 
   // 휴대전화 인증번호
@@ -258,10 +288,10 @@ const SignupPages: React.FC = () => {
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}
                 />
-                <SignUpUserAddress
+                {/* <SignUpUserAddress
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}
-                />
+                /> */}
                 <SignUpUserPhoneNumber
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}

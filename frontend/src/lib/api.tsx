@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // export const API_URL = "https://carborn.site";
-export const CARBORN_SITE = "https://carborn.site";
+// export const CARBORN_SITE = "https://carborn.site";
+export const CARBORN_SITE = "https://192.168.100.80";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
@@ -49,11 +50,19 @@ export const LogoutApi = async (): Promise<any> => {
 
 // 유저 회원가입 요청
 export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
-
   try {
-    const response = await fetch(`${API_URL}/user/signup`, {
+    const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
-      body: formData,
+      body: formData 
+      // {
+      //   id: formData.has("id") && formData.getAll("id").length > 0 ? formData.getAll("id")[0] : "",
+      //   pwd: formData.has("pwd") && formData.getAll("pwd").length > 0 ? formData.getAll("pwd")[0] : "",
+      //   name: formData.has("name") && formData.getAll("name").length > 0 ? formData.getAll("name")[0] : "",
+      //   phoneNo: formData.has("phoneNo") && formData.getAll("phoneNo").length > 0 ? formData.getAll("phoneNo")[0] : "",
+      //   auth: formData.has("auth") && formData.getAll("auth").length > 0 ? formData.getAll("auth")[0] : "",
+      //   birth: formData.has("birth") && formData.getAll("birth").length > 0 ? formData.getAll("birth")[0] : "",
+      // }
+      ,
       headers: {
         [ContentType]: multipart_formData,
       }
@@ -68,13 +77,14 @@ export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
 // 기업 회원가입 요청
 export const companySignUpSendApi = async (formData:FormData): Promise<any> => {
   try {
-    const response = await fetch(`${API_URL}/company/signup`, {
+    const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
       body: formData,
       headers: {
         [ContentType]: multipart_formData,
       }
     })
+    console.log(response)
 
     return response.body;
   } catch (error) {
@@ -87,17 +97,13 @@ export const UserIdCheckApi = async (id: string): Promise<any> => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/users`,
+      url: `${CARBORN_SITE}/api/check-id/${id}`,
     });
 
-    let result: boolean = true;
-    for (let user of response.data) {
-      if (user.loginid === id) {
-        result = false;
-        break;
-      }
-    }
-    return result;
+    // true는 가입할수 있는 상태, false는 가입 못하는 상태
+    console.log(response.data.message)
+
+    return response.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -108,24 +114,17 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/users`,
+      url: `${CARBORN_SITE}/api/check-id/${id}`,
     });
 
-    let result: boolean = true;
-    for (let user of response.data) {
-      if (user.loginid === id) {
-        result = false;
-        break;
-      }
-    }
+    // true는 가입할수 있는 상태, false는 가입 못하는 상태
+    console.log(response.data.message)
 
-    return result;
+    return response.data.message;
   } catch (error) {
     console.log(error);
   }
 };
-
-
 
 type PayloadType = {
   userid: string;
@@ -197,18 +196,10 @@ export const PhoneNumberCheckApi = async (
         [ContentType]: applicationjson,
       },
     });
-    let Obj: UserType | null = null;
-    for (let user of response.data) {
-      if (user.phone === phonenumber) {
-        Obj = {
-          name: user.name,
-          phone: user.phone,
-          verify: true,
-        };
-        break;
-      }
-    }
-    return Obj;
+
+    // 인증되면 true, 아니면 false
+
+    return response;
   } catch (error) {
     console.log(error);
   }
