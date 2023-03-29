@@ -67,4 +67,33 @@ public class UserCommunityService {
         Community save = communityRepository.save(community);
         return save.getId();
     }
+
+    public int updateBoard(Community community, int communityId) {
+
+        if (community.getAccount().getId().isBlank()) {
+            throw new RuntimeException("세션이 만료되었습니다");
+        }
+
+        if (accountRepository.findById(community.getAccount().getId())==null){
+            throw new RuntimeException("존재하지 않는 아이디입니다");
+        }
+        if (community.getId() != communityId){
+            throw new RuntimeException("잘못된 경로입니다");
+        }
+        Community update = communityRepository.findById(communityId).orElseThrow(()->
+                new RuntimeException("존재하지 않는 데이터입니다"));
+//
+        if (!community.getAccount().getId().equals(update.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다");
+        }
+
+        update.setTitle(community.getTitle());
+        update.setContent(community.getContent());
+        update.setUptDt(LocalDateTime.now());
+
+        communityRepository.save(update);
+        return update.getId();
+    }
+
+
 }

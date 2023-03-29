@@ -40,17 +40,25 @@ public class UserCommunityController{
 
     @GetMapping("/{communityId}")
     @Operation(description = "커뮤니티 글 단일 조회")
-    @Parameter(name = "inspectId", description = "예약글 id")
+    @Parameter(name = "communityId", description = "게시글 id")
     public ResponseEntity<?> getBoardDetail(@PathVariable("communityId") int communityId){
         UserCommunityListMapping boardDetail = userCommunityService.getBoardDetail(communityId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,boardDetail);
     }
 
     @PostMapping
-    @Operation(description = "사용자 검수원 예약")
+    @Operation(description = "커뮤니티 글 작성")
     public ResponseEntity<?> createBoard(@RequestBody Community community){
         int result = userCommunityService.createBoard(community);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
+    }
+
+    @PutMapping("/{communityId}")
+    @Operation(description = "커뮤니티 글 수정")
+    @Parameter(name = "communityId", description = "게시글 id")
+    public ResponseEntity<?> updateBoard(@RequestBody Community community,
+                                               @PathVariable("communityId") int communityId) {
+        return NormalResponse.toResponseEntity(HttpStatus.OK, userCommunityService.updateBoard(community, communityId));
     }
 
 }
