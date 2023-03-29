@@ -3,7 +3,7 @@
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext", "ESNext", "DOM"],
     "typeRoots": ["node_modules/@types", "node_modules", "src/@types"],
-    "types": ["react", "react-dom", "react-hook-form"],
+    "types": ["react", "react-dom", "react-hook-form", "node"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

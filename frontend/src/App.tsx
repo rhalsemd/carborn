@@ -40,6 +40,7 @@ import MyCommunityContent from "./components/MyPage/MyCommunityContent";
 import UserPasswordModify from "./components/MyPage/UserPasswordModify";
 import MyInspectorBookDetail from "./components/MyPage/DetailComponent/MyInspectorBookDetail";
 import MyRepairBookDetail from "./components/MyPage/DetailComponent/MyRepairBookDetail";
+import Community from "./routes/userUseFnc/Community";
 
 const globalStyles = css`
   body {
@@ -124,6 +125,7 @@ const routes = [
   { path: "/user/car/:carId", element: <VehiclePurchaseDetail /> },
   { path: "/user/car/sale", element: <SaleRegistration /> },
   { path: "/user/map", element: <NaverMap /> },
+  { path: "/user/community", element: <Community /> },
 ];
 
 function App() {
