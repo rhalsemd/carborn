@@ -47,10 +47,29 @@ public class SmsController {
         String msg = smsService.makeSmsAuthMsg(receivePhone, authNm.toString());
         //        smsService.smsAuthSend(smsAuth, msg);
 
-        String to = "ssafy8th.gumi@gmail.com";
-        String title = "CarBorn 인증번호";
-        msg = String.format("인증번호 [%s]", authNm);
-        mailService.mailAuthSend(to, title, msg);
+        new Thread(new Runnable() {
+            private String authNm;
+
+            public Runnable init(String authNm) {
+                this.authNm = authNm;
+
+                return this;
+            }
+
+            @Override
+            public void run() {
+                String to = "ssafy8th.gumi@gmail.com";
+                String title = "CarBorn 인증번호";
+                String msg = String.format("인증번호 [%s]", authNm);
+
+                try {
+                    mailService.mailAuthSend(to, title, msg);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }.init(authNm.toString())).start();
+
 
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
