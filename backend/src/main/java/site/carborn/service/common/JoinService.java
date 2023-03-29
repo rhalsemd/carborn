@@ -10,6 +10,7 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.account.Company;
 import site.carborn.entity.account.User;
 import site.carborn.entity.common.SmsAuth;
+import site.carborn.entity.company.Cbr;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.company.InsuranceCompany;
 import site.carborn.entity.company.RepairShop;
@@ -17,9 +18,11 @@ import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.account.CompanyRepository;
 import site.carborn.repository.account.UserRepository;
 import site.carborn.repository.common.SmsAuthRepository;
+import site.carborn.repository.company.CbrRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.InsuranceCompanyRepository;
 import site.carborn.repository.company.RepairShopRepository;
+import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.AuthUtils;
 
 import java.util.Map;
@@ -33,6 +36,7 @@ public class JoinService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final CbrRepository cbrRepository;
     private final RepairShopRepository repairShopRepository;
     private final InspectorRepository inspectorRepository;
     private final InsuranceCompanyRepository insuranceCompanyRepository;
@@ -92,9 +96,16 @@ public class JoinService {
         double lat = geo == null ? 0 : (double) geo.get("lat");
         double lng = geo == null ? 0 : (double) geo.get("lng");
 
-        accountRepository.save(account);
-        company.setAccount(account);
-        companyRepository.save(company);
+        Account accountSave = accountRepository.save(account);
+        company.setAccount(accountSave);
+        Company companySave = companyRepository.save(company);
+
+        String cbrImgNm = BoardUtils.singleFileSave(dto.getCbr());
+
+        Cbr cbr = new Cbr();
+        cbr.setCompany(companySave);
+        cbr.setImgNm(cbrImgNm);
+        cbrRepository.save(cbr);
 
         switch (account.getAuth()) {
             case AuthUtils.AUTH_REPAIR_SHOP -> {
