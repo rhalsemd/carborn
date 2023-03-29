@@ -43,7 +43,7 @@ export default function ReviewModal({ id }: Props) {
   let URL;
   let queryKey: any;
 
-  const isGarage = useLocation().pathname == "/garage/reserve";
+  const isGarage = useLocation().pathname == "/garage/history";
 
   if (isGarage) {
     URL = `http://carborn.site/api/repair-shop/result/review/${id}`;
@@ -79,7 +79,6 @@ export default function ReviewModal({ id }: Props) {
   };
 
   let score;
-
   switch (data?.point) {
     case 0:
       score = "☆☆☆☆☆";
@@ -103,7 +102,7 @@ export default function ReviewModal({ id }: Props) {
       score = "";
   }
   return (
-    <div css={{ width: "10vw" }}>
+    <div>
       <Button
         variant="outlined"
         color="inherit"

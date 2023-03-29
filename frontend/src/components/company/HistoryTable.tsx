@@ -14,6 +14,7 @@ import { useQuery } from "react-query";
 import { useAPI } from "./../../hooks/useAPI";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import ReviewModal from "./ReviewModal";
 
 interface Column {
   id: "name" | "code" | "population" | "size" | "density";
@@ -34,7 +35,7 @@ interface MapType {
   id: string;
   regDt: string;
   mileage: string;
-  inspectDt: string;
+  repairDt: string;
 }
 
 const container = css`
@@ -93,18 +94,24 @@ export default function HistoryTable() {
               <TableCell align="center">완료 날짜</TableCell>
               <TableCell align="center">주행 거리</TableCell>
               <TableCell align="center">자세히 보기</TableCell>
+              <TableCell align="center">리뷰 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data?.content?.map(
-              ({ id, regDt, inspectDt, mileage }: MapType, idx: number) => (
+              ({ id, regDt, repairDt, mileage }: MapType, idx: number) => (
                 <TableRow key={idx}>
                   <TableCell sx={{ minWidth: "20px" }}>{id}</TableCell>
-                  <TableCell>{regDt}</TableCell>
-                  <TableCell>{inspectDt}</TableCell>
-                  <TableCell sx={{ minWidth: "30px" }}>{mileage} KM</TableCell>
+                  <TableCell align="center">{regDt}</TableCell>
+                  <TableCell align="center">{repairDt}</TableCell>
+                  <TableCell align="center" sx={{ minWidth: "30px" }}>
+                    {mileage} KM
+                  </TableCell>
                   <TableCell align="center">
                     <HistoryModal id={id} />
+                  </TableCell>
+                  <TableCell align="center">
+                    <ReviewModal id={id} />
                   </TableCell>
                 </TableRow>
               )

@@ -12,13 +12,17 @@ import { TransitionProps } from "@mui/material/transitions";
 import { useLocation } from "react-router-dom";
 import { useAPI } from "./../../hooks/useAPI";
 import { useQuery, useQueryClient } from "react-query";
-import { useState } from "react";
+import dayjs from "dayjs";
 
 const tableStyle = css`
   tr {
     border-spacing: 10px;
   }
   width: 20vw;
+
+  tr {
+    /* display: flex; */
+  }
 `;
 
 interface Props {
@@ -91,26 +95,62 @@ export default function HistoryModal({ id }: Props) {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>사진</DialogTitle>
+        <DialogTitle>DEATIL</DialogTitle>
         <DialogContent>
           <table css={tableStyle}>
             <thead></thead>
             <tbody>
               <tr>
+                <td>처리 전</td>
+                <td>
+                  : <img src={data?.beoforeImgNm} alt="before" />
+                </td>
+              </tr>
+              <tr>
+                <td>처리 후</td>
+                <td>
+                  : <img src={data?.afterImgNm} alt="after" />
+                </td>
+              </tr>
+              <tr>
+                <td>차종</td>
+                <td>
+                  :{" "}
+                  {isGarage
+                    ? data?.repairBookCarModelNm
+                    : data?.inspectBookCarModelNm}
+                </td>
+              </tr>
+              <tr>
+                <td>예약자명</td>
+                <td>
+                  :{" "}
+                  {isGarage
+                    ? data?.repairBookRepairShopAccountName
+                    : data?.inspectBookInspectorAccountName}
+                </td>
+              </tr>
+              <tr>
                 <td>내용</td>
                 <td> : {data?.content}</td>
               </tr>
               <tr>
-                <td>차종</td>
-                <td> : {data?.inspectBookCarModelNm}</td>
+                <td>요청 날짜</td>
+                <td> : {dayjs(data?.regDt).format("YYYY년 MM월 DD일")}</td>
               </tr>
               <tr>
-                <td>예약자명</td>
-                <td> : {data?.inspectBookInspectorAccountName}</td>
+                <td>수리 날짜</td>
+                <td>
+                  {" "}
+                  :{" "}
+                  {isGarage
+                    ? dayjs(data?.repairDt).format("YYYY년 MM월 DD일")
+                    : dayjs(data?.inspectDt).format("YYYY년 MM월 DD일")}
+                </td>
               </tr>
               <tr>
-                <td>날짜</td>
-                <td> : {data?.inspectDt}</td>
+                <td>금액</td>
+                <td> : {isGarage ? data?.repairPrice : data?.inspectPrice}</td>
               </tr>
             </tbody>
           </table>

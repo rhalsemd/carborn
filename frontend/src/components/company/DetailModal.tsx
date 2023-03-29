@@ -104,7 +104,7 @@ export default function DetailModal({ id, status }: Props) {
         onClose={handleCancel}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>수리 요청 내역</DialogTitle>
+        <DialogTitle>{isGarage ? "수리 요청" : "검수 요청"}</DialogTitle>
         <DialogContent sx={{ minWidth: "300px" }}>
           <table css={tableStyle}>
             <thead></thead>

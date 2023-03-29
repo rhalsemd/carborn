@@ -90,7 +90,6 @@ export default function ReserveTable() {
               <TableCell align="center">차대 번호</TableCell>
               <TableCell align="center">전화 번호</TableCell>
               <TableCell align="center">자세히 보기</TableCell>
-              <TableCell align="center">리뷰 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -132,9 +131,6 @@ export default function ReserveTable() {
                   <TableCell align="center">
                     <DetailModal id={id} status={bookStatus} />
                   </TableCell>
-                  <TableCell align="center">
-                    {!bookStatus ? null : <ReviewModal id={id} />}
-                  </TableCell>
                 </TableRow>
               )
             )}
@@ -142,7 +138,7 @@ export default function ReserveTable() {
           <TableFooter>
             <TableRow>
               <TablePagination
-                count={data?.totalElements} //임시 나중에 서버에서 totalElement 받아야함
+                count={data?.totalElements}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}
