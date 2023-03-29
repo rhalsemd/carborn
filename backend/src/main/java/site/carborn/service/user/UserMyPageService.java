@@ -25,6 +25,7 @@ import site.carborn.repository.user.CarSaleBookRepository;
 import site.carborn.repository.user.CarSaleRepository;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BuyUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -229,5 +230,9 @@ public class UserMyPageService {
         String userId = "testuser2";
 
         return carSaleBookRepository.findAllByStatusAndAccountId(false, userId, page);
+    }
+
+    public int updateBookCancel(int carSaleBookId){
+        return carSaleBookRepository.updateBookStatusCancel(carSaleBookId, BuyUtils.BUY_STATUS_CANCEL, LocalDateTime.now());
     }
 }

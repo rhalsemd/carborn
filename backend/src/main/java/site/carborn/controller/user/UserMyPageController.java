@@ -90,4 +90,13 @@ public class UserMyPageController {
         PageRequest pageRequest = BoardUtils.pageRequestInit(page, size, "id", BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.getCarBuyList(pageRequest));
     }
+
+    @PutMapping("/buy/cancel/{carSaleBookId}")
+    @Operation(description = "차량 구매 취소")
+    @Parameters({
+            @Parameter(name = "carSaleBookId", description = "차량 구매 내역 페이지 번호")
+    })
+    public ResponseEntity<?> updateSaleCancel(@PathVariable("carSaleBookId") int carSaleBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.updateBookCancel(carSaleBookId));
+    }
 }
