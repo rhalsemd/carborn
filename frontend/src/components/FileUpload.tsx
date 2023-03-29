@@ -28,10 +28,12 @@ export default function FileUpload({
   size,
   row,
   setImage,
+  setFile,
 }: {
   size: number;
   row: number;
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  setFile: any;
 }) {
   const [imageName, setImageName] = useState<string>("");
 
@@ -41,7 +43,10 @@ export default function FileUpload({
       const reader = new FileReader();
 
       setImageName(file.name);
-      reader.onload = () => setImage(reader.result as string);
+      reader.onload = () => {
+        setFile(file);
+        setImage(reader.result as string);
+      };
       reader.readAsDataURL(file);
     }
   };

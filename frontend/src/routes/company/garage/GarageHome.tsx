@@ -15,7 +15,7 @@ const container = css`
   align-items: center;
   position: relative;
   justify-content: center;
-  img {
+  .backImg {
     height: 75%;
     width: 75%;
     opacity: 0.6;
@@ -71,7 +71,6 @@ const container = css`
         img {
           position: relative;
           height: 50%;
-          /* width: 50%; */
         }
       }
       div:nth-of-type(3) {
@@ -107,7 +106,7 @@ export default function GarageHome() {
     <>
       <NavGarage />
       <div css={container}>
-        <img src={car} />
+        <img src={car} className="backImg" />
         <div className="topTxt">
           <p>Repair</p>
         </div>

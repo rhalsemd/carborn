@@ -62,6 +62,7 @@ public class RepairShopController {
         }
         //예약 취소
         else if(dto.getRepairBook().getBookStatus() == BookUtils.BOOK_STATUS_CANCEL){
+            repairShopService.repairBookUpdate(updateData.get(), BookUtils.BOOK_STATUS_CANCEL);
             return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
         }
         //예약 상태 수정
