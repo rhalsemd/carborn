@@ -3,6 +3,8 @@ package site.carborn.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import site.carborn.dto.request.UserInspectInsertDTO;
+import site.carborn.dto.request.UserInspectUpdateDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
@@ -67,26 +69,37 @@ public class UserInspectService {
     }
 
 
-    public int createInspectBook(InspectBook inspectBook){
+    public int createInspectBook(UserInspectInsertDTO dto){
 
-        if (inspectBook.getAccount().getId().isBlank()) {
+        if (dto.getAccountId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
-        Account account = accountRepository.findById(inspectBook.getAccount().getId());
+        Account account = accountRepository.findById(dto.getAccountId());
         if (account == null){
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
-        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(()->
+        Inspector inspector = inspectorRepository.findById(dto.getInspectorId()).orElseThrow(()->
                 new RuntimeException("존재하지 않는 검수원입니다"));
 
-        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(()->
+        Car car = carRepository.findById(dto.getCarId()).orElseThrow(()->
                 new RuntimeException("등록되지 않은 차입니다"));
 
-        inspectBook.setRegDt(LocalDateTime.now());
-        inspectBook.setUptDt(LocalDateTime.now());
-        inspectBook.setBookStatus(BookUtils.BOOK_STATUS_WAIT);
-        inspectBook.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+//        dto.setRegDt(LocalDateTime.now());
+//        dto.setUptDt(LocalDateTime.now());
+//        dto.setBookStatus(BookUtils.BOOK_STATUS_WAIT);
+//        dto.setStatus(BoardUtils.BOARD_DELETE_STATUS_FALSE);
+        InspectBook inspectBook = InspectBook.builder()
+                .car(car)
+                .inspector(inspector)
+                .account(account)
+                .content(dto.getContent())
+                .bookStatus(BookUtils.BOOK_STATUS_WAIT)
+                .bookDt(dto.getBookDt())
+                .regDt(LocalDateTime.now())
+                .uptDt(LocalDateTime.now())
+                .status(BoardUtils.BOARD_DELETE_STATUS_FALSE)
+                .build();
 
         InspectBook save = inspectBookRepository.save(inspectBook);
         return save.getId();
@@ -107,27 +120,27 @@ public class UserInspectService {
     }
 
 
-    public int updateInspectBook(InspectBook inspectBook, int inspectBookId) {
+    public int updateInspectBook(UserInspectUpdateDTO dto, int inspectBookId) {
 
-        if (inspectBook.getAccount().getId().isBlank()) {
+        if (dto.getAccountId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
-        if (accountRepository.findById(inspectBook.getAccount().getId())==null){
+        if (accountRepository.findById(dto.getAccountId())==null){
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (inspectBook.getId() != inspectBookId){
+        if (dto.getId() != inspectBookId){
             throw new RuntimeException("잘못된 경로입니다");
         }
         InspectBook update = inspectBookRepository.findById(inspectBookId).orElseThrow(()->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-//
-        if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())){
-            throw new RuntimeException("권한이 없습니다??");
+
+        if (!dto.getAccountId().equals(update.getAccount().getId())){
+            throw new RuntimeException("권한이 없습니다");
         }
 
-        update.setContent(inspectBook.getContent());
-        update.setBookDt(inspectBook.getBookDt());
+        update.setContent(dto.getContent());
+        update.setBookDt(dto.getBookDt());
         update.setUptDt(LocalDateTime.now());
 
         inspectBookRepository.save(update);

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.UserInspectInsertDTO;
+import site.carborn.dto.request.UserInspectUpdateDTO;
 import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.mapping.company.InspectorReviewMapping;
@@ -50,8 +52,8 @@ public class UserInspectConteroller {
 
     @PostMapping("/book")
     @Operation(description = "사용자 검수원 예약")
-    public ResponseEntity<?> createRepairBook(@RequestBody InspectBook inspectBook){
-        int result = userInspectService.createInspectBook(inspectBook);
+    public ResponseEntity<?> createRepairBook(@RequestBody UserInspectInsertDTO dto){
+        int result = userInspectService.createInspectBook(dto);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
@@ -66,8 +68,8 @@ public class UserInspectConteroller {
     @PutMapping("/book/{inspectId}")
     @Operation(description = "사용자 검수원 예약 내역 수정")
     @Parameter(name = "inspectId", description = "예약 게시글 id")
-    public ResponseEntity<?> updateInspectBook(@RequestBody InspectBook inspectBook,@PathVariable("inspectId") int inspectBookId){
-        return NormalResponse.toResponseEntity(HttpStatus.OK, userInspectService.updateInspectBook(inspectBook,inspectBookId));
+    public ResponseEntity<?> updateInspectBook(@RequestBody UserInspectUpdateDTO dto, @PathVariable("inspectId") int inspectBookId){
+        return NormalResponse.toResponseEntity(HttpStatus.OK, userInspectService.updateInspectBook(dto,inspectBookId));
     }
 
 
