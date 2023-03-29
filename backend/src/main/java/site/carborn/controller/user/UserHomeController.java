@@ -58,6 +58,6 @@ public class UserHomeController {
     })
     public ResponseEntity<?> getCarSaleAddList(@PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getNewCarSaleList(pageRequest));
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getNewCarSaleList());
     }
 }
