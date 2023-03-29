@@ -1,4 +1,4 @@
-package site.carborn.mapping.user;
+package site.carborn.mapping.car;
 
 public interface CarGetListMapping {
     int getId();

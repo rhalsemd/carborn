@@ -12,7 +12,10 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.car.CarImage;
 import site.carborn.entity.car.CarVrc;
-import site.carborn.mapping.user.CarGetListMapping;
+import site.carborn.mapping.car.CarGetDetailMapping;
+import site.carborn.mapping.car.CarGetListMapping;
+import site.carborn.mapping.car.CarImageGetDataMapping;
+import site.carborn.mapping.car.CarVrcGetDataMapping;
 import site.carborn.repository.car.CarImageRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.car.CarVrcRepository;
@@ -22,7 +25,7 @@ import site.carborn.util.board.BoardUtils;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -187,5 +190,20 @@ public class UserMyPageService {
         //유저 아이디 받는 부분 현재는 임시
         String userId = "testuser2";
         return carRepository.findAllByAccount_Id(userId, pageable);
+    }
+
+    @Transactional
+    public CarGetDetailMapping getCarDetail(int carId){
+        return carRepository.findAllByStatusAndId(false, carId);
+    }
+
+    @Transactional
+    public CarVrcGetDataMapping getCarVrcData(int carId){
+        return carVrcRepository.findAllById(carId);
+    }
+
+    @Transactional
+    public List<CarImageGetDataMapping> getImageList(int carId){
+        return carImageRepository.findAllById(carId);
     }
 }

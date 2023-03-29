@@ -1,5 +1,27 @@
 package site.carborn.mapping.car;
 
-public interface CarGetHashMapping {
+import java.time.LocalDateTime;
+
+public interface CarGetDetailMapping {
+
+    int getId();
+
     String getWalletHash();
+
+    String getMaker();
+
+    String getModelNm();
+
+    String getModelYear();
+
+    String getRegNm();
+
+    String getVin();
+
+    int getMileage();
+
+    LocalDateTime getRegDt();
+
+    LocalDateTime getUptDt();
+
 }
