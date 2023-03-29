@@ -31,7 +31,7 @@ const SignUpCompanyTypeButton = ({
   const handleRepairType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(setUserAccountType(REPAIR));
-    setIsValid(false)
+    setIsValid(true)
     setSignupCompanyFormData({
       ...signupCompanyFormData,
       accountType: REPAIR,
@@ -40,7 +40,7 @@ const SignUpCompanyTypeButton = ({
   const handleInspectorType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(setUserAccountType(INSPECTOR));
-    setIsValid(false)
+    setIsValid(true)
     setSignupCompanyFormData({
       ...signupCompanyFormData,
       accountType: INSPECTOR,
@@ -49,7 +49,7 @@ const SignUpCompanyTypeButton = ({
   const handleInsuranceType = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(setUserAccountType(INSURANCE));
-    setIsValid(false)
+    setIsValid(true)
     setSignupCompanyFormData({
       ...signupCompanyFormData,
       accountType: INSURANCE,

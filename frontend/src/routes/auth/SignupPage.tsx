@@ -32,6 +32,7 @@ import {
   companySignUpSendAction,
 } from "./../../modules/signUpModule";
 import { ContentType, multipart_formData, CARBORN_SITE } from "./../../lib/api";
+import { useNavigate } from "react-router-dom";
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -57,6 +58,8 @@ export const StyleGoRegister = styled.button<StyleGoRegisterProps>`
 `;
 
 const SignupPages: React.FC = () => {
+  // 이동
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // 아이디 중복체크 후, ALERT 안뜨게 하기 위한 로직
   const [iddupliCheck, setIddupliCheck] = useState<boolean | null | undefined>(
@@ -71,7 +74,12 @@ const SignupPages: React.FC = () => {
   const USER: number = 0;
   // 회원구분 세팅 및 전송 데이터 형태 구축
   const [selectedButton, setSelectedButton] = useState(USER);
-  
+
+  // 회원가입 버튼 누를 수 있음
+  const isSignUpBtn = useSelector(
+    (state: any) => state.SignUpReducer.isSignPossible
+  );
+
   // 회원가입 초기값
   const initialSignupFormData = {
     accountType: USER,
@@ -117,7 +125,7 @@ const SignupPages: React.FC = () => {
       formData.append("auth", signupUserFormData.accountType);
       formData.append("birth", signupUserFormData.identifynumber);
     } else {
-    // 기업 정보들은 여기에 담는다.
+      // 기업 정보들은 여기에 담는다.
       formData.append("id", signupCompanyFormData.userid);
       formData.append("pwd", signupCompanyFormData.password);
       formData.append("name", signupCompanyFormData.name);
@@ -131,33 +139,46 @@ const SignupPages: React.FC = () => {
     // formdata에 회원가입 정보를 넣어서 서버에 요청한다.
     if (isUser) {
       try {
-        const response = await fetch(`${CARBORN_SITE}/api/join`, {
+        const response: any = await fetch(`${CARBORN_SITE}/api/join`, {
           method: "POST",
-          mode: "no-cors",
-          body: formData
-        });
-        console.log(response);
-        return response.body;
+          body: formData,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              alert("아무튼 오류가 났습니다. 다시 확인하세요");
+              throw new Error(`${res.status} 오류가 발생했습니다`);
+            }
+
+            // 성공하면 여기서 navigate
+            navigate("/login");
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
       } catch (error) {
         console.log(error);
       }
-
-      dispatch(userSignUpSendAction(formData));
     } else {
       try {
         const response = await fetch(`${CARBORN_SITE}/api/join`, {
           method: "POST",
-          mode: "no-cors",
-          body: formData
-        });
+          body: formData,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              alert("아무튼 오류가 났습니다. 다시 확인하세요");
+              throw new Error(`${res.status} 오류가 발생했습니다`);
+            }
 
-        console.log(response);
-        return response;
+            // 성공하면 여기서 navigate
+            navigate("/login");
+          })
+          .catch((err) => {
+            console.log(err.message);
+        });
       } catch (error) {
         console.log(error);
       }
-      
-      dispatch(companySignUpSendAction(formData));
     }
 
     // formData 초기화
@@ -186,7 +207,6 @@ const SignupPages: React.FC = () => {
           signupUserFormData.phonenumber &&
           signupUserFormData.identifynumber &&
           signupUserFormData.idcheck
-        // signupUserFormData.isVarify
       );
     } else {
       valid = Boolean(
@@ -198,7 +218,6 @@ const SignupPages: React.FC = () => {
           signupCompanyFormData.identifynumber &&
           signupCompanyFormData.address &&
           signupCompanyFormData.idcheck &&
-          // signupCompanyFormData.isVarify &&
           selectedFiles.length
       );
     }
@@ -207,35 +226,21 @@ const SignupPages: React.FC = () => {
 
   useEffect(() => {
     updateIsValid();
-    console.log(SignUpisValid);
-    // console.log(isValid)
-    // console.log(Boolean(signupCompanyFormData.name));
-    // console.log(Boolean(signupCompanyFormData.userid));
-    // console.log(Boolean(signupUserFormData.idcheck));
-    // console.log(Boolean(signupCompanyFormData.password));
-    // console.log(Boolean(signupCompanyFormData.passwordcheck));
-    // console.log(Boolean(signupCompanyFormData.phonenumber));
-    // console.log(Boolean(signupCompanyFormData.identifynumber));
-    // console.log(Boolean(signupCompanyFormData.address));
-
-    
-    console.log((signupCompanyFormData.userid));
-    console.log((signupCompanyFormData.idcheck));
-    console.log((signupCompanyFormData.password));
-    console.log((signupCompanyFormData.passwordcheck));
-    console.log((signupCompanyFormData.phonenumber));
-    console.log((signupCompanyFormData.identifynumber));
-    console.log((signupCompanyFormData.address));
-
-
-
-    // console.log(Boolean(signupUserFormData.isVarify));
+    console.log("회원가입 조건 확인하기", SignUpisValid);
+    console.log(Boolean(signupUserFormData.name));
+    console.log(Boolean(signupUserFormData.userid));
+    console.log(Boolean(signupUserFormData.idcheck));
+    console.log(Boolean(signupUserFormData.password));
+    console.log(Boolean(signupUserFormData.passwordcheck));
+    console.log(Boolean(signupUserFormData.phonenumber));
+    console.log(Boolean(signupUserFormData.identifynumber));
+    // console.log(Boolean(signupUserFormData.address));
     // console.log(selectedFiles.length === 0 ? false : true, "회사용");
     console.log(selectedFiles.length);
   }, [updateIsValid, SignUpisValid, signupCompanyFormData]);
 
   // 휴대전화 인증번호
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   return (
     <div>
@@ -350,7 +355,8 @@ const SignupPages: React.FC = () => {
           <StyleGoRegister
             type="button"
             tabIndex={13}
-            backgroundColor={SignUpisValid ? "#d23131" : "grey"}
+            disabled={!isSignUpBtn}
+            backgroundColor={isSignUpBtn ? "#d23131" : "grey"}
             onClick={(e) => handleSubmit(e)}
           >
             회원가입 하기
