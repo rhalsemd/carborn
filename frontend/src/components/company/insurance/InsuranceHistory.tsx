@@ -9,12 +9,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TablePagination, TableFooter } from "@mui/material";
 import { useState } from "react";
-import HistoryModal from "./HistoryModal";
 import { useQuery } from "react-query";
-import { useAPI } from "./../../hooks/useAPI";
-import { useLocation } from "react-router-dom";
+import { useAPI } from "../../../hooks/useAPI";
 import { useEffect } from "react";
-import ReviewModal from "./ReviewModal";
+import InsuranceModal from "./InsuranceModal";
 
 interface Column {
   id: "name" | "code" | "population" | "size" | "density";
@@ -31,11 +29,13 @@ interface Data {
   size: number;
   density: number;
 }
+
 interface MapType {
   id: string;
-  regDt: string;
-  mileage: string;
-  repairDt: string;
+  carVin: string;
+  category: string;
+  content: string;
+  insuranceDt: string;
 }
 
 const container = css`
@@ -43,34 +43,23 @@ const container = css`
   opacity: 0.85;
 `;
 
-export default function HistoryTable() {
+export default function InsuranceHistory() {
   const [page, setPage] = useState<number>(0);
   const rowsPerPage = 7;
 
-  const isGarage = useLocation().pathname == "/garage/history";
+  const URL = `http://carborn.site/api/insurance/list/${page + 1}/7`;
+  const queryKey = "getInsuranceHistory";
 
-  let URL: any;
-  let queryKey;
+  const getInsuranceHistory = useAPI("get", URL);
 
-  if (isGarage) {
-    URL = `http://carborn.site/api/repair-shop/result/list/${page + 1}/7`;
-    queryKey = "getGarageHistory";
-  } else {
-    URL = `http://carborn.site/api/inspector/result/list/${page + 1}/7`;
-    queryKey = "getInspectorHistory";
-  }
-
-  const getHistoryData = useAPI("get", URL);
-
-  const { data, refetch } = useQuery(queryKey, () => getHistoryData, {
+  const { data, refetch } = useQuery(queryKey, () => getInsuranceHistory, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     select: (data) => {
-      // return data.data;
       return data.data.message;
     },
     onError: (err) => {
-      console.log(err);
+      console.log(err, "에러");
     },
 
     suspense: true,
@@ -79,9 +68,9 @@ export default function HistoryTable() {
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
-  console.log(data);
   useEffect(() => {
     refetch();
+    console.log(data, "데이터");
   }, [page]);
   return (
     <div css={container}>
@@ -90,28 +79,27 @@ export default function HistoryTable() {
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
-              <TableCell align="center">요청 날짜</TableCell>
-              <TableCell align="center">완료 날짜</TableCell>
-              <TableCell align="center">주행 거리</TableCell>
+              <TableCell align="center">사고 일시</TableCell>
+              <TableCell align="center">차대 번호</TableCell>
+              <TableCell align="center">사고 유형</TableCell>
               <TableCell align="center">자세히 보기</TableCell>
-              <TableCell align="center">리뷰 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data?.content?.map(
-              ({ id, regDt, repairDt, mileage }: MapType, idx: number) => (
+              (
+                { id, carVin, category, content, insuranceDt }: MapType,
+                idx: number
+              ) => (
                 <TableRow key={idx}>
                   <TableCell sx={{ minWidth: "20px" }}>{id}</TableCell>
-                  <TableCell align="center">{regDt}</TableCell>
-                  <TableCell align="center">{repairDt}</TableCell>
+                  <TableCell>{insuranceDt}</TableCell>
+                  <TableCell>{carVin}</TableCell>
                   <TableCell align="center" sx={{ minWidth: "30px" }}>
-                    {mileage} KM
+                    {category}
                   </TableCell>
                   <TableCell align="center">
-                    <HistoryModal id={id} />
-                  </TableCell>
-                  <TableCell align="center">
-                    <ReviewModal id={id} />
+                    <InsuranceModal id={id} content={content} />
                   </TableCell>
                 </TableRow>
               )
@@ -121,7 +109,6 @@ export default function HistoryTable() {
             <TableRow>
               <TablePagination
                 count={data.totalElements}
-                // count={15}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}

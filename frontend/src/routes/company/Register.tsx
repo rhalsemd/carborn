@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import NavCompany from "../../components/company/NavCompnay";
-import RegisterForm from "../../components/company/garage/RegisterForm";
+import RegisterForm from "../../components/company/RegisterForm";
 import car from "../../assets/giup-car.png";
+import { useLocation } from "react-router-dom";
+import InsuranceForm from "../../components/company/insurance/InsuranceForm";
 
 const container = css`
   width: 100%;
@@ -23,12 +25,14 @@ const container = css`
 `;
 
 export default function Register() {
+  const isInsurance = useLocation().pathname === "/insurance/register";
+  console.log(useLocation().pathname);
   return (
     <>
       <NavCompany />
       <div css={container}>
         <img src={car} className="backImg" />
-        <RegisterForm />
+        {isInsurance ? <InsuranceForm /> : <RegisterForm />}
       </div>
     </>
   );

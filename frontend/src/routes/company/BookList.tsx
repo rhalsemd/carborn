@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import NavGarage from "../../components/company/NavCompnay";
 import car from "../../assets/giup-car.png";
 import ReserveTable from "../../components/company/ReserveTable";
+import { Suspense } from "react";
 
 const container = css`
   width: 100%;
@@ -29,7 +30,9 @@ export default function BookList() {
       <NavGarage />
       <div css={container}>
         <img src={car} />
-        <ReserveTable />
+        <Suspense fallback={<>asdf</>}>
+          <ReserveTable />
+        </Suspense>
       </div>
     </>
   );

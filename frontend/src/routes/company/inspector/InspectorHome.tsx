@@ -15,7 +15,7 @@ const container = css`
   align-items: center;
   position: relative;
   justify-content: center;
-  img {
+  .backImg {
     /* align-self; */
     height: 75%;
     width: 75%;
@@ -98,14 +98,14 @@ export default function InspecterHome() {
   };
   const historyList = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    navigate("/garage/history");
+    navigate("/inspector/history");
   };
 
   return (
     <>
       <NavGarage />
       <div css={container}>
-        <img src={car} />
+        <img src={car} className="backImg" />
         <div className="topTxt">
           <p>Inspector</p>
         </div>
