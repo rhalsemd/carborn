@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.carborn.dto.request.AccountRequestDTO;
+import site.carborn.entity.common.SmsAuth;
 import site.carborn.service.common.AddressService;
 import site.carborn.service.common.JoinService;
+import site.carborn.service.common.SmsService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.AuthUtils;
 import site.carborn.util.network.NormalResponse;
@@ -26,6 +28,9 @@ import java.util.Map;
 public class JoinController {
     @Autowired
     JoinService joinService;
+
+    @Autowired
+    SmsService smsService;
 
     @Autowired
     AddressService addressService;
@@ -47,6 +52,17 @@ public class JoinController {
         }
 
         joinService.join(dto, geo);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+    }
+
+    @PostMapping("/sms-auth-send")
+    public ResponseEntity<?> smsAuthSend(@RequestBody SmsAuth smsAuth) {
+        String phoneNm = smsAuth.getPhoneNm();
+        if (phoneNm.isBlank()) {
+            throw new NullPointerException("휴대전화 번호를 입력해주세요");
+        }
+
+        smsService.smsAuthSend(smsAuth);
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 }
