@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import site.carborn.entity.board.Board;
 
 @Entity
 @Table(name = "MWS_ACCOUNT")
@@ -27,4 +30,14 @@ public class Account {
     private String phoneNo;
 
     private int auth;
+
+    public UsernamePasswordAuthenticationToken toAuthentication() {
+        return new UsernamePasswordAuthenticationToken(id, pwd);
+    }
+
+    public static Account copy(Account account) {
+        Account a = new Account();
+        BeanUtils.copyProperties(account, a);
+        return a;
+    }
 }

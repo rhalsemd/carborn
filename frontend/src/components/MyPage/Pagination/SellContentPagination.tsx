@@ -1,57 +1,93 @@
-import styled from '@emotion/styled';
-import { useState } from 'react';
-import { BuySellContentPaginationProps, Car } from './BuyContentPagination';
-import { API_URL } from './../../../lib/api';
-import axios from 'axios';
-import { useEffect } from 'react';
+import styled from "@emotion/styled";
+import { useState } from "react";
+import { BuySellContentPaginationProps } from "./BuyContentPagination";
+import { CARBORN_SITE } from "./../../../lib/api";
+import axios from "axios";
+import { useEffect } from "react";
+
+
+export interface SellContentType {
+  carModel: string;
+  manufacturer: string;
+  plateNumber: string;
+  year: string;
+  mileage: number;
+  price: number;
+  reservationDate: null | string;
+  completedDate: null | string;
+  salesStatus: string;
+  buyer: string;
+}
 
 const StyleSellContentPaginationDiv = styled.div`
   width: 100vw;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
-export interface SellContentPaginationProps {
-  car_model:string,
-  manufacturer:string,
-  mileage:number,
-  car_number:string,
-  year:string,
-  price:number,
-  sales_reserved_date:null|string
-  sales_completed_date:null|string,
-  sales_status:string,
-  buyer:string
-}
-
-const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) => {
+const SellContentPagination = ({
+  itemsPerPage,
+}: BuySellContentPaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sellData, setSellData] = useState<SellContentPaginationProps[]>([]);
-  const totalPages = Math.ceil(sellData.length / itemsPerPage);
+  const [sellData, setSellData] = useState<SellContentType[]>([]);
+  const [totalPageCnt, setTotalPageCnt] = useState(0);
 
   const handleRequestSellData = async (page: number, count: number) => {
     try {
-      // const response = await axios.get(`${API_URL}/buycontent/${page}/${count}`);
-      const response = await axios.get(`${API_URL}/sellcontent`);
-      setSellData(response.data);
+      const response = await axios.get(`${CARBORN_SITE}/buycontent/${page}/${count}`);
+      // setTotalPageCnt(response.data.message.totalPages);
+
+      const modifiedContent = response.data.message.content.map((content: any) => {
+        let modifiedBookStatus = '';
+        let modifiedBookStatusNum = 0;
+        switch (content.bookStatus) {
+          case 0:
+            modifiedBookStatus = '예약 중';
+            modifiedBookStatusNum = 0;
+            break;
+          case 1:
+            modifiedBookStatus = '판매 완료';
+            modifiedBookStatusNum = 1;
+            break;
+          case 2:
+            modifiedBookStatus = '판매 취소';
+            modifiedBookStatusNum = 2;
+            break;
+          default:
+            modifiedBookStatus = content.bookStatus;
+            modifiedBookStatusNum = 0;
+            break
+        }
+  
+        return {
+          ...content,
+          bookStatus: modifiedBookStatus,
+          modifiedBookStatusNum,
+        };
+      });
+
+      setSellData(modifiedContent);
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const ObjString: string | null = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
+  const totalPages = totalPageCnt;
+
   useEffect(() => {
     handleRequestSellData(currentPage, itemsPerPage);
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
-  // 페이지네이션 유효성 검사
-  const startIndex = (currentPage -1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = sellData.slice(startIndex, endIndex);
-  
+  if (sellData.length === 0) {
+    return <div>No data Found!</div>;
+  }
+
   return (
     <StyleSellContentPaginationDiv>
       <table>
@@ -63,7 +99,6 @@ const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) =>
             <th>{`연식(년)`}</th>
             <th>{`주행거리(km)`}</th>
             <th>{`구매가(만원)`}</th>
-            <th>상태</th>
             <th>판매 예약 신청일</th>
             <th>판매 완료일</th>
             <th>판매상태</th>
@@ -71,20 +106,26 @@ const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) =>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((car: SellContentPaginationProps, index: number) => (
-            <tr key={index}>
-              <td>{car.car_model}</td>
-              <td>{car.manufacturer}</td>
-              <td>{car.mileage}</td>
-              <td>{car.car_number}</td>
-              <td>{car.year}</td>
-              <td>{car.price}</td>
-              <td>{car.sales_reserved_date === null ? "-" : car.sales_reserved_date}</td>
-              <td>{car.sales_completed_date === null ? "-" : car.sales_completed_date}</td>
-              <td>{car.sales_status}</td>
-              <td>{car.buyer}</td>
-            </tr>
-          ))}
+          {sellData.map(
+            (sell: SellContentType, index: number) => (
+              <tr key={index}>
+                <td>{sell.carModel}</td>
+                <td>{sell.manufacturer}</td>
+                <td>{sell.plateNumber}</td>
+                <td>{sell.year}</td>
+                <td>{sell.mileage}</td>
+                <td>{sell.price}</td>
+                <td>
+                  {sell.reservationDate === null ? "-" : sell.reservationDate}
+                </td>
+                <td>
+                  {sell.completedDate === null ? "-" : sell.completedDate}
+                </td>
+                <td>{sell.salesStatus}</td>
+                <td>{sell.buyer === null ? "-" : sell.buyer}</td>
+              </tr>
+            )
+          )}
         </tbody>
       </table>
       <div>
@@ -94,17 +135,17 @@ const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) =>
         >
           Previous
         </button>
-        {Array.from({ length: totalPages}, (_, i) => {
-          if ( i>= currentPage + 2 || i <= currentPage - 2) return null;
+        {Array.from({ length: totalPages }, (_, i) => {
+          if (i >= currentPage + 2 || i <= currentPage - 2) return null;
           return (
             <button
               key={i}
-              disabled={currentPage === i+1}
+              disabled={currentPage === i + 1}
               onClick={() => handleRequestSellData(i + 1, itemsPerPage)}
             >
               {i + 1}
             </button>
-          )
+          );
         })}
         <button
           disabled={currentPage === totalPages}
@@ -114,7 +155,7 @@ const SellContentPagination = ({itemsPerPage}: BuySellContentPaginationProps) =>
         </button>
       </div>
     </StyleSellContentPaginationDiv>
-  )
-}
+  );
+};
 
 export default SellContentPagination;

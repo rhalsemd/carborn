@@ -42,6 +42,7 @@ export function* takeLoginSaga(
       LoginApi,
       action.payload as loginInputType
       );
+    console.log(response)
 
     const accountType = {
       USER: "0",

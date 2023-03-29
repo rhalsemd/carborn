@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import site.carborn.dto.request.BoardRequestDTO;
 import site.carborn.dto.request.CarInsuranceHistoryRequestDTO;
-import site.carborn.entity.board.Board;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.car.CarInsuranceHistory;
 import site.carborn.entity.company.InsuranceCompany;
@@ -66,7 +64,7 @@ public class InsuranceService {
         CarInsuranceHistory carInsuranceHistory = CarInsuranceHistory.copy(dto);
 
         //carId를 통해 carHash를 가져오는 부분
-        String carHash = carRepository.findAllById(carId).getWalletHash();
+        String carHash = carRepository.findAllByStatusAndId(false,carId).getWalletHash();
 
         //kas api 호출
         //metaData 등록
@@ -74,7 +72,7 @@ public class InsuranceService {
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = carInsuranceHistory.getRegDt();
-        String alias = "insurance-"+carId+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "insurance-"+carId+"-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);

@@ -7,12 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.InspectResultRequestDTO;
+import site.carborn.entity.car.Car;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.company.InspectorReviewMapping;
 import site.carborn.mapping.user.InspectBookGetDetailMapping;
 import site.carborn.mapping.user.InspectBookGetListMapping;
 import site.carborn.mapping.user.InspectResultGetDetailMapping;
+import site.carborn.mapping.user.InspectResultGetListMapping;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.InspectorReviewRepository;
@@ -20,7 +22,6 @@ import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.board.BoardUtils;
-import site.carborn.util.common.BookUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -69,8 +70,9 @@ public class InspectorService {
     }
 
     @Transactional
-    public void inspectorBookUpdate(InspectBook inspectBook){
+    public void inspectorBookUpdate(InspectBook inspectBook, int status){
         inspectBook.setUptDt(LocalDateTime.now());
+        inspectBook.setBookStatus(status);
         inspectBookRepository.save(inspectBook);
     }
 
@@ -84,7 +86,17 @@ public class InspectorService {
         int carId = carRepository.findByVin(carVin).getId();
 
         //carId를 통해 carHash를 가져오는 부분
-        String carHash = carRepository.findAllById(carId).getWalletHash();
+        String carHash = carRepository.findAllByStatusAndId(false,carId).getWalletHash();
+
+        Optional<Car> car = carRepository.findById(carId);
+        if(car.isEmpty()){
+            throw new RuntimeException("해당 하는 차량의 데이터가 없습니다.");
+        }
+        car.get().setMileage(dto.getMileage());
+        car.get().setUptDt(LocalDateTime.now());
+
+        //CarId에 해당하는 차량의 주행거리를 업데이트
+        carRepository.save(car.get());
 
         //multipartfile 입력 부분
         String beforeImgNm = BoardUtils.singleFileSave((dto.getBeforeImg()));
@@ -104,7 +116,7 @@ public class InspectorService {
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = inspectResult.getRegDt();
-        String alias = "inspect-"+carId+"-time-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "inspect-"+carId+"-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
 
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
@@ -114,8 +126,17 @@ public class InspectorService {
     }
 
     @Transactional
-    public InspectResultGetDetailMapping inspectResultDetail(int inspectBookId){
-        return inspectResultRepository.findAllByInspectBookId(inspectBookId);
+    public Page<InspectResultGetListMapping> inspectResultGetList(Pageable page){
+        //회사 ID 가져오는 부분(현재는 임시)
+        String inspector = "imunseymc";
+        int inspectorId = inspectorRepository.findByAccount_Id(inspector).getId();
+
+        return inspectResultRepository.findByInspectBook_Inspector_Id(inspectorId,page);
+    }
+
+    @Transactional
+    public InspectResultGetDetailMapping inspectResultDetail(int id) {
+        return inspectResultRepository.findAllById(id);
     }
 
     @Transactional

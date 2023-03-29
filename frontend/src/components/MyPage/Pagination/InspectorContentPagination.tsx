@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "./../../../lib/api";
+import { API_URL, CARBORN_SITE } from "./../../../lib/api";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
@@ -10,19 +10,19 @@ export interface InspectorContentPaginationProps {
 
 export interface Car {
   id: number;
-  model: string;
+  carModelNm: string;
   manufacturer: string;
-  mileage: number;
-  plateNumber: string;
-  year: number;
+  carMileage: number;
+  carRegNm: string;
+  carModelYear: string;
   price: number;
-  maintenanceSchedule: string;
+  bookDt: string;
   lastMaintenanceDate: string;
-  maintenanceStatus: string;
-  maintenanceCompany: string;
+  bookStatus: string;
+  inspectorAccountName: string;
 }
 
-const StyleBuyContentPaginationDiv = styled.div`
+const StyleInspectorPaginationDiv = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -36,60 +36,88 @@ const InspectorContentPagination = ({
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [inspectorData, setInspectorData] = useState<Car[]>([]);
-  const totalPages = Math.ceil(inspectorData.length / itemsPerPage);
+  const [totalPageCnt, setTotalPageCnt] = useState(0);
 
-  const handleRequestBuyData = async (page: number, count: number) => {
+  const handleRequestInspectorData = async (page: number, count: number) => {
     try {
-      const response = await axios.get(`${API_URL}/inspector`);
-      setInspectorData(response.data);
+      const response = await axios.get(`${CARBORN_SITE}/api/user/inspect/book/list/${page}/${count}`);
+      setTotalPageCnt(response.data.message.totalPages);
+      
+      const modifiedContent = response.data.message.content.map((content: any) => {
+        let modifiedBookStatus = '';
+        let modifiedBookStatusNum = 0;
+        switch (content.bookStatus) {
+          case 0:
+            modifiedBookStatus = '예약 중';
+            modifiedBookStatusNum = 0;
+            break;
+          case 1:
+            modifiedBookStatus = '검수 완료';
+            modifiedBookStatusNum = 1;
+            break;
+          case 2:
+            modifiedBookStatus = '예약 취소';
+            modifiedBookStatusNum = 2;
+            break;
+          default:
+            modifiedBookStatus = content.bookStatus;
+            modifiedBookStatusNum = 0;
+            break
+        }
+  
+        return {
+          ...content,
+          bookStatus: modifiedBookStatus,
+          modifiedBookStatusNum,
+        };
+      });
+  
+      setInspectorData(modifiedContent);
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   const ObjString: string | null = localStorage.getItem("login-token");
   const Obj = ObjString ? JSON.parse(ObjString) : null;
+  const totalPages = totalPageCnt;
 
   useEffect(() => {
-    handleRequestBuyData(currentPage, itemsPerPage);
-  }, [currentPage]);
-
-  // 페이지 네이션 유효성 검사
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = inspectorData.slice(startIndex, endIndex);
+    handleRequestInspectorData(currentPage, itemsPerPage);
+  }, [currentPage, itemsPerPage]);
 
   if (inspectorData.length === 0) {
     return <div>No data Found!</div>;
   }
 
-  const getInspectionDetail = (carId: number) => {
+  const getInspectorBookDetail = (carId: number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/inspector/${carId}/completedetail`, {
-        state: inspectorData[carId - 1] },
-      );
+      navigate(`/${Obj.userId}/mypage/inspector/${carId}/bookdetail`);
     }
   };
-
-  const getInspectionBookDetail = (carId:number) => {
+  
+  const getInspectorDetail = (resultId: number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/inspector${carId}/bookdetail`)
+      navigate(`/${Obj.userId}/mypage/inspector/${resultId}/completedetail`, {
+        state: inspectorData[resultId % 5],
+      });
     }
-  }
+  };
+  
 
   return (
-    <StyleBuyContentPaginationDiv>
+    <StyleInspectorPaginationDiv>
       <table>
         <thead>
           <tr>
             <th>차량모델</th>
-            <th>제조사</th>
+            {/* <th>제조사</th> */}
             <th>{`주행거리(km)`}</th>
             <th>차량번호</th>
             <th>{`연식(년)`}</th>
             <th>검수예약신청일</th>
-            <th>검수완료일</th>
+            {/* <th>검수완료일</th> */}
             <th>검수상태</th>
             <th>검수업체</th>
             <th>예약상세조회</th>
@@ -97,34 +125,33 @@ const InspectorContentPagination = ({
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((car: Car, index: number) => (
+          {inspectorData.map((car: Car, index: number) => (
             <tr key={index}>
-              <td>{car.model}</td>
-              <td>{car.manufacturer}</td>
-              <td>{car.mileage}</td>
-              <td>{car.plateNumber}</td>
-              <td>{car.year}</td>
+              <td>{car.carModelNm}</td>
+              {/* <td>{car.manufacturer}</td> */}
+              <td>{car.carMileage}</td>
+              <td>{car.carRegNm}</td>
+              <td>{car.carModelYear}</td>
               <td>
-                {car.maintenanceSchedule === null
-                  ? "-"
-                  : car.maintenanceSchedule}
+                {car.bookDt === null ? "-" : car.bookDt}
               </td>
-              <td>
+              {/* <td>
                 {car.lastMaintenanceDate === null
                   ? "-"
                   : car.lastMaintenanceDate}
-              </td>
-              <td>{car.maintenanceStatus}</td>
-              <td>
+              </td> */}
+              <td>{car.bookStatus}</td>
+              <td>{car.inspectorAccountName}</td>
+              {/* <td>
                 {car.maintenanceCompany === null ? "-" : car.maintenanceCompany}
-              </td>
+              </td> */}
               <td>
-                <button onClick={() => getInspectionBookDetail(car.id)}>
+                <button onClick={() => getInspectorBookDetail(car.id)}>
                   조회
                 </button>
               </td>
               <td>
-                <button onClick={() => getInspectionDetail(car.id)}>
+                <button onClick={() => getInspectorDetail(car.id)}>
                   조회
                 </button>
               </td>
@@ -135,7 +162,7 @@ const InspectorContentPagination = ({
       <div>
         <button
           disabled={currentPage === 1}
-          onClick={() => handleRequestBuyData(currentPage - 1, itemsPerPage)}
+          onClick={() => handleRequestInspectorData(currentPage - 1, itemsPerPage)}
         >
           Previous
         </button>
@@ -145,7 +172,7 @@ const InspectorContentPagination = ({
             <button
               key={i}
               disabled={currentPage === i + 1}
-              onClick={() => handleRequestBuyData(i + 1, itemsPerPage)}
+              onClick={() => handleRequestInspectorData(i + 1, itemsPerPage)}
             >
               {i + 1}
             </button>
@@ -153,13 +180,14 @@ const InspectorContentPagination = ({
         })}
         <button
           disabled={currentPage === totalPages}
-          onClick={() => handleRequestBuyData(currentPage + 1, itemsPerPage)}
+          onClick={() => handleRequestInspectorData(currentPage + 1, itemsPerPage)}
         >
           Next
         </button>
       </div>
-    </StyleBuyContentPaginationDiv>
+    </StyleInspectorPaginationDiv>
   );
 };
 
 export default InspectorContentPagination;
+

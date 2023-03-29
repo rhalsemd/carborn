@@ -5,11 +5,13 @@ import { GetAgreementReducer } from "../getAgreementModule";
 import { verificationNumberReducer } from "../verificationNumberModule";
 import { passwordResetCheckReducer } from "../PasswordCheckModule";
 import { userinfoDeleteReducer } from "../userInfoDeleteModule";
+import { companyinfoDeleteReducer } from "../companyInfoDeleteModule";
 import { setAccountTypeReducer } from "./../setAccountTypeModule";
 import { IdCheckReducer } from "./../UserIdCheckModule";
 import { searchIDCheckReducer } from "../searchidModule";
 import { newPasswordReducer } from './../newPasswordModule';
 import { createReviewReducer } from './../createReviewModule';
+import { userModifyPasswordReducer } from './../modifyPasswordModule';
 
 const rootReducer = combineReducers({
   LoginOutReducer,
@@ -22,7 +24,9 @@ const rootReducer = combineReducers({
   newPasswordReducer,
   passwordResetCheckReducer,
   createReviewReducer,
-  userinfodelete: userinfoDeleteReducer,
+  userinfoDeleteReducer,
+  companyinfoDeleteReducer,
+  userModifyPasswordReducer,
 });
 
 export default rootReducer;

@@ -22,6 +22,8 @@ public interface RepairResultGetDetailMapping {
 
     String getReceiptImgNm();
 
+    int getRepairPrice();
+
     LocalDateTime getRepairDt();
 
     LocalDateTime getRegDt();

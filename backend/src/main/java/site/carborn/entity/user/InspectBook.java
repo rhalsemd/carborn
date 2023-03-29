@@ -1,15 +1,14 @@
 package site.carborn.entity.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.company.Inspector;
 import site.carborn.entity.account.Account;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "MWS_INSPECT_BOOK")

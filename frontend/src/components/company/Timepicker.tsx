@@ -58,9 +58,7 @@ export default function Timepicker({
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          {/* <DialogContentText id="alert-dialog-description"> */}
           <Picker setOpen={setOpen} setSelectTime={setSelectTime} />
-          {/* </DialogContentText> */}
         </DialogContent>
       </Dialog>
     </>
