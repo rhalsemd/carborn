@@ -1,5 +1,7 @@
 package site.carborn.service.common;
 
+import jakarta.validation.constraints.Null;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,15 +16,19 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class AddressService {
-
     @Value("${naver.naver-cloud-map.X-NCP-APIGW-API-KEY-ID}")
     private String clientId;
     @Value("${naver.naver-cloud-map.X-NCP-APIGW-API-KEY}")
     private String clientSecret;
 
     public Map<String, Object> getGeoAddress(String address) {
+        if (address == null || address.isBlank()) {
+            throw new NullPointerException("변환할 주소 데이터를 입력해주세요");
+        }
+
         try {
             JSONObject geoData = requestGeo(address);
             if (geoData == null) {
@@ -38,10 +44,10 @@ public class AddressService {
 
             return map;
         } catch (IOException e) {
-            System.out.println(e);
+            log.warn(e.getMessage());
         }
 
-        throw new NullPointerException();
+        throw new NullPointerException("위도 및 경도 정보를 확인할 수 없습니다");
     }
 
     public Map<String, Object> getReverseGeo(double lat, double lng) {
@@ -63,10 +69,10 @@ public class AddressService {
 
             return map;
         } catch (IOException e) {
-            System.out.println(e);
+            log.warn(e.getMessage());
         }
 
-        throw new NullPointerException();
+        throw new NullPointerException("주소 정보를 확인할 수 없습니다");
     }
 
     public JSONObject requestGeo(String address) throws IOException {
@@ -103,7 +109,7 @@ public class AddressService {
 
         int responseCode = get.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new NullPointerException();
+            throw new NullPointerException("올바른 데이터 요청이 아닙니다");
         }
 
         String content = get.get();
