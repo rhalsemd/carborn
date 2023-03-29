@@ -2,13 +2,11 @@ package site.carborn.controller.common;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.carborn.dto.request.AccountRequestDTO;
 import site.carborn.entity.common.SmsAuth;
 import site.carborn.service.common.AddressService;
@@ -21,6 +19,7 @@ import site.carborn.util.network.NormalResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Tag(name = "Join", description = "회원가입 API")
 @RequestMapping("/api")
 @RestController
@@ -36,7 +35,11 @@ public class JoinController {
     AddressService addressService;
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody AccountRequestDTO dto) {
+    public ResponseEntity<?> join(@ModelAttribute AccountRequestDTO dto) {
+        if (dto.getCbr() == null || dto.getCbr().isEmpty()) {
+            log.debug("첨부파일이 없습니다");
+        }
+
         Map<String, Object> geo = null;
 
         if (dto.getAuth() != AuthUtils.AUTH_USER) {

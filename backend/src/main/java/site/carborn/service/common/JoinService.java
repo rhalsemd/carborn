@@ -1,6 +1,7 @@
 package site.carborn.service.common;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,10 +65,10 @@ public class JoinService {
             throw new RuntimeException("중복된 휴대전화 번호가 존재합니다");
         }
 
-        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
-        if (smsAuth == null || smsAuth.isStatus() == false) {
-            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
-        }
+//        SmsAuth smsAuth = smsAuthRepository.checkSmsAuth(phoneNo);
+//        if (smsAuth == null || smsAuth.isStatus() == false) {
+//            throw new RuntimeException("SMS 인증을 완료하지 않았습니다");
+//        }
 
         switch(account.getAuth()) {
             case AuthUtils.AUTH_USER:
@@ -100,12 +101,8 @@ public class JoinService {
         company.setAccount(accountSave);
         Company companySave = companyRepository.save(company);
 
-        String cbrImgNm = BoardUtils.singleFileSave(dto.getCbr());
-
-        Cbr cbr = new Cbr();
-        cbr.setCompany(companySave);
-        cbr.setImgNm(cbrImgNm);
-        cbrRepository.save(cbr);
+        // 사업자등록증 이미지 저장
+        saveCbrImage(companySave, dto);
 
         switch (account.getAuth()) {
             case AuthUtils.AUTH_REPAIR_SHOP -> {
@@ -129,6 +126,20 @@ public class JoinService {
                 insuranceCompanyRepository.save(insuranceCompany);
             }
         }
+    }
+
+    private void saveCbrImage(Company company, AccountRequestDTO dto) {
+        if (dto.getCbr() == null || dto.getCbr().isEmpty()) {
+            throw new NullPointerException("사업자등록증 이미지를 첨부해주세요");
+        }
+
+        String cbrImgNm = BoardUtils.singleFileSave(dto.getCbr());
+
+        Cbr cbr = new Cbr();
+        cbr.setCompany(company);
+        cbr.setImgNm(cbrImgNm);
+
+        cbrRepository.save(cbr);
     }
 
     private void checkAccountIdFormat(String id) {
