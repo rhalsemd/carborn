@@ -3,6 +3,8 @@ package site.carborn.service.user;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import site.carborn.dto.request.CarRequestDTO;
@@ -10,6 +12,7 @@ import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
 import site.carborn.entity.car.CarImage;
 import site.carborn.entity.car.CarVrc;
+import site.carborn.mapping.user.CarGetListMapping;
 import site.carborn.repository.car.CarImageRepository;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.car.CarVrcRepository;
@@ -177,5 +180,12 @@ public class UserMyPageService {
                 }
             }
         }.init(carVrcMetaDataUri, car.getWalletHash(), insertVrcAlias)).start();
+    }
+
+    @Transactional
+    public Page<CarGetListMapping> getCarList(Pageable pageable){
+        //유저 아이디 받는 부분 현재는 임시
+        String userId = "testuser2";
+        return carRepository.findAllByAccount_Id(userId, pageable);
     }
 }
