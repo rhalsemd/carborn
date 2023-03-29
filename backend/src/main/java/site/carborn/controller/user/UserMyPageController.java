@@ -80,7 +80,7 @@ public class UserMyPageController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,userMyPageService.getCarSellList(pageRequest));
     }
 
-    @GetMapping("/sell/list/{page}/{size}")
+    @GetMapping("/buy/list/{page}/{size}")
     @Operation(description = "차량 구매 내역")
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호"),
