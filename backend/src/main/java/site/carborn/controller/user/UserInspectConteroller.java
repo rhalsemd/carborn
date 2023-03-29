@@ -66,10 +66,9 @@ public class UserInspectConteroller {
     @PutMapping("/book/{inspectId}")
     @Operation(description = "사용자 검수원 예약 내역 수정")
     @Parameter(name = "inspectId", description = "예약 게시글 id")
-    public ResponseEntity<?> updateInspectBook(@RequestBody InspectBook inspectBook,@PathVariable("inspectId") int inspectBookId){
-        return NormalResponse.toResponseEntity(HttpStatus.OK, userInspectService.updateInspectBook(inspectBook,inspectBookId));
+    public ResponseEntity<?> updateInspectBook(@RequestBody InspectBook inspectBook,@PathVariable("inspectId") int inspectBookId) {
+        return NormalResponse.toResponseEntity(HttpStatus.OK, userInspectService.updateInspectBook(inspectBook, inspectBookId));
     }
-
 
     // 검수 완료 조회
     @GetMapping("/result/list/{page}/{size}")
