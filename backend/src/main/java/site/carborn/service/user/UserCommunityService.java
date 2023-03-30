@@ -1,7 +1,9 @@
 package site.carborn.service.user;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import site.carborn.entity.account.Account;
@@ -13,6 +15,7 @@ import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.CommunityRepository;
 import site.carborn.repository.user.CommunityReviewRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.SortUtils;
 
 import java.time.LocalDateTime;
 
@@ -25,13 +28,37 @@ public class UserCommunityService {
     @Autowired
     private CommunityReviewRepository communityReviewRepository;
 
-    public Page<UserCommunityListMapping> getBoardList(int page, int size){
+    public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort){
+        String orderBy = BoardUtils.ORDER_BY_DESC;
+        String sortBy = BoardUtils.SORT_BY_ID;
+
+        switch (sort) {
+            case SortUtils.SORT_STATUS_NEW -> {
+                orderBy = BoardUtils.ORDER_BY_DESC;
+                sortBy = BoardUtils.SORT_BY_ID;
+            }
+            case SortUtils.SORT_STATUS_OLD -> {
+                orderBy = BoardUtils.ORDER_BY_ASC;
+                sortBy = BoardUtils.SORT_BY_ID;
+            }
+            case SortUtils.SORT_STATUS_VIEWS_DESC -> {
+                orderBy = BoardUtils.ORDER_BY_DESC;
+                sortBy = BoardUtils.SORT_BY_VIEWS;
+            }
+            case SortUtils.SORT_STATUS_VIEWS_ASC -> {
+                orderBy = BoardUtils.ORDER_BY_ASC;
+                sortBy = BoardUtils.SORT_BY_VIEWS;
+            }
+            default -> throw new RuntimeException("올바르지 않은 정렬 입니다");
+        }
+
         Page<UserCommunityListMapping> getBoardList = communityRepository.findByStatus(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"id", BoardUtils.ORDER_BY_DESC
+                        ,sortBy
+                        ,orderBy
                 )
         );
         if(getBoardList.isEmpty()){
@@ -40,7 +67,9 @@ public class UserCommunityService {
         return getBoardList;
     }
 
+    @Transactional
     public UserCommunityListMapping getBoardDetail(int communityId){
+        communityRepository.updateView(communityId);
         UserCommunityListMapping boardDetail = communityRepository.findAllByIdAndStatus(communityId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         if (boardDetail == null){
