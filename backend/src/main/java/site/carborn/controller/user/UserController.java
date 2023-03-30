@@ -22,6 +22,7 @@ import site.carborn.util.common.BookUtils;
 import site.carborn.util.common.SortUtils;
 import site.carborn.util.network.NormalResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -128,13 +129,13 @@ public class UserController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,userService.getCarSaleBookList(carSaleId, pageRequest));
     }
 
-    @PutMapping("sale/sell/confirm/{carSaleId}/{userId}")
+    @PutMapping("/sale/sell/confirm/{carSaleId}/{userId}")
     @Operation(description = "판매 확정")
     @Parameters({
             @Parameter(name = "carSaleId", description = "판매 글 번호"),
             @Parameter(name = "userId", description = "팔고 싶은 사람의 Id"),
     })
-    public ResponseEntity<?> sellConfim(@PathVariable("carSaleId") int carSaleId, @PathVariable("userId") String userId){
+    public ResponseEntity<?> sellConfirm(@PathVariable("carSaleId") int carSaleId, @PathVariable("userId") String userId){
        if(!userService.checkSaleStatus(carSaleId)){
            throw new NullPointerException("판매 중인 글이 아니거나 판매 글을 찾을 수 없습니다.");
        }
@@ -142,5 +143,20 @@ public class UserController {
            throw new NullPointerException("판매 확정 처리가 되지 않았습니다.");
        }
        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
+    }
+
+    @PutMapping("/sale/buy/confirm/{carSaleId}")
+    @Operation(description = "구매 확정")
+    @Parameters({
+            @Parameter(name = "carSaleId", description = "판매 글 번호")
+    })
+    public ResponseEntity<?> buyConfirm(@PathVariable("carSaleId") int carSaleId) throws IOException {
+        if(!userService.checkSaleCompleteStatus(carSaleId)){
+            throw new NullPointerException("판매 완료 상태인 글이 아니거나 판매 글을 찾을 수 없습니다.");
+        }
+        if(!userService.confirmTrade(carSaleId)){
+            throw new NullPointerException("판매 확정 처리가 되지 않았습니다.");
+        }
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 }
