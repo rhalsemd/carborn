@@ -9,4 +9,5 @@ public interface UserCommunityListMapping {
     String getContent();
     LocalDateTime getRegDt();
     LocalDateTime getUptDt();
+    int getViews();
 }

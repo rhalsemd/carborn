@@ -1,5 +1,6 @@
 package site.carborn.service.user;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,14 @@ public class UserCommunityService {
         return getBoardList;
     }
 
+    @Transactional
     public UserCommunityListMapping getBoardDetail(int communityId){
         UserCommunityListMapping boardDetail = communityRepository.findAllByIdAndStatus(communityId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         if (boardDetail == null){
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
+        communityRepository.updateView(communityId);
 
         return boardDetail;
     }
