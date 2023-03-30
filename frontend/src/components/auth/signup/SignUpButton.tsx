@@ -4,8 +4,9 @@ import {
   useridCheckReset,
 } from "../../../modules/UserIdCheckModule";
 import { SetIsSignupAction } from "../../../modules/signUpModule";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setUserAccountType } from "../../../modules/setAccountTypeModule";
+import styled from "@emotion/styled";
 
 // 타입
 export type SignupFormData = {
@@ -40,6 +41,38 @@ export type SignUpButtonProps = {
   isValid:any
 };
 
+const StyleUserCompanyBtn = styled.div`
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    width: 60%;
+    height: 3rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: white;
+    background-color: #D23131;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &.active {
+      border: 3px solid #D23131;
+      color: black;
+      font-weight: 900;
+      background-color: white;
+    }
+  }
+`;
+
 const SignUpButton = ({
   setSelectedButton,
   selectedButton,
@@ -58,7 +91,8 @@ const SignUpButton = ({
   const USER = 0;
   const REPAIR = 1;
 
-  // 리듀서 가져오기
+  // 버튼 클릭 유지시키기
+  const [isUserActive, setIsUserActive] = useState(true);
 
   // 액션
   const dispatch = useDispatch();
@@ -73,6 +107,7 @@ const SignUpButton = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    setIsUserActive(true);
     resetFormData();
     dispatch(setUserAccountType(USER));
     setSelectedButton(USER);
@@ -84,6 +119,7 @@ const SignUpButton = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    setIsUserActive(false);
     resetFormData();
     dispatch(setUserAccountType(REPAIR));
     setSelectedButton(REPAIR);
@@ -129,10 +165,10 @@ const SignUpButton = ({
   ]);
 
   return (
-    <div>
-      <button onClick={(e) => handleUserSignUp(e)}>일반회원</button>
-      <button onClick={(e) => handleCompanySignUp(e)}>기업회원</button>
-    </div>
+    <StyleUserCompanyBtn>
+      <button className={isUserActive ? 'active' : ''} onClick={(e) => handleUserSignUp(e)}>일반회원</button>
+      <button className={!isUserActive ? 'active' : ''} onClick={(e) => handleCompanySignUp(e)}>기업회원</button>
+    </StyleUserCompanyBtn>
   );
 };
 

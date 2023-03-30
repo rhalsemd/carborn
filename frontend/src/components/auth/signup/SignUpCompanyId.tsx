@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   companyidCheck,
@@ -7,6 +7,9 @@ import {
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import { useridCheckReset } from "../../../modules/UserIdCheckModule";
+import { StyleNameLabel } from "./SignUpUserName";
+import { StyleCheckBtn, StyleIdCheckDiv, StyleIdCheckInput } from "./SignUpUserId";
+import CustomAlert from "./modal/CustomAlert";
 
 type SignUpCompanyIdProps = {
   signupCompanyFormData: SignupFormData;
@@ -18,9 +21,13 @@ const SignUpCompanyId = ({
   signupCompanyFormData,
   setSignupCompanyFormData,
 }: SignUpCompanyIdProps) => {
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   const dispatch = useDispatch();
   const { companyidcheck } = useSelector((state: any) => state.IdCheckReducer);
-  console.log(companyidcheck)
+  console.log(companyidcheck);
 
   // 입력되는거 formdata에 넘겨주기
   const handleUserId = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,21 +49,37 @@ const SignUpCompanyId = ({
       const isValidLength =
         e.currentTarget.value.length >= 5 && e.currentTarget.value.length <= 20;
       if (regex.test(e.currentTarget.value) && isValidLength) {
-        alert("입력한 아이디가 유효합니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("입력한 아이디가 유효합니다.");
       } else if (!regex.test(e.currentTarget.value)) {
-        alert("아이디는 영어 소문자와 숫자, _만 가능합니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("아이디는 영어 소문자와 숫자, _만 가능합니다.");
         setSignupCompanyFormData({
           ...signupCompanyFormData,
           userid: "",
         });
       } else if (!isValidLength) {
-        alert("아이디 길이는 5글자에서 20글자입니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("아이디 길이는 5글자에서 20글자입니다.");
         setSignupCompanyFormData({
           ...signupCompanyFormData,
           userid: "",
         });
       } else {
-        alert(
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage(
           "입력하신 아이디가 영어 대소문자와 숫자가 아니거나, 길이가 5글자이하 또는 20글자 이상입니다."
         );
         setSignupCompanyFormData({
@@ -74,13 +97,21 @@ const SignUpCompanyId = ({
 
   useEffect(() => {
     if (companyidcheck === true) {
-      alert("사용가능한 아이디 입니다.");
+      setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+      setMessage("사용가능한 아이디 입니다.");
       setSignupCompanyFormData({
         ...signupCompanyFormData,
         idcheck: companyidcheck,
       });
     } else if (companyidcheck === false) {
-      alert("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
+      setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+      setMessage("중복된 아이디가 있습니다. 다른 아이디로 회원가입 해주세요.");
       setSignupCompanyFormData({
         ...signupCompanyFormData,
         idcheck: companyidcheck,
@@ -92,28 +123,35 @@ const SignUpCompanyId = ({
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="companyid">아이디</label>
+      <StyleNameLabel htmlFor="companyid">아이디</StyleNameLabel>
       <br />
-      <input
-        tabIndex={2}
-        type="text"
-        id="companyid"
-        name="companyid"
-        placeholder="아이디"
-        autoComplete="off"
-        required
-        value={signupCompanyFormData.userid}
-        onChange={(e) => handleUserId(e)}
-        onKeyDown={(e) => handleKeyPress(e)}
-      />
-      <input
-        tabIndex={3}
-        type="button"
-        onClick={(e) => {
-          userIdDuplicateCheck(e);
-        }}
-        value={`중복체크`}
-      />
+      <StyleIdCheckDiv>
+        <StyleIdCheckInput
+          tabIndex={2}
+          type="text"
+          id="companyid"
+          name="companyid"
+          placeholder="아이디"
+          autoComplete="off"
+          required
+          value={signupCompanyFormData.userid}
+          onChange={(e) => handleUserId(e)}
+          onKeyDown={(e) => handleKeyPress(e)}
+        />
+        <StyleCheckBtn
+          tabIndex={3}
+          type="button"
+          onClick={(e) => {
+            userIdDuplicateCheck(e);
+          }}
+          value={`중복체크`}
+        />
+      </StyleIdCheckDiv>
+      {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
     </StyleSignUpInputDiv>
   );
 };

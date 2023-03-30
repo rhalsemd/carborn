@@ -19,7 +19,6 @@ import SignUpUserPasswordCheck from "../../components/auth/signup/SignUpUserPass
 import SignUpCompanyPasswordCheck from "../../components/auth/signup/SignUpCompanyPasswordCheck";
 import SignUpUserBirth from "../../components/auth/signup/SignUpUserBirth";
 import SignUpCompanyBusinessNumber from "../../components/auth/signup/SignUpCompanyBusinessNumber";
-// import SignUpUserAddress from "../../components/auth/signup/SignUpUserAddress";
 import SignUpCompanyAddress from "../../components/auth/signup/SignUpCompanyAddress";
 import SignUpUserPhoneNumber from "../../components/auth/signup/SignUpUserPhoneNumber";
 import SignUpCompanyPhoneNumber from "../../components/auth/signup/SignUpCompanyPhoneNumber";
@@ -27,12 +26,9 @@ import SignUpCompanyDocument from "../../components/auth/signup/SignUpCompanyDoc
 import Nav from "../../components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { SetIsSignupAction } from "../../modules/signUpModule";
-import {
-  userSignUpSendAction,
-  companySignUpSendAction,
-} from "./../../modules/signUpModule";
-import { ContentType, multipart_formData, CARBORN_SITE } from "./../../lib/api";
+import { CARBORN_SITE } from "./../../lib/api";
 import { useNavigate } from "react-router-dom";
+import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -43,21 +39,43 @@ export interface StyleGoRegisterProps
 // CSS
 export const StyleSignUpInputDiv = styled.div`
   width: 100%;
-  padding-left: 2rem;
 `;
 
 export const StyleGoRegister = styled.button<StyleGoRegisterProps>`
-  width: 15rem;
+  width: 102%;
+  height: 3.5rem;
   text-align: center;
+  font-weight: 900;
   font-size: 1.2rem;
   color: white;
   background-color: ${(props) => props.backgroundColor};
   border: none;
+  border-radius: 5px;
   margin: 0.5rem 0;
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
+export const StyleSignUpBigContainer = styled.div`
+  width: 35vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    width: 100%;
+  }
+`
+
 const SignupPages: React.FC = () => {
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   // 이동
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -145,7 +163,11 @@ const SignupPages: React.FC = () => {
         })
           .then((res) => {
             if (!res.ok) {
-              alert("아무튼 오류가 났습니다. 다시 확인하세요");
+              setIsAlert(true);
+              setTimeout(() => {
+                setIsAlert(false);
+              }, 2000);
+              setMessage("알 수 없는 이유로 회원가입에 실패했습니다. 계정 정보를 다시 한 번 확인해주세요.");
               throw new Error(`${res.status} 오류가 발생했습니다`);
             }
 
@@ -166,7 +188,11 @@ const SignupPages: React.FC = () => {
         })
           .then((res) => {
             if (!res.ok) {
-              alert("아무튼 오류가 났습니다. 다시 확인하세요");
+              setIsAlert(true);
+              setTimeout(() => {
+                setIsAlert(false);
+              }, 2000);
+              setMessage("알 수 없는 이유로 회원가입에 실패했습니다. 계정 정보를 다시 한 번 확인해주세요.");
               throw new Error(`${res.status} 오류가 발생했습니다`);
             }
 
@@ -234,8 +260,6 @@ const SignupPages: React.FC = () => {
     console.log(Boolean(signupUserFormData.passwordcheck));
     console.log(Boolean(signupUserFormData.phonenumber));
     console.log(Boolean(signupUserFormData.identifynumber));
-    // console.log(Boolean(signupUserFormData.address));
-    // console.log(selectedFiles.length === 0 ? false : true, "회사용");
     console.log(selectedFiles.length);
   }, [updateIsValid, SignUpisValid, signupCompanyFormData]);
 
@@ -264,9 +288,10 @@ const SignupPages: React.FC = () => {
             setIsValid={setIsValid}
             isValid={isValid}
           />
-          <div>
+          <StyleSignUpBigContainer>
             {selectedButton === USER ? (
               <div>
+                <br/>
                 <SignUpUserName
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}
@@ -293,10 +318,6 @@ const SignupPages: React.FC = () => {
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}
                 />
-                {/* <SignUpUserAddress
-                  setSignupUserFormData={setSignupUserFormData}
-                  signupUserFormData={signupUserFormData}
-                /> */}
                 <SignUpUserPhoneNumber
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}
@@ -351,7 +372,8 @@ const SignupPages: React.FC = () => {
                 <SignUpCompanyDocument handleFileChange={handleFileChange} />
               </div>
             )}
-          </div>
+          </StyleSignUpBigContainer>
+          <br/>
           <StyleGoRegister
             type="button"
             tabIndex={13}
@@ -362,6 +384,11 @@ const SignupPages: React.FC = () => {
             회원가입 하기
           </StyleGoRegister>
         </StyleLoginSignUpBoxDiv>
+        {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
       </StyleLoginSignUpDiv>
     </div>
   );

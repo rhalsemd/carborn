@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
+import { StyledInput, StyleNameLabel } from "./SignUpUserName";
 
 //타입 지정
 export type SignUpUserNameProps = {
@@ -24,9 +25,9 @@ const SignUpCompanyName = ({
   return (
     <div>
       <StyleSignUpInputDiv>
-        <label htmlFor="companyname">회사명</label>
+        <StyleNameLabel htmlFor="companyname">회사명</StyleNameLabel>
         <br />
-        <input
+        <StyledInput
           tabIndex={1}
           type="text"
           id="companyname"

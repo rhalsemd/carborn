@@ -75,17 +75,21 @@ const VerifyNumberContentDiv = styled.div`
   button {
     width: 30%;
     margin-left: 2%;
-    border: 1px solid #d23131;
-    background-color: white;
+    background-color: #d23131;
+    border: 5px solid transparent;
     font-size: 1rem;
+    font-weight: 900;
+    color: white
   }
 
   button:hover,
   :focus {
     width: 30%;
     margin-left: 2%;
-    background-color: #d23131;
-    color: white;
+    border: 5px solid #d23131;
+    background-color: white;
+    color: black;
+    font-weight: 900;
     font-size: 1rem;
   }
 `;
@@ -97,33 +101,40 @@ const VerifyNumberButtonDiv = styled.div`
   justify-content: center;
 
   .closeButton {
-    width: 20%;
-    border: 1px solid #d23131;
-    background-color: white;
+    width: 25%;
+    margin-left: 5%;
+    border: 5px solid transparent;
+    background-color: #d23131;
+    color: white;
+    font-weight: 900;
     font-size: 1rem;
   }
 
   .closeButton:hover,
   :focus {
-    width: 20%;
-    background-color: #d23131;
-    color: white;
+    width: 25%;
+    margin-left: 5%;
+    border: 5px solid #d23131;
+    background-color: white;
+    color: black;
     font-size: 1rem;
   }
 
   .verifyButton {
-    width: 78%;
-    margin-left: 2%;
-    border: 1px solid #d23131;
-    background-color: white;
+    width: 70%;
+    background-color: #d23131;
+    border: 5px solid transparent;
+    color: white;
+    font-weight: 900;
     font-size: 1rem;
   }
 
   .verifyButton:hover,
   :focus {
-    width: 78%;
-    background-color: #d23131;
-    color: white;
+    width: 70%;
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
     font-size: 1rem;
   }
 `;
