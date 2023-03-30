@@ -47,11 +47,11 @@ const NewPassword = ({
         newpassword: value,
       });
     } else {
-      setIsAlert(true);
-        setTimeout(() => {
-          setIsAlert(false);
-        }, 2000);
-      setMessage("영소문자나 숫자, 특수문자만 가능합니다.")
+      // setIsAlert(true);
+      //   setTimeout(() => {
+      //     setIsAlert(false);
+      //   }, 2000);
+      // setMessage("영소문자나 숫자, 특수문자만 가능합니다.")
       setInputObj({
         ...inputObj,
         newpassword: "",

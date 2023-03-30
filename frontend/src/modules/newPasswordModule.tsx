@@ -28,9 +28,12 @@ const initialState = {
 export function* newPasswordSaga(
   action: ReturnType<typeof newPasswordAction>
 ): Generator<any, any, any> {
+  console.log(action.payload)
   try {
     const response = yield call<any>(newPasswordApi, action.payload);
-    yield put({ type: NEWPASSWORD_REQUEST_SUCCESS, payload: response})
+    console.log(response)
+
+    yield put({ type: NEWPASSWORD_REQUEST_SUCCESS, payload: response.data.message})
   } catch (error) {
     console.log(error);
   }
@@ -42,7 +45,7 @@ export function newPasswordReducer(
 ) {
   switch (action.type) {
     case NEWPASSWORD_REQUEST_SUCCESS:
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload, newpasswordcheck:true };
     case NEWPASSWORD_RESET:
       return { ...state, newpasswordcheck:false }
     default:
