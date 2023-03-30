@@ -203,17 +203,18 @@ export const PhoneNumberCheckApi = async (
 export const SearchIdCheckApi = async (payload: any): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${API_URL}/users`,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/find-id`,
       headers: {
         [ContentType]: applicationjson,
       },
       data: {
         name: payload.name,
-        phoneNm: payload.phonenumber,
+        phoneNo: payload.phonenumber,
       },
     });
-    console.log(response.data);
+
+    console.log(response.data.message);
 
     return response;
   } catch (error) {
@@ -228,7 +229,7 @@ export const smsAuthApi = async (payload: any): Promise<any> => {
     const response: any = await axios({
       method: "POST",
       // 수정해야함
-      url: `${CARBORN_SITE}/api/sms-auth-join`,
+      url: `${CARBORN_SITE}/api/sms-auth`,
       data: {
         phoneNm: payload.phoneNumber,
         authNm: payload.inputValue,

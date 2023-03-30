@@ -13,8 +13,8 @@ export const SearchIDCheckAction = (data: Object) => ({
 });
 
 export const SearchIDVerifyReset = () => ({
-  type: SEARCHID_VERIFY_RESET
-})
+  type: SEARCHID_VERIFY_RESET,
+});
 
 // 초기값
 const initialState = {
@@ -29,9 +29,9 @@ export function* searchidCheckSaga(
   action: ReturnType<typeof SearchIDCheckAction>
 ): Generator<any, any, any> {
   try {
-    const data = yield call<any>(SearchIdCheckApi, action.payload);
-    console.log('response값은? ', data)
-    yield put({ type: SEARCHID_CHECK_SUCCESS, payload: data });
+    const response = yield call<any>(SearchIdCheckApi, action.payload);
+    console.log("response값은? ", response.data.message);
+    yield put({ type: SEARCHID_CHECK_SUCCESS, payload: response.data.message });
   } catch (error) {
     console.log(error);
   }
@@ -43,9 +43,9 @@ export function searchIDCheckReducer(
 ) {
   switch (action.type) {
     case SEARCHID_CHECK_SUCCESS:
-      return { ...action.payload, verify:true };
+      return { ...state, searchid:action.payload, verify: true };
     case SEARCHID_VERIFY_RESET:
-      return { verify: false }
+      return { verify: false };
     default:
       return state;
   }

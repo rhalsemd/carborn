@@ -6,8 +6,12 @@ import {
   userverificationNumber,
 } from "../../../../modules/verificationNumberModule";
 import { IsCanSignUpAction } from "../../../../modules/signUpModule";
-import axios from 'axios';
-import { applicationjson, CARBORN_SITE, ContentType } from './../../../../lib/api';
+import axios from "axios";
+import {
+  applicationjson,
+  CARBORN_SITE,
+  ContentType,
+} from "./../../../../lib/api";
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
   display: ${(props) => (props.open ? "flex" : "none")};
@@ -79,7 +83,7 @@ const VerifyNumberContentDiv = styled.div`
     border: 5px solid transparent;
     font-size: 1rem;
     font-weight: 900;
-    color: white
+    color: white;
   }
 
   button:hover,
@@ -167,7 +171,7 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
 
   // 인증되었는지 관련 불린
   // const isPass = useSelector((state:any) => state.verificationNumberReducer.isPass)
-  
+
   const [inputValue, setInputValue] = useState("");
   const [countdown, setCountdown] = useState(180);
   const [countdownInterval, setCountdownInterval] = useState<ReturnType<
@@ -180,7 +184,7 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   const handleSendVerifyRequest = (phoneNumber: string) => {
     dispatch(userverificationNumber(phoneNumber));
 
-    setIsButtonValid(true)
+    setIsButtonValid(true);
     if (isButtonValid) return;
     setCountdown(180);
     clearInterval(countdownInterval!);
@@ -219,32 +223,32 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
     // 전화번호, 인증번호 넘겨주기
     try {
       const response = await axios({
-        method: 'POST',
-        url: `${CARBORN_SITE}/api/sms-auth-join`,
+        method: "POST",
+        url: `${CARBORN_SITE}/api/sms-auth`,
         data: {
-          phoneNm : phoneNumber,
-          authNm : inputValue
+          phoneNm: phoneNumber,
+          authNm: inputValue,
         },
         headers: {
           [ContentType]: applicationjson,
-        }
+        },
       });
 
       const isPass = response.data.message;
-      
+
       if (isPass) {
-        alert("인증성공")
-        console.log("인증성공")
-        dispatch(IsCanSignUpAction())
-        setIsValid(true)
-        handleClose()
+        alert("인증성공");
+        console.log("인증성공");
+        dispatch(IsCanSignUpAction());
+        setIsValid(true);
+        handleClose();
       } else {
-        setIsValid(false)
-        alert("인증실패")
-        console.log("인증실패")
+        setIsValid(false);
+        alert("인증실패");
+        console.log("인증실패");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
