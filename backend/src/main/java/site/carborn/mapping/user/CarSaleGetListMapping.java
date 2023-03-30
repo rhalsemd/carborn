@@ -14,7 +14,7 @@ public interface CarSaleGetListMapping {
 
     String getCarModelYear();
 
-    String getCarSaleCarRegNm();
+    String getCarRegNm();
 
     int getCarMileage();
 
