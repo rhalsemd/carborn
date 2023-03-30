@@ -6,7 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.CarSaleRequestDTO;
+import site.carborn.mapping.user.*;
+import site.carborn.repository.car.CarInsuranceHistoryRepository;
+import site.carborn.repository.user.CarSaleBookRepository;
 import site.carborn.repository.user.CarSaleRepository;
+import site.carborn.repository.user.InspectResultRepository;
+import site.carborn.repository.user.RepairResultRepository;
+import site.carborn.util.common.BookUtils;
 import site.carborn.util.common.SellUtils;
 import site.carborn.util.common.SortUtils;
 
@@ -18,6 +24,18 @@ public class UserService {
 
     @Autowired
     private CarSaleRepository carSaleRepository;
+
+    @Autowired
+    private CarSaleBookRepository carSaleBookRepository;
+
+    @Autowired
+    private InspectResultRepository inspectResultRepository;
+
+    @Autowired
+    private RepairResultRepository repairResultRepository;
+
+    @Autowired
+    private CarInsuranceHistoryRepository carInsuranceHistoryRepository;
 
     @Transactional
     public Page<CarSaleRequestDTO> getSaleList(Pageable pageable) {
@@ -67,5 +85,25 @@ public class UserService {
             dto.setImgNm((String) objects[12]);
             return dto;
         });
+    }
+
+    @Transactional
+    public CarSaleBookGetDetailMapping getSaleDetail(int carSaleId){
+        return carSaleBookRepository.findByStatusAndCarSale_SaleStatusNotAndCarSale_Id(false, SellUtils.SELL_STATUS_CANCEL,carSaleId);
+    }
+
+    @Transactional
+    public Page<UserInspectResultListMapping> getSaleInspectList(int carId, Pageable page){
+        return inspectResultRepository.findByInspectBook_Car_Id(carId, page);
+    }
+
+    @Transactional
+    public Page<UserRepairResultListMapping> getSaleRepairList(int carId, Pageable page){
+        return repairResultRepository.findByRepairBook_Car_Id(carId, page);
+    }
+
+    @Transactional
+    public Page<UserInsuranceListMapping> getSaleInsuranceList(int carId, Pageable page){
+        return carInsuranceHistoryRepository.findAllByCar_Id(carId, page);
     }
 }
