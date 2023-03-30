@@ -1,5 +1,6 @@
 package site.carborn.service.user;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,9 @@ import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.repository.user.CarSaleRepository;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserHomeService {
@@ -25,23 +29,28 @@ public class UserHomeService {
     @Autowired
     private CarSaleRepository carSaleRepository;
 
+    @Transactional
     public Long getCarCount(){
         return carRepository.countBy();
     }
 
+    @Transactional
     public Long getRepairCount(){
         return repairShopRepository.countBy();
     }
 
+    @Transactional
     public Long getInspectorCount(){
         return inspectorRepository.countBy();
     }
 
+    @Transactional
     public Long getCarSaleCount(){
         return carSaleRepository.countByStatusAndSaleStatus(false,1);
     }
 
-    public Page<CarSaleGetListMapping> getNewCarSaleList(Pageable page){
-        return carSaleRepository.findAllByStatusAndSaleStatus(false, 0, page);
+    @Transactional
+    public List<Map<String,String>> getNewCarSaleList(){
+        return carSaleRepository.getNewCarHomeData(false, 0);
     }
 }
