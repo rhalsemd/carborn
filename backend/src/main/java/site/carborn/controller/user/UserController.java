@@ -10,11 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.carborn.dto.request.CarSaleRequestDTO;
+import site.carborn.entity.user.CarSale;
 import site.carborn.mapping.car.CarImageGetDataMapping;
 import site.carborn.mapping.car.CarVrcGetDataMapping;
 import site.carborn.mapping.user.CarSaleBookGetDetailMapping;
@@ -98,4 +96,10 @@ public class UserController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,returnData);
     }
 
+    @PostMapping("/sell")
+    @Operation(description = "판매 차량 등록")
+    public ResponseEntity<?> insertCarSell(@RequestBody CarSale carSale){
+        userService.insertCarSale(carSale);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,"");
+    }
 }

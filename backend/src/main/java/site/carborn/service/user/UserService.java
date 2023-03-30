@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.CarSaleRequestDTO;
+import site.carborn.entity.account.Account;
+import site.carborn.entity.user.CarSale;
 import site.carborn.mapping.user.*;
 import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.user.CarSaleBookRepository;
@@ -105,5 +107,20 @@ public class UserService {
     @Transactional
     public Page<UserInsuranceListMapping> getSaleInsuranceList(int carId, Pageable page){
         return carInsuranceHistoryRepository.findAllByCar_Id(carId, page);
+    }
+
+    @Transactional
+    public void insertCarSale(CarSale carSale){
+        //현재는 임시아이디 시큐리티에서 받는 부분
+        String userid = "testuser2";
+
+        carSale.setAccount(new Account());
+        carSale.getAccount().setId(userid);
+        carSale.setSaleStatus(SellUtils.SELL_STATUS_STAY);
+        carSale.setRegDt(LocalDateTime.now());
+        carSale.setUptDt(LocalDateTime.now());
+        carSale.setStatus(false);
+
+        carSaleRepository.save(carSale);
     }
 }
