@@ -1,6 +1,8 @@
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import React, { useEffect } from "react";
 import { SignupFormData } from "./SignUpButton";
+import { StyledInput, StyleNameLabel } from "./SignUpUserName";
+import styled from "@emotion/styled";
 
 export type SignUpUserPasswordCheckProps = {
   signupUserFormData: SignupFormData;
@@ -10,6 +12,15 @@ export type SignUpUserPasswordCheckProps = {
   setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
   isPasswordValid: boolean;
 };
+
+export const StylePasswordCheck = styled.span`
+  display: inline-block;
+  width: 72%;
+  text-align: right;
+  color: #d23131;
+  font-weight: 900;
+  font-size: 1rem;
+`;
 
 const SignUpUserPasswordCheck = ({
   signupUserFormData,
@@ -60,10 +71,12 @@ const SignUpUserPasswordCheck = ({
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="userpasswordcheck">비밀번호 확인</label>
-      {isPasswordValid ? <span>비밀번호가 일치합니다.</span> : null}
+      <StyleNameLabel htmlFor="userpasswordcheck">비밀번호 확인</StyleNameLabel>
+      {isPasswordValid ? (
+        <StylePasswordCheck>비밀번호가 일치합니다.</StylePasswordCheck>
+      ) : null}
       <br />
-      <input
+      <StyledInput
         type="password"
         name="userpasswordcheck"
         id="userpasswordcheck"

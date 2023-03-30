@@ -29,9 +29,6 @@ public class JoinController {
     JoinService joinService;
 
     @Autowired
-    SmsService smsService;
-
-    @Autowired
     AddressService addressService;
 
     @PostMapping("/join")
@@ -69,15 +66,5 @@ public class JoinController {
             throw new NullPointerException("조회할 아이디 정보를 입력하세요");
         }
         return NormalResponse.toResponseEntity(HttpStatus.OK, joinService.checkId(id));
-    }
-
-    @PostMapping("/sms-auth-join")
-    public ResponseEntity<?> smsAuthJoin(@RequestBody SmsAuth smsAuth) {
-        String phoneNm = smsAuth.getPhoneNm();
-        if (phoneNm == null || phoneNm.isBlank()) {
-            throw new NullPointerException("휴대전화 번호를 입력해주세요");
-        }
-
-        return NormalResponse.toResponseEntity(HttpStatus.OK, joinService.smsAuthJoin(smsAuth));
     }
 }

@@ -68,28 +68,4 @@ public class LoginService {
 
         loginLogRepository.save(loginLog);
     }
-
-    public String findAccountId(Account account) {
-        Account data = accountRepository.findByPhoneNoAndName(account.getPhoneNo(), account.getName()).get();
-        if (data == null) {
-            throw new NullPointerException("입력하신 계정 정보가 없습니다");
-        }
-
-        // 아이디 전송
-//        sendMessage(data.getId());
-
-        return BoardUtils.BOARD_CRUD_SUCCESS;
-    }
-
-    public Account findAccountPwd(Account account) {
-        Account data = accountRepository.findByIdAndPhoneNoAndName(account.getId(), account.getPhoneNo(), account.getName()).get();
-        if (data == null) {
-            throw new NullPointerException("입력하신 계정 정보가 없습니다");
-        }
-
-        // 인증번호 전송
-//        sendMessage(randomNum);
-
-        return data;
-    }
 }

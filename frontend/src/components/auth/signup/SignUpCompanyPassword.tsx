@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import styled from "@emotion/styled";
+import React, { useEffect, useState } from "react";
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
+import { StyledInput, StyleNameLabel } from "./SignUpUserName";
+import CustomAlert from './modal/CustomAlert';
 
 export interface SignUpPasswordProps {
   signupCompanyFormData: SignupFormData;
@@ -11,12 +14,21 @@ export interface SignUpPasswordProps {
   setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export const StyleHeightSpan = styled.span`
+  display: block;
+  height: 1rem !important;
+`
+
 const SignUpCompanyPassword = ({
   setSignupCompanyFormData,
   signupCompanyFormData,
   secondPassword,
   setIsPasswordValid,
 }: SignUpPasswordProps) => {
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   // 입력되는거 formdata에 넘겨주기
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 타이핑하는순간 비밀번호중복체크 초기화됨
@@ -37,9 +49,17 @@ const SignUpCompanyPassword = ({
       const regex =
         /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
       if (regex.test(e.currentTarget.value)) {
-        alert("입력한 비밀번호가 유효합니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("입력한 비밀번호가 유효합니다.");
       } else {
-        alert(
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage(
           "입력한 비밀번호가 조합된 영소문자 및 숫자, 특수문자가 아닙니다."
         );
         setSignupCompanyFormData({
@@ -71,9 +91,10 @@ const SignUpCompanyPassword = ({
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="companypassword">비밀번호</label>
+      <StyleHeightSpan></StyleHeightSpan>
+      <StyleNameLabel htmlFor="companypassword">비밀번호</StyleNameLabel>
       <br />
-      <input
+      <StyledInput
         tabIndex={4}
         type="password"
         id="companypassword"
@@ -84,6 +105,11 @@ const SignUpCompanyPassword = ({
         onChange={(e) => handlePassword(e)}
         onKeyDown={(e) => handleKeyPress(e)}
       />
+      {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
     </StyleSignUpInputDiv>
   );
 };

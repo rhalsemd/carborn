@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { LoginInputProps } from "../../../routes/auth/LoginPage";
+import { StyledInput, StyleNameLabel } from "../signup/SignUpUserName";
 
 // CSS
 const StyleLoginInputDiv = styled.div`
@@ -19,8 +20,8 @@ const LoginPassword = ({ setLoginInput, loginInput }: LoginInputProps) => {
 
   return (
     <StyleLoginInputDiv>
-      <label htmlFor="loginpassword">비밀번호</label>
-      <input
+      <StyleNameLabel htmlFor="loginpassword">비밀번호</StyleNameLabel>
+      <StyledInput
         type="password"
         id="loginpassword"
         name="loginpassword"

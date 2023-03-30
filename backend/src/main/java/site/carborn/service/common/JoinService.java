@@ -23,11 +23,11 @@ import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.InsuranceCompanyRepository;
 import site.carborn.repository.company.RepairShopRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.AccountUtils;
 import site.carborn.util.common.AuthUtils;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -50,8 +50,8 @@ public class JoinService {
         String pwd = account.getPwd();
         String phoneNo = account.getPhoneNo();
 
-        checkAccountIdFormat(id);
-        checkAccountPwdFormat(pwd);
+        AccountUtils.checkAccountIdFormat(id);
+        AccountUtils.checkAccountPwdFormat(pwd);
 
         // 비밀번호 암호화
         account.setPwd(passwordEncoder.encode(pwd));
@@ -141,48 +141,6 @@ public class JoinService {
         cbr.setRegDt(LocalDateTime.now());
 
         cbrRepository.save(cbr);
-    }
-
-    public boolean smsAuthJoin(SmsAuth smsAuth) {
-        String phoneNm = smsAuth.getPhoneNm();
-        Account account = accountRepository.findByPhoneNo(phoneNm);
-        if (account != null) {
-            throw new RuntimeException("이미 회원가입 되어있는 사용자입니다");
-        }
-
-        SmsAuth data = smsAuthRepository.getSmsAuth(phoneNm);
-        if (data != null && data.getAuthNm().equals(smsAuth.getAuthNm())) {
-            // 인증 만료시간 내 입력 및 인증번호 일치
-            data.setStatus(true);
-            smsAuthRepository.save(data);
-
-            return true;
-        }
-
-        // 인증 만료시간 초과 혹은 인증번호 불일치
-        return false;
-    }
-
-    private void checkAccountIdFormat(String id) {
-        String pattern = "^[a-z0-9_]+$";
-        if (id.length() < 8 || id.length() > 20) {
-            throw new RuntimeException("아이디는 8~20자로 설정해야 합니다");
-        }
-
-//        if (Pattern.matches(pattern, id) == false) {
-//            throw new RuntimeException("아이디는 영문 소문자, 숫자, 언더스코어(_)만 가능합니다");
-//        }
-    }
-
-    private void checkAccountPwdFormat(String pwd) {
-        String pattern = "^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$";
-        if (pwd.length() < 8 || pwd.length() > 20) {
-            throw new RuntimeException("비밀번호는 8~20자로 설정해야 합니다");
-        }
-
-//        if (Pattern.matches(pattern, pwd) == false) {
-//            throw new RuntimeException("비밀번호 형식이 올바르지 않습니다");
-//        }
     }
 
     public boolean checkId(String id) {

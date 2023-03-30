@@ -73,4 +73,14 @@ public class SmsController {
 
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
+
+    @PostMapping("/sms-auth")
+    public ResponseEntity<?> smsAuth(@RequestBody SmsAuth smsAuth) {
+        String phoneNm = smsAuth.getPhoneNm();
+        if (phoneNm == null || phoneNm.isBlank()) {
+            throw new NullPointerException("휴대전화 번호를 입력해주세요");
+        }
+
+        return NormalResponse.toResponseEntity(HttpStatus.OK, smsService.smsAuth(smsAuth));
+    }
 }
