@@ -70,14 +70,4 @@ public class JoinController {
         }
         return NormalResponse.toResponseEntity(HttpStatus.OK, joinService.checkId(id));
     }
-
-    @PostMapping("/sms-auth-join")
-    public ResponseEntity<?> smsAuthJoin(@RequestBody SmsAuth smsAuth) {
-        String phoneNm = smsAuth.getPhoneNm();
-        if (phoneNm == null || phoneNm.isBlank()) {
-            throw new NullPointerException("휴대전화 번호를 입력해주세요");
-        }
-
-        return NormalResponse.toResponseEntity(HttpStatus.OK, joinService.smsAuthJoin(smsAuth));
-    }
 }

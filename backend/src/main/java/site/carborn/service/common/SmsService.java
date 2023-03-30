@@ -59,6 +59,11 @@ public class SmsService {
 
     private final SmsAuthRepository smsAuthRepository;
 
+    /**
+     * SMS 인증번호 발송
+     * @param smsAuth
+     * @param msg
+     */
     public void smsAuthSend(SmsAuth smsAuth, String msg) {
         String receivePhone = smsAuth.getPhoneNm();
 
@@ -164,6 +169,12 @@ public class SmsService {
         return encodeBase64String;
     }
 
+    /**
+     * SMS 인증번호 생성
+     * @param phoneNm
+     * @param authNm
+     * @return msg
+     */
     public String makeSmsAuthMsg(String phoneNm, String authNm) {
         StringBuilder sb = new StringBuilder();
         sb.append("[CarBorn]\n");
@@ -180,5 +191,26 @@ public class SmsService {
         smsAuthRepository.save(smsAuth);
 
         return sb.toString();
+    }
+
+    /**
+     * SMS 인증번호 검증
+     * @param smsAuth
+     * @return boolean
+     */
+    public boolean smsAuth(SmsAuth smsAuth) {
+        String phoneNm = smsAuth.getPhoneNm();
+
+        SmsAuth data = smsAuthRepository.getSmsAuth(phoneNm);
+        if (data != null && data.getAuthNm().equals(smsAuth.getAuthNm())) {
+            // 인증 만료시간 내 입력 및 인증번호 일치
+            data.setStatus(true);
+            smsAuthRepository.save(data);
+
+            return true;
+        }
+
+        // 인증 만료시간 초과 혹은 인증번호 불일치
+        return false;
     }
 }

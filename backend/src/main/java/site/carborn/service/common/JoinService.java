@@ -27,7 +27,6 @@ import site.carborn.util.common.AuthUtils;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -141,26 +140,6 @@ public class JoinService {
         cbr.setRegDt(LocalDateTime.now());
 
         cbrRepository.save(cbr);
-    }
-
-    public boolean smsAuthJoin(SmsAuth smsAuth) {
-        String phoneNm = smsAuth.getPhoneNm();
-        Account account = accountRepository.findByPhoneNo(phoneNm);
-        if (account != null) {
-            throw new RuntimeException("이미 회원가입 되어있는 사용자입니다");
-        }
-
-        SmsAuth data = smsAuthRepository.getSmsAuth(phoneNm);
-        if (data != null && data.getAuthNm().equals(smsAuth.getAuthNm())) {
-            // 인증 만료시간 내 입력 및 인증번호 일치
-            data.setStatus(true);
-            smsAuthRepository.save(data);
-
-            return true;
-        }
-
-        // 인증 만료시간 초과 혹은 인증번호 불일치
-        return false;
     }
 
     private void checkAccountIdFormat(String id) {
