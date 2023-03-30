@@ -62,9 +62,9 @@ public class WebSecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/api/insurance/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/api/user/**").hasAuthority(String.valueOf(AuthUtils.AUTH_USER))
-                .requestMatchers("/api/board/**").hasAuthority(String.valueOf(AuthUtils.AUTH_USER))
+//                .requestMatchers("/api/insurance/**").hasAuthority("ROLE_ADMIN")
+//                .requestMatchers("/api/user/**").hasAuthority(String.valueOf(AuthUtils.AUTH_USER))
+//                .requestMatchers("/api/board/**").hasAuthority(String.valueOf(AuthUtils.AUTH_USER))
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
 
