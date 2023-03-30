@@ -29,6 +29,7 @@ import { SetIsSignupAction } from "../../modules/signUpModule";
 import { CARBORN_SITE } from "./../../lib/api";
 import { useNavigate } from "react-router-dom";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -69,7 +70,7 @@ export const StyleSignUpBigContainer = styled.div`
   & > div {
     width: 100%;
   }
-`
+`;
 
 const SignupPages: React.FC = () => {
   // 메세지
@@ -97,6 +98,18 @@ const SignupPages: React.FC = () => {
   const isSignUpBtn = useSelector(
     (state: any) => state.SignUpReducer.isSignPossible
   );
+
+
+  // 리캡챠 해시 데이터 받아오기
+  const [isRecaptcha, setIsRecaptcha] = useState(false); 
+  const handleCaptchaChange = (value: string | null) => {
+    if (value) {
+      setIsRecaptcha(true)
+    } else {
+      setIsRecaptcha(false)
+    }
+  };
+
 
   // 회원가입 초기값
   const initialSignupFormData = {
@@ -167,7 +180,9 @@ const SignupPages: React.FC = () => {
               setTimeout(() => {
                 setIsAlert(false);
               }, 2000);
-              setMessage("알 수 없는 이유로 회원가입에 실패했습니다. 계정 정보를 다시 한 번 확인해주세요.");
+              setMessage(
+                "알 수 없는 이유로 회원가입에 실패했습니다. 계정 정보를 다시 한 번 확인해주세요."
+              );
               throw new Error(`${res.status} 오류가 발생했습니다`);
             }
 
@@ -192,7 +207,9 @@ const SignupPages: React.FC = () => {
               setTimeout(() => {
                 setIsAlert(false);
               }, 2000);
-              setMessage("알 수 없는 이유로 회원가입에 실패했습니다. 계정 정보를 다시 한 번 확인해주세요.");
+              setMessage(
+                "알 수 없는 이유로 회원가입에 실패했습니다. 계정 정보를 다시 한 번 확인해주세요."
+              );
               throw new Error(`${res.status} 오류가 발생했습니다`);
             }
 
@@ -201,7 +218,7 @@ const SignupPages: React.FC = () => {
           })
           .catch((err) => {
             console.log(err.message);
-        });
+          });
       } catch (error) {
         console.log(error);
       }
@@ -291,7 +308,7 @@ const SignupPages: React.FC = () => {
           <StyleSignUpBigContainer>
             {selectedButton === USER ? (
               <div>
-                <br/>
+                <br />
                 <SignUpUserName
                   setSignupUserFormData={setSignupUserFormData}
                   signupUserFormData={signupUserFormData}
@@ -373,22 +390,28 @@ const SignupPages: React.FC = () => {
               </div>
             )}
           </StyleSignUpBigContainer>
-          <br/>
+          <br />
+          {isSignUpBtn ? <ReCAPTCHA
+            sitekey="6LdijBMlAAAAACu0OtiHgCtKlGE58nkcRFXPxSLk"
+            style={{ marginBottom: "1rem" }}
+            size="normal"
+            onChange={handleCaptchaChange}
+          /> : null}
           <StyleGoRegister
             type="button"
             tabIndex={13}
-            disabled={!isSignUpBtn}
-            backgroundColor={isSignUpBtn ? "#d23131" : "grey"}
+            disabled={!isRecaptcha}
+            backgroundColor={isRecaptcha ? "#d23131" : "grey"}
             onClick={(e) => handleSubmit(e)}
           >
             회원가입 하기
           </StyleGoRegister>
         </StyleLoginSignUpBoxDiv>
         {isAlert ? (
-        <div>
-          <CustomAlert message={message} />
-        </div>
-      ) : null}
+          <div>
+            <CustomAlert message={message} />
+          </div>
+        ) : null}
       </StyleLoginSignUpDiv>
     </div>
   );
