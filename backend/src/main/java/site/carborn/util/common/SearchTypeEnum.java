@@ -1,10 +1,10 @@
 package site.carborn.util.common;
 
 public enum SearchTypeEnum {
-    VALUE1(0,"Maker"),
-    VALUE2(1,"MODEL_NM"),
-    VALUE3(2,"MODEL_YEAR"),
-    VALUE4(3,"Content");
+    VALUE1(0,"maker"),
+    VALUE2(1,"modelNm"),
+    VALUE3(2,"modelYear"),
+    VALUE4(3,"content");
 
     private final int intValue;
 
