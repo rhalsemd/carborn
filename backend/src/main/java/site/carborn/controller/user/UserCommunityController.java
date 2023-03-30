@@ -66,7 +66,7 @@ public class UserCommunityController{
         return NormalResponse.toResponseEntity(HttpStatus.OK, id);
     }
 
-    @DeleteMapping ("/delete/{communityId}")
+    @DeleteMapping ("/{communityId}")
     @Operation(description = "커뮤니티 글 삭제")
     @Parameter(name = "communityId", description = "게시글 id")
     public ResponseEntity<?> deleteRepairBook(@PathVariable("communityId") int communityId){
@@ -103,7 +103,7 @@ public class UserCommunityController{
         return NormalResponse.toResponseEntity(HttpStatus.OK, userCommunityService.updateComment(communityReview, commentId));
     }
 
-    @DeleteMapping ("/comment/delete/{commentId}")
+    @DeleteMapping ("/comment/{commentId}")
     @Operation(description = "댓글 삭제")
     @Parameter(name = "commentId", description = "댯글 id")
     public ResponseEntity<?> deleteComment(@PathVariable("commentId") int commentId){
