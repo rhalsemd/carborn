@@ -17,7 +17,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "jsxImportSource": "@emotion/react"
   },
   "include": ["src", "tsconfig.json"],
   "moduleResolution": "node"

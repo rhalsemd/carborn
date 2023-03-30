@@ -19,10 +19,6 @@ const tableStyle = css`
     border-spacing: 10px;
   }
   width: 20vw;
-
-  tr {
-    /* display: flex; */
-  }
 `;
 
 interface Props {
