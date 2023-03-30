@@ -6,4 +6,6 @@ public interface CarSaleBookGetReservationListMapping {
 
     String getAccountId();
 
+    String getAccountName();
+
 }
