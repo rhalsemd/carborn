@@ -43,12 +43,12 @@ public class UserCommunityService {
 
     @Transactional
     public UserCommunityListMapping getBoardDetail(int communityId){
+        communityRepository.updateView(communityId);
         UserCommunityListMapping boardDetail = communityRepository.findAllByIdAndStatus(communityId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         if (boardDetail == null){
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
-        communityRepository.updateView(communityId);
 
         return boardDetail;
     }
