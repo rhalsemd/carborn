@@ -29,15 +29,17 @@ public class UserCommunityController{
     @Autowired
     private UserCommunityService userCommunityService;
 
-    @GetMapping("/list/{page}/{size}")
+    @GetMapping("/list/{page}/{size}/{sort}")
     @Operation(description = "커뮤니티 글 목록 조회")
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 당 게시물 수")
+            @Parameter(name = "size", description = "페이지 당 게시물 수"),
+            @Parameter(name = "sort", description = "정렬 기준")
     })
     public ResponseEntity<?> getBoardList(@PathVariable("page") int page,
-                                                @PathVariable("size") int size){
-        Page<UserCommunityListMapping> boardList = userCommunityService.getBoardList(page,size);
+                                            @PathVariable("size") int size,
+                                             @PathVariable("sort") int sort){
+        Page<UserCommunityListMapping> boardList = userCommunityService.getBoardList(page,size,sort);
         return NormalResponse.toResponseEntity(HttpStatus.OK,boardList);
     }
 

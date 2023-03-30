@@ -14,6 +14,7 @@ import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.CommunityRepository;
 import site.carborn.repository.user.CommunityReviewRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.SortUtils;
 
 import java.time.LocalDateTime;
 
@@ -26,13 +27,29 @@ public class UserCommunityService {
     @Autowired
     private CommunityReviewRepository communityReviewRepository;
 
-    public Page<UserCommunityListMapping> getBoardList(int page, int size){
+    public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort){
+        String orderBy = null;
+        String sortBy = "id";
+        if (sort== SortUtils.SORT_STATUS_NEW){
+            orderBy = BoardUtils.ORDER_BY_DESC;
+        } else if (sort == SortUtils.SORT_STATUS_OLD) {
+            orderBy = BoardUtils.ORDER_BY_ASC;
+        } else if (sort == SortUtils.SORT_STATUS_VIEWS_DESC) {
+            sortBy ="views";
+            orderBy = BoardUtils.ORDER_BY_DESC;
+        } else if (sort == SortUtils.SORT_STATUS_VIEWS_ASC ){
+            sortBy ="views";
+            orderBy = BoardUtils.ORDER_BY_ASC;
+        } else {
+            throw new RuntimeException("올바르지 정렬 입니다");
+        }
         Page<UserCommunityListMapping> getBoardList = communityRepository.findByStatus(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"id", BoardUtils.ORDER_BY_DESC
+                        ,sortBy
+                        , orderBy
                 )
         );
         if(getBoardList.isEmpty()){

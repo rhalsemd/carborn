@@ -20,4 +20,13 @@ public class SortUtils {
      * 가격 낮은 순
      */
     public static final int SORT_STATUS_PRICE_ASC = 3;
+
+    /**
+     * 조회수 높은 순
+     */
+    public static final int  SORT_STATUS_VIEWS_DESC = 4;
+    /**
+     * 조회수 낮은 순
+     */
+    public static final int  SORT_STATUS_VIEWS_ASC = 5;
 }
