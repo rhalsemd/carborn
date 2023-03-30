@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import SignUpUserPhoneNumberModal from "../signup/modal/SignUpUserPhoneNumberModal";
 import { PasswordResetInputObj } from "../../../routes/auth/PasswordResetCheck";
+import { StylePhoneNumberVerify, StylePhoneNumberVerifyInput, StylePhoneNumberVerifyLabel, StylePhoneNumberVerifyBox, StylePhoneNumberVerifyDiv } from './../searchID/SearchIDPhoneNumberVerify';
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
@@ -13,6 +14,30 @@ type PasswordResetVerifyProps = {
   setinputObj: React.Dispatch<React.SetStateAction<PasswordResetInputObj>>;
   inputObj: PasswordResetInputObj;
 };
+
+const StylePasswordResetVerify = styled.input`
+  width: 32%;
+  height: 100%;
+  text-align: center;
+  background-color: #d23131;
+  color: white;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  margin-left: 3%;
+  margin-right: 1.2%;
+  font-weight: 900;
+  font-size: 1rem;
+
+  &:active {
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+`
 
 const PasswordResetVerify = ({
   setinputObj,
@@ -58,17 +83,22 @@ const PasswordResetVerify = ({
 
   return (
     <StyleLoginInputDiv>
-      <label htmlFor="passwordResetPhonenumber">전화번호</label>
-      <input
-        type="text"
-        id="passwordResetPhonenumber"
-        name="passwordResetPhonenumber"
-        autoComplete="off"
-        placeholder="전화번호 11자리(10자리)를 입력해주세요."
-        value={inputObj.phonenumber}
-        onChange={handleChange}
-      />
-      <button onClick={openModal}>인증하러가기</button>
+      <StylePhoneNumberVerifyLabel htmlFor="passwordResetPhonenumber">전화번호</StylePhoneNumberVerifyLabel>
+      <StylePhoneNumberVerifyDiv>
+        <StylePhoneNumberVerifyBox>
+          <StylePhoneNumberVerifyInput
+            type="text"
+            id="passwordResetPhonenumber"
+            name="passwordResetPhonenumber"
+            className="passwordResetPhonenumber"
+            autoComplete="off"
+            placeholder="전화번호 11자리(10자리)를 입력해주세요."
+            value={inputObj.phonenumber}
+            onChange={handleChange}
+          />
+          <StylePasswordResetVerify type='button' onClick={openModal} value={`인증하기`}/>
+        </StylePhoneNumberVerifyBox>
+      </StylePhoneNumberVerifyDiv>
 
       {/* 모달 */}
       <SignUpUserPhoneNumberModal

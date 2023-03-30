@@ -5,6 +5,8 @@ import Nav from "./../../components/Nav";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { newPasswordReset } from "../../modules/newPasswordModule";
+import { StyleLoginSignUpBtnDiv } from "./SearchidComplete";
+import { StyleLoginSignUpBtn } from "./SearchID";
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -64,9 +66,11 @@ const PasswordComplete = () => {
             로그인을 하시려면 아래 버튼을 눌러주세요
           </span>
         </div>
-        <Link to="/login">
-          <StyleBtn>로그인</StyleBtn>
-        </Link>
+        <StyleLoginSignUpBtnDiv>
+          <Link to="/login">
+            <StyleLoginSignUpBtn>로그인</StyleLoginSignUpBtn>
+          </Link>
+        </StyleLoginSignUpBtnDiv>
       </StyleSearchidCompleteContainer>
     </div>
   );
