@@ -7,6 +7,7 @@ import SearchSort from "../../components/VehiclePurchase/SearchSort";
 import { SearchType } from "../../components/VehiclePurchase/VehiclePurchaseType";
 import { useState } from "react";
 import Nav from "../../components/Nav";
+import SpeedDialComponent from "../../components/VehiclePurchase/SpeedDialComponent";
 
 const outer = css`
   width: 100%;
@@ -31,8 +32,9 @@ const content = css`
 
 function VehiclePurchase() {
   const [searchInfo, setSearchInfo] = useState<SearchType>({
-    sort: "",
+    sortType: "0",
   });
+
   return (
     <>
       <Nav />
@@ -40,13 +42,15 @@ function VehiclePurchase() {
       <div css={outer}>
         <div css={filter}>
           {/* 정렬바 */}
-          <SearchSort setSearchInfo={setSearchInfo} />
+          <SearchSort searchInfo={searchInfo} setSearchInfo={setSearchInfo} />
         </div>
         <div css={content}>
           {/* 왼쪽 메뉴바 */}
           <MenuBar />
           {/* 오른쪽 컨텐츠 */}
-          <CarList />
+          <CarList searchInfo={searchInfo} />
+          {/* 스피드 다이얼 */}
+          <SpeedDialComponent />
         </div>
       </div>
     </>

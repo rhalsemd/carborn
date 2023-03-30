@@ -4,8 +4,6 @@ import { css } from "@emotion/react";
 import Nav from "../../components/Nav";
 import SaleInfoArea from "../../components/SaleRegistrationComponents/rightContents/SaleInfoArea";
 import SaleCarImg from "./../../components/SaleRegistrationComponents/leftContents/SaleCarImg";
-import { useState } from "react";
-import { RegistrationInfo } from "./MyVehicleRegistration";
 
 const outer = css`
   border: 1px solid black;
@@ -21,13 +19,6 @@ const content = css`
 `;
 
 function SaleRegistration() {
-  const [registrationInfo, setRegistrationInfo] = useState<
-    Partial<RegistrationInfo>
-  >({
-    fileList: [],
-    fileNames: [],
-  });
-
   return (
     <>
       <Nav />
@@ -36,10 +27,7 @@ function SaleRegistration() {
           {/* 왼쪽 컨텐츠 */}
           <SaleCarImg />
           {/* 오른쪽 컨텐츠*/}
-          <SaleInfoArea
-            setRegistrationInfo={setRegistrationInfo}
-            registrationInfo={registrationInfo}
-          />
+          <SaleInfoArea />
         </div>
       </div>
     </>
