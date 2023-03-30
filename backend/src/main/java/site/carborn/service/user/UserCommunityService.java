@@ -3,6 +3,7 @@ package site.carborn.service.user;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import site.carborn.entity.account.Account;
@@ -28,28 +29,36 @@ public class UserCommunityService {
     private CommunityReviewRepository communityReviewRepository;
 
     public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort){
-        String orderBy = null;
-        String sortBy = "id";
-        if (sort== SortUtils.SORT_STATUS_NEW){
-            orderBy = BoardUtils.ORDER_BY_DESC;
-        } else if (sort == SortUtils.SORT_STATUS_OLD) {
-            orderBy = BoardUtils.ORDER_BY_ASC;
-        } else if (sort == SortUtils.SORT_STATUS_VIEWS_DESC) {
-            sortBy ="views";
-            orderBy = BoardUtils.ORDER_BY_DESC;
-        } else if (sort == SortUtils.SORT_STATUS_VIEWS_ASC ){
-            sortBy ="views";
-            orderBy = BoardUtils.ORDER_BY_ASC;
-        } else {
-            throw new RuntimeException("올바르지 정렬 입니다");
+        String orderBy = BoardUtils.ORDER_BY_DESC;
+        String sortBy = BoardUtils.SORT_BY_ID;
+
+        switch (sort) {
+            case SortUtils.SORT_STATUS_NEW -> {
+                orderBy = BoardUtils.ORDER_BY_DESC;
+                sortBy = BoardUtils.SORT_BY_ID;
+            }
+            case SortUtils.SORT_STATUS_OLD -> {
+                orderBy = BoardUtils.ORDER_BY_ASC;
+                sortBy = BoardUtils.SORT_BY_ID;
+            }
+            case SortUtils.SORT_STATUS_VIEWS_DESC -> {
+                orderBy = BoardUtils.ORDER_BY_DESC;
+                sortBy = BoardUtils.SORT_BY_VIEWS;
+            }
+            case SortUtils.SORT_STATUS_VIEWS_ASC -> {
+                orderBy = BoardUtils.ORDER_BY_ASC;
+                sortBy = BoardUtils.SORT_BY_VIEWS;
+            }
+            default -> throw new RuntimeException("올바르지 않은 정렬 입니다");
         }
+
         Page<UserCommunityListMapping> getBoardList = communityRepository.findByStatus(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
                         ,sortBy
-                        , orderBy
+                        ,orderBy
                 )
         );
         if(getBoardList.isEmpty()){

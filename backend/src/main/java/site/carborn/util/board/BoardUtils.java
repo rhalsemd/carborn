@@ -22,6 +22,9 @@ public class BoardUtils {
     public static final String ORDER_BY_ASC = "ASC";
     public static final String ORDER_BY_DESC = "DESC";
 
+    public static final String SORT_BY_ID = "ID";
+    public static final String SORT_BY_VIEWS = "VIEWS";
+
     public static final boolean BOARD_DELETE_STATUS_FALSE = false;
     public static final boolean BOARD_DELETE_STATUS_TRUE = true;
 
