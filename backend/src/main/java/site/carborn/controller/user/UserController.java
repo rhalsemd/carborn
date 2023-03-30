@@ -40,8 +40,21 @@ public class UserController {
         Page<CarSaleRequestDTO> result = null;
         if(sortType == SortUtils.SORT_STATUS_NEW){
             PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
-            result=userService.getsaleList(pageRequest);
+            result=userService.getSaleList(pageRequest);
         }
+        else if(sortType == SortUtils.SORT_STATUS_OLD){
+            PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_ASC);
+            result=userService.getSaleList(pageRequest);
+        }
+        else if(sortType == SortUtils.SORT_STATUS_PRICE_DESC){
+            PageRequest pageRequest = PageRequest.of(page-1, size);
+            result=userService.getSaleListOrderByPrice(pageRequest,sortType);
+        }
+        else if(sortType == SortUtils.SORT_STATUS_PRICE_ASC){
+            PageRequest pageRequest = PageRequest.of(page-1, size);
+            result=userService.getSaleListOrderByPrice(pageRequest,sortType);
+        }
+
         return NormalResponse.toResponseEntity(HttpStatus.OK,result);
     }
 
