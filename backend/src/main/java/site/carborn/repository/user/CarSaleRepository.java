@@ -30,7 +30,7 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     	(SELECT CAR_ID, IMG_NM FROM S08P22D209.MWS_CAR_IMG mci GROUP BY CAR_ID) img
     ON sale.CAR_ID = img.CAR_ID
     ORDER BY sale.ID DESC\s
-    LIMIT 5
+    LIMIT 7
     """,nativeQuery = true)
     List<Map<String,String>> getNewCarHomeData(@Param("status") boolean status, @Param("saleStatus") int saleStatus);
 
