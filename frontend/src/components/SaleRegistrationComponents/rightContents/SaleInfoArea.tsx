@@ -1,45 +1,54 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+
+import { useState, Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Suspense } from "react";
-import ErrorComponent from "./../../ErrorComponent";
-import { Loading } from "./../../Loading";
-import { useAPI } from "./../../../hooks/useAPI";
-import { useQuery } from "react-query";
-import { useState } from "react";
+import { useQuery, useMutation } from "react-query";
+
 import SaleManufacturingCompany from "./SaleManufacturingCompany";
 import SaleCarNumber from "./SaleCarNumber";
 import SaleCarYear from "./SaleCarYear";
 import SaleDistanceDriven from "./SaleDistanceDriven";
-import {
-  Props,
-  RegistrationInfo,
-} from "../../../routes/userUseFnc/MyVehicleRegistration";
-import AdditionalSubmissionFiles from "../../MyVehicleRegistrationComponent/rightContents/AdditionalSubmissionFiles";
-import RegistrationBtn from "../../MyVehicleRegistrationComponent/rightContents/RegistrationBtn";
+import SaleCarCost from "./SaleCarCost";
+import SaleCarContent from "./SaleCarContent";
+
+import ErrorComponent from "./../../ErrorComponent";
+import { Loading } from "./../../Loading";
+import { useAPI } from "./../../../hooks/useAPI";
+import axios from "axios";
 
 const rightContent = css`
   width: 40vw;
   height: 90vh;
 `;
 
-interface SaleInfoContentsType {
+export interface SaleInfoType {
+  distance: string;
+  cost: string;
+  content: string;
+}
+
+export interface SaleInfoContentsType {
   setError: React.Dispatch<React.SetStateAction<Error | null>>;
-  registrationInfo?: Partial<RegistrationInfo>;
-  setRegistrationInfo: React.Dispatch<
-    React.SetStateAction<Partial<RegistrationInfo>>
-  >;
+  setSaleInfo: React.Dispatch<React.SetStateAction<SaleInfoType>>;
+  saleInfo: SaleInfoType;
 }
 
 const GET_API = `https://jsonplaceholder.typicode.com/todos/1`;
-const POST_API = `https://jsonplaceholder.typicode.com/todos/1`;
+const POST_API = `https://jsonplaceholder.typicode.com/todos/12`;
 
 function SaleInfoContents({
   setError,
-  registrationInfo,
-  setRegistrationInfo,
-}: SaleInfoContentsType) {
+}: Pick<SaleInfoContentsType, "setError">) {
+  const [saleInfo, setSaleInfo] = useState<SaleInfoType>({
+    distance: "",
+    cost: "",
+    content: "",
+  });
+
   const getCarInfo = useAPI("get", GET_API);
+
+  // 자동차 정보를 받아오는 query
   const { data } = useQuery("get-car-info", () => getCarInfo, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
@@ -53,6 +62,21 @@ function SaleInfoContents({
     useErrorBoundary: true,
   });
 
+  // 제출할 때 실행되는 query
+  const { mutate } = useMutation(() =>
+    axios({
+      method: "post",
+      url: POST_API,
+      data: {
+        saleInfo,
+      },
+    })
+  );
+
+  const submitInfo = () => {
+    mutate();
+  };
+
   return (
     <div css={rightContent}>
       <h2 style={{ textAlign: "center" }}>차량 판매 등록</h2>
@@ -64,27 +88,18 @@ function SaleInfoContents({
       {/* 연식 */}
       <SaleCarYear />
       {/* 주행거리 */}
-      <SaleDistanceDriven />
-      {/* 추가 제출 파일 */}
-      <AdditionalSubmissionFiles
-        registrationInfo={registrationInfo}
-        setRegistrationInfo={setRegistrationInfo}
-      />
-      {/* 등록하기 버튼 */}
-      <RegistrationBtn
-        registrationInfo={registrationInfo}
-        setRegistrationInfo={setRegistrationInfo}
-        newRegistrationInfo={{}}
-        API={POST_API}
-      />
+      <SaleDistanceDriven setSaleInfo={setSaleInfo} />
+      {/* 차량 가격 */}
+      <SaleCarCost setSaleInfo={setSaleInfo} />
+      {/* 판매내용 */}
+      <SaleCarContent setSaleInfo={setSaleInfo} />
+      {/* 제출 버튼 */}
+      <button onClick={submitInfo}>제출</button>
     </div>
   );
 }
 
-function SaleInfoArea({
-  registrationInfo,
-  setRegistrationInfo,
-}: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
+function SaleInfoArea() {
   const [error, setError] = useState<Error | null>(null);
 
   return (
@@ -92,11 +107,7 @@ function SaleInfoArea({
       fallback={<ErrorComponent error={error} queryKey={"get-car-info"} />}
     >
       <Suspense fallback={<Loading />}>
-        <SaleInfoContents
-          setError={setError}
-          registrationInfo={registrationInfo}
-          setRegistrationInfo={setRegistrationInfo}
-        />
+        <SaleInfoContents setError={setError} />
       </Suspense>
     </ErrorBoundary>
   );

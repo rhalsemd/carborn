@@ -1,25 +1,23 @@
 import { SaleInfoContentsType, SaleInfoType } from "./SaleInfoArea";
 
-function SaleDistanceDriven({
+function SaleCarCost({
   setSaleInfo,
 }: Pick<SaleInfoContentsType, "setSaleInfo">) {
-  // 입력하면 발생
   const getTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
 
     setSaleInfo((saleInfo: SaleInfoType) => {
-      return { ...saleInfo, distance: inputValue };
+      return { ...saleInfo, cost: inputValue };
     });
   };
-
   return (
-    <div>
-      <span>주행거리</span>
+    <>
+      <span>차량가격</span>
       <div>
         <input type="number" min="0" onBlur={getTyping} />
       </div>
-    </div>
+    </>
   );
 }
 
-export default SaleDistanceDriven;
+export default SaleCarCost;
