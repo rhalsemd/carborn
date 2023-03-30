@@ -7,6 +7,7 @@ import PasswordResetVerify from "../../components/auth/passwordreset/PasswordRes
 import PasswordResetID from "../../components/auth/passwordreset/PasswordResetID";
 import { passwordResetCheck } from "../../modules/PasswordCheckModule";
 import Nav from "./../../components/Nav";
+import { StyleHeightDiv, StyleSearchIdDiv } from "./SearchID";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -24,11 +25,11 @@ export const StyleLoginSignUpBoxDiv = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid transparent;
-  background-color: #d5cfcf2a;
+  background-color: #fdfdfde9;
 `;
 
-export const StyleLoginSignUpTitle = styled.div`
-  width: 100%;
+export const StylePasswordResetCheckTitle = styled.div`
+  width: 150%;
   height: 20%;
   border-bottom: 1px solid red;
   text-align: center;
@@ -48,6 +49,31 @@ export const StyleLoginAnotherLink = styled.div`
   font-size: 0.7rem;
   text-decoration: none;
 `;
+
+export const StylePasswordResetCheckBtn = styled.button`
+  width: 88%;
+  height: 75%;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  margin-right: 0.2rem;
+  background-color: #d23131;
+  color: white;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 1rem;
+
+  &:active {
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+`
 
 // 타입 설정
 export type PasswordResetInputObj = {
@@ -79,18 +105,21 @@ const PasswordResetCheck = () => {
   return (
     <div>
       <Nav />
-      <StyleLoginSignUpDiv>
+      <StyleHeightDiv></StyleHeightDiv>
+      <StyleSearchIdDiv>
         <StyleLoginSignUpBoxDiv>
-          <StyleLoginSignUpTitle>
+          <StylePasswordResetCheckTitle>
             <h2>비밀번호 재설정</h2>
-          </StyleLoginSignUpTitle>
+          </StylePasswordResetCheckTitle>
           <PasswordResetID setinputObj={setinputObj} inputObj={inputObj} />
           <PasswordResetVerify setinputObj={setinputObj} inputObj={inputObj} />
-          <StyleLoginSignUpBtn onClick={handlePasswordReset}>
+          <StylePasswordResetCheckBtn onClick={handlePasswordReset}>
             비밀번호 재설정
-          </StyleLoginSignUpBtn>
+          </StylePasswordResetCheckBtn>
+        <StyleHeightDiv></StyleHeightDiv>
+        <StyleHeightDiv></StyleHeightDiv>
         </StyleLoginSignUpBoxDiv>
-      </StyleLoginSignUpDiv>
+      </StyleSearchIdDiv>
     </div>
   );
 };

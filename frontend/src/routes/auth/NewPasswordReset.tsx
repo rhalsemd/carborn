@@ -5,13 +5,10 @@ import NewPassword from "../../components/auth/newpassword/NewPassword";
 import NewPasswordCheck from "../../components/auth/newpassword/NewPasswordCheck";
 import Nav from "../../components/Nav";
 import { StyleLoginSignUpBoxDiv } from "./LoginPage";
-import { StyleLoginSignUpDiv } from "./PasswordResetCheck";
-import { StyleLoginSignUpTitle } from "./SearchID";
-import { StyleBtn } from "./PasswordComplete";
+import { StyleLoginSignUpDiv, StylePasswordResetCheckTitle } from "./PasswordResetCheck";
 import { passwordResetCheckReset } from "../../modules/PasswordCheckModule";
 import {
   newPasswordAction,
-  newPasswordReset,
 } from "../../modules/newPasswordModule";
 import styled from "@emotion/styled";
 
@@ -27,15 +24,41 @@ export interface StyleNewPasswordResetBtnProps
   backgroundColor: string;
 }
 
-export const StyleNewPasswordResetBtn = styled.button<StyleNewPasswordResetBtnProps>`
-  width: 15rem;
+export const StylePasswordResetTitle = styled.div`
+  width: 100%;
+  height: 20%;
+  border-bottom: 1px solid red;
   text-align: center;
-  font-size: 1.2rem;
+`
+
+export const StyleNewPasswordResetBtn = styled.button<StyleNewPasswordResetBtnProps>`
   color: white;
   background-color: ${(props) => props.backgroundColor};
   border: none;
   margin: 0.5rem 0;
   cursor: pointer;
+
+  width: 50%;
+  height: 75%;
+  margin-bottom: 2rem;
+  margin-top: -0.2rem;
+  margin-left: 0.5rem;
+  text-align: center;
+  color: white;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 1rem;
+
+  &:active {
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const NewPasswordReset = () => {
@@ -66,24 +89,14 @@ const NewPasswordReset = () => {
     dispatch(passwordResetCheckReset());
   }, [dispatch, isNewPass, navigate]);
 
-  // useEffect(() => {
-  //   if (selector) {
-  //     setIsValid(selector);
-  //   }
-  // }, [selector, setIsValid]);
-
-  // useEffect(() => {
-  //   navigate("/passwordresetcheck/passwordreset/passwordcomplete");
-  // }, [navigate]);
-
   return (
     <div>
       <Nav />
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
-          <StyleLoginSignUpTitle>
+          <StylePasswordResetTitle>
             <h2>비밀번호 재설정</h2>
-          </StyleLoginSignUpTitle>
+          </StylePasswordResetTitle>
           <NewPassword
             setInputObj={setInputObj}
             inputObj={inputObj}

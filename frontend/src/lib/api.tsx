@@ -202,7 +202,12 @@ export const SearchIdCheckApi = async (payload: any): Promise<any> => {
       headers: {
         [ContentType]: applicationjson,
       },
+      data: {
+        name: payload.name,
+        phoneNm: payload.phonenumber
+      }
     });
+    console.log(response.data)
     
     return response;
   } catch (error) {

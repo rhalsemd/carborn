@@ -29,8 +29,9 @@ export function* searchidCheckSaga(
   action: ReturnType<typeof SearchIDCheckAction>
 ): Generator<any, any, any> {
   try {
-    const response = yield call<any>(SearchIdCheckApi, action.payload);
-    yield put({ type: SEARCHID_CHECK_SUCCESS, payload: response });
+    const data = yield call<any>(SearchIdCheckApi, action.payload);
+    console.log('response값은? ', data)
+    yield put({ type: SEARCHID_CHECK_SUCCESS, payload: data });
   } catch (error) {
     console.log(error);
   }
@@ -42,7 +43,7 @@ export function searchIDCheckReducer(
 ) {
   switch (action.type) {
     case SEARCHID_CHECK_SUCCESS:
-      return { ...action.payload };
+      return { ...action.payload, verify:true };
     case SEARCHID_VERIFY_RESET:
       return { verify: false }
     default:

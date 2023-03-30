@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { SearchInputPasswordCheckObj } from "../../../routes/auth/NewPasswordReset";
+import { StyledInput, StyleNameLabel } from "../signup/SignUpUserName";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
@@ -59,15 +60,15 @@ const NewPasswordCheck = ({
 
   return (
     <StyleLoginInputDiv>
-      <label htmlFor="newpasswordcheck">새로운 비밀번호 체크</label>
+      <StyleNameLabel htmlFor="newpasswordcheck">새로운 비밀번호 체크</StyleNameLabel>
       {isNewPassword ? <span>비밀번호가 일치합니다.</span> : null}
-      <input
+      <StyledInput
         type="password"
         id="newpasswordcheck"
         name="newpasswordcheck"
         autoComplete="off"
         value={newSecondPassword}
-        placeholder="변경할 비밀번호를 다시 입력해주세요"
+        placeholder="again"
         onChange={(e) => handlePasswordCheck(e)}
       />
     </StyleLoginInputDiv>

@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { SearchInputPasswordCheckObj } from "../../../routes/auth/NewPasswordReset";
+import { StyledInput, StyleNameLabel } from "../signup/SignUpUserName";
+import { StyleHeightDiv } from "../../../routes/auth/SearchID";
+import CustomAlert from "../signup/modal/CustomAlert";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
@@ -27,6 +30,10 @@ const NewPassword = ({
   setNewpassword,
   newpassword,
 }: NewPasswordProps) => {
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 타이핑하는순간 비밀번호중복체크 초기화됨
     e.preventDefault();
@@ -40,6 +47,11 @@ const NewPassword = ({
         newpassword: value,
       });
     } else {
+      setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+      setMessage("영소문자나 숫자, 특수문자만 가능합니다.")
       setInputObj({
         ...inputObj,
         newpassword: "",
@@ -54,9 +66,17 @@ const NewPassword = ({
       const regex =
         /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
       if (regex.test(e.currentTarget.value)) {
-        alert("입력한 비밀번호가 유효합니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("입력한 비밀번호가 유효합니다.");
       } else {
-        alert(
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage(
           "입력한 비밀번호가 조합된 영소문자 및 숫자, 특수문자가 아닙니다."
         );
         setNewpassword("");
@@ -73,9 +93,17 @@ const NewPassword = ({
     const regex =
       /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
     if (regex.test(e.currentTarget.value)) {
-      alert("입력한 비밀번호가 유효합니다.");
+      setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+      setMessage("입력한 비밀번호가 유효합니다.");
     } else {
-      alert("입력한 비밀번호가 조합된 영소문자 및 숫자, 특수문자가 아닙니다.");
+      setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+      setMessage("입력한 비밀번호가 조합된 영소문자 및 숫자, 특수문자가 아닙니다.");
       setNewpassword("");
       setInputObj({
         ...inputObj,
@@ -102,18 +130,24 @@ const NewPassword = ({
 
   return (
     <StyleLoginInputDiv>
-      <label htmlFor="newpassword">새로운 비밀번호</label>
-      <input
+      <br/>
+      <StyleNameLabel htmlFor="newpassword">새로운 비밀번호</StyleNameLabel>
+      <StyledInput
         type="password"
         id="newpassword"
         name="newpassword"
         autoComplete="off"
         value={newpassword}
-        placeholder="새로운 비밀번호를 작성해주세요."
+        placeholder="newPassword"
         onChange={(e) => handlePassword(e)}
         onKeyDown={(e) => handleKeyPress(e)}
         onBlur={(e) => handleBlur(e)}
       />
+      {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
     </StyleLoginInputDiv>
   );
 };
