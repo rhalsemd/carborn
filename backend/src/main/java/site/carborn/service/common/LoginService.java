@@ -65,13 +65,10 @@ public class LoginService {
     }
 
     private void insertLoginLog(Account account, HttpServletRequest request) {
-        String agent = request.getHeader("User-Agent");
+        String agent = HTTPUtils.getUserAgent(request);
         String os = HTTPUtils.getClientOS(agent);                             // 클라이언트 운영체제
         String browser = HTTPUtils.getClientBrowser(agent);                   // 클라이언트 브라우저
-        String ipAddr = (String) request.getHeader("X-Forwarded-For");  // 클라이언트 IP
-        if (ipAddr == null == ipAddr.isBlank()) {
-            ipAddr = "*0.0.0.0";
-        }
+        String ipAddr = HTTPUtils.getClientIp(request);  // 클라이언트 IP
 
         AccountLoginLog loginLog = new AccountLoginLog();
         loginLog.setAccount(account);
