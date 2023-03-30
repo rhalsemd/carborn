@@ -50,14 +50,9 @@ public class UserHomeController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getCarSaleCount());
     }
 
-    @GetMapping("/car-regist/list/{page}/{size}")
-    @Operation(description = "최신 판매 등록 차량")
-    @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
-            @Parameter(name = "size", description = "페이지 사이즈")
-    })
-    public ResponseEntity<?> getCarSaleAddList(@PathVariable("page") int page, @PathVariable("size") int size){
-        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getNewCarSaleList(pageRequest));
+    @GetMapping("/car-regist/list")
+    @Operation(description = "최신 판매 등록 차량 정보")
+    public ResponseEntity<?> getCarSaleAddList(){
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userHomeService.getNewCarSaleList());
     }
 }
