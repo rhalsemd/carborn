@@ -98,6 +98,17 @@ public class UserController {
     @Operation(description = "판매 차량 등록")
     public ResponseEntity<?> insertCarSell(@RequestBody CarSale carSale){
         userService.insertCarSale(carSale);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,"");
+        return NormalResponse.toResponseEntity(HttpStatus.OK,BoardUtils.BOARD_CRUD_SUCCESS);
+    }
+
+    @PostMapping("/buy/{carSaleId}")
+    @Operation(description = "구매 신청")
+    @Parameter(name = "carSaleId", description = "판매 글 번호")
+    public ResponseEntity<?> purchaseRequest(@PathVariable("carSaleId") int carSaleId){
+        if(!userService.checkSalesReservation(carSaleId)){
+            throw new ArithmeticException("이미 구매 신청을 한 글입니다.");
+        }
+        userService.salesReservation(carSaleId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,BoardUtils.BOARD_CRUD_SUCCESS);
     }
 }

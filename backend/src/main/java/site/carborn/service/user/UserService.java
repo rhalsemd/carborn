@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.dto.request.CarSaleRequestDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.CarSale;
+import site.carborn.entity.user.CarSaleBook;
 import site.carborn.mapping.user.*;
 import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.user.CarSaleBookRepository;
@@ -15,6 +16,7 @@ import site.carborn.repository.user.CarSaleRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.repository.user.RepairResultRepository;
 import site.carborn.util.common.BookUtils;
+import site.carborn.util.common.BuyUtils;
 import site.carborn.util.common.SellUtils;
 import site.carborn.util.common.SortUtils;
 
@@ -130,4 +132,32 @@ public class UserService {
 
         carSaleRepository.save(carSale);
     }
+
+    public boolean checkSalesReservation(int carSaleId){
+        if(getSaleBookStatus(carSaleId) == null){
+            return true;
+        }
+        else if (getSaleBookStatus(carSaleId).getBookStatus()>= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public void salesReservation(int carSaleId){
+        //현재는 임시아이디 시큐리티에서 받는 부분
+        String userid = "testuser2";
+
+        CarSaleBook carSalebook = new CarSaleBook();
+        carSalebook.setAccount(new Account());
+        carSalebook.getAccount().setId(userid);
+        carSalebook.setCarSale(new CarSale());
+        carSalebook.getCarSale().setId(carSaleId);
+        carSalebook.setStatus(false);
+        carSalebook.setRegDt(LocalDateTime.now());
+        carSalebook.setUptDt(LocalDateTime.now());
+        carSalebook.setBookStatus(BuyUtils.BUY_STATUS_STAY);
+
+        carSaleBookRepository.save(carSalebook);
+    }
+
 }
