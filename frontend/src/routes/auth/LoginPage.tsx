@@ -17,17 +17,19 @@ export const StyleLoginSignUpDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 3rem;
 `;
 
 export const StyleLoginSignUpBoxDiv = styled.div`
-  width: 25%;
+  width: 35%;
+  margin: 5rem 0;
   padding: 0rem, 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid transparent;
-  background-color: #d5cfcf2a;
+  background-color: #fdfdfde9;
 `;
 
 export const StyleLoginSignUpTitle = styled.div`
@@ -35,6 +37,11 @@ export const StyleLoginSignUpTitle = styled.div`
   height: 20%;
   border-bottom: 1px solid red;
   text-align: center;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
 `;
 
 export const StyleLoginSignUpBtn = styled.button<StyleLoginSignUpBtnProps>`

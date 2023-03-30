@@ -1,6 +1,8 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import styled from "@emotion/styled";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
+import CustomAlert from "./modal/CustomAlert";
 
 //타입 지정
 export type SignUpUserNameProps = {
@@ -8,10 +10,35 @@ export type SignUpUserNameProps = {
   setSignupUserFormData: Dispatch<SetStateAction<SignupFormData>>;
 };
 
+export const StyledInput = styled.input`
+  padding: 0.7rem;
+  font-size: 1.2rem;
+  border: 1px solid #d23131;
+  border-radius: 5px;
+  width: 93%;
+  color: #333;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  &:focus {
+    outline: none;
+    border-color: #d23131;
+    box-shadow: 0px 0px 5px 0px rgba(210, 49, 49, 0.75);
+  }
+`;
+
+export const StyleNameLabel = styled.label`
+  font-weight: 900;
+`;
+
 const SignUpUserName = ({
   setSignupUserFormData,
   signupUserFormData,
 }: SignUpUserNameProps) => {
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   // 회원가입 이름 세팅
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -22,7 +49,11 @@ const SignUpUserName = ({
         name: e.target.value,
       });
     } else {
-      alert("한글 이름만 가능합니다. 한영키를 눌러주세요.");
+      setIsAlert(true);
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 2000);
+      setMessage("한글 이름만 가능합니다. 한영키를 눌러주세요.");
       setSignupUserFormData({
         ...signupUserFormData,
         name: "",
@@ -38,9 +69,17 @@ const SignUpUserName = ({
     if (e.key === "Enter") {
       e.preventDefault();
       if (/^[가-힣]+$/.test(signupUserFormData.name)) {
-        alert("입력한 이름이 유효합니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("입력한 이름이 유효합니다.");
       } else {
-        alert("이름은 꼭 한글명입니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("이름은 꼭 한글명입니다.");
         setSignupUserFormData({
           ...signupUserFormData,
           name: "",
@@ -51,9 +90,9 @@ const SignUpUserName = ({
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="username">이름</label>
+      <StyleNameLabel htmlFor="username">이름</StyleNameLabel>
       <br />
-      <input
+      <StyledInput
         tabIndex={1}
         type="text"
         id="username"
@@ -64,6 +103,11 @@ const SignUpUserName = ({
         onKeyDown={(e) => handleKeyPress(e)}
         onChange={(e) => handleUserName(e)}
       />
+      {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
     </StyleSignUpInputDiv>
   );
 };
