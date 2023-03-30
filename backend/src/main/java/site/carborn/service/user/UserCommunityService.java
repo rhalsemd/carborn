@@ -159,7 +159,7 @@ public class UserCommunityService {
         if (communityReview.getId() != commentId){
             throw new RuntimeException("잘못된 경로입니다");
         }
-        Community update = communityRepository.findById(commentId).orElseThrow(()->
+        CommunityReview update = communityReviewRepository.findById(commentId).orElseThrow(()->
                 new RuntimeException("존재하지 않는 데이터입니다"));
 //
         if (!communityReview.getAccount().getId().equals(update.getAccount().getId())){
@@ -169,7 +169,21 @@ public class UserCommunityService {
         update.setContent(communityReview.getContent());
         update.setUptDt(LocalDateTime.now());
 
-        communityRepository.save(update);
+        communityReviewRepository.save(update);
         return update.getId();
+    }
+
+    public void deleteComment(int commentId){
+        CommunityReview delete = communityReviewRepository.findById(commentId).orElseThrow(() ->
+                new RuntimeException("존재하지 않는 데이터입니다")
+        );
+
+        if (delete.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
+            throw new RuntimeException("삭제된 데이터입니다");
+        }
+
+        delete.setStatus(BoardUtils.BOARD_DELETE_STATUS_TRUE);
+        delete.setUptDt(LocalDateTime.now());
+        communityReviewRepository.save(delete);
     }
 }

@@ -96,11 +96,19 @@ public class UserCommunityController{
     }
 
     @PutMapping("/comment/{commentId}")
-    @Operation(description = "커뮤니티 댓글 수정")
-    @Parameter(name = "communityId", description = "게시글 id")
+    @Operation(description = "댓글 수정")
+    @Parameter(name = "communityId", description = "댓글 id")
     public ResponseEntity<?> updateComment(@RequestBody CommunityReview communityReview,
                                          @PathVariable("commentId") int commentId) {
         return NormalResponse.toResponseEntity(HttpStatus.OK, userCommunityService.updateComment(communityReview, commentId));
+    }
+
+    @DeleteMapping ("/comment/delete/{commentId}")
+    @Operation(description = "댓글 삭제")
+    @Parameter(name = "commentId", description = "댯글 id")
+    public ResponseEntity<?> deleteComment(@PathVariable("commentId") int commentId){
+        userCommunityService.deleteComment(commentId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
 }
