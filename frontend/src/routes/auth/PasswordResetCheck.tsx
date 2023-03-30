@@ -16,7 +16,6 @@ export const StyleLoginSignUpDiv = styled.div`
   align-items: center;
 `;
 
-
 export const StyleLoginSignUpBoxDiv = styled.div`
   width: 25%;
   padding: 0rem, 0.5rem;
@@ -98,7 +97,10 @@ const PasswordResetCheck = () => {
 
   useEffect(() => {
     if (isverify) {
-      navigate("/passwordresetcheck/passwordreset");
+      navigate("/passwordresetcheck/passwordreset", { state: {
+        userid: inputObj.userid,
+        phonenumber: inputObj.phonenumber
+      }});
     }
   }, [navigate, isverify]);
 

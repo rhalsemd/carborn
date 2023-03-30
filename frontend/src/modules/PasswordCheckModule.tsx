@@ -30,7 +30,6 @@ export function* passwordResetCheckSaga(
 ): Generator<any, any, any> {
   try {
     const response = yield call<any>(passwordCheckIdApi, action.payload);
-    console.log(response)
     yield put({ type: PASSWORD_RESET_CHECK_SUCCESS, payload: response });
   } catch (error) {
     console.log(error);
@@ -43,7 +42,7 @@ export function passwordResetCheckReducer(
 ) {
   switch (action.type) {
     case PASSWORD_RESET_CHECK_SUCCESS:
-      return { ...state, ...action.payload }; 
+      return { ...state, ...action.payload, isVerify: true }; 
     case PASSWORD_RESET_CHECK_RESET:
       return { ...state, isVerify: false }
     default:

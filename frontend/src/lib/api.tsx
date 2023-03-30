@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // export const API_URL = "https://carborn.site";
-// export const CARBORN_SITE = "https://carborn.site";
-export const CARBORN_SITE = "https://192.168.18.15";
+export const CARBORN_SITE = "https://carborn.site";
+// export const CARBORN_SITE = "https://192.168.18.15";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
@@ -119,7 +119,8 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
 
 type PayloadType = {
   userid: string;
-  isVerify: boolean;
+  phonenumber: string,
+  newpassword: string
 };
 
 // 비밀번호 바꾸기 전에 아이디랑 이름 일치하는지 확인
@@ -128,23 +129,20 @@ export const passwordCheckIdApi = async (
 ): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${API_URL}/users`,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/find-pw`,
       headers: {
         [ContentType]: applicationjson,
       },
-      data: payload,
+      data: {
+        id: payload.userid,
+        phoneNo: payload.phonenumber
+      }
     });
 
-    let Passwordverify = true;
+    console.log(response)
 
-    for (const user of response.data as any) {
-      if (user.loginid === payload.userid) {
-        payload.isVerify = Passwordverify;
-        break;
-      }
-    }
-    return payload;
+    return response
   } catch (error) {
     console.log(error);
   }
@@ -155,15 +153,21 @@ export const newPasswordApi = async (payload: PayloadType): Promise<any> => {
   console.log(payload);
   try {
     const response = await axios({
-      method: "POST",
-      url: `${API_URL}/newpassword`,
+      method: "PATCH",
+      url: `${CARBORN_SITE}/api/reset-pw`,
       headers: {
         [ContentType]: applicationjson,
       },
-      data: payload,
+      data: {
+        id: payload.userid,
+        phoneNo: payload.phonenumber,
+        pwd: payload.newpassword
+      }
     });
 
-    return response.data;
+    console.log(response)
+
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -249,8 +253,11 @@ export const GetAgreementApi = async (): Promise<any> => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/agreement`,
+      url: `${CARBORN_SITE}/`,
     });
+
+    console.log(response)
+
     return response.data;
   } catch (error) {
     console.log(error);
