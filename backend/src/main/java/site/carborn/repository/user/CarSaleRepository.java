@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import site.carborn.dto.request.CarSaleRequestDTO;
 import site.carborn.entity.user.CarSale;
+import site.carborn.mapping.user.CarSaleGetDetailMapping;
 import site.carborn.mapping.user.CarSaleGetListMapping;
 
 import java.time.LocalDateTime;
@@ -131,4 +132,6 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     ORDER BY sale.PRICE DESC
 """, nativeQuery = true)
     Page<Object[]> findAllPageOrderByPriceDESC(@Param("status") boolean status, @Param("saleStatus") int saleStatus, Pageable pageable);
+
+    CarSaleGetDetailMapping findByStatusAndSaleStatusNotAndId(@Param("status") boolean status, @Param("saleStatus") int saleStatus,@Param("id") int id);
 }

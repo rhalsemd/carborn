@@ -90,8 +90,15 @@ public class UserService {
     }
 
     @Transactional
-    public CarSaleBookGetDetailMapping getSaleDetail(int carSaleId){
-        return carSaleBookRepository.findByStatusAndCarSale_SaleStatusNotAndCarSale_Id(false, SellUtils.SELL_STATUS_CANCEL,carSaleId);
+    public CarSaleGetDetailMapping getSaleDetail(int carSaleId){
+        return carSaleRepository.findByStatusAndSaleStatusNotAndId(false, SellUtils.SELL_STATUS_CANCEL, carSaleId);
+    }
+
+    @Transactional
+    public CarSaleBookGetBookStatusMapping getSaleBookStatus(int carSaleId){
+        //현재는 임시아이디 시큐리티에서 받는 부분
+        String userid = "testuser2";
+        return carSaleBookRepository.findByStatusAndAccount_IdAndCarSale_Id(false, userid, carSaleId);
     }
 
     @Transactional

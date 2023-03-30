@@ -15,10 +15,7 @@ import site.carborn.dto.request.CarSaleRequestDTO;
 import site.carborn.entity.user.CarSale;
 import site.carborn.mapping.car.CarImageGetDataMapping;
 import site.carborn.mapping.car.CarVrcGetDataMapping;
-import site.carborn.mapping.user.CarSaleBookGetDetailMapping;
-import site.carborn.mapping.user.UserInspectResultListMapping;
-import site.carborn.mapping.user.UserInsuranceListMapping;
-import site.carborn.mapping.user.UserRepairResultListMapping;
+import site.carborn.mapping.user.*;
 import site.carborn.service.user.*;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.SortUtils;
@@ -78,16 +75,17 @@ public class UserController {
     public ResponseEntity<?> getCarSaleDetail(@PathVariable("carSaleId") int carSaleId, @PathVariable("page") int page, @PathVariable("size") int size){
         PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
 
-        CarSaleBookGetDetailMapping csbgdm = userService.getSaleDetail(carSaleId);
-        List<CarImageGetDataMapping> cigdm = userMyPageService.getImageList(csbgdm.getCarSaleCarId());
-        CarVrcGetDataMapping cvgdm = userMyPageService.getCarVrcData(csbgdm.getCarSaleCarId());
-        Page<UserInsuranceListMapping> uirlm = userService.getSaleInsuranceList(csbgdm.getCarSaleCarId(),pageRequest);
-        Page<UserRepairResultListMapping> urrlm = userService.getSaleRepairList(csbgdm.getCarSaleCarId(),pageRequest);
-        Page<UserInspectResultListMapping> uiprlm = userService.getSaleInspectList(csbgdm.getCarSaleCarId(),pageRequest);
-        System.out.println(csbgdm.getCarSaleCarId());
+        CarSaleGetDetailMapping csgdm = userService.getSaleDetail(carSaleId);
+        CarSaleBookGetBookStatusMapping csbgbsm = userService.getSaleBookStatus(carSaleId);
+        List<CarImageGetDataMapping> cigdm = userMyPageService.getImageList(csgdm.getCarId());
+        CarVrcGetDataMapping cvgdm = userMyPageService.getCarVrcData(csgdm.getCarId());
+        Page<UserInsuranceListMapping> uirlm = userService.getSaleInsuranceList(csgdm.getCarId(),pageRequest);
+        Page<UserRepairResultListMapping> urrlm = userService.getSaleRepairList(csgdm.getCarId(),pageRequest);
+        Page<UserInspectResultListMapping> uiprlm = userService.getSaleInspectList(csgdm.getCarId(),pageRequest);
 
         HashMap<String, Object> returnData = new HashMap<>();
-        returnData.put("detail",csbgdm);
+        returnData.put("detail", csgdm);
+        returnData.put("bookStatus",csbgbsm);
         returnData.put("img",cigdm);
         returnData.put("vrc",cvgdm);
         returnData.put("insurance", uirlm);
