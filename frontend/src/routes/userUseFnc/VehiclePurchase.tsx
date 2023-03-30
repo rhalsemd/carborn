@@ -7,7 +7,6 @@ import SearchSort from "../../components/VehiclePurchase/SearchSort";
 import { SearchType } from "../../components/VehiclePurchase/VehiclePurchaseType";
 import { useState } from "react";
 import Nav from "../../components/Nav";
-import SpeedDialComponent from "../../components/VehiclePurchase/SpeedDialComponent";
 
 const outer = css`
   width: 100%;
@@ -49,8 +48,6 @@ function VehiclePurchase() {
           <MenuBar />
           {/* 오른쪽 컨텐츠 */}
           <CarList searchInfo={searchInfo} />
-          {/* 스피드 다이얼 */}
-          <SpeedDialComponent />
         </div>
       </div>
     </>

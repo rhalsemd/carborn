@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+
 import { useInfiniteQuery } from "react-query";
-import carImg from "../../../assets/car.png";
 import { useEffect, useRef, useState } from "react";
-import { Page, SearchType } from "../VehiclePurchaseType";
+import { SearchType } from "../VehiclePurchaseType";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ErrorComponent from "../../ErrorComponent";
 import Loading from "../../Loading";
+import SpeedDialComponent from "../SpeedDialComponent";
 
 const rightContent = css`
   width: 75vw;
@@ -184,6 +185,8 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
           );
         });
       })}
+      {/* 스피드 다이얼 */}
+      <SpeedDialComponent />
     </div>
   );
 }
