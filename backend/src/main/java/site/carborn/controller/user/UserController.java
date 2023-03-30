@@ -106,9 +106,24 @@ public class UserController {
     @Parameter(name = "carSaleId", description = "판매 글 번호")
     public ResponseEntity<?> purchaseRequest(@PathVariable("carSaleId") int carSaleId){
         if(!userService.checkSalesReservation(carSaleId)){
-            throw new ArithmeticException("이미 구매 신청을 한 글입니다.");
+            throw new NullPointerException("이미 구매 신청을 한 글입니다.");
         }
         userService.salesReservation(carSaleId);
         return NormalResponse.toResponseEntity(HttpStatus.OK,BoardUtils.BOARD_CRUD_SUCCESS);
+    }
+
+    @GetMapping("/sale/sell/{carSaleId}/{page}/{size}")
+    @Operation(description = "구매 신청자 목록")
+    @Parameters({
+            @Parameter(name = "carSaleId", description = "판매 글 번호"),
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 당 게시물 수")
+    })
+    public ResponseEntity<?> getPurchaseRequestList(@PathVariable("carSaleId") int carSaleId, @PathVariable("page") int page, @PathVariable("size") int size){
+        if(!userService.checkSaleStatus(carSaleId)){
+            throw new NullPointerException("판매 중인 글이 아니거나 판매 글을 찾을 수 없습니다.");
+        }
+        PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userService.getCarSaleBookList(carSaleId, pageRequest));
     }
 }

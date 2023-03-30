@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import site.carborn.entity.user.CarSaleBook;
-import site.carborn.mapping.user.CarSaleBookGetBookStatusMapping;
-import site.carborn.mapping.user.CarSaleBookGetDetailMapping;
-import site.carborn.mapping.user.CarSaleBookGetListMapping;
+import site.carborn.mapping.user.*;
 
 import java.time.LocalDateTime;
 
@@ -27,4 +25,6 @@ public interface CarSaleBookRepository extends JpaRepository<CarSaleBook, Intege
     void updateSaleCancel(@Param("carSaleId") int carSaleId,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt);
 
     CarSaleBookGetBookStatusMapping findByStatusAndAccount_IdAndCarSale_Id(@Param("status") boolean status, @Param("accountId") String accountId, @Param("carSaleId") int carSaleId);
+
+    Page<CarSaleBookGetReservationListMapping> findAllByStatusAndBookStatusAndCarSale_Id(@Param("status") boolean status, @Param("bookStatus") int bookStatus, @Param("carSaleId") int carSaleId, Pageable pageable);
 }

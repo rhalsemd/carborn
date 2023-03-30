@@ -11,6 +11,7 @@ import site.carborn.dto.request.CarSaleRequestDTO;
 import site.carborn.entity.user.CarSale;
 import site.carborn.mapping.user.CarSaleGetDetailMapping;
 import site.carborn.mapping.user.CarSaleGetListMapping;
+import site.carborn.mapping.user.CarSaleGetSaleStatusMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -134,4 +135,6 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     Page<Object[]> findAllPageOrderByPriceDESC(@Param("status") boolean status, @Param("saleStatus") int saleStatus, Pageable pageable);
 
     CarSaleGetDetailMapping findByStatusAndSaleStatusNotAndId(@Param("status") boolean status, @Param("saleStatus") int saleStatus,@Param("id") int id);
+
+    CarSaleGetSaleStatusMapping findByStatusAndId(@Param("status") boolean status, @Param("id") int id);
 }

@@ -133,6 +133,7 @@ public class UserService {
         carSaleRepository.save(carSale);
     }
 
+    @Transactional
     public boolean checkSalesReservation(int carSaleId){
         if(getSaleBookStatus(carSaleId) == null){
             return true;
@@ -143,6 +144,7 @@ public class UserService {
         return true;
     }
 
+    @Transactional
     public void salesReservation(int carSaleId){
         //현재는 임시아이디 시큐리티에서 받는 부분
         String userid = "testuser2";
@@ -158,6 +160,29 @@ public class UserService {
         carSalebook.setBookStatus(BuyUtils.BUY_STATUS_STAY);
 
         carSaleBookRepository.save(carSalebook);
+    }
+
+    @Transactional
+    public Page<CarSaleBookGetReservationListMapping> getCarSaleBookList(int carSaleId, Pageable page){
+        return carSaleBookRepository.findAllByStatusAndBookStatusAndCarSale_Id(false,SellUtils.SELL_STATUS_STAY,carSaleId, page);
+    }
+
+    @Transactional
+    public CarSaleGetSaleStatusMapping getSaleStatus(int carSaleId){
+        return carSaleRepository.findByStatusAndId(false,carSaleId);
+    }
+
+    @Transactional
+    public boolean checkSaleStatus(int carSaleId){
+        if(getSaleStatus(carSaleId) == null){
+            return false;
+        }
+        else if(getSaleStatus(carSaleId).getSaleStatus() != SellUtils.SELL_STATUS_STAY){
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 }
