@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import site.carborn.config.auth.jwt.JwtAccessDeniedHandler;
 import site.carborn.config.auth.jwt.JwtAuthenticationEntryPoint;
 import site.carborn.config.auth.jwt.TokenProvider;
+import site.carborn.util.common.AuthUtils;
 
 import java.util.Arrays;
 
@@ -31,6 +32,7 @@ public class WebSecurityConfig {
     private final RedisTemplate redisTemplate;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -60,8 +62,9 @@ public class WebSecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/api/auth/admin/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/api/auth/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/api/insurance/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/user/**").hasAuthority(String.valueOf(AuthUtils.AUTH_USER))
+                .requestMatchers("/api/board/**").hasAuthority(String.valueOf(AuthUtils.AUTH_USER))
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
 
@@ -82,6 +85,7 @@ public class WebSecurityConfig {
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 }

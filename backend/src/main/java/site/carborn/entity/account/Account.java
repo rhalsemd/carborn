@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import site.carborn.entity.board.Board;
 
 @Entity
 @Table(name = "MWS_ACCOUNT")
