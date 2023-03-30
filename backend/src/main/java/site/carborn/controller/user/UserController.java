@@ -159,4 +159,35 @@ public class UserController {
         }
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
+
+    @GetMapping("/sale/list/{page}/{size}/{sortType}/{keywordType}/{keyword}")
+    @Operation(description = "판매 차량 목록")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 당 게시물 수"),
+            @Parameter(name = "sortType", description = "정렬 방법"),
+            @Parameter(name = "keywordType", description = "검색 방법"),
+            @Parameter(name = "keyword", description = "검색 키워드")
+    })
+    public ResponseEntity<?> getSaleSearchList(@PathVariable("page") int page, @PathVariable("size") int size, @PathVariable("sortType") int sortType, @PathVariable("keywordType") int keywordType, @PathVariable("keyword") String keyword){
+        Page<CarSaleRequestDTO> result = null;
+        if(sortType == SortUtils.SORT_STATUS_NEW){
+            PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
+            result=userService.getSaleSearchList(keywordType,keyword,pageRequest);
+        }
+        else if(sortType == SortUtils.SORT_STATUS_OLD){
+            PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_ASC);
+            result=userService.getSaleSearchList(keywordType,keyword,pageRequest);
+        }
+        else if(sortType == SortUtils.SORT_STATUS_PRICE_DESC){
+            PageRequest pageRequest = PageRequest.of(page-1, size);
+            result=userService.getSaleListSearchOrderByPrice(keywordType,keyword,pageRequest,sortType);
+        }
+        else if(sortType == SortUtils.SORT_STATUS_PRICE_ASC){
+            PageRequest pageRequest = PageRequest.of(page-1, size);
+            result=userService.getSaleListSearchOrderByPrice(keywordType,keyword,pageRequest,sortType);
+        }
+
+        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+    }
 }
