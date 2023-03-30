@@ -17,7 +17,7 @@ const StyleBuyContentContainer = styled.div`
 `;
 
 const StyleBuyContentTitleDiv = styled.div`
-  width: 70%;
+  width: 60%;
   height: 20%;
 
   display: flex;
@@ -41,6 +41,7 @@ const BuyContent = () => {
         <StyleBuyContentTitleDiv>
           <p>구매 내역</p>
         </StyleBuyContentTitleDiv>
+        <br/>
         <MyBuyContentComponent />
       </StyleBuyContentContainer>
     </StyleBuyContent>

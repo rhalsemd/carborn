@@ -1,7 +1,3 @@
-//MUI 컴포넌트
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -188,29 +184,9 @@ const RepairContentPagination = ({
           Next
         </button>
       </div>
-      <div>
-        <Stack direction="row" spacing={2}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            color="primary"
-            onChange={(event, page) =>
-              handleRequestRepairData(page, itemsPerPage)
-            }
-          />
-        </Stack>
-      </div>
     </StyleRepairPaginationDiv>
   );
 };
 
 export default RepairContentPagination;
 
-// 페이지네이션 컴포넌트 
-export const BasicPagination = () => {
-  return (
-    <Stack spacing={2}>
-      <Pagination count={10} color="primary" />
-    </Stack>
-  );
-}

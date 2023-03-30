@@ -13,7 +13,7 @@ import {
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { SignupFormData } from "./SignUpButton";
 import { useridCheckReset } from "../../../modules/UserIdCheckModule";
-import { StyledInput, StyleNameLabel } from "./SignUpUserName";
+import { StyleNameLabel } from "./SignUpUserName";
 import styled from "@emotion/styled";
 import CustomAlert from "./modal/CustomAlert";
 

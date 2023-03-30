@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_URL } from './../../../lib/api';
+import { API_URL } from "./../../../lib/api";
 import styled from "@emotion/styled";
 import MyCarInfoPagination from "../Pagination/MyCarInfoPagination";
 
@@ -36,7 +36,7 @@ const MyCarDataComponent = () => {
       <StyleMyCarInfoTitleDiv>
         <p>내 차량 정보</p>
       </StyleMyCarInfoTitleDiv>
-      <MyCarInfoPagination itemsPerPage={ITEMS_PER_PAGE}/>
+      <MyCarInfoPagination itemsPerPage={ITEMS_PER_PAGE} />
     </StyleMyCarInfoTableDiv>
   );
 };
