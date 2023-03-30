@@ -6,7 +6,7 @@ import squareCar1 from "../../assets/squareCar2.png";
 import squareCar2 from "../../assets/squareCar3.png";
 
 const container = css`
-  height: 100vh;
+  height: 110vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -14,13 +14,9 @@ const container = css`
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
   }
 
-  .menu > h3 {
-    margin-top: 5%;
-    margin-bottom: 8px;
-  }
   .menu > hr {
     width: 30%;
     background-color: #d23131;
@@ -297,7 +293,7 @@ export default function HomeMainMenu() {
       </g>
     </svg>
   );
-  // const icon5 = ( )
+  // const  icon5 = ( )
   const rectangles: btnType = [
     {
       icon: icon1,
@@ -344,7 +340,12 @@ export default function HomeMainMenu() {
     <div css={container}>
       <div className="menu">
         <p
-          css={{ fontSize: "2.5rem", marginTop: "100px", fontWeight: "bolder" }}
+          css={{
+            fontSize: "2.5rem",
+            marginTop: "80px",
+            marginBottom: "20px",
+            fontWeight: "bolder",
+          }}
         >
           Menu
         </p>
@@ -353,7 +354,7 @@ export default function HomeMainMenu() {
       <div css={buttons}>
         <div className="rectangleBtns">
           {rectangles.map((rect: btns, idx: number): any => (
-            <div className={`rectangleBtn`} key={idx}>
+            <div className="rectangleBtn" key={idx}>
               <div className="icon">{rect.icon}</div>
               <div className="name">{rect.name}</div>
               <div className="description">{rect.description}</div>
