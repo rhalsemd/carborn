@@ -18,6 +18,7 @@ import site.carborn.mapping.car.CarVrcGetDataMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.service.user.*;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.BookUtils;
 import site.carborn.util.common.SortUtils;
 import site.carborn.util.network.NormalResponse;
 
@@ -125,5 +126,21 @@ public class UserController {
         }
         PageRequest pageRequest = BoardUtils.pageRequestInit(page,size, "id" ,BoardUtils.ORDER_BY_DESC);
         return NormalResponse.toResponseEntity(HttpStatus.OK,userService.getCarSaleBookList(carSaleId, pageRequest));
+    }
+
+    @PutMapping("sale/sell/confirm/{carSaleId}/{userId}")
+    @Operation(description = "판매 확정")
+    @Parameters({
+            @Parameter(name = "carSaleId", description = "판매 글 번호"),
+            @Parameter(name = "userId", description = "팔고 싶은 사람의 Id"),
+    })
+    public ResponseEntity<?> sellConfim(@PathVariable("carSaleId") int carSaleId, @PathVariable("userId") String userId){
+       if(!userService.checkSaleStatus(carSaleId)){
+           throw new NullPointerException("판매 중인 글이 아니거나 판매 글을 찾을 수 없습니다.");
+       }
+       if(!userService.updateSaleStatus(carSaleId, userId)){
+           throw new NullPointerException("판매 확정 처리가 되지 않았습니다.");
+       }
+       return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 }

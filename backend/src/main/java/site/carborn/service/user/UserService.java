@@ -164,7 +164,7 @@ public class UserService {
 
     @Transactional
     public Page<CarSaleBookGetReservationListMapping> getCarSaleBookList(int carSaleId, Pageable page){
-        return carSaleBookRepository.findAllByStatusAndBookStatusAndCarSale_Id(false,SellUtils.SELL_STATUS_STAY,carSaleId, page);
+        return carSaleBookRepository.findAllByStatusAndBookStatusAndCarSale_Id(false,BuyUtils.BUY_STATUS_STAY,carSaleId, page);
     }
 
     @Transactional
@@ -183,6 +183,23 @@ public class UserService {
         else {
             return true;
         }
+    }
+
+    @Transactional
+    public boolean updateSaleStatus(int carSaleId, String buyid){
+        //현재는 임시아이디 시큐리티에서 받는 부분
+        String userid = "testuser2";
+
+        if(carSaleBookRepository.findByStatusAndAccount_IdAndCarSale_Id(false,buyid,carSaleId)==null){
+            return false;
+        }
+        if(carSaleBookRepository.findByStatusAndAccount_IdAndCarSale_Id(false,buyid,carSaleId).getBookStatus()!=BuyUtils.BUY_STATUS_STAY){
+            return false;
+        }
+        carSaleBookRepository.updateBookStatusAllCancel(BuyUtils.BUY_STATUS_CANCEL,false,LocalDateTime.now(),carSaleId, buyid);
+        carSaleBookRepository.updateBookStatusComplete(BuyUtils.BUY_STATUS_COMPLETE,false,LocalDateTime.now(),carSaleId, buyid);
+        carSaleRepository.updateSaleComplete(SellUtils.SELL_STATUS_COMPLETE,false,LocalDateTime.now(),carSaleId, userid);
+        return true;
     }
 
 }

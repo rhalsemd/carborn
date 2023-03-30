@@ -137,4 +137,8 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     CarSaleGetDetailMapping findByStatusAndSaleStatusNotAndId(@Param("status") boolean status, @Param("saleStatus") int saleStatus,@Param("id") int id);
 
     CarSaleGetSaleStatusMapping findByStatusAndId(@Param("status") boolean status, @Param("id") int id);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE CarSale cs SET cs.saleStatus = :saleStatus, cs.uptDt = :uptDt WHERE cs.status = :status AND cs.id = :id AND cs.account.id = :accountId")
+    void updateSaleComplete(@Param("saleStatus") int saleStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt, @Param("id") int id, @Param("accountId") String accountId);
 }

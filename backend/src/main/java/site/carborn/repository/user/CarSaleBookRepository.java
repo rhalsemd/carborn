@@ -27,4 +27,12 @@ public interface CarSaleBookRepository extends JpaRepository<CarSaleBook, Intege
     CarSaleBookGetBookStatusMapping findByStatusAndAccount_IdAndCarSale_Id(@Param("status") boolean status, @Param("accountId") String accountId, @Param("carSaleId") int carSaleId);
 
     Page<CarSaleBookGetReservationListMapping> findAllByStatusAndBookStatusAndCarSale_Id(@Param("status") boolean status, @Param("bookStatus") int bookStatus, @Param("carSaleId") int carSaleId, Pageable pageable);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.status = :status AND csb.carSale.id = :carSaleId AND csb.account.id != :accountId")
+    void updateBookStatusAllCancel(@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt, @Param("carSaleId") int carSaleId, @Param("accountId") String accountId);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.status = :status AND csb.carSale.id = :carSaleId AND csb.account.id = :accountId")
+    void updateBookStatusComplete(@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt, @Param("carSaleId") int carSaleId, @Param("accountId") String accountId);
 }
