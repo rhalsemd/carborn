@@ -7,40 +7,61 @@ import Nav from "./../../components/Nav";
 import { useNavigate } from "react-router-dom";
 import { SearchIDCheckAction } from "../../modules/searchidModule";
 
-export const StyleLoginSignUpDiv = styled.div`
-  width: 100%;
+export const StyleHeightDiv = styled.div`
+  height: 6rem;
+`
+
+export const StyleHeight2Div = styled.div`
+  height: 3rem;
+`
+
+export const StyleSearchIdDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+`
 
 export const StyleLoginSignUpBoxDiv = styled.div`
-  width: 25%;
+  width: 35%;
   padding: 0rem, 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid transparent;
-  background-color: #d5cfcf2a;
+  background-color: #fdfdfde9;
 `;
 
 export const StyleLoginSignUpTitle = styled.div`
-  width: 100%;
+  width: 115%;
   height: 20%;
   border-bottom: 1px solid red;
   text-align: center;
 `;
 
 export const StyleLoginSignUpBtn = styled.button`
-  width: 15rem;
+  width: 63%;
+  height: 75%;
+  margin-right: 1%;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
   text-align: center;
-  font-size: 1.2rem;
-  color: white;
   background-color: #d23131;
-  border: none;
-  margin: 0.5rem 0;
-  cursor: pointer;
+  color: white;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 1rem;
+
+  &:active {
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 export const StyleLoginAnotherLink = styled.div`
@@ -58,10 +79,11 @@ export type SearchInputType = {
 const SearchID = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isSearchIdPass = useSelector((state:any) => state.SignUpReducerisSignPossible)
   const isComplete = useSelector(
-    (state: any) => state.SearchIDCheckReducer.verify
+    (state: any) => state.searchIDCheckReducer.verify
   );
-  const SearchIDdata = useSelector((state: any) => state.SearchIDCheckReducer);
+  // const SearchIDdata = useSelector((state: any) => state.SearchIDCheckReducer);
   const [searchInput, setSearchInput] = useState<SearchInputType>({
     name: "",
     phonenumber: "",
@@ -74,14 +96,15 @@ const SearchID = () => {
 
   useEffect(() => {
     if (isComplete) {
-      navigate("/searchid/searchidcomplete", { state: SearchIDdata });
+      navigate("/searchid/searchidcomplete", { state: searchInput });
     }
   }, [isComplete]);
 
   return (
     <div>
       <Nav />
-      <StyleLoginSignUpDiv>
+      <StyleHeightDiv></StyleHeightDiv>
+      <StyleSearchIdDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>
             <h2>아이디 찾기</h2>
@@ -99,13 +122,15 @@ const SearchID = () => {
             disabled={
               !Boolean(searchInput.name) &&
               !Boolean(searchInput.phonenumber) &&
-              !searchInput.isVerify
+              !isSearchIdPass
             }
           >
             아이디 찾기
           </StyleLoginSignUpBtn>
+        <StyleHeightDiv></StyleHeightDiv>
+        <StyleHeightDiv></StyleHeightDiv>
         </StyleLoginSignUpBoxDiv>
-      </StyleLoginSignUpDiv>
+      </StyleSearchIdDiv>
     </div>
   );
 };

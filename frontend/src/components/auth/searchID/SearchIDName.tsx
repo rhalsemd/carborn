@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { SearchInputType } from "../../../routes/auth/SearchID";
+import { StyledInput, StyleNameLabel } from "../signup/SignUpUserName";
 
 // input DIV
 const StyleLoginInputDiv = styled.div`
   display: flex;
   flex-direction: column;
+  width: 22vw;
 `;
 
 type SearchIDNameProps = {
@@ -24,12 +26,14 @@ const SearchIDName = ({ setSearchInput, searchInput }: SearchIDNameProps) => {
 
   return (
     <StyleLoginInputDiv>
-      <span>이름(회사명)</span>
-      <input
+      <br />
+      <StyleNameLabel htmlFor="SearchName">이름(회사명)</StyleNameLabel>
+      <StyledInput
         type="text"
         id="SearchName"
+        name="SearchName"
         autoComplete="off"
-        placeholder="SearchName"
+        placeholder="Name"
         onChange={handleChange}
       />
     </StyleLoginInputDiv>

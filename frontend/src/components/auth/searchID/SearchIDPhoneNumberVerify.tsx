@@ -2,11 +2,25 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import SignUpUserPhoneNumberModal from "../signup/modal/SignUpUserPhoneNumberModal";
 import { SearchInputType } from "../../../routes/auth/SearchID";
+import { StyleNameLabel } from "../signup/SignUpUserName";
+import {
+  StyleCheckBtn,
+  StyleIdCheckDiv,
+  StyleIdCheckInput,
+} from "../signup/SignUpUserId";
 
 // input DIV
-const StyleLoginInputDiv = styled.div`
+export const StylePhoneNumberVerifyContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 22vw;
+`;
+
+export const StylePhoneNumberVerifyBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 type SearchIDVerifyProps = {
@@ -14,7 +28,64 @@ type SearchIDVerifyProps = {
   searchInput: SearchInputType;
 };
 
-const SearchIDPhoneNumberVerify = ({ setSearchInput, searchInput }: SearchIDVerifyProps) => {
+export const StylePhoneNumberVerifyDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  height: 3rem;
+`;
+
+export const StylePhoneNumberVerifyInput = styled.input`
+  padding: 0.7rem;
+  font-size: 1.2rem;
+  border: 1px solid #d23131;
+  border-radius: 5px;
+  width: 88%;
+  margin-right: 1%;
+  color: #333;
+
+  &:focus {
+    outline: none;
+    border-color: #d23131;
+    box-shadow: 0px 0px 5px 0px rgba(210, 49, 49, 0.75);
+  }
+`;
+
+export const StylePhoneNumberVerifyLabel = styled.label`
+  font-weight: 900;
+  margin-left: 0.5rem;
+`;
+
+export const StylePhoneNumberVerify = styled.input`
+  width: 32%;
+  height: 75%;
+  text-align: center;
+  background-color: #d23131;
+  color: white;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  margin-left: 3%;
+  margin-right: 1.2%;
+  font-weight: 900;
+  font-size: 1rem;
+
+  &:active {
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const SearchIDPhoneNumberVerify = ({
+  setSearchInput,
+  searchInput,
+}: SearchIDVerifyProps) => {
   const [isValid, setIsValid] = useState(false);
 
   // 모달 관련
@@ -54,18 +125,24 @@ const SearchIDPhoneNumberVerify = ({ setSearchInput, searchInput }: SearchIDVeri
   };
 
   return (
-    <StyleLoginInputDiv>
-      <label htmlFor="searchIDPhoneNumber">전화번호</label>
-      <input
-        type="text"
-        id="searchIDPhoneNumber"
-        name="searchIDPhoneNumber"
-        autoComplete="off"
-        placeholder="SearchName"
-        value={searchInput.phonenumber}
-        onChange={handleChange}
-      />
-      <button onClick={openModal}>인증하러가기</button>
+    <StylePhoneNumberVerifyContainer>
+      <StylePhoneNumberVerifyLabel htmlFor="searchIDPhoneNumber">
+        전화번호
+      </StylePhoneNumberVerifyLabel>
+      <StylePhoneNumberVerifyDiv>
+        <StylePhoneNumberVerifyBox>
+          <StylePhoneNumberVerifyInput
+            type="text"
+            id="searchIDPhoneNumber"
+            name="searchIDPhoneNumber"
+            autoComplete="off"
+            placeholder="phoneNumber"
+            value={searchInput.phonenumber}
+            onChange={handleChange}
+          />
+          <StylePhoneNumberVerify onClick={openModal} value={`인증하기`} />
+        </StylePhoneNumberVerifyBox>
+      </StylePhoneNumberVerifyDiv>
 
       {/* 모달 */}
       <SignUpUserPhoneNumberModal
@@ -75,7 +152,7 @@ const SearchIDPhoneNumberVerify = ({ setSearchInput, searchInput }: SearchIDVeri
         setIsValid={setIsValid}
         isValid={isValid}
       />
-    </StyleLoginInputDiv>
+    </StylePhoneNumberVerifyContainer>
   );
 };
 

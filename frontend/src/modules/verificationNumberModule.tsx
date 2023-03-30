@@ -171,7 +171,6 @@ export function verificationNumberReducer(
   state = initialState,
   action: { type: string; payload: any }
 ) {
-  console.log(action.payload)
   switch (action.type) {
     case USER_VERIFICATION_CHECK_SUCCESS:
       return { ...state, isSend: action.payload };

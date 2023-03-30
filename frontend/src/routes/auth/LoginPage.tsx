@@ -10,10 +10,12 @@ import { userInfoDeleteReset } from "../../modules/userInfoDeleteModule";
 import { companyInfoDeleteReset } from "../../modules/companyInfoDeleteModule";
 import { companyModifyPasswordReset, userModifyPasswordReset } from "../../modules/modifyPasswordModule";
 import { IsCanSignUpReset } from "../../modules/signUpModule";
+import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 
 export const StyleLink = styled(Link)`
   color: #d23131;
   font-size: 0.75rem;
+  font-weight: 900;
   text-decoration: none;
   margin: 0 0.5rem;
 
@@ -21,7 +23,6 @@ export const StyleLink = styled(Link)`
     text-decoration: underline;
   }
 `;
-
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -114,6 +115,10 @@ const LoginPages = () => {
   const { accountType } = useSelector((state: any) => state.LoginOutReducer);
   const { success } = useSelector((state: any) => state.LoginOutReducer);
 
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   // 로그인 데이터 컨테이너
   const initialState = {
     loginid: "",
@@ -145,6 +150,12 @@ const LoginPages = () => {
     if (!success) {
       navigate("/login");
       return;
+    } else {
+      setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+      setMessage("아이디나 비밀번호가 맞지 않습니다.")
     }
 
     switch (isAccountType) {
@@ -200,6 +211,11 @@ const LoginPages = () => {
             <StyleLink to="/passwordresetcheck"> 비밀번호 재설정</StyleLink>
           </StyleLoginAnotherLink>
         </StyleLoginSignUpBoxDiv>
+        {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
       </StyleLoginSignUpDiv>
     </div>
   );

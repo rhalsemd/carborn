@@ -231,12 +231,15 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
       });
 
       const isPass = response.data.message;
+      
       if (isPass) {
         alert("인증성공")
         console.log("인증성공")
         dispatch(IsCanSignUpAction())
+        setIsValid(true)
         handleClose()
       } else {
+        setIsValid(false)
         alert("인증실패")
         console.log("인증실패")
       }

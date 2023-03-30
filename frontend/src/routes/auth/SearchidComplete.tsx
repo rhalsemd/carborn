@@ -2,10 +2,10 @@ import styled from "@emotion/styled";
 import { Link, useLocation } from "react-router-dom";
 import carbornLogo from "../../assets/carbornLogo.png";
 import Nav from "../../components/Nav";
-import { StyleBtn } from "./PasswordComplete";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { SearchIDVerifyReset } from "../../modules/searchidModule";
+import { StyleLoginSignUpBtn } from "./SearchID";
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -17,6 +17,7 @@ const StyleSearchidCompleteContainer = styled.div`
   align-items: center;
 
   .SearchidCompleteTitle {
+    margin-top: 2%;
     text-align: center;
     display: block;
     font-size: 2rem;
@@ -32,9 +33,23 @@ const StyleSearchidCompleteContainer = styled.div`
   }
 `;
 
+export const StyleLoginSignUpBtnDiv = styled.div`
+  width: 40vw;
+  margin-top: 2%;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
 const SearchidComplete = () => {
   const { state } = useLocation();
   const dispatch = useDispatch();
+  console.log(state)
 
   useEffect(() => {
     dispatch(SearchIDVerifyReset());
@@ -49,15 +64,18 @@ const SearchidComplete = () => {
         </div>
         <div>
           <span className="SearchidCompleteTitle">
-            귀하의 아이디는 {state.name} 입니다.
+            {/* 귀하의 아이디는 {state} 입니다.  */}
+            귀하의 아이디는 ssafy123 입니다.
           </span>
           <span className="SearchidCompleteGuide">
             로그인하시면 더욱 다양한 서비스와 혜택을 제공받으실 수 있습니다.
           </span>
         </div>
-        <Link to="/login">
-          <StyleBtn>로그인</StyleBtn>
-        </Link>
+        <StyleLoginSignUpBtnDiv>
+          <Link to="/login">
+            <StyleLoginSignUpBtn>로그인</StyleLoginSignUpBtn>
+          </Link>
+        </StyleLoginSignUpBtnDiv>
       </StyleSearchidCompleteContainer>
     </div>
   );
