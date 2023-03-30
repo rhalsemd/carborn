@@ -22,6 +22,6 @@ public interface CarSaleGetListMapping {
 
     LocalDateTime getRegDt();
 
-    LocalDateTime getUptdt();
+    LocalDateTime getUptDt();
 
 }
