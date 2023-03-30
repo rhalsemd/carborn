@@ -105,32 +105,32 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
 
     @Query(value = """
     SELECT sale.ID as id, sale.ACCOUNT_ID as accountId, sale.CAR_ID as carId, sale.MAKER as maker, sale.MODEL_NM as modelNm, sale.MODEL_YEAR as modelYear, sale.MILEAGE as mileage, sale.Content as content,sale.PRICE as price, sale.SALE_STATUS as saleStatus,sale.REG_DT as regDt, sale.UPT_DT as uptDt, img.IMG_NM as imgNm
-        FROM(
-            SELECT mcs.ID, mcs.ACCOUNT_ID, mcs.CAR_ID, mcs.CONTENT,mcs.PRICE, mcs.SALE_STATUS,mcs.REG_DT, mcs.UPT_DT, mc.MAKER, mc.MODEL_NM, mc.MODEL_YEAR, mc.MILEAGE
-            FROM S08P22D209.MWS_CAR_SALE mcs
-            INNER JOIN S08P22D209.MWS_CAR mc ON mcs.CAR_ID = mc.ID
-            WHERE mc.STATUS = :status AND mcs.STATUS = :status AND mcs.SALE_STATUS != :saleStatus
-        ) sale
-        LEFT OUTER JOIN(
-            SELECT CAR_ID, IMG_NM
-            FROM S08P22D209.MWS_CAR_IMG mci
-            GROUP BY CAR_ID
-        ) img ON sale.CAR_ID = img.CAR_ID
-        WHERE sale.:searchType LIKE CONCAT('%', :keyword, '%')
-    """, countQuery = """
-    SELECT COUNT(*)
-    FROM(
-        SELECT mcs.ID, mcs.ACCOUNT_ID, mcs.CAR_ID, mcs.CONTENT,mcs.PRICE, mcs.SALE_STATUS,mcs.REG_DT, mcs.UPT_DT, mc.MAKER, mc.MODEL_NM, mc.MODEL_YEAR, mc.MILEAGE
-        FROM S08P22D209.MWS_CAR_SALE mcs
-        INNER JOIN S08P22D209.MWS_CAR mc ON mcs.CAR_ID = mc.ID
-        WHERE mc.STATUS = :status AND mcs.STATUS = :status AND mcs.SALE_STATUS != :saleStatus
-    ) sale
-    LEFT OUTER JOIN(
-        SELECT CAR_ID, IMG_NM
-        FROM S08P22D209.MWS_CAR_IMG mci
-        GROUP BY CAR_ID
-    ) img ON sale.CAR_ID = img.CAR_ID
-    WHERE sale.:searchType LIKE CONCAT('%', :keyword, '%')
+                                             FROM(
+                                                 SELECT mcs.ID, mcs.ACCOUNT_ID, mcs.CAR_ID, mcs.CONTENT,mcs.PRICE, mcs.SALE_STATUS,mcs.REG_DT, mcs.UPT_DT, mc.MAKER, mc.MODEL_NM, mc.MODEL_YEAR, mc.MILEAGE
+                                                 FROM S08P22D209.MWS_CAR_SALE mcs
+                                                 INNER JOIN S08P22D209.MWS_CAR mc ON mcs.CAR_ID = mc.ID
+                                                 WHERE mc.STATUS = :status AND mcs.STATUS = :status AND mcs.SALE_STATUS != :saleStatus
+                                             ) sale
+                                             LEFT OUTER JOIN(
+                                                 SELECT CAR_ID, IMG_NM
+                                                 FROM S08P22D209.MWS_CAR_IMG mci
+                                                 GROUP BY CAR_ID
+                                             ) img ON sale.CAR_ID = img.CAR_ID
+                                             ORDER BY sale.PRICE DESC
+                                         ""\", countQuery = ""\"
+                                         SELECT COUNT(*)
+                                         FROM(
+                                             SELECT mcs.ID, mcs.ACCOUNT_ID, mcs.CAR_ID, mcs.CONTENT,mcs.PRICE, mcs.SALE_STATUS,mcs.REG_DT, mcs.UPT_DT, mc.MAKER, mc.MODEL_NM, mc.MODEL_YEAR, mc.MILEAGE
+                                             FROM S08P22D209.MWS_CAR_SALE mcs
+                                             INNER JOIN S08P22D209.MWS_CAR mc ON mcs.CAR_ID = mc.ID
+                                             WHERE mc.STATUS = :status AND mcs.STATUS = :status AND mcs.SALE_STATUS != :saleStatus
+                                         ) sale
+                                         LEFT OUTER JOIN(
+                                             SELECT CAR_ID, IMG_NM
+                                             FROM S08P22D209.MWS_CAR_IMG mci
+                                             GROUP BY CAR_ID
+                                         ) img ON sale.CAR_ID = img.CAR_ID
+                                         ORDER BY sale.PRICE DESC
 """, nativeQuery = true)
     Page<Object[]> findAllPageOrderByPriceDESC(@Param("status") boolean status, @Param("saleStatus") int saleStatus, Pageable pageable);
 
@@ -149,7 +149,7 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     INNER JOIN S08P22D209.MWS_CAR mc ON mcs.CAR_ID = mc.ID\s
     WHERE mc.STATUS = :status AND mcs.STATUS = :status AND mcs.SALE_STATUS != :saleStatus) sale\s
     LEFT OUTER JOIN (SELECT CAR_ID, IMG_NM FROM S08P22D209.MWS_CAR_IMG mci GROUP BY CAR_ID) img ON sale.CAR_ID = img.CAR_ID\s
-    WHERE sale.:searchType LIKE CONCAT('%', :keyword, '%')
+    WHERE sale.:columnName LIKE CONCAT('%', :keyword, '%')
 """, countQuery = """
     SELECT COUNT(*)
         FROM(
@@ -163,9 +163,9 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
             FROM S08P22D209.MWS_CAR_IMG mci
             GROUP BY CAR_ID
         ) img ON sale.CAR_ID = img.CAR_ID
-        WHERE sale.:searchType LIKE CONCAT('%', :keyword, '%')
+        WHERE sale.:columnName LIKE CONCAT('%', :keyword, '%')
 """, nativeQuery = true)
-    Page<Object[]> findAllPageAndSearch(@Param("status") boolean status, @Param("saleStatus") int saleStatus, @Param("searchType") String searchType,@Param("keyword") String keyword, Pageable pageable);
+    Page<Object[]> findAllPageAndSearch(@Param("status") boolean status, @Param("saleStatus") int saleStatus, @Param("columnName") String columnName,@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = """
     SELECT sale.ID as id, sale.ACCOUNT_ID as accountId, sale.CAR_ID as carId, sale.MAKER as maker, sale.MODEL_NM as modelNm, sale.MODEL_YEAR as modelYear, sale.MILEAGE as mileage, sale.Content as content,sale.PRICE as price, sale.SALE_STATUS as saleStatus,sale.REG_DT as regDt, sale.UPT_DT as uptDt, img.IMG_NM as imgNm
