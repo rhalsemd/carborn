@@ -8,7 +8,10 @@ import Nav from "../../components/Nav";
 import { loginAction } from "../../modules/takeLoginLogoutModule";
 import { userInfoDeleteReset } from "../../modules/userInfoDeleteModule";
 import { companyInfoDeleteReset } from "../../modules/companyInfoDeleteModule";
-import { companyModifyPasswordReset, userModifyPasswordReset } from "../../modules/modifyPasswordModule";
+import {
+  companyModifyPasswordReset,
+  userModifyPasswordReset,
+} from "../../modules/modifyPasswordModule";
 import { IsCanSignUpReset } from "../../modules/signUpModule";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 
@@ -107,6 +110,11 @@ export interface LoginInputProps {
 }
 
 const LoginPages = () => {
+  // 상수화
+  const USER = 0;
+  const REPAIR = 1;
+  const INSPECTOR = 2;
+  const INSURANCE = 3;
   // 액션 실행
   const dispatch = useDispatch();
   // 페이지 이동
@@ -114,7 +122,6 @@ const LoginPages = () => {
   // 리듀서 가져오기
   const { accountType } = useSelector((state: any) => state.LoginOutReducer);
   const { success } = useSelector((state: any) => state.LoginOutReducer);
-
   // 메세지
   const [isAlert, setIsAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<String>("");
@@ -128,7 +135,7 @@ const LoginPages = () => {
   // 로그인 인풋, 리캡챠 적용여부 useState
   const [loginInput, setLoginInput] = useState<loginInputType>(initialState);
   const [captchaValue, setCaptchaValue] = useState<boolean>(false);
-  const [isAccountType, setIsAccountType] = useState<string>("");
+  const [isAccountType, setIsAccountType] = useState<number>(0);
   const [isToken, setIsToken] = useState<boolean>(false);
 
   // 로그인 하기(최종)
@@ -139,11 +146,10 @@ const LoginPages = () => {
   useEffect(() => {
     setIsAccountType(accountType);
     if (loginInput.loginid && loginInput.loginpassword) {
-      setCaptchaValue(true) 
+      setCaptchaValue(true);
     } else {
-      setCaptchaValue(false)
+      setCaptchaValue(false);
     }
-
   }, [accountType, loginInput.loginid, loginInput.loginpassword]);
 
   useEffect(() => {
@@ -152,23 +158,23 @@ const LoginPages = () => {
       return;
     } else {
       setIsAlert(true);
-        setTimeout(() => {
-          setIsAlert(false);
-        }, 2000);
-      setMessage("아이디나 비밀번호가 맞지 않습니다.")
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 2000);
+      setMessage("아이디나 비밀번호가 맞지 않습니다.");
     }
 
     switch (isAccountType) {
-      case "0":
+      case USER:
         navigate("/");
         break;
-      case "1":
+      case REPAIR:
         navigate("/garage");
         break;
-      case "2":
+      case INSPECTOR:
         navigate("/inspector");
         break;
-      case "3":
+      case INSURANCE:
         navigate("/insurance");
         break;
       default:
@@ -178,12 +184,12 @@ const LoginPages = () => {
   }, [success, isAccountType, navigate]);
 
   useEffect(() => {
-    dispatch(userInfoDeleteReset())
-    dispatch(companyInfoDeleteReset())
-    dispatch(userModifyPasswordReset())
-    dispatch(companyModifyPasswordReset())
-    dispatch(IsCanSignUpReset())
-  }, [dispatch])
+    dispatch(userInfoDeleteReset());
+    dispatch(companyInfoDeleteReset());
+    dispatch(userModifyPasswordReset());
+    dispatch(companyModifyPasswordReset());
+    dispatch(IsCanSignUpReset());
+  }, [dispatch]);
 
   return (
     <div>
@@ -212,10 +218,10 @@ const LoginPages = () => {
           </StyleLoginAnotherLink>
         </StyleLoginSignUpBoxDiv>
         {isAlert ? (
-        <div>
-          <CustomAlert message={message} />
-        </div>
-      ) : null}
+          <div>
+            <CustomAlert message={message} />
+          </div>
+        ) : null}
       </StyleLoginSignUpDiv>
     </div>
   );

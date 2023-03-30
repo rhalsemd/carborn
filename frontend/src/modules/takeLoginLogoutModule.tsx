@@ -41,35 +41,23 @@ export function* takeLoginSaga(
     const response: any = yield call(
       LoginApi,
       action.payload as loginInputType
-      );
-    console.log(response)
+    );
 
-    const accountType = {
-      USER: "0",
-      REPAIR: "1",
-      INSPECTOR: "2",
-      INSURANCE: "3",
-    };
+    if (response.status === 200) {
+      const Obj = {
+        // 여기에 토큰을 넣어야 함.
+        value: response.data.message.token.accessToken,
+        expire: Date.now() * 1800000,
+        userId: action.payload.loginid,
+        // 이거도 받아야함
+        accountType: response.data.message.auth,
+      };
+      const ObjString = JSON.stringify(Obj);
+      localStorage.setItem("login-token", ObjString);
 
-    const Obj = {
-      value: response.captcha,
-      expire: Date.now() * 180000,
-      userId: response.loginid,
-      accountType: accountType.USER,
+      //
+      yield put(loginSuccessAction(response.data.message));
     }
-
-    const ObjString = JSON.stringify(Obj);
-    localStorage.setItem("login-token", ObjString);
-
-    // 밑에는 일부
-    // const Token = response.captcha;
-    // const userid = response.loginid;
-
-    // localStorage.setItem("accessToken", Token);
-    // localStorage.setItem("userid", userid);
-    // localStorage.setItem("accountType", String(accountType.USER));
-
-    yield put(loginSuccessAction(response));
   } catch (error: any) {
     yield put(loginFailureAction(error.message));
   }
@@ -106,8 +94,6 @@ export function LoginOutReducer(state = initialState, action: any) {
     const Obj = JSON.parse(ObjString);
     accountType = Obj.accountType;
   }
-  // const accountType = localStorage.getItem("accountType");
-
   switch (action.type) {
     case LOGIN_REQUEST:
       return {

@@ -1,22 +1,32 @@
+import axios from "axios";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { BuySellContentPaginationProps } from "./BuyContentPagination";
 import { CARBORN_SITE } from "./../../../lib/api";
-import axios from "axios";
 import { useEffect } from "react";
+import { SellDeleteWarningModal } from "../ModalComponent/SellDeleteWarningModal";
 
+import { Pagination, Table, TableCell, TableRow } from "@mui/material";
+import {
+  StyledTableContainer,
+  StyledTableHead,
+  StyleMainTableHead,
+} from "../DetailComponent/MyCarInfoDetail";
+import { StyledButton, StyledPagination } from "./MyCarInfoPagination";
 
 export interface SellContentType {
-  carModel: string;
-  manufacturer: string;
-  plateNumber: string;
-  year: string;
-  mileage: number;
+  id: number;
+  carModelNm: string;
+  carMaker: string;
+  carRegNm: string;
+  carModelYear: string;
+  carMileage: number;
   price: number;
-  reservationDate: null | string;
+  regDt: null | string;
   completedDate: null | string;
-  salesStatus: string;
-  buyer: string;
+  saleStatus: number;
+  modifiedBookStatusNum?: number;
+  // buyer: string;
 }
 
 const StyleSellContentPaginationDiv = styled.div`
@@ -34,40 +44,49 @@ const SellContentPagination = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sellData, setSellData] = useState<SellContentType[]>([]);
   const [totalPageCnt, setTotalPageCnt] = useState(0);
-
+  
+  const [isDeleteSellModal, setIsDeleteSellModal] = useState(false);
+  const [isDeleteSellId, setIsDeleteSellId] = useState(0);
+  
   const handleRequestSellData = async (page: number, count: number) => {
     try {
-      const response = await axios.get(`${CARBORN_SITE}/buycontent/${page}/${count}`);
-      // setTotalPageCnt(response.data.message.totalPages);
+      const response = await axios.get(
+        `${CARBORN_SITE}/api/user/car/sell/list/${page}/${count}`
+      );
 
-      const modifiedContent = response.data.message.content.map((content: any) => {
-        let modifiedBookStatus = '';
-        let modifiedBookStatusNum = 0;
-        switch (content.bookStatus) {
-          case 0:
-            modifiedBookStatus = '예약 중';
-            modifiedBookStatusNum = 0;
-            break;
-          case 1:
-            modifiedBookStatus = '판매 완료';
-            modifiedBookStatusNum = 1;
-            break;
-          case 2:
-            modifiedBookStatus = '판매 취소';
-            modifiedBookStatusNum = 2;
-            break;
-          default:
-            modifiedBookStatus = content.bookStatus;
-            modifiedBookStatusNum = 0;
-            break
+      console.log(response)
+      setTotalPageCnt(response.data.message.totalPages);
+
+      const modifiedContent = response.data.message.content.map(
+        (content: any) => {
+          let modifiedBookStatus = "";
+          let modifiedBookStatusNum = 0;
+          switch (content.saleStatus) {
+            case 0:
+              modifiedBookStatus = "예약 중";
+              modifiedBookStatusNum = 0;
+              break;
+            case 1:
+              modifiedBookStatus = "판매 완료";
+              modifiedBookStatusNum = 1;
+              break;
+            case 2:
+              modifiedBookStatus = "판매 취소";
+              modifiedBookStatusNum = 2;
+              break;
+            default:
+              modifiedBookStatus = content.saleStatus;
+              modifiedBookStatusNum = 0;
+              break;
+          }
+
+          return {
+            ...content,
+            saleStatus: modifiedBookStatus,
+            modifiedBookStatusNum,
+          };
         }
-  
-        return {
-          ...content,
-          bookStatus: modifiedBookStatus,
-          modifiedBookStatusNum,
-        };
-      });
+      );
 
       setSellData(modifiedContent);
       setCurrentPage(page);
@@ -79,6 +98,8 @@ const SellContentPagination = ({
   const ObjString: string | null = localStorage.getItem("login-token");
   const Obj = ObjString ? JSON.parse(ObjString) : null;
   const totalPages = totalPageCnt;
+  
+  console.log(sellData);
 
   useEffect(() => {
     handleRequestSellData(currentPage, itemsPerPage);
@@ -88,72 +109,75 @@ const SellContentPagination = ({
     return <div>No data Found!</div>;
   }
 
+  const handleSellData = (id: number) => {
+    setIsDeleteSellModal(true);
+    setIsDeleteSellId(id);
+  };
+
+  // 모달창 닫을 때
+  const handleCloseModal = () => {
+    setIsDeleteSellModal(false);
+  };
+
+
   return (
     <StyleSellContentPaginationDiv>
-      <table>
-        <thead>
-          <tr>
-            <th>차량모델</th>
-            <th>제조사</th>
-            <th>차량번호</th>
-            <th>{`연식(년)`}</th>
-            <th>{`주행거리(km)`}</th>
-            <th>{`구매가(만원)`}</th>
-            <th>판매 예약 신청일</th>
-            <th>판매 완료일</th>
-            <th>판매상태</th>
-            <th>구매자</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sellData.map(
-            (sell: SellContentType, index: number) => (
-              <tr key={index}>
-                <td>{sell.carModel}</td>
-                <td>{sell.manufacturer}</td>
-                <td>{sell.plateNumber}</td>
-                <td>{sell.year}</td>
-                <td>{sell.mileage}</td>
-                <td>{sell.price}</td>
-                <td>
-                  {sell.reservationDate === null ? "-" : sell.reservationDate}
-                </td>
-                <td>
-                  {sell.completedDate === null ? "-" : sell.completedDate}
-                </td>
-                <td>{sell.salesStatus}</td>
-                <td>{sell.buyer === null ? "-" : sell.buyer}</td>
-              </tr>
-            )
-          )}
-        </tbody>
-      </table>
-      <div>
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handleRequestSellData(currentPage - 1, itemsPerPage)}
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => {
-          if (i >= currentPage + 2 || i <= currentPage - 2) return null;
-          return (
-            <button
-              key={i}
-              disabled={currentPage === i + 1}
-              onClick={() => handleRequestSellData(i + 1, itemsPerPage)}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => handleRequestSellData(currentPage + 1, itemsPerPage)}
-        >
-          Next
-        </button>
-      </div>
+      <StyledTableContainer>
+        <Table>
+          <StyledTableHead>
+            <TableRow>
+              <TableCell>차량모델</TableCell>
+              <TableCell>제조사</TableCell>
+              <TableCell>차량번호</TableCell>
+              <TableCell>{`연식(년)`}</TableCell>
+              <TableCell>{`주행거리(km)`}</TableCell>
+              <TableCell>{`구매가(만원)`}</TableCell>
+              <TableCell>판매 등록일</TableCell>
+              <TableCell>판매상태</TableCell>
+              <TableCell>예약상태</TableCell>
+            </TableRow>
+          </StyledTableHead>
+          <StyleMainTableHead>
+            {sellData.map((sell: SellContentType, index: number) => (
+              <TableRow key={index}>
+                <TableCell>{sell.carModelNm}</TableCell>
+                <TableCell>{sell.carMaker}</TableCell>
+                <TableCell>{sell.carRegNm}</TableCell>
+                <TableCell>{sell.carModelYear}</TableCell>
+                <TableCell>{sell.carMileage}</TableCell>
+                <TableCell>{sell.price.toLocaleString()}</TableCell>
+                <TableCell>{sell.regDt?.slice(0,10)}</TableCell>
+                <TableCell>{sell.saleStatus}</TableCell>
+                <TableCell>
+                  <StyledButton onClick={() => handleSellData(sell.id)}>
+                    취소하기
+                  </StyledButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </StyleMainTableHead>
+        </Table>
+      </StyledTableContainer>
+      <br />
+      <StyledPagination>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, value) =>
+            handleRequestSellData(value, itemsPerPage)
+          }
+          color="primary"
+          size="large"
+          disabled={totalPages === 0}
+        />
+      </StyledPagination>
+      {isDeleteSellModal && (
+        <SellDeleteWarningModal
+          message="판매예약을 취소하시겠습니까?"
+          onClose={handleCloseModal}
+          bookid={isDeleteSellId}
+        />
+      )}
     </StyleSellContentPaginationDiv>
   );
 };
