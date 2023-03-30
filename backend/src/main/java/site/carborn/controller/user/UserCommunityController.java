@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import site.carborn.service.user.UserCommunityService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.network.NormalResponse;
 
+@Slf4j
 @Tag(name = "커뮤니티")
 @RequestMapping("/api/user/community")
 @RequiredArgsConstructor
@@ -59,7 +61,9 @@ public class UserCommunityController{
     @Parameter(name = "communityId", description = "게시글 id")
     public ResponseEntity<?> updateBoard(@RequestBody Community community,
                                                @PathVariable("communityId") int communityId) {
-        return NormalResponse.toResponseEntity(HttpStatus.OK, userCommunityService.updateBoard(community, communityId));
+        log.debug("커뮤니티 글 수정");
+        int id = userCommunityService.updateBoard(community, communityId);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, id);
     }
 
     @DeleteMapping ("/delete/{communityId}")
@@ -91,8 +95,8 @@ public class UserCommunityController{
         return NormalResponse.toResponseEntity(HttpStatus.OK,commentList);
     }
 
-    @PutMapping("/{commentId}")
-    @Operation(description = "커뮤니티 글 수정")
+    @PutMapping("/comment/{commentId}")
+    @Operation(description = "커뮤니티 댓글 수정")
     @Parameter(name = "communityId", description = "게시글 id")
     public ResponseEntity<?> updateComment(@RequestBody CommunityReview communityReview,
                                          @PathVariable("commentId") int commentId) {
