@@ -17,12 +17,12 @@ public interface CarSaleBookRepository extends JpaRepository<CarSaleBook, Intege
     Page<CarSaleBookGetListMapping> findAllByStatusAndAccountId(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.id = :id AND csb.status = :status")
-    void updateBookStatusCancel(@Param("id") int id,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt);
+    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.id = :id AND csb.status = :status AND csb.bookStatus = :checkStatus")
+    void updateBookStatusCancel(@Param("id") int id,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt, @Param("checkStatus") int checkStatus);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.carSale.id = :carSaleId AND csb.status = :status")
-    void updateSaleCancel(@Param("carSaleId") int carSaleId,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt);
+    @Query(value = "UPDATE CarSaleBook csb SET csb.bookStatus = :bookStatus, csb.uptDt = :uptDt WHERE csb.carSale.id = :carSaleId AND csb.status = :status And csb.bookStatus = :checkStatus")
+    void updateSaleCancel(@Param("carSaleId") int carSaleId,@Param("bookStatus") int bookStatus, @Param("status") boolean status ,@Param("uptDt") LocalDateTime uptDt, @Param("checkStatus") int checkStatus);
 
     CarSaleBookGetBookStatusMapping findByStatusAndAccount_IdAndCarSale_Id(@Param("status") boolean status, @Param("accountId") String accountId, @Param("carSaleId") int carSaleId);
 

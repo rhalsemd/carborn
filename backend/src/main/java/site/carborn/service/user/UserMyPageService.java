@@ -27,6 +27,7 @@ import site.carborn.service.common.KlaytnService;
 import site.carborn.util.board.BoardUtils;
 import site.carborn.util.common.BookUtils;
 import site.carborn.util.common.BuyUtils;
+import site.carborn.util.common.SellUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -237,14 +238,14 @@ public class UserMyPageService {
 
     @Transactional
     public String updateBookCancel(int carSaleBookId){
-        carSaleBookRepository.updateBookStatusCancel(carSaleBookId, BuyUtils.BUY_STATUS_CANCEL, false ,LocalDateTime.now());
+        carSaleBookRepository.updateBookStatusCancel(carSaleBookId, BuyUtils.BUY_STATUS_CANCEL, false ,LocalDateTime.now(), BuyUtils.BUY_STATUS_STAY);
         return BoardUtils.BOARD_CRUD_SUCCESS;
     }
 
     @Transactional
     public String updateSaleCancel(int carSaleId){
-        carSaleRepository.updateSaleCancel(carSaleId, false ,BuyUtils.BUY_STATUS_CANCEL ,LocalDateTime.now());
-        carSaleBookRepository.updateSaleCancel(carSaleId,BuyUtils.BUY_STATUS_CANCEL, false, LocalDateTime.now());
+        carSaleRepository.updateSaleCancel(carSaleId, false ,BuyUtils.BUY_STATUS_CANCEL ,LocalDateTime.now(), BuyUtils.BUY_STATUS_STAY);
+        carSaleBookRepository.updateSaleCancel(carSaleId,BuyUtils.BUY_STATUS_CANCEL, false, LocalDateTime.now(), SellUtils.SELL_STATUS_STAY);
         return BoardUtils.BOARD_CRUD_SUCCESS;
     }
 }

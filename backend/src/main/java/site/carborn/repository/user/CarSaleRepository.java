@@ -40,8 +40,8 @@ public interface CarSaleRepository extends JpaRepository<CarSale, Integer> {
     Page<CarSaleGetListMapping> findAllByStatusAndAccountId(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE CarSale cs SET cs.saleStatus = :saleStatus, cs.uptDt = :uptDt WHERE cs.id = :id AND cs.status = :status")
-    void updateSaleCancel(@Param("id") int id,@Param("status") boolean status, @Param("saleStatus") int saleStatus, @Param("uptDt") LocalDateTime uptDt);
+    @Query(value = "UPDATE CarSale cs SET cs.saleStatus = :saleStatus, cs.uptDt = :uptDt WHERE cs.id = :id AND cs.status = :status AND cs.saleStatus = :checkStatus")
+    void updateSaleCancel(@Param("id") int id,@Param("status") boolean status, @Param("saleStatus") int saleStatus, @Param("uptDt") LocalDateTime uptDt, @Param("checkStatus") int checkStatus);
 
     @Query(value = """
     SELECT sale.ID as id, sale.ACCOUNT_ID as accountId, sale.CAR_ID as carId, sale.MAKER as maker, sale.MODEL_NM as modelNm, sale.MODEL_YEAR as modelYear, sale.MILEAGE as mileage, sale.Content as content,sale.PRICE as price, sale.SALE_STATUS as saleStatus,sale.REG_DT as regDt, sale.UPT_DT as uptDt, img.IMG_NM as imgNm
