@@ -2,10 +2,7 @@ package site.carborn.service.user;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import site.carborn.mapping.user.CarSaleGetListMapping;
 import site.carborn.repository.car.CarRepository;
 import site.carborn.repository.company.InspectorRepository;
 import site.carborn.repository.company.RepairShopRepository;
