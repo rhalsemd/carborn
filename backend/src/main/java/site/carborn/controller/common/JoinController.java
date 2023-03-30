@@ -29,9 +29,6 @@ public class JoinController {
     JoinService joinService;
 
     @Autowired
-    SmsService smsService;
-
-    @Autowired
     AddressService addressService;
 
     @PostMapping("/join")
