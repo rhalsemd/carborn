@@ -14,10 +14,10 @@ public class SortUtils {
     /**
      * 가격 높은 순
      */
-    public static final int SORT_STATUS_PRICE_DESC = 3;
+    public static final int SORT_STATUS_PRICE_DESC = 2;
 
     /**
      * 가격 낮은 순
      */
-    public static final int SORT_STATUS_PRICE_ASC = 4;
+    public static final int SORT_STATUS_PRICE_ASC = 3;
 }
