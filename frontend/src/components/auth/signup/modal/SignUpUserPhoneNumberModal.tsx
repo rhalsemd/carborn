@@ -1,7 +1,13 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-import { userverificationNumber } from "../../../../modules/verificationNumberModule";
+import {
+  userSmsAuthAction,
+  userverificationNumber,
+} from "../../../../modules/verificationNumberModule";
+import { IsCanSignUpAction } from "../../../../modules/signUpModule";
+import axios from 'axios';
+import { applicationjson, CARBORN_SITE, ContentType } from './../../../../lib/api';
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
   display: ${(props) => (props.open ? "flex" : "none")};
@@ -69,17 +75,21 @@ const VerifyNumberContentDiv = styled.div`
   button {
     width: 30%;
     margin-left: 2%;
-    border: 1px solid #d23131;
-    background-color: white;
+    background-color: #d23131;
+    border: 5px solid transparent;
     font-size: 1rem;
+    font-weight: 900;
+    color: white
   }
 
   button:hover,
   :focus {
     width: 30%;
     margin-left: 2%;
-    background-color: #d23131;
-    color: white;
+    border: 5px solid #d23131;
+    background-color: white;
+    color: black;
+    font-weight: 900;
     font-size: 1rem;
   }
 `;
@@ -91,33 +101,40 @@ const VerifyNumberButtonDiv = styled.div`
   justify-content: center;
 
   .closeButton {
-    width: 20%;
-    border: 1px solid #d23131;
-    background-color: white;
+    width: 25%;
+    margin-left: 5%;
+    border: 5px solid transparent;
+    background-color: #d23131;
+    color: white;
+    font-weight: 900;
     font-size: 1rem;
   }
 
   .closeButton:hover,
   :focus {
-    width: 20%;
-    background-color: #d23131;
-    color: white;
+    width: 25%;
+    margin-left: 5%;
+    border: 5px solid #d23131;
+    background-color: white;
+    color: black;
     font-size: 1rem;
   }
 
   .verifyButton {
-    width: 78%;
-    margin-left: 2%;
-    border: 1px solid #d23131;
-    background-color: white;
+    width: 70%;
+    background-color: #d23131;
+    border: 5px solid transparent;
+    color: white;
+    font-weight: 900;
     font-size: 1rem;
   }
 
   .verifyButton:hover,
   :focus {
-    width: 78%;
-    background-color: #d23131;
-    color: white;
+    width: 70%;
+    background-color: white;
+    color: black;
+    border: 5px solid #d23131;
     font-size: 1rem;
   }
 `;
@@ -127,8 +144,8 @@ export interface SignUpUserPhoneNumberModalProps {
   open: boolean;
   onClose: () => void;
   phoneNumber: any;
-  setIsValid: any,
-  isValid:boolean
+  setIsValid: any;
+  isValid: boolean;
 }
 
 export interface ModalWrapperProps {
@@ -141,25 +158,30 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   onClose,
   phoneNumber,
   setIsValid,
-  isValid
+  isValid,
 }) => {
-
-  const selector = useSelector(
-    (state: any) => state.verificationNumberReducer.certificatedNum
+  // 번호 전송 관련 불린
+  const isSend = useSelector(
+    (state: any) => state.verificationNumberReducer.isSend
   );
+
+  // 인증되었는지 관련 불린
+  // const isPass = useSelector((state:any) => state.verificationNumberReducer.isPass)
+  
   const [inputValue, setInputValue] = useState("");
   const [countdown, setCountdown] = useState(180);
   const [countdownInterval, setCountdownInterval] = useState<ReturnType<
     typeof setTimeout
   > | null>(null);
-  const [isButtonValid, setIsButtonValid] = useState(true);
+  const [isButtonValid, setIsButtonValid] = useState(false);
   const dispatch = useDispatch();
 
   // 인증번호 발송버튼
   const handleSendVerifyRequest = (phoneNumber: string) => {
-    dispatch(userverificationNumber(phoneNumber))
+    dispatch(userverificationNumber(phoneNumber));
 
-    if (isValid) return;
+    setIsButtonValid(true)
+    if (isButtonValid) return;
     setCountdown(180);
     clearInterval(countdownInterval!);
 
@@ -170,7 +192,6 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
           if (prevCountdown === 1) {
             clearInterval(countdownInterval!);
             setIsButtonValid(false);
-            setIsValid(false)
             return 0;
           } else if (prevCountdown <= 0) {
             clearInterval(countdownInterval!);
@@ -187,25 +208,42 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
     setInputValue("");
     setCountdown(180);
     setIsButtonValid(false);
-    setIsValid(true)
     if (countdownInterval) {
       clearInterval(countdownInterval);
     }
     onClose();
   };
 
-  // 인증확인 버튼 
-  const handleVerifyCheck = () => {
-    if(selector === inputValue || !isButtonValid) {
-      setIsButtonValid(true)
-      setIsValid(true)
-      setInputValue("")
-      onClose();
-    } else {
-      setIsButtonValid(false)
-      setIsValid(false)
+  // 인증확인 버튼
+  const handleVerifyCheck = async ({ phoneNumber, inputValue }: any) => {
+    // 전화번호, 인증번호 넘겨주기
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `${CARBORN_SITE}/api/sms-auth-join`,
+        data: {
+          phoneNm : phoneNumber,
+          authNm : inputValue
+        },
+        headers: {
+          [ContentType]: applicationjson,
+        }
+      });
+
+      const isPass = response.data.message;
+      if (isPass) {
+        alert("인증성공")
+        console.log("인증성공")
+        dispatch(IsCanSignUpAction())
+        handleClose()
+      } else {
+        alert("인증실패")
+        console.log("인증실패")
+      }
+    } catch (error) {
+      console.log(error)
     }
-  }
+  };
 
   // 시간 형식 바꾸기
   const formatTime = (time: number) => {
@@ -218,17 +256,6 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
   const handleChange = (value: string) => {
     setInputValue(value);
   };
-
-  useEffect(() => {
-    if (selector === inputValue) {
-      setIsButtonValid(true)
-    } else if ( selector !== inputValue && inputValue === "" ) {
-      setIsButtonValid(false)
-      setIsValid(false)
-    } else {
-      setIsValid(false)
-    }
-  }, [inputValue, selector, setIsButtonValid, setIsValid])
 
   return (
     <ModalWrapper open={open} onClick={onClose}>
@@ -261,16 +288,15 @@ const SignUpUserPhoneNumberModal: React.FC<SignUpUserPhoneNumberModalProps> = ({
           </button>
         </VerifyNumberContentDiv>
         <VerifyNumberButtonDiv>
-          <button tabIndex={12} className="closeButton" onClick={handleClose}>
-            닫기
-          </button>
           <button
             tabIndex={11}
             className="verifyButton"
-            onClick={handleVerifyCheck}
-            disabled={!isButtonValid}
+            onClick={() => handleVerifyCheck({ phoneNumber, inputValue })}
           >
             인증확인
+          </button>
+          <button tabIndex={12} className="closeButton" onClick={handleClose}>
+            닫기
           </button>
         </VerifyNumberButtonDiv>
       </ModalContent>

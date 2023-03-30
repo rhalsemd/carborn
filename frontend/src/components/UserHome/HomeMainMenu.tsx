@@ -1,6 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import car1 from "../../assets/car1.jpg";
+import squareCar0 from "../../assets/squareCar1.jpg";
+import squareCar1 from "../../assets/squareCar2.png";
+import squareCar2 from "../../assets/squareCar3.png";
 
 const container = css`
   height: 100vh;
@@ -17,7 +20,6 @@ const container = css`
   .menu > h3 {
     margin-top: 5%;
     margin-bottom: 8px;
-    /* font-weight: bolder; */
   }
   .menu > hr {
     width: 30%;
@@ -35,12 +37,14 @@ const buttons = css`
     margin: 0;
     padding: 0;
   }
+
   .rectangleBtns {
     display: flex;
     flex-direction: row;
     margin-bottom: 5vh;
     padding: 0;
   }
+
   .rectangleBtn {
     height: 50vh;
     width: 20vw;
@@ -50,6 +54,8 @@ const buttons = css`
     border-radius: 10px;
     position: relative;
     display: inline-block;
+    text-align: center;
+    overflow: hidden;
 
     .icon {
       height: 40%;
@@ -83,8 +89,27 @@ const buttons = css`
       z-index: 1;
     }
 
+    .click {
+      height: 10%;
+      font-size: 1rem;
+      font-weight: bold;
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a8a8a8;
+    }
+
+    .redBox {
+      height: 10%;
+      width: 100%;
+      position: absolute;
+      background-color: red;
+      transition: all 0.3s;
+    }
     &:hover {
-      transition: all 0.5s;
+      transition: all 0.3s;
 
       .btnImg {
         opacity: 1;
@@ -92,7 +117,7 @@ const buttons = css`
 
       .description {
         color: white;
-        transition: all 0.5s;
+        transition: all 0.3s;
         z-index: 3;
       }
 
@@ -101,8 +126,17 @@ const buttons = css`
       }
       svg {
         fill: white;
-        transition: all 0.5s;
+        transition: all 0.3s;
         z-index: 3;
+      }
+      .click {
+        color: white;
+        z-index: 3;
+      }
+      .redBox {
+        z-index: 2;
+        transform: translateY(-100%);
+        transition: all 0.3s;
       }
     }
   }
@@ -130,6 +164,37 @@ const buttons = css`
     width: 20vw;
     margin: 0 20px 0 20px;
     border-radius: 10px;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    transition: all 0.8s;
+    font-size: 28px;
+    cursor: pointer;
+
+    &:hover {
+      .name {
+        font-size: 30px;
+        transition: all 0.3s;
+      }
+    }
+  }
+
+  .squareBtn0 {
+    background-image: url(${squareCar0});
+    background-size: cover;
+  }
+  .squareBtn1 {
+    background-image: url(${squareCar1});
+    background-size: cover;
+  }
+  .squareBtn2 {
+    background-image: url(${squareCar2});
+    background-size: cover;
   }
 `;
 
@@ -218,8 +283,8 @@ export default function HomeMainMenu() {
     <svg
       version="1.1"
       id="REPAIR"
-      width="60%"
-      height="60%"
+      width="50%"
+      height="50%"
       viewBox="0 0 1800 1800"
       fill="black"
     >
@@ -256,20 +321,20 @@ export default function HomeMainMenu() {
 
   const squares: btnType = [
     {
-      icon: icon1,
-      name: "사기",
+      icon: icon4,
+      name: "내 차 등록하기",
       description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
       url: "/",
     },
     {
-      icon: icon1,
-      name: "팔기",
+      icon: icon4,
+      name: "검수 및 정비 예약 신청",
       description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
       url: "/",
     },
     {
-      icon: icon1,
-      name: "커뮤니티",
+      icon: icon4,
+      name: "마이페이지",
       description: "다양한 사람들과 함께 내 차를 공유해 보asdfasdf세요",
       url: "/",
     },
@@ -293,16 +358,15 @@ export default function HomeMainMenu() {
               <div className="name">{rect.name}</div>
               <div className="description">{rect.description}</div>
               <div className="click">Click</div>
+              <div className="redBox" />
               <img src={car1} className="btnImg" alt="사진" />
             </div>
           ))}
         </div>
         <div className="squareBtns">
           {squares.map((rect: btns, idx: number): any => (
-            <div className="squareBtn" key={idx}>
-              <div>{rect.icon}</div>
-              <div>{rect.name}</div>
-              <div>{rect.description}</div>
+            <div className={`squareBtn${idx} squareBtn`} key={idx}>
+              <div className="name">{rect.name}</div>
             </div>
           ))}
         </div>

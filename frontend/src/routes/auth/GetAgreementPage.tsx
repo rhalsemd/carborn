@@ -18,30 +18,118 @@ export const StyleTermsOfUseDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
+
+  padding-top: 1rem;
+  padding-left: 1rem;
 `;
 export const StyleTermsOfUseTitleDiv = styled.div`
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+
+  div {
+    padding-top: 0.8rem;
+    padding-left: 1.5rem;
+
+    input {
+      appearance: none;
+    }
+
+    .checkbox-label {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      line-height: 1rem;
+      text-align: center;
+      margin-right: 0.5rem;
+      appearance: none;
+      border: 1px solid black;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .checkbox-input:checked + .checkbox-label {
+      background-color: #D23131;
+      border: 1px solid #D23131;
+      color: white;
+    }
+
+    span {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #000000;
+    }
+  }
 `;
 
 export const StyleTermsOfUseEleDiv = styled.div`
+  
+  .checkbox-label {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    margin-right: 0.5rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .checkbox-label::before {
+    content: "\2713";
+    font-size: 1rem;
+    color: white;
+  }
+
+  .checkbox-input:checked + .checkbox-label {
+    background-color: #D23131;
+    border-color: #D23131;
+    color: white;
+  }
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
 `;
 
 export const StyleGoSignUpBtn = styled.button<StyleGoSignUpBtnProps>`
-  width: 15rem;
-  text-align: center;
+  display: inline-block;
+  margin-top: 3rem;
+  width: 100%;
+  padding: 1rem;
   font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
   color: white;
   background-color: ${(props) => props.backgroundColor};
   border: none;
-  margin: 0.5rem 0;
+  border-radius: 0.3rem;
+  box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: darken(${(props) => props.backgroundColor}, 10%);
+  }
 `;
+
+export const StyleTermExplainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 1%;
+
+  span {
+    font-weight: 900;
+    color: #959595 !important;
+  }
+`
 
 // CSS 타입
 export interface StyleGoSignUpBtnProps
@@ -112,20 +200,25 @@ const GetAgreementPage = () => {
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>
-            <h2>이용약관</h2>
+            <p>이용약관</p>
           </StyleLoginSignUpTitle>
           <StyleLoginSignUpTitle>
             <StyleTermsOfUseTitleDiv>
-              <span>카본에 오신 것을 환영합니다.</span>
-              <span>카본에서 거래 및 커뮤니티 사용을 위하여</span>
-              <span>아래의 약관 동의 및 회원가입이 필요합니다.</span>
+              <StyleTermExplainDiv>
+                <span>카본에 오신 것을 환영합니다.</span>
+                <span>카본에서 거래 및 커뮤니티 사용을 위하여</span>
+                <span>아래의 약관 동의 및 회원가입이 필요합니다.</span>
+              </StyleTermExplainDiv>
               <div>
                 <input
                   type="checkbox"
                   id="allcheckbox"
+                  name="checkbox"
+                  className="checkbox-input"
                   checked={isCheckedAll}
                   onChange={handleCheckAll}
                 />
+                <label htmlFor="allcheckbox" className="checkbox-label">&#10003;</label>
                 <span>전체동의</span>
               </div>
             </StyleTermsOfUseTitleDiv>

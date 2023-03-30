@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { useRef, useState } from "react";
+import { useQuery } from "react-query";
 
 interface 임시type {
   url: string;
@@ -119,6 +120,7 @@ const 임시data: 임시type[] = [
 ];
 
 export default function HomeCarForSales() {
+  // const { data } = useQuery();
   const len = 임시data.length;
   const imgWidth = window.innerWidth * 0.15125;
   const [x, setX] = useState<number>(0);

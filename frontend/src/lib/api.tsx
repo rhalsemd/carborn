@@ -1,26 +1,94 @@
 import axios from "axios";
 
+// export const API_URL = "https://carborn.site";
+// export const CARBORN_SITE = "https://carborn.site";
+export const CARBORN_SITE = "https://172.30.1.91";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
 export const Authorization = 'Authorization';
+export const multipart_formData = "multipart/form-data";
+
+// 로그인
+export const LoginApi = async (payload: Object): Promise<any> => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `http://localhost:3001/users`,
+      headers: {
+        [ContentType]: applicationjson,
+      },
+      data: payload,
+    });
+
+    console.log(response)
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 로그아웃
+export const LogoutApi = async (): Promise<any> => {
+  const ObjString: string | null = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
+
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${API_URL}/logout`,
+      headers: {
+        [Authorization]: `Bearer ${Obj.value}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 유저 회원가입 요청
+export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
+  try {
+    const response = await fetch(`${CARBORN_SITE}/api/join`, {
+      method: "POST",
+      body: formData,
+    })
+
+    return response.body;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// 기업 회원가입 요청
+export const companySignUpSendApi = async (formData:FormData): Promise<any> => {
+  try {
+    const response = await fetch(`${CARBORN_SITE}/api/join`, {
+      method: "POST",
+      body: formData,
+    })
+    console.log(response)
+
+    return response.body;
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // 아이디 중복체크
 export const UserIdCheckApi = async (id: string): Promise<any> => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/users`,
+      url: `${CARBORN_SITE}/api/check-id/${id}`,
     });
 
-    let result: boolean = true;
-    for (let user of response.data) {
-      if (user.loginid === id) {
-        result = false;
-        break;
-      }
-    }
-    return result;
+    // true는 가입할수 있는 상태, false는 가입 못하는 상태
+    console.log(response.data.message)
+
+    return response.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -31,50 +99,13 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/users`,
+      url: `${CARBORN_SITE}/api/check-id/${id}`,
     });
 
-    let result: boolean = true;
-    for (let user of response.data) {
-      if (user.loginid === id) {
-        result = false;
-        break;
-      }
-    }
+    // true는 가입할수 있는 상태, false는 가입 못하는 상태
+    console.log(response.data.message)
 
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// 로그인
-export const LoginApi = async (payload: Object): Promise<any> => {
-  try {
-    const response = await axios({
-      method: "POST",
-      url: `${API_URL}/users`,
-      headers: {
-        [ContentType]: applicationjson,
-        // 로그인을 해야만 이용가능한 서비스관련 axios에 모두 들어가야함.
-        // Authorization: `Bearer ${요기에는 토큰 해쉬값이 들어가야함}`,
-      },
-      data: payload,
-    });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// 로그아웃
-export const LogoutApi = async (): Promise<any> => {
-  try {
-    const response = await axios({
-      method: "POST",
-      url: `${API_URL}/logout`,
-    });
-    return response.data;
+    return response.data.message;
   } catch (error) {
     console.log(error);
   }
@@ -144,24 +175,19 @@ export const PhoneNumberCheckApi = async (
 ): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${API_URL}/users`,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/sms-auth-send`,
+      data: {
+        phoneNm: phonenumber
+      },
       headers: {
         [ContentType]: applicationjson,
       },
     });
-    let Obj: UserType | null = null;
-    for (let user of response.data) {
-      if (user.phone === phonenumber) {
-        Obj = {
-          name: user.name,
-          phone: user.phone,
-          verify: true,
-        };
-        break;
-      }
-    }
-    return Obj;
+
+    // 인증되면 true, 아니면 false
+
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -177,22 +203,34 @@ export const SearchIdCheckApi = async (payload: any): Promise<any> => {
         [ContentType]: applicationjson,
       },
     });
-    let Obj: UserType | null = null;
-    for (let user of response.data) {
-      if (user.phone === payload.phonenumber) {
-        Obj = {
-          name: user.name,
-          phone: user.phone,
-          verify: true,
-        };
-        break;
-      }
-    }
-    return Obj;
+    
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
+
+// 유저 인증번호랑 전화번호 보내주면서, 인증여부 확인하기
+export const smsAuthApi = async (payload: any): Promise<any> => {
+  try {
+    // 전화번호, 인증번호 넘겨주기
+    const response:any = await axios({
+      method: 'POST',
+      // 수정해야함
+      url: `${CARBORN_SITE}/api/sms-auth-join`,
+      data: {
+        phoneNm : payload.phoneNumber,
+        authNm : payload.inputValue
+      },
+      headers: {
+        [ContentType]: applicationjson,
+      }
+    })
+    return response.data.message
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // 약관 동의 불러오기
 export const GetAgreementApi = async (): Promise<any> => {

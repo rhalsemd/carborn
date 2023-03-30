@@ -81,11 +81,11 @@ naver:
     X-NCP-APIGW-API-KEY-ID: iap87u1sur
     X-NCP-APIGW-API-KEY: DMlA2OvuXox8pSlVqTIAwXHRdL8sJz79VbUqF5wH
 
-  #naver-cloud-sms:
-  #  accessKey: hZMpYNUxSNTcNY73KTBW
-  #  serviceKey: qt5P7NEBOLXPtDG6K8eNpjgopeYNjxII6Dzdmjuk
-  #  serviceId: ncp:sms:kr:257282496643:sms_example
-  #  senderPhone: 01085241881
+  naver-cloud-sms:
+    accessKey: HO4teZS6PyoWGWJVPnT7
+    secretKey: pKYglycSNc1Dj4ivtL875XGA4ZtXyVf5VAhWubi7
+    serviceId: ncp:sms:kr:257282460554:car-born
+    senderPhone: 01085241881
 
   #naver-cloud-ocr:
   #  apiURL: https://5omzwputv7.apigw.ntruss.com/custom/v1/21212/9e015480e19104a91ee5d3cdfb7200731357cdaf00d3689246ffaacc81f8fd02/general
@@ -99,3 +99,20 @@ klaytn:
   secretAccessKey: 8fxpWhYFGmYW3Fz1uXT5MiZ_Mw9qhFmojpS94psy
   authorization: Basic S0FTS1VJSVBSVzEzOVdCWkFYVDY1N0gwOjhmeHBXaFlGR21ZVzNGejF1WFQ1TWlaX013OXFoRm1vanBTOTRwc3k=
   chainId: 1001
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: jakarta.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+
+admin:
+  mail: ssafy8th.gumi@gmail.com
+  name: CarBorn 관리자
+  password: mgskcmzufwphqyua

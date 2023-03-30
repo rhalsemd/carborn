@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.InspectResultRequestDTO;
+import site.carborn.entity.car.Car;
 import site.carborn.entity.user.InspectBook;
 import site.carborn.entity.user.InspectResult;
 import site.carborn.mapping.company.InspectorReviewMapping;
@@ -85,7 +86,17 @@ public class InspectorService {
         int carId = carRepository.findByVin(carVin).getId();
 
         //carId를 통해 carHash를 가져오는 부분
-        String carHash = carRepository.findAllById(carId).getWalletHash();
+        String carHash = carRepository.findAllByStatusAndId(false,carId).getWalletHash();
+
+        Optional<Car> car = carRepository.findById(carId);
+        if(car.isEmpty()){
+            throw new RuntimeException("해당 하는 차량의 데이터가 없습니다.");
+        }
+        car.get().setMileage(dto.getMileage());
+        car.get().setUptDt(LocalDateTime.now());
+
+        //CarId에 해당하는 차량의 주행거리를 업데이트
+        carRepository.save(car.get());
 
         //multipartfile 입력 부분
         String beforeImgNm = BoardUtils.singleFileSave((dto.getBeforeImg()));

@@ -21,6 +21,13 @@ const content = css`
 `;
 
 function SaleRegistration() {
+  const [registrationInfo, setRegistrationInfo] = useState<
+    Partial<RegistrationInfo>
+  >({
+    fileList: [],
+    fileNames: [],
+  });
+
   return (
     <>
       <Nav />
@@ -29,7 +36,10 @@ function SaleRegistration() {
           {/* 왼쪽 컨텐츠 */}
           <SaleCarImg />
           {/* 오른쪽 컨텐츠*/}
-          <SaleInfoArea />
+          <SaleInfoArea
+            setRegistrationInfo={setRegistrationInfo}
+            registrationInfo={registrationInfo}
+          />
         </div>
       </div>
     </>

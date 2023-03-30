@@ -9,6 +9,12 @@ import rootReducer from "./modules/root/rootReducer";
 import rootSaga from "./modules/root/rootSaga";
 import { createBrowserHistory } from "history";
 
+declare global {
+  interface Window {
+    naver: any;
+  }
+}
+
 const history = createBrowserHistory();
 
 const sagaMiddleware = createSagaMiddleware({

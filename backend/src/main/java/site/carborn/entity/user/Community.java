@@ -30,6 +30,8 @@ public class Community {
     private LocalDateTime regDt;
 
     private LocalDateTime uptDt;
+    
+    private int views;
 
     private boolean status;
 }

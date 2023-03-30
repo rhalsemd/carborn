@@ -8,34 +8,81 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TablePagination, TableFooter } from "@mui/material";
-import { faker } from "@faker-js/faker";
 import { useState } from "react";
-import HistoryModal from "./garage/HistoryModal";
+import HistoryModal from "./HistoryModal";
+import { useQuery } from "react-query";
+import { useAPI } from "./../../hooks/useAPI";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import ReviewModal from "./ReviewModal";
 
-faker.seed(123);
+interface Column {
+  id: "name" | "code" | "population" | "size" | "density";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
+}
+
+interface Data {
+  name: string;
+  code: string;
+  population: number;
+  size: number;
+  density: number;
+}
+interface MapType {
+  id: string;
+  regDt: string;
+  mileage: string;
+  repairDt: string;
+}
 
 const container = css`
   position: relative;
   opacity: 0.85;
 `;
 
-const users = Array<any>(53)
-  .fill(null)
-  .map(() => ({
-    id: faker.datatype.uuid(),
-    name: faker.name.lastName() + faker.name.firstName(),
-    content: faker.internet.email(),
-    phone: faker.phone.number(),
-  }));
-
 export default function HistoryTable() {
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(7);
+  const rowsPerPage = 7;
+
+  const isGarage = useLocation().pathname == "/garage/history";
+
+  let URL: any;
+  let queryKey;
+
+  if (isGarage) {
+    URL = `http://carborn.site/api/repair-shop/result/list/${page + 1}/7`;
+    queryKey = "getGarageHistory";
+  } else {
+    URL = `http://carborn.site/api/inspector/result/list/${page + 1}/7`;
+    queryKey = "getInspectorHistory";
+  }
+
+  const getHistoryData = useAPI("get", URL);
+
+  const { data, refetch } = useQuery(queryKey, () => getHistoryData, {
+    cacheTime: 1000 * 300,
+    staleTime: 1000 * 300,
+    select: (data) => {
+      // return data.data;
+      return data.data.message;
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+
+    suspense: true,
+  });
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
-
+  console.log(data);
+  useEffect(() => {
+    refetch();
+  }, [page]);
   return (
     <div css={container}>
       <TableContainer component={Paper}>
@@ -43,35 +90,38 @@ export default function HistoryTable() {
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
-              <TableCell align="center">수리 완료 날짜</TableCell>
-              <TableCell align="center">수리 내용</TableCell>
-              <TableCell align="center">주행 거리</TableCell>
-              <TableCell align="center">사진</TableCell>
               <TableCell align="center">요청 날짜</TableCell>
+              <TableCell align="center">완료 날짜</TableCell>
+              <TableCell align="center">주행 거리</TableCell>
+              <TableCell align="center">자세히 보기</TableCell>
+              <TableCell align="center">리뷰 보기</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users
-              .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-              .map(({ id, name, content, phone }, i) => (
-                <TableRow key={id} hover={true}>
-                  <TableCell component="th" scope="row">
-                    {page * rowsPerPage + i + 1}
+            {data?.content?.map(
+              ({ id, regDt, repairDt, mileage }: MapType, idx: number) => (
+                <TableRow key={idx}>
+                  <TableCell sx={{ minWidth: "20px" }}>{id}</TableCell>
+                  <TableCell align="center">{regDt}</TableCell>
+                  <TableCell align="center">{repairDt}</TableCell>
+                  <TableCell align="center" sx={{ minWidth: "30px" }}>
+                    {mileage} KM
                   </TableCell>
-                  <TableCell align="right">{name}</TableCell>
-                  <TableCell align="right">{content}</TableCell>
-                  <TableCell align="right">{phone}</TableCell>
                   <TableCell align="center">
                     <HistoryModal id={id} />
                   </TableCell>
-                  <TableCell align="right">{phone}</TableCell>
+                  <TableCell align="center">
+                    <ReviewModal id={id} />
+                  </TableCell>
                 </TableRow>
-              ))}
+              )
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                count={users.length}
+                count={data.totalElements}
+                // count={15}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}

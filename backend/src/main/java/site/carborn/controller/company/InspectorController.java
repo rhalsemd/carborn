@@ -60,7 +60,7 @@ public class InspectorController {
             throw new RuntimeException("예약 변경 데이터가 잘못되었습니다.");
         }
 
-        //예약 상태 취소만
+        //예약 취소
         else if(dto.getInspectBook().getBookStatus() == BookUtils.BOOK_STATUS_CANCEL) {
             inspectorService.inspectorBookUpdate(updateData.get(), BookUtils.BOOK_STATUS_CANCEL);
             return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);

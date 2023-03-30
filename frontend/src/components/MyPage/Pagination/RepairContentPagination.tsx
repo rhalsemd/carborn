@@ -1,26 +1,30 @@
+//MUI 컴포넌트
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 import styled from "@emotion/styled";
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import axios from 'axios';
-import { API_URL } from './../../../lib/api';
-import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { CARBORN_SITE } from "./../../../lib/api";
+import { useEffect } from "react";
 
 export interface RepairContentPaginationProps {
   itemsPerPage: number;
 }
 
-export interface Car {
+export interface RepairType {
   id: number;
-  model: string;
+  repairBookCarModelNm: string;
   manufacturer: string;
   mileage: number;
-  plateNumber: string;
-  year: number;
+  repairBookCarRegNm: string;
+  repairBookCarModelYear: number;
   price: number;
-  maintenanceSchedule: string;
+  repairDt: string;
   lastMaintenanceDate: string;
-  maintenanceStatus: string;
-  maintenanceCompany: string;
+  repairBookBookStatus: string;
+  repairBookAccountName: string;
 }
 
 const StyleRepairPaginationDiv = styled.div`
@@ -31,16 +35,52 @@ const StyleRepairPaginationDiv = styled.div`
   align-items: center;
 `;
 
-const RepairContentPagination = ({itemsPerPage} : RepairContentPaginationProps) => {
+const RepairContentPagination = ({
+  itemsPerPage,
+}: RepairContentPaginationProps) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [repairData, setRepairData] = useState<Car[]>([]);
-  const totalPages = Math.ceil(repairData.length / itemsPerPage);
-  
+  const [repairData, setRepairData] = useState<RepairType[]>([]);
+  const [totalPageCnt, setTotalPageCnt] = useState(0);
+
   const handleRequestRepairData = async (page: number, count: number) => {
     try {
-      const response = await axios.get(`${API_URL}/repair`);
-      setRepairData(response.data);
+      const response = await axios.get(
+        `${CARBORN_SITE}/api/user/repair/result/list/${page}`
+      );
+      setTotalPageCnt(response.data.message.totalPages);
+      const modifiedContent = response.data.message.content.map(
+        (content: any) => {
+          let modifiedBookStatus = "";
+          let modifiedBookStatusNum = 0;
+          switch (content.repairBookBookStatus) {
+            case 0:
+              modifiedBookStatus = "예약 중";
+              modifiedBookStatusNum = 0;
+              break;
+            case 1:
+              modifiedBookStatus = "정비 완료";
+              modifiedBookStatusNum = 1;
+              break;
+            case 2:
+              modifiedBookStatus = "예약 취소";
+              modifiedBookStatusNum = 2;
+              break;
+            default:
+              modifiedBookStatus = content.repairBookBookStatus;
+              modifiedBookStatusNum = 0;
+              break;
+          }
+
+          return {
+            ...content,
+            repairBookBookStatus: modifiedBookStatus,
+            modifiedBookStatusNum,
+          };
+        }
+      );
+
+      setRepairData(modifiedContent);
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
@@ -49,33 +89,29 @@ const RepairContentPagination = ({itemsPerPage} : RepairContentPaginationProps) 
 
   const ObjString: string | null = localStorage.getItem("login-token");
   const Obj = ObjString ? JSON.parse(ObjString) : null;
+  const totalPages = totalPageCnt;
 
   useEffect(() => {
     handleRequestRepairData(currentPage, itemsPerPage);
-  }, [currentPage]);
-
-  // 페이지 네이션 유효성 검사
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = repairData.slice(startIndex, endIndex);
+  }, [currentPage, itemsPerPage]);
 
   if (repairData.length === 0) {
     return <div>No data Found!</div>;
   }
 
-  const getRepairDetail = (carId: number) => {
+  const getRepairBookDetail = (bookId: number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/repair/${carId}/completedetail`, {
-        state: repairData[carId - 1] },
-      );
+      navigate(`/${Obj.userId}/mypage/repair/${bookId}/bookdetail`);
     }
   };
 
-  const getRepairBookDetail = (carId:number) => {
+  const getRepairDetail = (resultId: number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/repair/${carId}/bookdetail`)
+      navigate(`/${Obj.userId}/mypage/repair/${resultId}/completedetail`, {
+        state: repairData[resultId % 5],
+      });
     }
-  }
+  };
 
   return (
     <StyleRepairPaginationDiv>
@@ -83,12 +119,12 @@ const RepairContentPagination = ({itemsPerPage} : RepairContentPaginationProps) 
         <thead>
           <tr>
             <th>차량모델</th>
-            <th>제조사</th>
+            {/* <th>제조사</th> */}
             <th>{`주행거리(km)`}</th>
             <th>차량번호</th>
             <th>{`연식(년)`}</th>
             <th>정비예약신청일</th>
-            <th>정비완료일</th>
+            {/* <th>정비완료일</th> */}
             <th>정비상태</th>
             <th>정비업체</th>
             <th>예약상세조회</th>
@@ -96,36 +132,31 @@ const RepairContentPagination = ({itemsPerPage} : RepairContentPaginationProps) 
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((car: Car, index: number) => (
+          {repairData.map((car: RepairType, index: number) => (
             <tr key={index}>
-              <td>{car.model}</td>
-              <td>{car.manufacturer}</td>
+              <td>{car.repairBookCarModelNm}</td>
+              {/* <td>{car.manufacturer}</td> */}
               <td>{car.mileage}</td>
-              <td>{car.plateNumber}</td>
-              <td>{car.year}</td>
-              <td>
-                {car.maintenanceSchedule === null
-                  ? "-"
-                  : car.maintenanceSchedule}
-              </td>
-              <td>
+              <td>{car.repairBookCarRegNm}</td>
+              <td>{car.repairBookCarModelYear}</td>
+              <td>{car.repairDt === null ? "-" : car.repairDt}</td>
+              {/* <td>
                 {car.lastMaintenanceDate === null
                   ? "-"
                   : car.lastMaintenanceDate}
-              </td>
-              <td>{car.maintenanceStatus}</td>
-              <td>
+              </td> */}
+              <td>{car.repairBookBookStatus}</td>
+              <td>{car.repairBookAccountName}</td>
+              {/* <td>
                 {car.maintenanceCompany === null ? "-" : car.maintenanceCompany}
-              </td>
+              </td> */}
               <td>
                 <button onClick={() => getRepairBookDetail(car.id)}>
                   조회
                 </button>
               </td>
               <td>
-                <button onClick={() => getRepairDetail(car.id)}>
-                  조회
-                </button>
+                <button onClick={() => getRepairDetail(car.id)}>조회</button>
               </td>
             </tr>
           ))}
@@ -157,8 +188,29 @@ const RepairContentPagination = ({itemsPerPage} : RepairContentPaginationProps) 
           Next
         </button>
       </div>
+      <div>
+        <Stack direction="row" spacing={2}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            color="primary"
+            onChange={(event, page) =>
+              handleRequestRepairData(page, itemsPerPage)
+            }
+          />
+        </Stack>
+      </div>
     </StyleRepairPaginationDiv>
-  )
-}
+  );
+};
 
 export default RepairContentPagination;
+
+// 페이지네이션 컴포넌트 
+export const BasicPagination = () => {
+  return (
+    <Stack spacing={2}>
+      <Pagination count={10} color="primary" />
+    </Stack>
+  );
+}

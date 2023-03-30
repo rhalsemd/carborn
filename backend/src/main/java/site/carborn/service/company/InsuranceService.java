@@ -64,7 +64,7 @@ public class InsuranceService {
         CarInsuranceHistory carInsuranceHistory = CarInsuranceHistory.copy(dto);
 
         //carId를 통해 carHash를 가져오는 부분
-        String carHash = carRepository.findAllById(carId).getWalletHash();
+        String carHash = carRepository.findAllByStatusAndId(false,carId).getWalletHash();
 
         //kas api 호출
         //metaData 등록

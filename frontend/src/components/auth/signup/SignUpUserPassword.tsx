@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
+import CustomAlert from "./modal/CustomAlert";
 import { SignupFormData } from "./SignUpButton";
+import { StyledInput, StyleNameLabel } from "./SignUpUserName";
 
 export interface SignUpPasswordProps {
   signupUserFormData: SignupFormData;
@@ -15,6 +17,10 @@ const SignUpUserPassword = ({
   secondPassword,
   setIsPasswordValid,
 }: SignUpPasswordProps) => {
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   // 입력되는거 formdata에 넘겨주기
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -36,9 +42,17 @@ const SignUpUserPassword = ({
       const regex =
         /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
       if (regex.test(e.currentTarget.value)) {
-        alert("입력한 비밀번호가 유효합니다.");
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage("입력한 비밀번호가 유효합니다.");
       } else {
-        alert(
+        setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 2000);
+        setMessage(
           "입력한 비밀번호가 조합된 영소문자 및 숫자, 특수문자가 아닙니다."
         );
         setSignupUserFormData({
@@ -70,9 +84,9 @@ const SignUpUserPassword = ({
 
   return (
     <StyleSignUpInputDiv>
-      <label htmlFor="userpassword">비밀번호</label>
+      <StyleNameLabel htmlFor="userpassword">비밀번호</StyleNameLabel>
       <br />
-      <input
+      <StyledInput
         type="password"
         id="userpassword"
         name="userpassword"
@@ -84,6 +98,11 @@ const SignUpUserPassword = ({
         onChange={(e) => handlePassword(e)}
         onKeyDown={(e) => handleKeyPress(e)}
       />
+      {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
     </StyleSignUpInputDiv>
   );
 };

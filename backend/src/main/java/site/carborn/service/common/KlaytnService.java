@@ -33,12 +33,12 @@ public class KlaytnService {
 
     public Map<String, Object> getCarHash() {
         try {
-            JSONObject geoData = requestNewAccount();
-            if (geoData == null) {
+            JSONObject data = requestNewAccount();
+            if (data == null) {
                 throw new NullPointerException();
             }
             Map<String, Object> map = new HashMap<>();
-            map.put("address", geoData.get("address"));
+            map.put("address", data.get("address"));
 
             return map;
         } catch (IOException e) {
@@ -74,12 +74,12 @@ public class KlaytnService {
     @Transactional
     public Map<String, Object> getUri(Object object) {
         try {
-            JSONObject geoData = requestMetaData(object);
-            if (geoData == null) {
+            JSONObject data = requestMetaData(object);
+            if (data == null) {
                 throw new NullPointerException();
             }
             Map<String, Object> map = new HashMap<>();
-            map.put("uri", geoData.get("uri"));
+            map.put("uri", data.get("uri"));
 
             return map;
         } catch (IOException e) {

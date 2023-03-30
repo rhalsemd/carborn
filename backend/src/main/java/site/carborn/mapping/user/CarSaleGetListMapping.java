@@ -6,15 +6,22 @@ public interface CarSaleGetListMapping {
 
     int getId();
 
+    String getAccountId();
+
     String getCarMaker();
 
     String getCarModelYear();
 
     int getCarMileage();
 
+    String getContent();
+
     int getPrice();
+
+    int getSaleStatus();
 
     LocalDateTime getRegDt();
 
+    LocalDateTime getUptdt();
 
 }

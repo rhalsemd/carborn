@@ -1,43 +1,32 @@
-import axios from "axios";
-import { useMutation } from "react-query";
 import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
-import { useState } from "react";
 import { RegistrationInfo } from "./../../../routes/userUseFnc/MyVehicleRegistration";
-
-const fileUpLoadAPI = (data: FormData) => {
-  return axios({
-    method: "post",
-    url: "http://192.168.100.176:8080/uploadFiles",
-    data: data,
-  });
-};
 
 function AdditionalSubmissionFiles({
   registrationInfo,
   setRegistrationInfo,
-}: Props<React.Dispatch<React.SetStateAction<RegistrationInfo>>>) {
-  const { mutate } = useMutation(fileUpLoadAPI);
-  const [fileList, setFileList] = useState<Array<File>>([]);
-
+}: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
   // 파일 선택
   const onSaveFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadFiles = Array.prototype.slice.call(e.target.files); // 파일선택창에서 선택한 파일들
+
     uploadFiles.forEach((uploadFile) => {
-      // fileList.push(uploadFile);
       const reader = new FileReader();
-      setFileList((file) => {
-        return [...file, uploadFile];
+
+      setRegistrationInfo((registrationInfo) => {
+        const newFiles = [...(registrationInfo.files || []), uploadFile];
+        return { ...registrationInfo, files: newFiles };
       });
 
       reader.onload = () => {
+        // 사진 이미지랑 파일 이름 state에 저장
         setRegistrationInfo((registrationInfo) => {
           const newFileListL: File[] = [
-            ...registrationInfo.fileList,
+            ...(registrationInfo.fileList || []),
             reader.result,
           ];
 
           const newFileNames: string[] = [
-            ...registrationInfo.fileNames,
+            ...(registrationInfo.fileNames || []),
             uploadFile.name,
           ];
 
@@ -54,38 +43,21 @@ function AdditionalSubmissionFiles({
     e.target.value = "";
   };
 
-  // 등록하기 버튼 누름
-  const onFileUpload = () => {
-    const formData = new FormData();
-
-    fileList.forEach((file) => {
-      // 파일 데이터 저장
-      formData.append("multipartFiles", file);
-    });
-
-    const newRegistrationInfo = {
-      manufacturingCompany: registrationInfo?.manufacturingCompany,
-      carNumber: registrationInfo?.carNumber,
-      carYear: registrationInfo?.carYear,
-      distanceDriven: registrationInfo?.distanceDriven,
-    };
-
-    formData.append("stringFoodDto", JSON.stringify(newRegistrationInfo)); // 직렬화하여 객체 저장
-
-    mutate(formData);
-  };
-
-  // 등록된 사진 삭제
+  // 등록된 사진 삭제 이벤트
   const deleteImg = (index: number) => {
-    setFileList((fileList) => {
-      const newFileList = fileList.filter((file, number) => {
-        return number !== index;
-      });
-      return newFileList;
+    // 사진 파일 삭제
+    setRegistrationInfo((registrationInfo) => {
+      const newFileList = (registrationInfo.files || []).filter(
+        (file, number) => {
+          return number !== index;
+        }
+      );
+      return { ...registrationInfo, files: newFileList };
     });
 
+    // 사진 이미지 삭제
     setRegistrationInfo((registrationInfo) => {
-      const newFileListL: File[] = registrationInfo.fileList.filter(
+      const newFileListL: File[] = (registrationInfo.fileList || []).filter(
         (file, number) => {
           return index !== number;
         }
@@ -106,7 +78,7 @@ function AdditionalSubmissionFiles({
         accept="image/*"
         onChange={onSaveFiles}
       />
-      {fileList.map((file, index) => {
+      {(registrationInfo?.files || []).map((file, index) => {
         return (
           <div key={`${file.name}/${index}`}>
             <span style={{ padding: "0" }}>{file.name}</span>
@@ -114,10 +86,6 @@ function AdditionalSubmissionFiles({
           </div>
         );
       })}
-      <div>
-        {/* 등록하기 버튼 */}
-        <button onClick={onFileUpload}>등록하기</button>
-      </div>
     </div>
   );
 }
