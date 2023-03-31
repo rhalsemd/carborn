@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import Nav from "../../components/Nav";
 import CommunityLeftContent from "./../../components/community/leftContent/CommunityLeftContent";
 import CommunityRightContent from "./../../components/community/rightContent/CommunityRightContent";
+import Nav2 from "./../../components/Nav2";
 
 const container = css`
   width: 70vw;
@@ -31,7 +31,7 @@ const rightContent = css`
 function Community() {
   return (
     <>
-      <Nav />
+      <Nav2 />
       <div css={container}>
         <div css={leftContent}>
           <CommunityLeftContent />

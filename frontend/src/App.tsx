@@ -123,7 +123,7 @@ const routes = [
   { path: "/user/car", element: <MyVehicleRegistration /> },
   { path: "/user/car/list", element: <VehiclePurchase /> },
   { path: "/user/car/:carId", element: <VehiclePurchaseDetail /> },
-  { path: "/user/car/sale", element: <SaleRegistration /> },
+  { path: "/user/car/sale/:carId", element: <SaleRegistration /> },
   { path: "/user/map", element: <NaverMap /> },
   { path: "/user/community", element: <Community /> },
 ];

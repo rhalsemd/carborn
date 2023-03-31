@@ -19,7 +19,6 @@ import { StyledButton } from "./MyCarInfoPagination";
 export interface InsuranceContentPaginationProps {
   itemsPerPage: number;
 }
-
 export interface InsuranceType {
   id: number;
   carMaker: string;

@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 import Thumnail from "../../components/MyVehicleRegistrationComponent/leftContents/Thumnail";
 import FormArea from "../../components/MyVehicleRegistrationComponent/rightContents/FormArea";
-import Nav from "../../components/Nav";
+import Nav2 from "./../../components/Nav2";
 
 const outer = css`
   width: 100%;
@@ -48,7 +48,7 @@ function MyVehicleRegistration() {
 
   return (
     <>
-      <Nav />
+      <Nav2 />
       <div css={outer}>
         <div css={content}>
           {/* 왼쪽 컨텐츠 */}
