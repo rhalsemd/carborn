@@ -4,6 +4,7 @@ package site.carborn.config.auth.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import site.carborn.config.auth.dto.TokenDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class TokenProvider {
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
@@ -37,7 +38,6 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-
     // 토큰 생성
     public TokenDTO generateTokenDto(Authentication authentication) {
 
@@ -47,10 +47,8 @@ public class TokenProvider {
 
         long now = (new Date()).getTime();
 
-
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-
-        System.out.println(tokenExpiresIn);
+        log.debug(tokenExpiresIn.toString());
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())

@@ -1,13 +1,17 @@
 //MUI 컴포넌트
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { Pagination } from "@mui/material";
+import { Table, TableCell, TableRow } from "@mui/material";
 
 import axios from "axios";
 import { CARBORN_SITE } from "./../../../lib/api";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from './../../../lib/api';
+import {
+  StyledTableContainer,
+  StyledTableHead,
+  StyleMainTableHead,
+} from "../DetailComponent/MyCarInfoDetail";
 
 export interface MyCarInfoPaginationProps {
   itemsPerPage: number;
@@ -15,15 +19,47 @@ export interface MyCarInfoPaginationProps {
 
 export interface Car {
   id: number;
-  model: string;
-  license_plate: string;
+  modelNm: string;
+  regNm: string;
   mileage: number;
-  year: string;
-  registration_date: string;
-  images: any
+  modelYear: number;
+  maker: string;
+  images: any;
 }
 
-const MyCarInfoPagination = ({itemsPerPage}:MyCarInfoPaginationProps) => {
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+`;
+
+export const StyledButton = styled.button`
+  background-color: #d23131;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+
+  &:hover {
+    background-color: #a51c1c;
+  }
+`;
+
+export const StyledPagination = styled((props: any) => <Pagination {...props} />)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & .MuiPaginationItem-root.Mui-selected {
+    background-color: #d23131;
+    color: white;
+  }
+`;
+
+const MyCarInfoPagination = ({ itemsPerPage }: MyCarInfoPaginationProps) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [myCarInfoData, setMyCarInfoData] = useState<Car[]>([]);
@@ -31,12 +67,11 @@ const MyCarInfoPagination = ({itemsPerPage}:MyCarInfoPaginationProps) => {
 
   const handleRequestMyCarInfoData = async (page: number, count: number) => {
     try {
-      // const response = await axios.get(`${CARBORN_SITE}/api/user/carinfo/list/${page}/${count}`);
-      const response = await axios.get(`${API_URL}/mycardata`);
-      // setTotalPageCnt(response.data.message.totalPages);
-      
-      // setMyCarInfoData(response.data.message.content);
-      setMyCarInfoData(response.data);
+      const response = await axios.get(
+        `${CARBORN_SITE}/api/user/car/list/${page}/${count}`
+      );
+      setTotalPageCnt(response.data.message.totalPages);
+      setMyCarInfoData(response.data.message.content);
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
@@ -51,80 +86,64 @@ const MyCarInfoPagination = ({itemsPerPage}:MyCarInfoPaginationProps) => {
     handleRequestMyCarInfoData(currentPage, itemsPerPage);
   }, [currentPage, itemsPerPage]);
 
-  if(myCarInfoData.length === 0) {
-    return <div>No data Found!</div>
+  if (myCarInfoData.length === 0) {
+    return <div>No data Found!</div>;
   }
 
-  const getCarInfoDetail = (resultId: number) => {
+  const getCarInfoDetail = (carId: number) => {
     if (Obj.userId) {
-      navigate(`/${Obj.userId}/mypage/mycarinfo/${resultId}/detail`, {
-        state: myCarInfoData[resultId % 5],
-      });
+      navigate(`/${Obj.userId}/mypage/mycarinfo/${carId}/detail`);
     }
-  } 
+  };
 
   return (
     <div>
-      {/* <ul>
-        {currentItems.map((item:any) => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul> */}
-      <table>
-        <thead>
-          <tr>
-            <th>차량모델</th>
-            <th>차량번호</th>
-            <th>{`주행거리(km)`}</th>
-            <th>{`연식(년)`}</th>
-            <th>차량등록일</th>
-            <th>상세조회</th>
-          </tr>
-        </thead>
-        <tbody>
-          {myCarInfoData.map((car:Car, index) => (
-            // 클릭하면 해당 리스트 아이디랑 이미지 넘겨주기
-            <tr key={index}>
-              <td>{car.model}</td>
-              <td>{car.license_plate}</td>
-              <td>{car.mileage}</td>
-              <td>{car.year}</td>
-              <td>{car.registration_date}</td>
-              <td>
-                <button onClick={() => getCarInfoDetail(car.id)}>조회</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handleRequestMyCarInfoData(currentPage - 1, itemsPerPage)}
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => {
-          if (i >= currentPage + 2 || i <= currentPage - 2) return null;
-          return (
-            <button
-              key={i}
-              disabled={currentPage === i + 1}
-              onClick={() => handleRequestMyCarInfoData(i + 1, itemsPerPage)}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => handleRequestMyCarInfoData(currentPage + 1, itemsPerPage)}
-        >
-          Next
-        </button>
-      </div>
+      <StyledTableContainer>
+        <Table>
+          <StyledTableHead>
+            <TableRow>
+              <TableCell>차량모델</TableCell>
+              <TableCell>제조사</TableCell>
+              <TableCell>차량번호</TableCell>
+              <TableCell>{`주행거리(km)`}</TableCell>
+              <TableCell>{`연식(년)`}</TableCell>
+              <TableCell>상세조회</TableCell>
+            </TableRow>
+          </StyledTableHead>
+          <StyleMainTableHead>
+            {myCarInfoData.map((car: Car, index) => (
+              // 클릭하면 해당 리스트 아이디랑 이미지 넘겨주기
+              <TableRow key={index}>
+                <TableCell>{car.modelNm}</TableCell>
+                <TableCell>{car.maker}</TableCell>
+                <TableCell>{car.regNm}</TableCell>
+                <TableCell>{car.mileage}</TableCell>
+                <TableCell>{car.modelYear}</TableCell>
+                <TableCell>
+                  <StyledButton onClick={() => getCarInfoDetail(car.id)}>
+                    조회
+                  </StyledButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </StyleMainTableHead>
+        </Table>
+      </StyledTableContainer>
+      <br />
+      <StyledPagination>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, value) =>
+            handleRequestMyCarInfoData(value, itemsPerPage)
+          }
+          color="primary"
+          size="large"
+          disabled={totalPages === 0}
+        />
+      </StyledPagination>
     </div>
-  )
-}
+  );
+};
 
 export default MyCarInfoPagination;

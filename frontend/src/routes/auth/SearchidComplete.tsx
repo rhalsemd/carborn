@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { SearchIDVerifyReset } from "../../modules/searchidModule";
 import { StyleLoginSignUpBtn } from "./SearchID";
+import Nav2 from "../../components/Nav2";
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -49,7 +50,7 @@ export const StyleLoginSignUpBtnDiv = styled.div`
 const SearchidComplete = () => {
   const { state } = useLocation();
   const dispatch = useDispatch();
-  console.log(state)
+  console.log(state.searchid.searchid)
 
   useEffect(() => {
     dispatch(SearchIDVerifyReset());
@@ -57,15 +58,14 @@ const SearchidComplete = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleSearchidCompleteContainer>
         <div>
           <img src={carbornLogo} alt="asdfasdf" />
         </div>
         <div>
           <span className="SearchidCompleteTitle">
-            {/* 귀하의 아이디는 {state} 입니다.  */}
-            귀하의 아이디는 ssafy123 입니다.
+            귀하의 아이디는 {state.searchid.searchid} 입니다.
           </span>
           <span className="SearchidCompleteGuide">
             로그인하시면 더욱 다양한 서비스와 혜택을 제공받으실 수 있습니다.

@@ -8,6 +8,7 @@ import PasswordResetID from "../../components/auth/passwordreset/PasswordResetID
 import { passwordResetCheck } from "../../modules/PasswordCheckModule";
 import Nav from "./../../components/Nav";
 import { StyleHeightDiv, StyleSearchIdDiv } from "./SearchID";
+import Nav2 from "../../components/Nav2";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -15,7 +16,6 @@ export const StyleLoginSignUpDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 
 export const StyleLoginSignUpBoxDiv = styled.div`
   width: 25%;
@@ -98,13 +98,16 @@ const PasswordResetCheck = () => {
 
   useEffect(() => {
     if (isverify) {
-      navigate("/passwordresetcheck/passwordreset");
+      navigate("/passwordresetcheck/passwordreset", { state: {
+        userid: inputObj.userid,
+        phonenumber: inputObj.phonenumber
+      }});
     }
   }, [navigate, isverify]);
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleHeightDiv></StyleHeightDiv>
       <StyleSearchIdDiv>
         <StyleLoginSignUpBoxDiv>

@@ -10,7 +10,11 @@ public interface CarSaleGetListMapping {
 
     String getCarMaker();
 
+    String getCarModelNm();
+
     String getCarModelYear();
+
+    String getCarRegNm();
 
     int getCarMileage();
 

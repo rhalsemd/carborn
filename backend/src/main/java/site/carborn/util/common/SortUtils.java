@@ -29,4 +29,20 @@ public class SortUtils {
      * 조회수 낮은 순
      */
     public static final int  SORT_STATUS_VIEWS_ASC = 5;
+    /**
+     * 모델로 검색
+     */
+    public static final int SEARCH_STATUS_MODEL = 0;
+    /**
+     * 차종으로 검색
+     */
+    public static final int SEARCH_STATUS_MODELNM = 1;
+    /**
+     * 연식으로 검색
+     */
+    public static final int SEARCH_STATUS_YEAR = 2;
+    /**
+     * 컨텐츠로 검색
+     */
+    public static final int SEARCH_STATUS_CONTENT = 3;
 }

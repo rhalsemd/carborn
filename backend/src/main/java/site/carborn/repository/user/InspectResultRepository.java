@@ -20,4 +20,6 @@ public interface InspectResultRepository extends JpaRepository<InspectResult, In
     InspectResultGetDetailMapping findAllById(int id);
 
     Page<UserInspectResultListMapping> findByInspectBook_StatusAndInspectBook_Account_Id(Boolean InspectBookStatus, String InspectBookAccountId, Pageable page);
+
+    Page<UserInspectResultListMapping> findByInspectBook_Car_Id(@Param("inspectBookCarId") int inspectBookCarId, Pageable page);
 }

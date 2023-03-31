@@ -1,29 +1,30 @@
 import axios from "axios";
 
 // export const API_URL = "https://carborn.site";
-// export const CARBORN_SITE = "https://carborn.site";
-export const CARBORN_SITE = "https://172.30.1.91";
+export const CARBORN_SITE = "https://carborn.site";
+// export const CARBORN_SITE = "https://192.168.100.80";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";
-export const Authorization = 'Authorization';
+export const Authorization = "Authorization";
 export const multipart_formData = "multipart/form-data";
 
 // 로그인
-export const LoginApi = async (payload: Object): Promise<any> => {
+export const LoginApi = async (payload: any): Promise<any> => {
   try {
     const response = await axios({
       method: "POST",
-      url: `http://localhost:3001/users`,
+      url: `${CARBORN_SITE}/api/login`,
       headers: {
         [ContentType]: applicationjson,
       },
-      data: payload,
+      data: {
+        id: payload.loginid,
+        pwd: payload.loginpassword,
+      },
     });
 
-    console.log(response)
-
-    return response.data;
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -36,12 +37,15 @@ export const LogoutApi = async (): Promise<any> => {
 
   try {
     const response = await axios({
-      method: "POST",
-      url: `${API_URL}/logout`,
+      method: "GET",
+      url: `${CARBORN_SITE}/api/logout`,
       headers: {
-        [Authorization]: `Bearer ${Obj.value}`
-      }
+        [Authorization]: `Bearer ${Obj.value}`,
+      },
     });
+
+    console.log(response);
+
     return response.data;
   } catch (error) {
     console.log(error);
@@ -49,33 +53,35 @@ export const LogoutApi = async (): Promise<any> => {
 };
 
 // 유저 회원가입 요청
-export const userSignUpSendApi = async (formData:FormData): Promise<any> => {
+export const userSignUpSendApi = async (formData: FormData): Promise<any> => {
   try {
     const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
       body: formData,
-    })
+    });
 
     return response.body;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 기업 회원가입 요청
-export const companySignUpSendApi = async (formData:FormData): Promise<any> => {
+export const companySignUpSendApi = async (
+  formData: FormData
+): Promise<any> => {
   try {
     const response = await fetch(`${CARBORN_SITE}/api/join`, {
       method: "POST",
       body: formData,
-    })
-    console.log(response)
+    });
+    console.log(response);
 
     return response.body;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 아이디 중복체크
 export const UserIdCheckApi = async (id: string): Promise<any> => {
@@ -86,7 +92,7 @@ export const UserIdCheckApi = async (id: string): Promise<any> => {
     });
 
     // true는 가입할수 있는 상태, false는 가입 못하는 상태
-    console.log(response.data.message)
+    console.log(response.data.message);
 
     return response.data.message;
   } catch (error) {
@@ -103,7 +109,7 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
     });
 
     // true는 가입할수 있는 상태, false는 가입 못하는 상태
-    console.log(response.data.message)
+    console.log(response.data.message);
 
     return response.data.message;
   } catch (error) {
@@ -113,7 +119,8 @@ export const CompanyIdCheckApi = async (id: string): Promise<any> => {
 
 type PayloadType = {
   userid: string;
-  isVerify: boolean;
+  phonenumber: string,
+  newpassword: string
 };
 
 // 비밀번호 바꾸기 전에 아이디랑 이름 일치하는지 확인
@@ -122,23 +129,20 @@ export const passwordCheckIdApi = async (
 ): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${API_URL}/users`,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/find-pw`,
       headers: {
         [ContentType]: applicationjson,
       },
-      data: payload,
+      data: {
+        id: payload.userid,
+        phoneNo: payload.phonenumber
+      }
     });
 
-    let Passwordverify = true;
+    console.log(response)
 
-    for (const user of response.data as any) {
-      if (user.loginid === payload.userid) {
-        payload.isVerify = Passwordverify;
-        break;
-      }
-    }
-    return payload;
+    return response
   } catch (error) {
     console.log(error);
   }
@@ -149,15 +153,21 @@ export const newPasswordApi = async (payload: PayloadType): Promise<any> => {
   console.log(payload);
   try {
     const response = await axios({
-      method: "POST",
-      url: `${API_URL}/newpassword`,
+      method: "PATCH",
+      url: `${CARBORN_SITE}/api/reset-pw`,
       headers: {
         [ContentType]: applicationjson,
       },
-      data: payload,
+      data: {
+        id: payload.userid,
+        phoneNo: payload.phonenumber,
+        pwd: payload.newpassword
+      }
     });
 
-    return response.data;
+    console.log(response)
+
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -178,7 +188,7 @@ export const PhoneNumberCheckApi = async (
       method: "POST",
       url: `${CARBORN_SITE}/api/sms-auth-send`,
       data: {
-        phoneNm: phonenumber
+        phoneNm: phonenumber,
       },
       headers: {
         [ContentType]: applicationjson,
@@ -197,18 +207,19 @@ export const PhoneNumberCheckApi = async (
 export const SearchIdCheckApi = async (payload: any): Promise<any> => {
   try {
     const response = await axios({
-      method: "GET",
-      url: `${API_URL}/users`,
+      method: "POST",
+      url: `${CARBORN_SITE}/api/find-id`,
       headers: {
         [ContentType]: applicationjson,
       },
       data: {
         name: payload.name,
-        phoneNm: payload.phonenumber
-      }
+        phoneNo: payload.phonenumber,
+      },
     });
-    console.log(response.data)
-    
+
+    console.log(response.data.message);
+
     return response;
   } catch (error) {
     console.log(error);
@@ -219,31 +230,34 @@ export const SearchIdCheckApi = async (payload: any): Promise<any> => {
 export const smsAuthApi = async (payload: any): Promise<any> => {
   try {
     // 전화번호, 인증번호 넘겨주기
-    const response:any = await axios({
-      method: 'POST',
+    const response: any = await axios({
+      method: "POST",
       // 수정해야함
-      url: `${CARBORN_SITE}/api/sms-auth-join`,
+      url: `${CARBORN_SITE}/api/sms-auth`,
       data: {
-        phoneNm : payload.phoneNumber,
-        authNm : payload.inputValue
+        phoneNm: payload.phoneNumber,
+        authNm: payload.inputValue,
       },
       headers: {
         [ContentType]: applicationjson,
-      }
-    })
-    return response.data.message
+      },
+    });
+    return response.data.message;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 약관 동의 불러오기
 export const GetAgreementApi = async (): Promise<any> => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${API_URL}/agreement`,
+      url: `${CARBORN_SITE}/`,
     });
+
+    console.log(response)
+
     return response.data;
   } catch (error) {
     console.log(error);
@@ -251,17 +265,17 @@ export const GetAgreementApi = async (): Promise<any> => {
 };
 
 // 검수 리뷰 작성
-export const createInspectorReviewApi = async (data:any): Promise<any> => {
-  const ObjString:any = localStorage.getItem('login-token')
+export const createInspectorReviewApi = async (data: any): Promise<any> => {
+  const ObjString: any = localStorage.getItem("login-token");
   const Obj = JSON.parse(ObjString);
-  let userid = Obj.userId
+  let userid = Obj.userId;
 
   let reviewObj = {
-    reviewInput:data.reviewInput,
-    userId:userid,
-    carId:parseInt(data.carId),
-    rating:data.rating
-  }
+    reviewInput: data.reviewInput,
+    userId: userid,
+    carId: parseInt(data.carId),
+    rating: data.rating,
+  };
 
   try {
     const response = await axios({
@@ -272,22 +286,22 @@ export const createInspectorReviewApi = async (data:any): Promise<any> => {
 
     return response.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 정비 리뷰 작성
-export const createRepairReviewApi = async (data:any): Promise<any> => {
-  const ObjString:any = localStorage.getItem('login-token')
+export const createRepairReviewApi = async (data: any): Promise<any> => {
+  const ObjString: any = localStorage.getItem("login-token");
   const Obj = JSON.parse(ObjString);
-  let userid = Obj.userId
+  let userid = Obj.userId;
 
   let reviewObj = {
-    reviewInput:data.reviewInput,
-    userId:userid,
-    carId:parseInt(data.carId),
-    rating:data.rating
-  }
+    reviewInput: data.reviewInput,
+    userId: userid,
+    carId: parseInt(data.carId),
+    rating: data.rating,
+  };
 
   try {
     const response = await axios({
@@ -298,12 +312,12 @@ export const createRepairReviewApi = async (data:any): Promise<any> => {
 
     return response.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 사용자 회원 탈퇴
-export const userinfoDeleteApi = async (userId:string) => {
+export const userinfoDeleteApi = async (userId: string) => {
   try {
     const response = await axios({
       method: "DELETE",
@@ -318,7 +332,7 @@ export const userinfoDeleteApi = async (userId:string) => {
 };
 
 // 기업 회원 탈퇴
-export const companyinfoDeleteApi = async (userId:string) => {
+export const companyinfoDeleteApi = async (userId: string) => {
   try {
     const response = await axios({
       method: "DELETE",
@@ -333,75 +347,78 @@ export const companyinfoDeleteApi = async (userId:string) => {
 };
 
 // DB 리뷰 체킹
-export const getReviewedCheckingApi = async (payload:any) => {
+export const getReviewedCheckingApi = async (payload: any) => {
   try {
     const response = await axios({
-      method: 'GET',
-      url: `${API_URL}/reviewrite`
-    })
+      method: "GET",
+      url: `${API_URL}/reviewrite`,
+    });
 
     // 여기서 비교하고 들어가자
-    for (let review of response.data){
-      if (payload.userId === review.userid && payload.carId === parseInt(review.data.carId)) {
-        payload.isReview = false
-        break
+    for (let review of response.data) {
+      if (
+        payload.userId === review.userid &&
+        payload.carId === parseInt(review.data.carId)
+      ) {
+        payload.isReview = false;
+        break;
       }
     }
 
-    return payload
+    return payload;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 마이페이지에서 유저 비밀번호 바꾸기
-export const userModifyPasswordApi = async (payload:any) => {
-  const {oldPassword, newPassword} = payload
-  const ObjString = localStorage.getItem('login-token');
-  const Obj = ObjString ? JSON.parse(ObjString) : null
+export const userModifyPasswordApi = async (payload: any) => {
+  const { oldPassword, newPassword } = payload;
+  const ObjString = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
 
   try {
     const response = await axios({
-      method: 'POST',
+      method: "POST",
       url: `${API_URL}/mypage/${Obj.userId}`,
       data: {
         oldPassword,
-        newPassword
+        newPassword,
       },
       headers: {
         [ContentType]: applicationjson,
-        [Authorization] : `Bearer ${Obj.value}`
-      }
-    })
+        [Authorization]: `Bearer ${Obj.value}`,
+      },
+    });
 
-    return response.data
+    return response.data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 // 마이페이지에서 기업 비밀번호 바꾸기
-export const companyModifyPasswordApi = async (payload:any) => {
-  const {oldPassword, newPassword} = payload
-  const ObjString = localStorage.getItem('login-token');
-  const Obj = ObjString ? JSON.parse(ObjString) : null
+export const companyModifyPasswordApi = async (payload: any) => {
+  const { oldPassword, newPassword } = payload;
+  const ObjString = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
 
   try {
     const response = await axios({
-      method: 'POST',
+      method: "POST",
       url: `${API_URL}/mypage/${Obj.userId}`,
       data: {
         oldPassword,
-        newPassword
+        newPassword,
       },
       headers: {
         [ContentType]: applicationjson,
-        [Authorization] : `Bearer ${Obj.value}`
-      }
-    })
+        [Authorization]: `Bearer ${Obj.value}`,
+      },
+    });
 
-    return response.data
+    return response.data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};

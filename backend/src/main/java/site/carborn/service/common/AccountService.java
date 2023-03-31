@@ -74,6 +74,7 @@ public class AccountService {
         // 변경된 비밀번호 정보 저장
         accountRepository.save(save);
 
+        log.debug(String.format("사용자 [%s]의 비밀번호가 변경되었습니다", id));
         return true;
     }
 }

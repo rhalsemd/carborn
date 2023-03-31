@@ -1,6 +1,6 @@
 import Nav from "../Nav";
 import styled from "@emotion/styled";
-import MyCompanyInfoDeleteComponent from './ModalComponent/MyCompanyInfoDeleteComponent';
+import MyCompanyInfoDeleteComponent from "./ModalComponent/MyCompanyInfoDeleteComponent";
 
 const StyleCompanyWithdrawal = styled.div`
   width: 100vw;

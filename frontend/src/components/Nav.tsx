@@ -5,11 +5,11 @@ import { Link, Navigate, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../modules/takeLoginLogoutModule";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const StyleMainNav = styled.div`
   width: 100%;
-  height: 35vh;
+  height: 40vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -49,7 +49,7 @@ const StyleNavUl = styled.ul`
   background-color: pink;
 `;
 
-const StyleNavLi = styled.li`
+export const StyleNavLi = styled.li`
   list-style-type: none;
   width: 5rem;
   height: 7vh;
@@ -65,14 +65,14 @@ const StyleNavTitle = styled.h1`
   /* margin-left: 2.5rem; */
 `;
 
-const StyleLinkText = css`
+export const StyleLinkText = css`
   text-decoration: none;
   font-size: 1.25rem;
   font-weight: bold;
   color: black;
 `;
 
-function Nav({setIsToken, isToken}:any) {
+function Nav({ setIsToken, isToken }: any) {
   const navigate = useNavigate();
   // Nav 타이틀, 로그인 확인 여부
   const [title, setTitle] = useState<string>("Home");
@@ -84,24 +84,22 @@ function Nav({setIsToken, isToken}:any) {
   useEffect(() => {
     const ObjString = localStorage.getItem("login-token");
     let Obj = null;
-    if(ObjString){
+    if (ObjString) {
       Obj = JSON.parse(ObjString);
       if (Date.now() > Obj.expire) {
         localStorage.removeItem("login-token");
-        alert("로그아웃 되었습니다. 다시 로그인 해주세요.")
-        navigate('/login')
+        alert("로그아웃 되었습니다. 다시 로그인 해주세요.");
+        navigate("/login");
       }
     }
-  })
+  });
 
-  const ObjString:any = localStorage.getItem("login-token");
+  const ObjString: any = localStorage.getItem("login-token");
   const Obj = JSON.parse(ObjString);
-  let userid = Obj?.userId || '';
+  let userid = Obj?.userId || "";
 
-  // const userid = localStorage.getItem("userid");
-  // 리듀서
-  const { success } = useSelector((state:any) => state.LoginOutReducer)
-  
+  const { success } = useSelector((state: any) => state.LoginOutReducer);
+
   useEffect(() => {
     if (location.pathname === "/") {
       setTitle("Home");
@@ -115,15 +113,14 @@ function Nav({setIsToken, isToken}:any) {
       setTitle(`내 차량 정보`);
     }
   }, [location.pathname, setTitle, userid]);
-  
+
   // 로그아웃
   const handleLogout = () => {
     dispatch(logoutAction());
   };
 
-  let localToken = Obj?.value || '';
-  useEffect(() => {},[])
-
+  let localToken = Obj?.value || "";
+  
   return (
     <StyleMainNav>
       <StyleMainLogo>
@@ -142,7 +139,7 @@ function Nav({setIsToken, isToken}:any) {
                 <StyleNavLi>Login</StyleNavLi>
               </Link>
             )}
-            {success || localToken? (
+            {success || localToken ? (
               <Link to={`/${userid}/mypage`} css={StyleLinkText}>
                 <StyleNavLi>Mypage</StyleNavLi>
               </Link>

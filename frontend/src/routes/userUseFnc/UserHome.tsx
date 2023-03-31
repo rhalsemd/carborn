@@ -6,17 +6,19 @@ import HomeMainMenu from "../../components/UserHome/HomeMainMenu";
 import HomeCarForSales from "../../components/UserHome/HomeCarForSales";
 import HomeWhyCooseUs from "../../components/UserHome/HomeWhyChooseUs";
 import HomeCarsInfo from "../../components/UserHome/HomeCarsInfo";
-import Nav from "../../components/Nav";
+import Nav2 from "../../components/Nav2";
 
 const container = css`
   position: absolute;
-  top: 13.5vh;
+  top: 15.5vh;
+  z-index: 3;
+  width: 100%;
 `;
 
 export default function UserHome() {
   return (
     <>
-      <Nav />
+      <Nav2 />
       <div css={container}>
         <HomeCarModel />
         <HomeIconMenu />

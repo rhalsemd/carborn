@@ -1,19 +1,22 @@
 import { useState, useEffect, ButtonHTMLAttributes } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NewPassword from "../../components/auth/newpassword/NewPassword";
 import NewPasswordCheck from "../../components/auth/newpassword/NewPasswordCheck";
 import Nav from "../../components/Nav";
 import { StyleLoginSignUpBoxDiv } from "./LoginPage";
-import { StyleLoginSignUpDiv, StylePasswordResetCheckTitle } from "./PasswordResetCheck";
+import { StyleLoginSignUpDiv } from "./PasswordResetCheck";
 import { passwordResetCheckReset } from "../../modules/PasswordCheckModule";
 import {
   newPasswordAction,
 } from "../../modules/newPasswordModule";
 import styled from "@emotion/styled";
+import Nav2 from "../../components/Nav2";
 
 // 타입 설정
 export type SearchInputPasswordCheckObj = {
+  userid:string,
+  phonenumber:string,
   newpassword: string;
   newpasswordcheck: boolean | null;
 };
@@ -63,11 +66,20 @@ export const StyleNewPasswordResetBtn = styled.button<StyleNewPasswordResetBtnPr
 
 const NewPasswordReset = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state;
+
+  console.log(state.userid)
+  console.log(state.phonenumber)
+
   const dispatch = useDispatch();
+
   const isNewPass = useSelector(
     (state: any) => state.newPasswordReducer.newpasswordcheck
   );
   const [inputObj, setInputObj] = useState<SearchInputPasswordCheckObj>({
+    userid:"",
+    phonenumber:"",
     newpassword: "",
     newpasswordcheck: false,
   });
@@ -75,8 +87,15 @@ const NewPasswordReset = () => {
   const [isNewPassword, setIsNewPassword] = useState<boolean>(false);
   const [newpassword, setNewpassword] = useState("");
 
-  console.log(inputObj);
   console.log(isNewPass);
+
+  useEffect(() => {
+    setInputObj({
+      ...inputObj,
+      userid: state.userid,
+      phonenumber: state.phonenumber
+    })
+  }, [])
 
   const handlePasswordReset = () => {
     dispatch(newPasswordAction(inputObj));
@@ -91,7 +110,7 @@ const NewPasswordReset = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StylePasswordResetTitle>

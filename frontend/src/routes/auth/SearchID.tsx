@@ -6,20 +6,22 @@ import SearchIDPhoneNumberVerify from "../../components/auth/searchID/SearchIDPh
 import Nav from "./../../components/Nav";
 import { useNavigate } from "react-router-dom";
 import { SearchIDCheckAction } from "../../modules/searchidModule";
+import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
+import Nav2 from "../../components/Nav2";
 
 export const StyleHeightDiv = styled.div`
   height: 6rem;
-`
+`;
 
 export const StyleHeight2Div = styled.div`
   height: 3rem;
-`
+`;
 
 export const StyleSearchIdDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 export const StyleLoginSignUpBoxDiv = styled.div`
   width: 35%;
@@ -79,30 +81,51 @@ export type SearchInputType = {
 const SearchID = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isSearchIdPass = useSelector((state:any) => state.SignUpReducerisSignPossible)
+  // const isSearchIdPass = useSelector(
+  //   (state: any) => state.SignUpReducerisSignPossible
+  // );
   const isComplete = useSelector(
     (state: any) => state.searchIDCheckReducer.verify
   );
-  // const SearchIDdata = useSelector((state: any) => state.SearchIDCheckReducer);
+  const searchid = useSelector((state: any) => state.searchIDCheckReducer);
+  
   const [searchInput, setSearchInput] = useState<SearchInputType>({
     name: "",
     phonenumber: "",
     isVerify: false,
   });
 
+  // 메세지
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<String>("");
+
   const handleSearchID = () => {
+    if (searchInput.isVerify === false) {
+      setIsAlert(true);
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 2000);
+      setMessage(
+        "이름과 전화번호를 모두 입력해주시고, 인증을 완료하고 눌러주세요."
+      );
+    }
     dispatch(SearchIDCheckAction(searchInput));
   };
 
   useEffect(() => {
     if (isComplete) {
-      navigate("/searchid/searchidcomplete", { state: searchInput });
+      navigate("/searchid/searchidcomplete", { state: {
+        searchid,
+        searchInput
+      }});
     }
   }, [isComplete]);
 
+  useEffect(() => {});
+
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleHeightDiv></StyleHeightDiv>
       <StyleSearchIdDiv>
         <StyleLoginSignUpBoxDiv>
@@ -119,17 +142,18 @@ const SearchID = () => {
           />
           <StyleLoginSignUpBtn
             onClick={handleSearchID}
-            disabled={
-              !Boolean(searchInput.name) &&
-              !Boolean(searchInput.phonenumber) &&
-              !isSearchIdPass
-            }
+            disabled={!searchInput.isVerify}
           >
             아이디 찾기
           </StyleLoginSignUpBtn>
-        <StyleHeightDiv></StyleHeightDiv>
-        <StyleHeightDiv></StyleHeightDiv>
+          <StyleHeightDiv></StyleHeightDiv>
+          <StyleHeightDiv></StyleHeightDiv>
         </StyleLoginSignUpBoxDiv>
+        {isAlert ? (
+          <div>
+            <CustomAlert message={message} />
+          </div>
+        ) : null}
       </StyleSearchIdDiv>
     </div>
   );
