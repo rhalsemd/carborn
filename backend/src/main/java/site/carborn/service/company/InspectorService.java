@@ -121,6 +121,7 @@ public class InspectorService {
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
         inspectResult.setContractHash(alias);
+        inspectResult.setMetadataUri(metaDataUri);
 
         inspectResultRepository.save(inspectResult);
     }

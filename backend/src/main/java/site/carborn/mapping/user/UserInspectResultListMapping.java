@@ -16,5 +16,7 @@ public interface UserInspectResultListMapping {
 
     LocalDateTime getInspectDt();
 
+    String getMetadataUri();
+
     LocalDateTime getRegDt();
 }

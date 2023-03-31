@@ -17,6 +17,9 @@ public interface UserInsuranceListMapping {
     //보험수리관련
     String getCategory();
     LocalDateTime getInsuranceDt();
+
+    String getMetadataUri();
+
     LocalDateTime getRegDt();
 
 }
