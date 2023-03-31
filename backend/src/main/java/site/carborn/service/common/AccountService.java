@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import site.carborn.dto.request.ResetPwdRequestDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.common.SmsAuth;
 import site.carborn.repository.account.AccountRepository;
@@ -70,6 +71,41 @@ public class AccountService {
 
         // 비밀번호 암호화
         save.setPwd(passwordEncoder.encode(pwd));
+
+        // 변경된 비밀번호 정보 저장
+        accountRepository.save(save);
+
+        log.debug(String.format("사용자 [%s]의 비밀번호가 변경되었습니다", id));
+        return true;
+    }
+
+    public boolean resetPwWithLogin(ResetPwdRequestDTO dto) {
+        String id = dto.getId();
+        String pwd = dto.getPwd();
+        String newPwd = dto.getNewPwd();
+
+        if (id == null || id.isBlank()) {
+            throw new NullPointerException("비밀번호를 변경하려는 계정 정보가 존재하지 않습니다");
+        }
+
+        Account save = accountRepository.findById(id);
+        if (save == null) {
+            throw new NullPointerException("입력한 정보에 해당하는 사용자가 존재하지 않습니다");
+        }
+
+        if (pwd == null || pwd.isBlank() || newPwd == null || newPwd.isBlank()) {
+            throw new NullPointerException("비밀번호를 입력해주세요");
+        }
+
+        AccountUtils.checkAccountPwdFormat(pwd);
+        AccountUtils.checkAccountPwdFormat(newPwd);
+
+        if (passwordEncoder.matches(pwd, save.getPwd()) == false) {
+            throw new RuntimeException("기존 비밀번호가 일치하지 않습니다");
+        }
+
+        // 비밀번호 암호화
+        save.setPwd(passwordEncoder.encode(newPwd));
 
         // 변경된 비밀번호 정보 저장
         accountRepository.save(save);
