@@ -52,7 +52,15 @@ const container = css`
     background-color: #f6f6f6;
     opacity: 0.9;
     border-radius: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    &:hover {
+      width: 20vw;
+      height: 55vh;
+      transition: all 0.1s;
+    }
   }
+
   .btnSection {
     display: flex;
     flex-direction: row;

@@ -12,5 +12,7 @@ public interface CarInsuranceHistoryGetListMapping {
 
     LocalDateTime getInsuranceDt();
 
+    String getMetadataUri();
+
     LocalDateTime getRegDt();
 }

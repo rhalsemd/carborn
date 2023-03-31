@@ -118,6 +118,7 @@ public class RepairShopService {
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
         repairResult.setContractHash(alias);
+        repairResult.setMetadataUri(metaDataUri);
 
         repairResultRepository.save(repairResult);
     }

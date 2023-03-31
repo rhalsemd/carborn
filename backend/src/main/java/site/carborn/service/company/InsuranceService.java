@@ -77,6 +77,7 @@ public class InsuranceService {
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
         carInsuranceHistory.setContractHash(alias);
+        carInsuranceHistory.setMetadataUri(metaDataUri);
 
         carInsuranceHistoryRepository.save(carInsuranceHistory);
     }

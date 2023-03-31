@@ -12,5 +12,7 @@ public interface RepairResultGetListMapping {
 
     LocalDateTime getRepairDt();
 
+    String getMetadataUri();
+
     LocalDateTime getRegDt();
 }

@@ -22,6 +22,8 @@ public interface UserInsuranceListMapping {
 
     LocalDateTime getInsuranceDt();
 
+    String getMetadataUri();
+    
     LocalDateTime getRegDt();
 
 }
