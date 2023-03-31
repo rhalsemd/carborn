@@ -1,22 +1,12 @@
-import { SaleInfoContentsType, SaleInfoType } from "./SaleInfoArea";
+import { DataType } from "./SaleInfoArea";
 
-function SaleDistanceDriven({
-  setSaleInfo,
-}: Pick<SaleInfoContentsType, "setSaleInfo">) {
-  // 입력하면 발생
-  const getTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-
-    setSaleInfo((saleInfo: SaleInfoType) => {
-      return { ...saleInfo, distance: inputValue };
-    });
-  };
-
+function SaleDistanceDriven({ data }: DataType) {
+  const mileage = data.mileage.toLocaleString("ko-KR");
   return (
     <div>
       <span>주행거리</span>
       <div>
-        <input type="number" min="0" onBlur={getTyping} />
+        <input disabled={true} value={`${mileage}`} />
       </div>
     </div>
   );

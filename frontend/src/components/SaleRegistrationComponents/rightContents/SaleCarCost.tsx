@@ -7,7 +7,7 @@ function SaleCarCost({
     const inputValue = e.target.value;
 
     setSaleInfo((saleInfo: SaleInfoType) => {
-      return { ...saleInfo, cost: inputValue };
+      return { ...saleInfo, price: inputValue };
     });
   };
   return (
