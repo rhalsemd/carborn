@@ -63,6 +63,7 @@ let intersectionOptions = {
 
 const SIZE: number = 5;
 const CAR_URL = process.env.REACT_APP_IMG_URL;
+let cnt = 0;
 
 function CarList({ searchInfo }: { searchInfo: SearchType }) {
   const divRef = useRef<HTMLDivElement | any>({});
@@ -81,7 +82,10 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
       {
         retry: false,
         keepPreviousData: true,
+        useErrorBoundary: true,
         getNextPageParam: (lastPage, allPages) => {
+          console.log(lastPage.data.message.totalPages, "토탈");
+          console.log(allPages.length, "페이지");
           if (lastPage.data.message.totalPages > allPages.length) {
             return allPages.length + 1;
           }
@@ -113,6 +117,7 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
         data.pages[data.pages.length - 1].data.message.content.length -
         1;
       intersection.observe(divRef?.current[lastPage]);
+      console.log(data);
     }
   }, [data]);
 
@@ -153,16 +158,16 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
   return (
     <div css={rightContent}>
       {data?.pages.map((item) => {
-        let cnt = 0;
-
         return item?.data?.message.content.map((car: any, index: number) => {
           return (
             <div
               css={infoBox}
               key={index}
               ref={(ref) => {
-                divRef.current[cnt] = ref;
-                cnt++;
+                if (ref) {
+                  divRef.current[cnt] = ref;
+                  cnt++;
+                }
               }}
             >
               <button className="btn" onClick={() => goToDetil(car.carId)}>
