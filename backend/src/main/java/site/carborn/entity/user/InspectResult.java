@@ -42,6 +42,9 @@ public class InspectResult {
     @Column(length = 200)
     private String contractHash;
 
+    @Column(length = 200)
+    private String metadataUri;
+
     private LocalDateTime regDt;
 
     public static InspectResult copy(InspectResult inspectResult) {
