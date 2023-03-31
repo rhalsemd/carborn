@@ -1,15 +1,15 @@
-import Nav from "../Nav";
 import styled from '@emotion/styled';
 import MyInspectorContentComponent from "./TableComponent/MyInspectorContentComponent";
+import Nav2 from './../Nav2';
 
 const StyleInspectorContent = styled.div`
   width: 100vw;
+  margin-bottom: 20vh;
 `;
 
 const StyleInspectorContentContainer = styled.div`
   width: 100vw;
   height: 80vh;
-  border: 1px solid black;
 
   display: flex;
   flex-direction: column;
@@ -37,11 +37,12 @@ const StyleInspectorContentTitleDiv = styled.div`
 const InspectorContent = () => {
   return (
     <StyleInspectorContent>
-      <Nav />
+      <Nav2 />
       <StyleInspectorContentContainer>
         <StyleInspectorContentTitleDiv>
           <p>검수 내역</p>
         </StyleInspectorContentTitleDiv>
+        <br/>
         <MyInspectorContentComponent />
       </StyleInspectorContentContainer>
     </StyleInspectorContent>

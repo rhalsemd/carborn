@@ -23,7 +23,7 @@ import axios from "axios";
 import { CARBORN_SITE } from "../../../lib/api";
 
 export const StyledTableContainer = styled(TableContainer)`
-  width: 60rem;
+  width: 70rem;
 `
 
 export const StyledTableHead = styled(TableHead)`

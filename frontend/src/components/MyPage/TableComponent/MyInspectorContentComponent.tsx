@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import InspectorContentPagination from './../Pagination/InspectorContentPagination';
+import styled from "@emotion/styled";
+import InspectorContentPagination from "./../Pagination/InspectorContentPagination";
 
 const ITEMS_PER_PAGES = 5;
 
@@ -9,13 +9,13 @@ const StyleMyInspectorContentTableDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 const MyInspectorContentComponent = () => {
   return (
     <StyleMyInspectorContentTableDiv>
       <InspectorContentPagination itemsPerPage={ITEMS_PER_PAGES} />
     </StyleMyInspectorContentTableDiv>
-  )
-}
+  );
+};
 
 export default MyInspectorContentComponent;
