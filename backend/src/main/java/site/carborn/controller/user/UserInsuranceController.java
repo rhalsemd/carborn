@@ -41,7 +41,7 @@ public class UserInsuranceController {
 
     @GetMapping("/{insuranceId}")
     @Operation(description = "사용자의 보험내역 단일 조회")
-    @Parameter(name = "inspectId", description = "보험내역 id")
+    @Parameter(name = "insuranceId", description = "보험내역 id")
     public ResponseEntity<?> getInspectBook(@PathVariable("insuranceId") int insuranceId) {
         CarInsuranceHistoryGetDetailMapping insuranceDetail = userInsuranceService.insuranceDetail(insuranceId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, insuranceDetail);

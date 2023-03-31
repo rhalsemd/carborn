@@ -32,7 +32,7 @@ public class UserInsuranceService {
     public CarInsuranceHistoryGetDetailMapping insuranceDetail(int insuranceId) {
         CarInsuranceHistoryGetDetailMapping detail = carInsuranceHistoryRepository.findAllById(insuranceId);
         if (detail == null) {
-            throw new RuntimeException("존재하지 않는 데이터입니다.");
+            throw new RuntimeException("존재하지 않는 데이터입니다");
         }
         return detail;
     }
