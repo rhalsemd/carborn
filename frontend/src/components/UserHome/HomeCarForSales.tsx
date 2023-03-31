@@ -5,11 +5,12 @@ import { useQuery } from "react-query";
 import { useAPI } from "./../../hooks/useAPI";
 import carForSaleImg from "../../assets/carForSaleImg.jpg";
 
-interface 임시type {
-  url: string;
-  year: number;
-  car: string;
-  price: number;
+interface Maptype {
+  IMG_NM: string;
+  MODEL_NM: string;
+  MODEL_YEAR: string;
+  MAKER: string;
+  PRICE: string;
 }
 
 const container = css`
@@ -76,7 +77,7 @@ const imgBox = css`
     }
 
     .leftBtn {
-      transform: translateX(-10px);
+      transform: translateX(0);
       transition: all 0.3s;
     }
     .rightBtn {
@@ -129,7 +130,8 @@ const imgBox = css`
       color: white;
       font-size: 20px;
       hr {
-        background-color: white;
+        background-color: #d23131;
+        border: none;
         border: none;
         height: 1px;
       }
@@ -152,59 +154,19 @@ const imgBox = css`
   }
 `;
 
-const 임시data: 임시type[] = [
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-  {
-    url: "url",
-    year: 2013,
-    car: "아우디 A8",
-    price: 1000000,
-  },
-];
-
 export default function HomeCarForSales() {
-  const URL = "http://carborn.site/api/repair-shop/result/${id}";
-  const getCarForSale = useAPI("get", "");
-  const { data } = useQuery("getCarForSale");
-  const len = 임시data.length;
+  const URL = `http://carborn.site/api/user/car-regist/list`;
+  const getCarForSale = useAPI("get", URL);
   const imgWidth = window.innerWidth * 0.15125;
   const [x, setX] = useState<number>(0);
 
+  const { data } = useQuery("getCarForSale", () => getCarForSale, {
+    select: (data) => {
+      return data.data.message;
+    },
+  });
+
+  const len = data?.length;
   const cars = css`
     transition: all ease 80ms 0s;
     display: flex;
@@ -242,15 +204,22 @@ export default function HomeCarForSales() {
           <p>&#10094;</p>
         </div>
         <div css={cars} ref={carsRef}>
-          {임시data.map((data: 임시type, idx: number): any => (
+          {data?.map((data: Maptype, idx: number): any => (
             <div className="img" key={idx}>
-              <div className="imgUrl">{data.url}</div>
+              <div className="imgUrl">
+                <img
+                  src={`${data.IMG_NM}`}
+                  height="100%"
+                  width="100%"
+                  alt="img"
+                />
+              </div>
               <div className="year">
-                {`${data.year} ${data.car}`}
+                {`${data.MODEL_YEAR} ${data.MAKER} ${data.MODEL_NM}`}
                 <hr />
                 <hr />
               </div>
-              <div className="car">{data.price}</div>
+              <div className="car">{data.PRICE}</div>
             </div>
           ))}
         </div>

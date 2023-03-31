@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 const container = css`
   width: 100%;
@@ -48,6 +49,10 @@ const container = css`
 `;
 
 export default function NavGarage() {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/garage");
+  };
   return (
     <div css={container}>
       <div className="loginInfo">
@@ -56,7 +61,9 @@ export default function NavGarage() {
       </div>
       <div className="menu">
         <div className="logo"></div>
-        <div className="logo2">Car Bon</div>
+        <div className="logo2" onClick={handleClick}>
+          Car Bon
+        </div>
       </div>
     </div>
   );
