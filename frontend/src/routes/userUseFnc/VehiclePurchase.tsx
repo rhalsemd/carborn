@@ -6,7 +6,7 @@ import MenuBar from "../../components/VehiclePurchase/leftContents/MenuBar";
 import SearchSort from "../../components/VehiclePurchase/SearchSort";
 import { SearchType } from "../../components/VehiclePurchase/VehiclePurchaseType";
 import { useState } from "react";
-import Nav from "../../components/Nav";
+import Nav2 from "./../../components/Nav2";
 
 const outer = css`
   width: 100%;
@@ -36,7 +36,7 @@ function VehiclePurchase() {
 
   return (
     <>
-      <Nav />
+      <Nav2 />
 
       <div css={outer}>
         <div css={filter}>
