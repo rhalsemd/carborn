@@ -7,6 +7,7 @@ import MarkerDetailInfo from "./MarkerDetailInfo";
 import MarkerDetailReview from "./MarkerDetailReview";
 import { useAPI } from "./../../hooks/useAPI";
 import { useQueries } from "react-query";
+import axios from "axios";
 
 const roadView = css`
   width: 100%;
@@ -60,9 +61,6 @@ interface Props {
   markerArr: any;
 }
 
-const clientID = process.env.REACT_APP_NAVER_CLIENT_ID;
-const clientSecret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
-
 function MarkerDetail({
   setReserve,
   setMarkerNum,
@@ -94,6 +92,22 @@ function MarkerDetail({
       refetchOnMount: true,
     },
   ]);
+
+  naver.maps.Service.geocode(
+    {
+      // address: `${markerArr[markerNum].ADDRESS}`,
+      address: `경기도 성남시 분당구 불정로 6 그린팩토리`,
+    },
+    function (status: any, response: any) {
+      var result = response.result, // 검색 결과의 컨테이너
+        items = result.items; // 검색 결과의 배열
+
+      // do Something
+      console.log(result);
+    }
+  );
+
+  console.log(naver.maps.Service.Addition1);
 
   // 파노라마 옵션
   var panoramaOptions = {
