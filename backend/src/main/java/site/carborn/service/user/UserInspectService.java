@@ -39,27 +39,28 @@ public class UserInspectService {
     @Autowired
     private CarRepository carRepository;
 
-    public Page<UserInspectBookListMapping> inspectBookList(String accountId, int page, int size){
+    public Page<UserInspectBookListMapping> inspectBookList(String accountId, int page, int size) {
         Page<UserInspectBookListMapping> inspectBookList = inspectBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"id", BoardUtils.ORDER_BY_DESC
+                        ,"id"
+                        ,BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(inspectBookList.isEmpty()){
+        if (inspectBookList.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return inspectBookList;
     }
 
 
-    public UserInspectBookDetailMapping inspectBookDetail(Integer id){
-        UserInspectBookDetailMapping inspectBook = inspectBookRepository.findAllByIdAndStatus(id,BoardUtils.BOARD_DELETE_STATUS_FALSE);
+    public UserInspectBookDetailMapping inspectBookDetail(int id) {
+        UserInspectBookDetailMapping inspectBook = inspectBookRepository.findAllByIdAndStatus(id, BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
-        if (inspectBook == null){
+        if (inspectBook == null) {
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
 
@@ -67,20 +68,20 @@ public class UserInspectService {
     }
 
 
-    public int createInspectBook(InspectBook inspectBook){
+    public int createInspectBook(InspectBook inspectBook) {
 
         if (inspectBook.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
         Account account = accountRepository.findById(inspectBook.getAccount().getId());
-        if (account == null){
+        if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
-        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(()->
+        Inspector inspector = inspectorRepository.findById(inspectBook.getInspector().getId()).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 검수원입니다"));
 
-        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(()->
+        Car car = carRepository.findById(inspectBook.getCar().getId()).orElseThrow(() ->
                 new RuntimeException("등록되지 않은 차입니다"));
 
         inspectBook.setRegDt(LocalDateTime.now());
@@ -92,7 +93,7 @@ public class UserInspectService {
         return save.getId();
     }
 
-    public void deleteInspectBook(Integer id){
+    public void deleteInspectBook(int id) {
         InspectBook delete = inspectBookRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
@@ -100,7 +101,7 @@ public class UserInspectService {
         if (delete.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
             throw new RuntimeException("삭제된 데이터입니다");
         }
-        if (delete.getBookStatus() != BookUtils.BOOK_STATUS_WAIT){
+        if (delete.getBookStatus() != BookUtils.BOOK_STATUS_WAIT) {
             throw new RuntimeException("거래가 진행중이거나 완료된 상태입니다");
         }
 
@@ -116,16 +117,16 @@ public class UserInspectService {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
-        if (accountRepository.findById(inspectBook.getAccount().getId())==null){
+        if (accountRepository.findById(inspectBook.getAccount().getId()) == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (inspectBook.getId() != inspectBookId){
+        if (inspectBook.getId() != inspectBookId) {
             throw new RuntimeException("잘못된 경로입니다");
         }
-        InspectBook update = inspectBookRepository.findById(inspectBookId).orElseThrow(()->
+        InspectBook update = inspectBookRepository.findById(inspectBookId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
 //
-        if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())){
+        if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
 
@@ -145,46 +146,47 @@ public class UserInspectService {
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"inspectDt", BoardUtils.ORDER_BY_DESC
+                        ,"inspectDt"
+                        ,BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(inspectResultList.isEmpty()){
+        if (inspectResultList.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return inspectResultList;
     }
 
-    public InspectResultGetDetailMapping inspectResultDetail(int inspectBookId){
+    public InspectResultGetDetailMapping inspectResultDetail(int inspectBookId) {
         int bookStatus = inspectBookRepository.findById(inspectBookId).get().getBookStatus();
-        if (bookStatus == 0){
+        if (bookStatus == 0) {
             throw new RuntimeException("검사가 완료되지 않았습니다");
         } else if (bookStatus == 2) {
             throw new RuntimeException("취소된 예약입니다");
         }
         InspectResultGetDetailMapping result = inspectResultRepository.findAllByInspectBookId(inspectBookId);
-        if (result == null){
+        if (result == null) {
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
         return result;
     }
 
-    public InspectorReviewMapping getInspectReviewDetail(int inspectResultId){
+    public InspectorReviewMapping getInspectReviewDetail(int inspectResultId) {
         InspectorReviewMapping result = inspectorReviewRepository.findByStatusAndInspectResult_Id(BoardUtils.BOARD_DELETE_STATUS_FALSE, inspectResultId);
         return result;
     }
 
-    public int createInspectReview(int inspectResultId,InspectorReview inspectorReview){
-        InspectResult result = inspectResultRepository.findById(inspectResultId).orElseThrow(()->
+    public int createInspectReview(int inspectResultId, InspectorReview inspectorReview) {
+        InspectResult result = inspectResultRepository.findById(inspectResultId).orElseThrow(() ->
                 new RuntimeException("수리결과가 없습니다"));
 
         if (inspectorReview.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
         Account account = accountRepository.findById(inspectorReview.getAccount().getId());
-        if (account == null){
+        if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (!account.getId().equals(inspectorReview.getAccount().getId())){
+        if (!account.getId().equals(inspectorReview.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
 
