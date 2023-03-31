@@ -1,6 +1,27 @@
-function ApplyBtn() {
+import axios from "axios";
+import { useMutation } from "react-query";
+import { MarkerType } from "../../routes/userUseFnc/NaverMap";
+
+function ApplyBtn({
+  markerArr,
+  markerNum,
+}: {
+  markerArr: MarkerType[];
+  markerNum: number;
+}) {
+  const { mutate, isSuccess } = useMutation("apply-company", () => {
+    return axios({
+      method: "post",
+      url: `https://carborn.site/api/user/${
+        markerArr[markerNum].AUTH === 1 ? "repair" : "inspect"
+      }/book`,
+      data: {},
+    });
+  });
+
   const getApply = () => {
-    console.log("신청하기");
+    mutate();
+    console.log(isSuccess);
   };
   return (
     <>

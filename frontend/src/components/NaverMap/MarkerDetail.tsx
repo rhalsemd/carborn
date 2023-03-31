@@ -8,6 +8,7 @@ import MarkerDetailReview from "./MarkerDetailReview";
 import { useAPI } from "./../../hooks/useAPI";
 import { useQueries } from "react-query";
 import axios from "axios";
+import { MarkerType } from "../../routes/userUseFnc/NaverMap";
 
 const roadView = css`
   width: 100%;
@@ -58,7 +59,7 @@ interface Props {
   setMarkerNum: React.Dispatch<React.SetStateAction<number>>;
   searchInfoWindows: any;
   markerNum: number;
-  markerArr: any;
+  markerArr: MarkerType[];
 }
 
 function MarkerDetail({
@@ -103,11 +104,9 @@ function MarkerDetail({
         items = result.items; // 검색 결과의 배열
 
       // do Something
-      console.log(result);
+      // console.log(result);
     }
   );
-
-  console.log(naver.maps.Service.Addition1);
 
   // 파노라마 옵션
   var panoramaOptions = {
