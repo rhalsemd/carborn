@@ -1,5 +1,6 @@
 package site.carborn.service.common;
 
+import io.swagger.v3.core.util.Json;
 import jakarta.validation.constraints.Null;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -75,6 +76,34 @@ public class AddressService {
         throw new NullPointerException("주소 정보를 확인할 수 없습니다");
     }
 
+    public Map<String, Object> getGeoAddressJibun(String address) {
+        if (address == null || address.isBlank()) {
+            throw new NullPointerException("변환할 주소 데이터를 입력해주세요");
+        }
+
+        try {
+            JSONObject geoData = requestGeo(address);
+            if (geoData == null) {
+                throw new NullPointerException();
+            }
+            if ((int) ((JSONObject) geoData.get("meta")).get("totalCount") == 0) {
+                throw new NullPointerException();
+            }
+            JSONObject document = (JSONObject) ((JSONArray) geoData.get("addresses")).get(0);
+            Map<String, Object> map = new HashMap<>();
+            map.put("roadAddress", document.get("roadAddress"));
+            map.put("jibunAddress", document.get("jibunAddress"));
+            int documentLen = ((JSONArray) ((JSONObject) ((JSONArray) geoData.get("addresses")).get(0)).get("addressElements")).length();
+            document = ((JSONObject) ((JSONArray) ((JSONObject) ((JSONArray) geoData.get("addresses")).get(0)).get("addressElements")).get(documentLen-1));
+            map.put("longName", document.get("longName"));
+            return map;
+        } catch (IOException e) {
+            log.warn(e.getMessage());
+        }
+
+        throw new NullPointerException("위도 및 경도 정보를 확인할 수 없습니다");
+    }
+
     public JSONObject requestGeo(String address) throws IOException {
         String url = String.format("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=%s", URLUtils.urlEncode(address));
 
@@ -116,4 +145,23 @@ public class AddressService {
         return new JSONObject(content);
     }
 
+    public JSONObject requestGeoJibun(String address) throws IOException {
+        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=%s", URLUtils.urlEncode(address));
+
+        Header header = new Header();
+        header.append("User-Agent", HTTPUtils.USER_AGENT);
+        header.append("Accept-Language", HTTPUtils.ACCEPT_LANGUAGE);
+        header.append("Connection", HTTPUtils.CONNECTION);
+        header.append("X-NCP-APIGW-API-KEY-ID", clientId);
+        header.append("X-NCP-APIGW-API-KEY", clientSecret);
+        Get get = new Get(url, header);
+
+        int responseCode = get.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new NullPointerException();
+        }
+
+        String content = get.get();
+        return new JSONObject(content);
+    }
 }
