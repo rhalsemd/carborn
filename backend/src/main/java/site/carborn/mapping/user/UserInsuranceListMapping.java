@@ -10,13 +10,18 @@ public interface UserInsuranceListMapping {
 
     //차정보
     String getCarMaker();
+
     String getCarModelNm();
+
     String getCarModelYear();
+
     String getCarRegNm();
 
     //보험수리관련
     String getCategory();
+
     LocalDateTime getInsuranceDt();
+
     LocalDateTime getRegDt();
 
 }
