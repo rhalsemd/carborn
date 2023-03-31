@@ -144,24 +144,4 @@ public class AddressService {
         String content = get.get();
         return new JSONObject(content);
     }
-
-    public JSONObject requestGeoJibun(String address) throws IOException {
-        String url = String.format("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=%s", URLUtils.urlEncode(address));
-
-        Header header = new Header();
-        header.append("User-Agent", HTTPUtils.USER_AGENT);
-        header.append("Accept-Language", HTTPUtils.ACCEPT_LANGUAGE);
-        header.append("Connection", HTTPUtils.CONNECTION);
-        header.append("X-NCP-APIGW-API-KEY-ID", clientId);
-        header.append("X-NCP-APIGW-API-KEY", clientSecret);
-        Get get = new Get(url, header);
-
-        int responseCode = get.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new NullPointerException();
-        }
-
-        String content = get.get();
-        return new JSONObject(content);
-    }
 }

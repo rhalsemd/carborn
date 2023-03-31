@@ -1,6 +1,7 @@
 import Nav from "../Nav";
 import styled from "@emotion/styled";
 import MyCompanyInfoDeleteComponent from "./ModalComponent/MyCompanyInfoDeleteComponent";
+import Nav2 from './../Nav2';
 
 const StyleCompanyWithdrawal = styled.div`
   width: 100vw;
@@ -36,7 +37,7 @@ const StyleCompanyWithdrawalTitleDiv = styled.div`
 const CompanyInfoDelete = () => {
   return (
     <StyleCompanyWithdrawal>
-      <Nav />
+      <Nav2 />
       <StyleCompanyWithdrawalContainer>
         <StyleCompanyWithdrawalTitleDiv>
           <p>회원 탈퇴</p>

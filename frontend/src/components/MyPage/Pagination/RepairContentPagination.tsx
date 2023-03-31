@@ -1,9 +1,20 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { CARBORN_SITE } from "./../../../lib/api";
-import { useEffect } from "react";
+
+//MUI 컴포넌트
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+
+import { Table, TableCell, TableRow } from "@mui/material";
+import {
+  StyledTableContainer,
+  StyledTableHead,
+  StyleMainTableHead,
+} from "../DetailComponent/MyCarInfoDetail";
+import { StyledButton } from "./MyCarInfoPagination";
 
 export interface RepairContentPaginationProps {
   itemsPerPage: number;
@@ -11,16 +22,17 @@ export interface RepairContentPaginationProps {
 
 export interface RepairType {
   id: number;
-  repairBookCarModelNm: string;
-  manufacturer: string;
-  mileage: number;
-  repairBookCarRegNm: string;
-  repairBookCarModelYear: number;
+  carModelNm: string;
+  carMaker: string;
+  carMileage: number;
+  carRegNm: string;
+  carModelYear: number;
   price: number;
-  repairDt: string;
+  bookDt: string;
   lastMaintenanceDate: string;
-  repairBookBookStatus: string;
-  repairBookAccountName: string;
+  bookStatus: string;
+  repairShopAccountName: string;
+  modifiedBookStatusNum: number;
 }
 
 const StyleRepairPaginationDiv = styled.div`
@@ -29,6 +41,20 @@ const StyleRepairPaginationDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  .MuiStack-root {
+    position: absolute;
+    top: 135vh
+  }
+
+  .MuiButtonBase-root {
+    background-color: white;
+  }
+
+  .Mui-selected {
+    background-color: #d23131 !important;
+    color: white;
+  }
 `;
 
 const RepairContentPagination = ({
@@ -42,14 +68,15 @@ const RepairContentPagination = ({
   const handleRequestRepairData = async (page: number, count: number) => {
     try {
       const response = await axios.get(
-        `${CARBORN_SITE}/api/user/repair/result/list/${page}`
+        `${CARBORN_SITE}/api/user/repair/book/list/${page}/${count}`
       );
       setTotalPageCnt(response.data.message.totalPages);
+
       const modifiedContent = response.data.message.content.map(
         (content: any) => {
           let modifiedBookStatus = "";
           let modifiedBookStatusNum = 0;
-          switch (content.repairBookBookStatus) {
+          switch (content.bookStatus) {
             case 0:
               modifiedBookStatus = "예약 중";
               modifiedBookStatusNum = 0;
@@ -59,18 +86,18 @@ const RepairContentPagination = ({
               modifiedBookStatusNum = 1;
               break;
             case 2:
-              modifiedBookStatus = "예약 취소";
+              modifiedBookStatus = "정비 취소";
               modifiedBookStatusNum = 2;
               break;
             default:
-              modifiedBookStatus = content.repairBookBookStatus;
+              modifiedBookStatus = content.bookStatus;
               modifiedBookStatusNum = 0;
               break;
           }
 
           return {
             ...content,
-            repairBookBookStatus: modifiedBookStatus,
+            bookStatus: modifiedBookStatus,
             modifiedBookStatusNum,
           };
         }
@@ -111,82 +138,71 @@ const RepairContentPagination = ({
 
   return (
     <StyleRepairPaginationDiv>
-      <table>
-        <thead>
-          <tr>
-            <th>차량모델</th>
-            {/* <th>제조사</th> */}
-            <th>{`주행거리(km)`}</th>
-            <th>차량번호</th>
-            <th>{`연식(년)`}</th>
-            <th>정비예약신청일</th>
-            {/* <th>정비완료일</th> */}
-            <th>정비상태</th>
-            <th>정비업체</th>
-            <th>예약상세조회</th>
-            <th>완료상세조회</th>
-          </tr>
-        </thead>
-        <tbody>
-          {repairData.map((car: RepairType, index: number) => (
-            <tr key={index}>
-              <td>{car.repairBookCarModelNm}</td>
-              {/* <td>{car.manufacturer}</td> */}
-              <td>{car.mileage}</td>
-              <td>{car.repairBookCarRegNm}</td>
-              <td>{car.repairBookCarModelYear}</td>
-              <td>{car.repairDt === null ? "-" : car.repairDt}</td>
-              {/* <td>
-                {car.lastMaintenanceDate === null
-                  ? "-"
-                  : car.lastMaintenanceDate}
-              </td> */}
-              <td>{car.repairBookBookStatus}</td>
-              <td>{car.repairBookAccountName}</td>
-              {/* <td>
-                {car.maintenanceCompany === null ? "-" : car.maintenanceCompany}
-              </td> */}
-              <td>
-                <button onClick={() => getRepairBookDetail(car.id)}>
-                  조회
-                </button>
-              </td>
-              <td>
-                <button onClick={() => getRepairDetail(car.id)}>조회</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handleRequestRepairData(currentPage - 1, itemsPerPage)}
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => {
-          if (i >= currentPage + 2 || i <= currentPage - 2) return null;
-          return (
-            <button
-              key={i}
-              disabled={currentPage === i + 1}
-              onClick={() => handleRequestRepairData(i + 1, itemsPerPage)}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => handleRequestRepairData(currentPage + 1, itemsPerPage)}
-        >
-          Next
-        </button>
-      </div>
+      <StyledTableContainer>
+        <Table>
+          <StyledTableHead>
+            <TableRow>
+              <TableCell>차량모델</TableCell>
+              <TableCell>제조사</TableCell>
+              <TableCell>{`주행거리(km)`}</TableCell>
+              <TableCell>차량번호</TableCell>
+              <TableCell>{`연식(년)`}</TableCell>
+              <TableCell>정비예약신청일</TableCell>
+              <TableCell>정비상태</TableCell>
+              <TableCell>정비업체</TableCell>
+              <TableCell>예약상세조회</TableCell>
+              <TableCell>완료상세조회</TableCell>
+            </TableRow>
+          </StyledTableHead>
+          <StyleMainTableHead>
+            {repairData.map((car: RepairType, index: number) => (
+              <TableRow key={index}>
+                <TableCell>{car.carModelNm}</TableCell>
+                <TableCell>{car.carMaker}</TableCell>
+                <TableCell>{car.carMileage}</TableCell>
+                <TableCell>{car.carRegNm}</TableCell>
+                <TableCell>{car.carModelYear}</TableCell>
+                <TableCell>{car.bookDt === null ? "-" : car.bookDt}</TableCell>
+                {/* <TableCell>
+                  {car.lastMaintenanceDate === null
+                    ? "-"
+                    : car.lastMaintenanceDate}
+                </TableCell> */}
+                <TableCell>{car.bookStatus}</TableCell>
+                <TableCell>{car.repairShopAccountName}</TableCell>
+                {/* <TableCell>
+                  {car.maintenanceCompany === null ? "-" : car.maintenanceCompany}
+                </TableCell> */}
+                <TableCell>
+                  {car.modifiedBookStatusNum === 0 ? <StyledButton onClick={() => getRepairBookDetail(car.id)}>
+                    조회
+                  </StyledButton> : null}
+                </TableCell>
+                <TableCell>
+                  {car.modifiedBookStatusNum === 1 ? <StyledButton onClick={() => getRepairDetail(car.id)}>
+                    조회
+                  </StyledButton> : null}
+                </TableCell>
+              </TableRow>
+            ))}
+          </StyleMainTableHead>
+        </Table>
+      </StyledTableContainer>
+      <br/>
+      <Stack spacing={2}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, value) =>
+            handleRequestRepairData(value, itemsPerPage)
+          }
+          sx={{ backgroundColor: "white" }}
+          size="large"
+          disabled={totalPages === 0}
+        />
+      </Stack>
     </StyleRepairPaginationDiv>
   );
 };
 
 export default RepairContentPagination;
-

@@ -1,6 +1,7 @@
 import Nav from "./../Nav";
 import styled from "@emotion/styled";
 import MyCarDataComponent from "./TableComponent/MyCarDataComponent";
+import Nav2 from "../Nav2";
 
 // 캐러셀 CSS
 const StyleMyCarInfoContainer = styled.div`
@@ -13,7 +14,7 @@ const StyleMyCarInfoContainer = styled.div`
 const MyCarInfo = () => {
   return (
     <>
-      <Nav />
+      <Nav2 />
       <StyleMyCarInfoContainer>
         <MyCarDataComponent />
       </StyleMyCarInfoContainer>
