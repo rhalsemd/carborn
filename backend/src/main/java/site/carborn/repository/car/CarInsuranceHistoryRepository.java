@@ -12,11 +12,11 @@ import site.carborn.mapping.user.UserInsuranceListMapping;
 
 @Repository
 public interface CarInsuranceHistoryRepository extends JpaRepository<CarInsuranceHistory, Integer> {
-    Page<CarInsuranceHistoryGetListMapping> findAllByInsuranceCompany_Id(int insuranceCompany_Id, Pageable page);
+    Page<CarInsuranceHistoryGetListMapping> findAllByInsuranceCompany_Id(@Param("insuranceCompany_Id") int insuranceCompany_Id, Pageable page);
 
-    CarInsuranceHistoryGetDetailMapping findAllById(int id);
+    CarInsuranceHistoryGetDetailMapping findAllById(@Param("id") int id);
 
-    Page<UserInsuranceListMapping> findByCar_Account_Id(String accountId,Pageable page);
+    Page<UserInsuranceListMapping> findByCar_Account_Id(@Param("accountId") String accountId, Pageable page);
 
     Page<UserInsuranceListMapping> findAllByCar_Id(@Param("carId") int carId, Pageable page);
 }

@@ -13,24 +13,25 @@ public class UserInsuranceService {
     @Autowired
     private CarInsuranceHistoryRepository carInsuranceHistoryRepository;
 
-    public Page<UserInsuranceListMapping> insuranceList(String accountId, int page, int size){
+    public Page<UserInsuranceListMapping> insuranceList(String accountId, int page, int size) {
         Page<UserInsuranceListMapping> insuranceList = carInsuranceHistoryRepository.findByCar_Account_Id(
                 accountId
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
-                        ,"id", BoardUtils.ORDER_BY_DESC
+                        ,"id"
+                        ,BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(insuranceList.isEmpty()){
+        if (insuranceList.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return insuranceList;
     }
 
-    public CarInsuranceHistoryGetDetailMapping insuranceDetail(int insuranceId){
+    public CarInsuranceHistoryGetDetailMapping insuranceDetail(int insuranceId) {
         CarInsuranceHistoryGetDetailMapping detail = carInsuranceHistoryRepository.findAllById(insuranceId);
-        if(detail == null){
+        if (detail == null) {
             throw new RuntimeException("존재하지 않는 데이터입니다.");
         }
         return detail;
