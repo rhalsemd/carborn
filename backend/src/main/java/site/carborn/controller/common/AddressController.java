@@ -40,7 +40,7 @@ public class AddressController {
         return NormalResponse.toResponseEntity(HttpStatus.OK,addressService.getReverseGeo(lat, lng));
     }
     @GetMapping("/convert-geo/jibun/{address}")
-    @Operation(description = "주소에 해당하는 지역에 대한 위도, 경도 데이터")
+    @Operation(description = "도로명 주소로 지번 및 우편번호를 조회")
     @Parameters({
             @Parameter(name = "address", description = "주소")
     })
