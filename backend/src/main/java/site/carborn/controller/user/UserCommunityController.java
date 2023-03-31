@@ -31,17 +31,32 @@ public class UserCommunityController{
 
     @GetMapping("/list/{page}/{size}/{sort}")
     @Operation(description = "커뮤니티 글 목록 조회")
-    @Parameters({
-            @Parameter(name = "page", description = "페이지 번호"),
+    @Parameters({@Parameter(name = "page", description = "페이지 번호"),
             @Parameter(name = "size", description = "페이지 당 게시물 수"),
             @Parameter(name = "sort", description = "정렬 기준")
     })
     public ResponseEntity<?> getBoardList(@PathVariable("page") int page,
                                             @PathVariable("size") int size,
                                              @PathVariable("sort") int sort){
-        Page<UserCommunityListMapping> boardList = userCommunityService.getBoardList(page,size,sort);
+        Page<UserCommunityListMapping> boardList = userCommunityService.getBoardList(page,size,sort,null);
         return NormalResponse.toResponseEntity(HttpStatus.OK,boardList);
     }
+    @GetMapping("/list/{page}/{size}/{sort}/{keyword}")
+    @Operation(description = "커뮤니티 글 목록 조회")
+    @Parameters({@Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 당 게시물 수"),
+            @Parameter(name = "sort", description = "정렬 기준"),
+            @Parameter(name = "keyword", description = "검색어")
+    })
+    public ResponseEntity<?> searchBoardList(@PathVariable("page") int page,
+                                          @PathVariable("size") int size,
+                                          @PathVariable("sort") int sort,
+                                          @PathVariable("keyword") String keyword){
+        log.debug("키워드 : {}", keyword);
+        Page<UserCommunityListMapping> boardList = userCommunityService.getBoardList(page,size,sort,keyword);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,boardList);
+    }
+
 
     @GetMapping("/{communityId}")
     @Operation(description = "커뮤니티 글 단일 조회")

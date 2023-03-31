@@ -1,9 +1,12 @@
-function SaleDistanceDriven() {
+import { DataType } from "./SaleInfoArea";
+
+function SaleDistanceDriven({ data }: DataType) {
+  const mileage = data.mileage.toLocaleString("ko-KR");
   return (
     <div>
       <span>주행거리</span>
       <div>
-        <input value="190,000km" disabled={true} />
+        <input disabled={true} value={`${mileage}`} />
       </div>
     </div>
   );

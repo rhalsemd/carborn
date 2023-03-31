@@ -14,6 +14,7 @@ import {
 } from "../../modules/modifyPasswordModule";
 import { IsCanSignUpReset } from "../../modules/signUpModule";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
+import Nav2 from './../../components/Nav2';
 
 export const StyleLink = styled(Link)`
   color: #d23131;
@@ -140,7 +141,15 @@ const LoginPages = () => {
 
   // 로그인 하기(최종)
   const handleLogin = () => {
-    dispatch(loginAction(loginInput));
+    try {
+      dispatch(loginAction(loginInput));
+    } catch (error:any) {
+      setIsAlert(true);
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 2000);
+      setMessage(error);
+    }
   };
 
   useEffect(() => {
@@ -193,7 +202,8 @@ const LoginPages = () => {
 
   return (
     <div>
-      <Nav isToken={isToken} setIsToken={setIsToken} />
+      <Nav2 isToken={isToken} setIsToken={setIsToken} />
+      {/* <Nav isToken={isToken} setIsToken={setIsToken} /> */}
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>

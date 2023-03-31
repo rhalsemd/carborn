@@ -85,7 +85,6 @@ function NaverMap() {
     retry: false,
     keepPreviousData: true,
   });
-
   /**
    * 현재 위치를 받는 함수
    */
@@ -139,7 +138,7 @@ function NaverMap() {
   const setMarker = (map: any, markerInfo: any) => {
     setMarkerArr(markerInfo);
     let newMarkerArr: any[] = markerInfo;
-
+    console.log(markerInfo);
     markerInfo.forEach((key: any) => {
       var position = new naver.maps.LatLng(key.LAT, key.LNG);
       var marker = new naver.maps.Marker({

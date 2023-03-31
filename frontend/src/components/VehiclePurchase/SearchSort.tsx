@@ -2,15 +2,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useState } from "react";
 import { Props } from "./VehiclePurchaseType";
 
-function SearchSort({ setSearchInfo }: Props) {
-  const [age, setAge] = useState("");
-
+function SearchSort({ setSearchInfo, searchInfo }: Props) {
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-    console.log(event.target.value);
+    setSearchInfo((info) => {
+      return { ...info, sortType: event.target.value };
+    });
   };
 
   return (
@@ -23,17 +21,16 @@ function SearchSort({ setSearchInfo }: Props) {
         <Select
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
-          value={age}
+          value={searchInfo.sortType}
           onChange={handleChange}
           autoWidth
           label="Age"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Twenty</MenuItem>
-          <MenuItem value={21}>Twenty one</MenuItem>
-          <MenuItem value={22}>Twenty one and a half</MenuItem>
+          <MenuItem value={-1}>기본</MenuItem>
+          <MenuItem value={0}>최신순</MenuItem>
+          <MenuItem value={1}>오래된순</MenuItem>
+          <MenuItem value={3}>높은 가격 순</MenuItem>
+          <MenuItem value={4}>낮은 가격 순</MenuItem>
         </Select>
       </FormControl>
     </div>

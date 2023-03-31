@@ -9,7 +9,6 @@ import site.carborn.util.image.ImageUtils;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -22,8 +21,8 @@ public class BoardUtils {
     public static final String ORDER_BY_ASC = "ASC";
     public static final String ORDER_BY_DESC = "DESC";
 
-    public static final String SORT_BY_ID = "ID";
-    public static final String SORT_BY_VIEWS = "VIEWS";
+    public static final String SORT_BY_ID = "id";
+    public static final String SORT_BY_VIEWS = "views";
 
     public static final boolean BOARD_DELETE_STATUS_FALSE = false;
     public static final boolean BOARD_DELETE_STATUS_TRUE = true;

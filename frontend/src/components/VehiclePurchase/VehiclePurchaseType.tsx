@@ -11,9 +11,10 @@ export interface PageParam {
 }
 
 export interface SearchType {
-  sort: string;
+  sortType: string;
 }
 
 export interface Props {
+  searchInfo: SearchType;
   setSearchInfo: React.Dispatch<React.SetStateAction<SearchType>>;
 }

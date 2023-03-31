@@ -11,6 +11,7 @@ import {
   newPasswordAction,
 } from "../../modules/newPasswordModule";
 import styled from "@emotion/styled";
+import Nav2 from "../../components/Nav2";
 
 // 타입 설정
 export type SearchInputPasswordCheckObj = {
@@ -109,7 +110,7 @@ const NewPasswordReset = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StylePasswordResetTitle>

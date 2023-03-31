@@ -11,7 +11,7 @@ const leftOuter = css`
   height: 40%;
   width: 20vw;
   position: fixed;
-  top: 56.7%;
+  top: 45.3%;
   left: 1vw;
   border: 1px black solid;
 `;

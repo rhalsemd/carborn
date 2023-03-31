@@ -3,9 +3,7 @@ package site.carborn.service.user;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.user.Community;
 import site.carborn.entity.user.CommunityReview;
@@ -28,9 +26,11 @@ public class UserCommunityService {
     @Autowired
     private CommunityReviewRepository communityReviewRepository;
 
-    public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort){
+    public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort, String keyword){
         String orderBy = BoardUtils.ORDER_BY_DESC;
         String sortBy = BoardUtils.SORT_BY_ID;
+
+        Page<UserCommunityListMapping> boardList = null;
 
         switch (sort) {
             case SortUtils.SORT_STATUS_NEW -> {
@@ -52,19 +52,33 @@ public class UserCommunityService {
             default -> throw new RuntimeException("올바르지 않은 정렬 입니다");
         }
 
-        Page<UserCommunityListMapping> getBoardList = communityRepository.findByStatus(
-                BoardUtils.BOARD_DELETE_STATUS_FALSE
-                ,BoardUtils.pageRequestInit(
-                        page
-                        ,size
-                        ,sortBy
-                        ,orderBy
-                )
-        );
-        if(getBoardList.isEmpty()){
-            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
+        if (keyword == null){
+            boardList = communityRepository.findByStatus(
+                    BoardUtils.BOARD_DELETE_STATUS_FALSE
+                    ,BoardUtils.pageRequestInit(
+                            page
+                            ,size
+                            ,sortBy
+                            ,orderBy
+                    )
+            );
+
+
+        } else {
+            boardList = communityRepository.findByStatusAndTitleContainingOrContentContaining(
+                    BoardUtils.BOARD_DELETE_STATUS_FALSE
+                    ,keyword
+                    ,keyword
+                    ,BoardUtils.pageRequestInit(
+                            page
+                            ,size
+                            ,sortBy
+                            ,orderBy
+                    )
+            );
         }
-        return getBoardList;
+
+        return boardList;
     }
 
     @Transactional

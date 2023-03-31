@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import site.carborn.dto.request.CarSaleRequestDTO;
 import site.carborn.dto.request.TradeRequestDTO;
 import site.carborn.entity.account.Account;
+import site.carborn.entity.car.Car;
 import site.carborn.entity.user.CarSale;
 import site.carborn.entity.user.CarSaleBook;
 import site.carborn.mapping.user.*;
@@ -257,6 +258,9 @@ public class UserService {
         String alias = "buy-"+trd.getCarId()+"-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
+
+        //차 권한 이양
+        carRepository.updateCar(uptDt,userid,csgsm.getCarId(),false);
 
         return true;
     }
