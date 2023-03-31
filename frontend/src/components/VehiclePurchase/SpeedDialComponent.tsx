@@ -8,6 +8,10 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import SpeedDialTable from "./SpeedDialTable";
+import { useState } from "react";
+import { useAPI } from "./../../hooks/useAPI";
+import { useQuery } from "react-query";
 
 const dialog = css`
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -21,8 +25,20 @@ const dialog = css`
 `;
 
 function SpeedDialComponent() {
-  const navigation = useNavigate();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [page, setPage] = useState<number>(1);
+  const API = `https://carborn.site/api/user/car/list/${page}/5`;
+
+  const getCarListFnc = useAPI("get", API);
+
+  const { data } = useQuery("get-car-list-fnc", () => getCarListFnc, {
+    retry: false,
+    cacheTime: 1000 * 300,
+    staleTime: 1000 * 300,
+    select: (data) => {
+      return data.data.message.content;
+    },
+  });
 
   const showModalFnc = () => {
     dialogRef.current?.showModal();
@@ -42,10 +58,9 @@ function SpeedDialComponent() {
           onClick={showModalFnc}
         ></SpeedDial>
         <dialog ref={dialogRef} css={dialog}>
-          Hello! I'm a modal!
+          <SpeedDialTable data={data} />
           <form method="dialog">
             <button value="close">Close</button>
-            <button value="confirm">Confirm</button>
           </form>
         </dialog>
       </Box>

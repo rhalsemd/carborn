@@ -134,7 +134,6 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
       </div>
     );
   }
-  console.log(data);
 
   if (isLoading) {
     return (
