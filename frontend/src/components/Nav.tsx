@@ -49,7 +49,7 @@ const StyleNavUl = styled.ul`
   background-color: pink;
 `;
 
-const StyleNavLi = styled.li`
+export const StyleNavLi = styled.li`
   list-style-type: none;
   width: 5rem;
   height: 7vh;
@@ -65,7 +65,7 @@ const StyleNavTitle = styled.h1`
   /* margin-left: 2.5rem; */
 `;
 
-const StyleLinkText = css`
+export const StyleLinkText = css`
   text-decoration: none;
   font-size: 1.25rem;
   font-weight: bold;
@@ -120,7 +120,7 @@ function Nav({ setIsToken, isToken }: any) {
   };
 
   let localToken = Obj?.value || "";
-
+  
   return (
     <StyleMainNav>
       <StyleMainLogo>

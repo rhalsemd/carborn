@@ -2,7 +2,7 @@ import axios from "axios";
 
 // export const API_URL = "https://carborn.site";
 export const CARBORN_SITE = "https://carborn.site";
-// export const CARBORN_SITE = "https://192.168.18.15";
+// export const CARBORN_SITE = "https://192.168.100.80";
 export const API_URL = "http://localhost:3001";
 export const ContentType = "Content-Type";
 export const applicationjson = "application/json";

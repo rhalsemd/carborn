@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { newPasswordReset } from "../../modules/newPasswordModule";
 import { StyleLoginSignUpBtnDiv } from "./SearchidComplete";
 import { StyleLoginSignUpBtn } from "./SearchID";
+import Nav2 from "../../components/Nav2";
 
 const StyleSearchidCompleteContainer = styled.div`
   width: 100vw;
@@ -53,7 +54,7 @@ const PasswordComplete = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleSearchidCompleteContainer>
         <div>
           <img src={carbornLogo} alt="asdfasdf" />

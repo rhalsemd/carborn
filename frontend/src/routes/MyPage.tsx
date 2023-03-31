@@ -13,6 +13,7 @@ import Repair from '../assets/Repair.png';
 import Sell from '../assets/Sell.png';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import Nav2 from '../components/Nav2';
 
 export const StyleMyPageDiv = styled.div`
   a {
@@ -134,7 +135,7 @@ const MyPage = () => {
 
   return (
     <div>
-      <Nav/>
+      <Nav2 />
       <StyleLoginSignUpDiv>
         <StyleMyPageDiv>
           <Link to={`/${userid}/mypage/mycarinfo`} >

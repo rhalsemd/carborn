@@ -30,6 +30,7 @@ import { CARBORN_SITE } from "./../../lib/api";
 import { useNavigate } from "react-router-dom";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 import ReCAPTCHA from "react-google-recaptcha";
+import Nav2 from "../../components/Nav2";
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -285,7 +286,7 @@ const SignupPages: React.FC = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>

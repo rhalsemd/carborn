@@ -54,10 +54,9 @@ export function* takeLoginSaga(
       };
       const ObjString = JSON.stringify(Obj);
       localStorage.setItem("login-token", ObjString);
-
-      //
-      yield put(loginSuccessAction(response.data.message));
     }
+    yield put(loginSuccessAction(response.data.message));
+    
   } catch (error: any) {
     yield put(loginFailureAction(error.message));
   }
