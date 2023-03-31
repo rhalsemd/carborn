@@ -8,6 +8,7 @@ import PasswordResetID from "../../components/auth/passwordreset/PasswordResetID
 import { passwordResetCheck } from "../../modules/PasswordCheckModule";
 import Nav from "./../../components/Nav";
 import { StyleHeightDiv, StyleSearchIdDiv } from "./SearchID";
+import Nav2 from "../../components/Nav2";
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -106,7 +107,7 @@ const PasswordResetCheck = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleHeightDiv></StyleHeightDiv>
       <StyleSearchIdDiv>
         <StyleLoginSignUpBoxDiv>

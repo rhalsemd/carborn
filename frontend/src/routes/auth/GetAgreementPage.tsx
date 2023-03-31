@@ -14,6 +14,7 @@ import Nav from "../../components/Nav";
 import { GetAgreementAction } from "../../modules/getAgreementModule";
 import axios from "axios";
 import { CARBORN_SITE } from "../../lib/api";
+import Nav2 from "../../components/Nav2";
 
 export const StyleTermsOfUseDiv = styled.div`
   width: 100%;
@@ -130,7 +131,8 @@ export const StyleTermExplainDiv = styled.div`
   span {
     font-weight: 900;
     color: #959595 !important;
-  }
+  }import Nav2 from './../../components/Nav2';
+
 `
 
 // CSS 타입
@@ -223,7 +225,7 @@ const GetAgreementPage = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>

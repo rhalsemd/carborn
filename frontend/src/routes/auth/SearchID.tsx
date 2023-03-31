@@ -7,6 +7,7 @@ import Nav from "./../../components/Nav";
 import { useNavigate } from "react-router-dom";
 import { SearchIDCheckAction } from "../../modules/searchidModule";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
+import Nav2 from "../../components/Nav2";
 
 export const StyleHeightDiv = styled.div`
   height: 6rem;
@@ -124,7 +125,7 @@ const SearchID = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav2 />
       <StyleHeightDiv></StyleHeightDiv>
       <StyleSearchIdDiv>
         <StyleLoginSignUpBoxDiv>

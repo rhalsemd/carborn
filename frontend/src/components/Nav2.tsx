@@ -1,7 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import carBackground from "../assets/carBackground2.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutAction } from "../modules/takeLoginLogoutModule";
+import { StyleLinkText, StyleNavLi } from "./Nav";
 
 const container = css`
   height: 50vh;
@@ -75,14 +79,78 @@ const container = css`
   }
 `;
 
-export default function Nav2() {
+export default function Nav2({ setIsToken, isToken }: any) {
   const navigate = useNavigate();
+  // Nav 타이틀, 로그인 확인 여부
+  const [title, setTitle] = useState<string>("Home");
+  // location.pathname마다 다른 타이틀 가져가게 하려고
+  const location = useLocation();
+  // 액션 실행
+  const dispatch = useDispatch();
+  // 유저아이디랑 토큰 가져오기
+  useEffect(() => {
+    const ObjString = localStorage.getItem("login-token");
+    let Obj = null;
+    if (ObjString) {
+      Obj = JSON.parse(ObjString);
+      if (Date.now() > Obj.expire) {
+        localStorage.removeItem("login-token");
+        alert("로그아웃 되었습니다. 다시 로그인 해주세요.");
+        navigate("/login");
+      }
+    }
+  });
+
+  const ObjString: any = localStorage.getItem("login-token");
+  const Obj = JSON.parse(ObjString);
+  let userid = Obj?.userId || "";
+
+  const { success } = useSelector((state: any) => state.LoginOutReducer);
+
+  // 제목 얘기하기
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setTitle("Home");
+    } else if (location.pathname === "/login") {
+      setTitle("User Login");
+    } else if (location.pathname === "/myvehicle/registration") {
+      setTitle("Car Regitration");
+    } else if (location.pathname === `/${userid}/mypage`) {
+      setTitle(`${userid}'s Page`);
+    } else if (location.pathname === `/${userid}/mypage/mycarinfo`) {
+      setTitle(`내 차량 정보`);
+    }
+  }, [location.pathname, setTitle, userid]);
+
+  // 로그아웃
+  const handleLogout = () => {
+    dispatch(logoutAction());
+  };
+
+  let localToken = Obj?.value || "";
+
   return (
     <div css={container}>
       <div className="section1">
         <div className="loginInfo">
-          <div>로그인이 필요합니다.</div>
-          <div>login</div>
+          {success || localToken ? (
+            <div className="logo" onClick={handleLogout}>
+              {Obj.userId}님 안녕하세요.
+            </div>
+          ) : (
+            <div className="logo" onClick={(): void => navigate("/login")}>
+              로그인이 필요합니다.
+            </div>
+          )}
+          {success || localToken ? (
+            <div className="logo" onClick={handleLogout}>
+              logout
+            </div>
+          ) : (
+            <div className="logo" onClick={(): void => navigate("/login")}>
+              login
+            </div>
+          )}
         </div>
       </div>
       <div className="section2">
@@ -106,9 +174,17 @@ export default function Nav2() {
             <div className="item" onClick={(): void => navigate("/")}>
               MY CAR
             </div>
+            {success || localToken ? (
+              <div
+                className="item"
+                onClick={(): void => navigate(`/${userid}/mypage`)}
+              >
+                MY PAGE
+              </div>
+            ) : null}
           </div>
         </div>
-        <div className="location">여기는 어디?</div>
+        <div className="location">{title}</div>
       </div>
     </div>
   );
