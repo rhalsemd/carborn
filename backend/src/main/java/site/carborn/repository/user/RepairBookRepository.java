@@ -13,10 +13,10 @@ import site.carborn.mapping.user.RepairBookGetListMapping;
 @Repository
 public interface RepairBookRepository extends JpaRepository<RepairBook, Integer> {
     //예약 목록 조회
-    Page<UserRepairBookListMapping> findByStatusAndAccount_Id(Boolean status, String accountId, Pageable page);
+    Page<UserRepairBookListMapping> findByStatusAndAccount_Id(boolean status, String accountId, Pageable page);
 
     //예약 단일 조회
-    UserRepairBookDetailMapping findByStatusAndId(Boolean status, Integer id);
+    UserRepairBookDetailMapping findByStatusAndId(boolean status, int id);
 
     Page<RepairBookGetListMapping> findByStatusAndRepairShop_Id(boolean status, int repairShopId, Pageable page);
 

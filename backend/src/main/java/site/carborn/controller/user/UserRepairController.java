@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.company.RepairShopReview;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.mapping.company.RepairShopReviewMapping;
@@ -60,7 +59,7 @@ public class UserRepairController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, userRepairService.createRepairBook(repairBook));
     }
 
-    @DeleteMapping ("/book/delete/{repairBookId}")
+    @DeleteMapping ("/book/{repairBookId}")
     @Operation(description = "사용자 정비소 예약 삭제")
     @Parameter(name = "repairBookId", description = "예약 게시글 id")
     public ResponseEntity<?> deleteRepairBook(@PathVariable("repairBookId") Integer repairBookId){
@@ -88,7 +87,7 @@ public class UserRepairController {
     }
 
     @GetMapping("/result/{repairResultId}")
-    @Operation(description = "사용자의 정비 완료 단일 조히")
+    @Operation(description = "사용자의 정비 완료 단일 조회")
     @Parameter(name = "repairResultId", description = "정비 결과 게시글 id")
     public ResponseEntity<?> getRepairResultDetail(@PathVariable("repairResultId") int repairResultId){
         RepairResultGetDetailMapping result = userRepairService.repairResultDetail(repairResultId);

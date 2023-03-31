@@ -18,7 +18,7 @@ public interface RepairResultRepository extends JpaRepository<RepairResult, Inte
 
     RepairResultGetDetailMapping findAllByRepairBook_Id(@Param("repairBookId") int repairBookId);
 
-    Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_Id(Boolean repairBookStatus, String repairBookAccountId, Pageable page);
+    Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_Id(boolean repairBookStatus, String repairBookAccountId, Pageable page);
 
     Page<UserRepairResultListMapping> findByRepairBook_Car_Id(@Param("repairBookCarId") int repairBookCarId, Pageable pageable);
 }

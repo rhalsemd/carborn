@@ -4,11 +4,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import site.carborn.entity.account.Account;
-import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.company.RepairShopReview;
-import site.carborn.entity.user.InspectResult;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.company.RepairShopReviewMapping;
@@ -54,7 +51,7 @@ public class UserRepairService {
         return repairBookList;
     }
 
-    public UserRepairBookDetailMapping repairBook(Integer id){
+    public UserRepairBookDetailMapping repairBook(int id){
         //게시글이 없을때
         UserRepairBookDetailMapping repairBook = repairBookRepository.findByStatusAndId(BoardUtils.BOARD_DELETE_STATUS_FALSE, id);
 
@@ -86,7 +83,7 @@ public class UserRepairService {
         return save.getId();
     }
 
-    public void deleteRepairBook(Integer id){
+    public void deleteRepairBook(int id){
         RepairBook delete = repairBookRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
