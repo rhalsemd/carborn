@@ -26,6 +26,8 @@ public interface RepairResultGetDetailMapping {
 
     LocalDateTime getRepairDt();
 
+    String getMetadataUri();
+
     LocalDateTime getRegDt();
 
 }

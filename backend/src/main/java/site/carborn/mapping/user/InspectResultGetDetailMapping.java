@@ -25,5 +25,7 @@ public interface InspectResultGetDetailMapping {
 
     LocalDateTime getInspectDt();
 
+    String getMetadataUri();
+
     LocalDateTime getRegDt();
 }
