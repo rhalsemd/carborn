@@ -56,7 +56,7 @@ public class UserInspectService {
     }
 
 
-    public UserInspectBookDetailMapping inspectBookDetail(Integer id){
+    public UserInspectBookDetailMapping inspectBookDetail(int id){
         UserInspectBookDetailMapping inspectBook = inspectBookRepository.findAllByIdAndStatus(id,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         if (inspectBook == null){
@@ -92,7 +92,7 @@ public class UserInspectService {
         return save.getId();
     }
 
-    public void deleteInspectBook(Integer id){
+    public void deleteInspectBook(int id){
         InspectBook delete = inspectBookRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
