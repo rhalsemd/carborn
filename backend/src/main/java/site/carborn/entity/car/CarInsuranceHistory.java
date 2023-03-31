@@ -43,6 +43,9 @@ public class CarInsuranceHistory {
     @Column(length = 200)
     private String contractHash;
 
+    @Column(length = 200)
+    private String metadataUri;
+
     private LocalDateTime regDt;
 
     public static CarInsuranceHistory copy(CarInsuranceHistory carInsuranceHistory){
