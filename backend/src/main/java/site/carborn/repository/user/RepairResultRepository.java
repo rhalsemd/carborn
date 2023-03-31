@@ -12,13 +12,13 @@ import site.carborn.mapping.user.UserRepairResultListMapping;
 
 @Repository
 public interface RepairResultRepository extends JpaRepository<RepairResult, Integer> {
-    Page<RepairResultGetListMapping> findByRepairBook_RepairShop_Id(int repairBookRepairShopId, Pageable page);
+    Page<RepairResultGetListMapping> findByRepairBook_RepairShop_Id(@Param("repairBookRepairShopId") int repairBookRepairShopId, Pageable page);
 
-    RepairResultGetDetailMapping findAllById(int id);
+    RepairResultGetDetailMapping findAllById(@Param("id") int id);
 
     RepairResultGetDetailMapping findAllByRepairBook_Id(@Param("repairBookId") int repairBookId);
 
-    Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_Id(Boolean repairBookStatus, String repairBookAccountId, Pageable page);
+    Page<UserRepairResultListMapping> findByRepairBook_StatusAndRepairBook_Account_Id(@Param("repairBookStatus") boolean repairBookStatus, @Param("repairBookAccountId") String repairBookAccountId, Pageable page);
 
     Page<UserRepairResultListMapping> findByRepairBook_Car_Id(@Param("repairBookCarId") int repairBookCarId, Pageable pageable);
 }

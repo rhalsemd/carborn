@@ -11,15 +11,23 @@ public interface UserRepairBookDetailMapping {
 
     //기업 정보
     int getRepairShopId();
+
     String getRepairShopAddress();
+
     String getRepairShopAccountName();
+
     String getRepairShopAccountPhoneNo();
 
     //유저 예약 정보
     String getAccountId();
+
     String getContent();
+
     int getBookStatus();
+
     LocalDate getBookDt();
+
     LocalDateTime getRegDt();
+
     LocalDateTime getUptDt();
 }

@@ -31,12 +31,20 @@ public class AddressController {
     }
 
     @GetMapping("/reverse-geo/{lat}/{lng}")
-    @Operation(description = "위도, 경도와 일치하는 지역에 대한 지번주소")
+    @Operation(description = "위도, 경도와 일치하는 지역에 대한 도로명주소")
     @Parameters({
             @Parameter(name = "lat", description = "주소를 조회할 지역의 위도")
             ,@Parameter(name = "lng", description = "주소를 조회할 지역의 경도")
     })
     public ResponseEntity<?> getReverseGeo(@PathVariable("lat") double lat, @PathVariable("lng") double lng) {
         return NormalResponse.toResponseEntity(HttpStatus.OK,addressService.getReverseGeo(lat, lng));
+    }
+    @GetMapping("/convert-geo/jibun/{address}")
+    @Operation(description = "도로명 주소로 지번 및 우편번호를 조회")
+    @Parameters({
+            @Parameter(name = "address", description = "주소")
+    })
+    public ResponseEntity<?> getGeoAddressJibun(@PathVariable("address") String address) {
+        return NormalResponse.toResponseEntity(HttpStatus.OK,addressService.getGeoAddressJibun(address));
     }
 }

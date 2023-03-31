@@ -1,9 +1,15 @@
-function SaleManufacturingCompany() {
+import { DataType } from "./SaleInfoArea";
+
+function SaleManufacturingCompany({ data }: DataType) {
   return (
     <div>
       <span>제조사 / 차량모델</span>
       <div>
-        <input type="text" disabled={true} value="소나타" />
+        <input
+          type="text"
+          disabled={true}
+          value={`${data.maker} / ${data.modelNm}`}
+        />
       </div>
     </div>
   );

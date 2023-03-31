@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import Nav from "../../components/Nav";
 import SaleInfoArea from "../../components/SaleRegistrationComponents/rightContents/SaleInfoArea";
 import SaleCarImg from "./../../components/SaleRegistrationComponents/leftContents/SaleCarImg";
 import { useState } from "react";
 import { RegistrationInfo } from "./MyVehicleRegistration";
+import Nav2 from "./../../components/Nav2";
 
 const outer = css`
   border: 1px solid black;
@@ -21,25 +21,17 @@ const content = css`
 `;
 
 function SaleRegistration() {
-  const [registrationInfo, setRegistrationInfo] = useState<
-    Partial<RegistrationInfo>
-  >({
-    fileList: [],
-    fileNames: [],
-  });
+  const [imgs, setImg] = useState<string[]>([]);
 
   return (
     <>
-      <Nav />
+      <Nav2 />
       <div css={outer}>
         <div css={content}>
           {/* 왼쪽 컨텐츠 */}
-          <SaleCarImg />
+          <SaleCarImg imgs={imgs} />
           {/* 오른쪽 컨텐츠*/}
-          <SaleInfoArea
-            setRegistrationInfo={setRegistrationInfo}
-            registrationInfo={registrationInfo}
-          />
+          <SaleInfoArea setImg={setImg} />
         </div>
       </div>
     </>
