@@ -4,11 +4,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import site.carborn.entity.account.Account;
-import site.carborn.entity.company.InspectorReview;
 import site.carborn.entity.company.RepairShopReview;
-import site.carborn.entity.user.InspectResult;
 import site.carborn.entity.user.RepairBook;
 import site.carborn.entity.user.RepairResult;
 import site.carborn.mapping.company.RepairShopReviewMapping;
@@ -42,24 +39,24 @@ public class UserRepairService {
         Page<UserRepairBookListMapping> repairBookList = repairBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
-                ,BoardUtils.pageRequestInit(
+                , BoardUtils.pageRequestInit(
                         page
-                        ,size
-                        ,"id", BoardUtils.ORDER_BY_DESC
+                        , size
+                        , "id", BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(repairBookList.isEmpty()){
+        if (repairBookList.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return repairBookList;
     }
 
-    public UserRepairBookDetailMapping repairBook(Integer id){
+    public UserRepairBookDetailMapping repairBook(int id) {
         //게시글이 없을때
         UserRepairBookDetailMapping repairBook = repairBookRepository.findByStatusAndId(BoardUtils.BOARD_DELETE_STATUS_FALSE, id);
 
 
-        if (repairBook == null){
+        if (repairBook == null) {
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
 
@@ -67,13 +64,13 @@ public class UserRepairService {
     }
 
 
-    public int createRepairBook(RepairBook repairBook){
+    public int createRepairBook(RepairBook repairBook) {
 
         if (repairBook.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
         Account account = accountRepository.findById(repairBook.getAccount().getId());
-        if (account == null){
+        if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
@@ -86,7 +83,7 @@ public class UserRepairService {
         return save.getId();
     }
 
-    public void deleteRepairBook(Integer id){
+    public void deleteRepairBook(int id) {
         RepairBook delete = repairBookRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
@@ -106,11 +103,11 @@ public class UserRepairService {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
-        if (accountRepository.findById(repairBook.getAccount().getId())==null){
+        if (accountRepository.findById(repairBook.getAccount().getId()) == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
-        RepairBook update = repairBookRepository.findById(repairBook.getId()).orElseThrow(()->
+        RepairBook update = repairBookRepository.findById(repairBook.getId()).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
         update.setCar(repairBook.getCar());
         update.setContent(repairBook.getContent());
@@ -125,44 +122,44 @@ public class UserRepairService {
         Page<UserRepairResultListMapping> repairResults = repairResultRepository.findByRepairBook_StatusAndRepairBook_Account_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
-                ,BoardUtils.pageRequestInit(
+                , BoardUtils.pageRequestInit(
                         page
-                        ,BoardUtils.PAGE_PER_ROW_20
-                        ,"repairDt", BoardUtils.ORDER_BY_DESC
+                        , BoardUtils.PAGE_PER_ROW_20
+                        , "repairDt", BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(repairResults.isEmpty()){
+        if (repairResults.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return repairResults;
     }
 
-    public RepairResultGetDetailMapping repairResultDetail(int repairResultId){
+    public RepairResultGetDetailMapping repairResultDetail(int repairResultId) {
         RepairResultGetDetailMapping result = repairResultRepository.findAllByRepairBook_Id(repairResultId);
-        if (result == null){
+        if (result == null) {
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
         return result;
     }
 
 
-    public RepairShopReviewMapping getRepairReviewDetail(int repairResultId){
+    public RepairShopReviewMapping getRepairReviewDetail(int repairResultId) {
         RepairShopReviewMapping result = repairShopReviewRepository.findByStatusAndRepairResult_Id(BoardUtils.BOARD_DELETE_STATUS_FALSE, repairResultId);
-        return  result;
+        return result;
     }
 
-    public int createInspectReview(int repairResultId, RepairShopReview repairShopReview){
-        RepairResult result = repairResultRepository.findById(repairResultId).orElseThrow(()->
+    public int createInspectReview(int repairResultId, RepairShopReview repairShopReview) {
+        RepairResult result = repairResultRepository.findById(repairResultId).orElseThrow(() ->
                 new RuntimeException("수리결과가 없습니다"));
 
         if (repairShopReview.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
         Account account = accountRepository.findById(repairShopReview.getAccount().getId());
-        if (account == null){
+        if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (!account.getId().equals(repairShopReview.getAccount().getId())){
+        if (!account.getId().equals(repairShopReview.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
 
