@@ -55,7 +55,7 @@ public class UserInspectConteroller {
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
-    @DeleteMapping ("/book/delete/{inspectId}")
+    @DeleteMapping ("/book/{inspectId}")
     @Operation(description = "사용자 검수원 예약 삭제")
     @Parameter(name = "inspectId", description = "예약 게시글 id")
     public ResponseEntity<?> deleteRepairBook(@PathVariable("inspectId") int inspectBookId){
