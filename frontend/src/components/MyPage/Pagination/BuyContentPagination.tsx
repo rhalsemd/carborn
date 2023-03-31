@@ -55,8 +55,8 @@ const BuyContentPagination = ({
       const response = await axios.get(
         `${CARBORN_SITE}/api/user/car/buy/list/${page}/${count}`
       );
-
       setTotalPageCnt(response.data.message.totalPages);
+
       const modifiedContent = response.data.message.content.map(
         (content: any) => {
           let modifiedBookStatus = "";
@@ -98,8 +98,6 @@ const BuyContentPagination = ({
   const ObjString: string | null = localStorage.getItem("login-token");
   const Obj = ObjString ? JSON.parse(ObjString) : null;
   const totalPages = totalPageCnt;
-
-  console.log(buyData);
 
   useEffect(() => {
     handleRequestBuyData(currentPage, itemsPerPage);

@@ -1,9 +1,11 @@
-function SaleCarYear() {
+import { DataType } from "./SaleInfoArea";
+
+function SaleCarYear({ data }: DataType) {
   return (
     <div>
       <span>연식</span>
       <div>
-        <input value="2019" disabled={true} />
+        <input value={`${data.modelYear}`} disabled={true} />
       </div>
     </div>
   );

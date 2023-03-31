@@ -159,19 +159,25 @@ export default function Nav2({ setIsToken, isToken }: any) {
             로고임
           </div>
           <div className="menu">
-            <div className="item" onClick={(): void => navigate("/")}>
+            <div className="item" onClick={(): void => navigate("/user/car/list")}>
               구매
             </div>
-            <div className="item" onClick={(): void => navigate("/")}>
+            <div
+              className="item"
+              onClick={(): void => navigate("/user/car/sale/4")}
+            >
               판매
             </div>
-            <div className="item" onClick={(): void => navigate("/")}>
+            <div
+              className="item"
+              onClick={(): void => navigate("/user/community")}
+            >
               커뮤니티
             </div>
-            <div className="item" onClick={(): void => navigate("/")}>
+            <div className="item" onClick={(): void => navigate("/user/map")}>
               검수 및 정비 예약
             </div>
-            <div className="item" onClick={(): void => navigate("/")}>
+            <div className="item" onClick={(): void => navigate("/user/car")}>
               MY CAR
             </div>
             {success || localToken ? (

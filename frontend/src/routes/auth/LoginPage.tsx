@@ -4,7 +4,6 @@ import LoginID from "../../components/auth/login/LoginID";
 import LoginPassword from "../../components/auth/login/LoginPassword";
 import React, { useState, useEffect, ButtonHTMLAttributes } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Nav from "../../components/Nav";
 import { loginAction } from "../../modules/takeLoginLogoutModule";
 import { userInfoDeleteReset } from "../../modules/userInfoDeleteModule";
 import { companyInfoDeleteReset } from "../../modules/companyInfoDeleteModule";
@@ -14,7 +13,7 @@ import {
 } from "../../modules/modifyPasswordModule";
 import { IsCanSignUpReset } from "../../modules/signUpModule";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
-import Nav2 from './../../components/Nav2';
+import Nav2 from "./../../components/Nav2";
 
 export const StyleLink = styled(Link)`
   color: #d23131;
@@ -143,7 +142,7 @@ const LoginPages = () => {
   const handleLogin = () => {
     try {
       dispatch(loginAction(loginInput));
-    } catch (error:any) {
+    } catch (error: any) {
       setIsAlert(true);
       setTimeout(() => {
         setIsAlert(false);
@@ -203,24 +202,25 @@ const LoginPages = () => {
   return (
     <div>
       <Nav2 isToken={isToken} setIsToken={setIsToken} />
-      {/* <Nav isToken={isToken} setIsToken={setIsToken} /> */}
       <StyleLoginSignUpDiv>
         <StyleLoginSignUpBoxDiv>
           <StyleLoginSignUpTitle>
             <h2>로그인</h2>
           </StyleLoginSignUpTitle>
-          <LoginID setLoginInput={setLoginInput} loginInput={loginInput} />
-          <LoginPassword
-            setLoginInput={setLoginInput}
-            loginInput={loginInput}
-          />
-          <StyleLoginSignUpBtn
-            backgroundColor={captchaValue ? "#d23131" : "grey"}
-            disabled={!captchaValue}
-            onClick={handleLogin}
-          >
-            로그인 하기
-          </StyleLoginSignUpBtn>
+          <form onSubmit={handleLogin}>
+            <LoginID setLoginInput={setLoginInput} loginInput={loginInput} />
+            <LoginPassword
+              setLoginInput={setLoginInput}
+              loginInput={loginInput}
+            />
+            <StyleLoginSignUpBtn
+              backgroundColor={captchaValue ? "#d23131" : "grey"}
+              disabled={!captchaValue}
+              type="submit"
+            >
+              로그인 하기
+            </StyleLoginSignUpBtn>
+          </form>
           <StyleLoginAnotherLink>
             <StyleLink to="/getagreement">회원가입</StyleLink> /
             <StyleLink to="/searchid"> 아이디 찾기</StyleLink> /

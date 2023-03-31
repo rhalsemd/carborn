@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.carborn.dto.request.ResetPwdRequestDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.service.common.AccountService;
 import site.carborn.util.network.NormalResponse;
@@ -31,5 +32,10 @@ public class AccountController {
     @PatchMapping("/reset-pw")
     public ResponseEntity<?> resetPw(@RequestBody Account account) {
         return NormalResponse.toResponseEntity(HttpStatus.OK, accountService.resetPw(account));
+    }
+
+    @PostMapping("/user/reset-pw")
+    public ResponseEntity<?> resetPwWithLogin(@RequestBody ResetPwdRequestDTO dto) {
+        return NormalResponse.toResponseEntity(HttpStatus.OK, accountService.resetPwWithLogin(dto));
     }
 }

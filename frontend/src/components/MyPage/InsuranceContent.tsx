@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
-import Nav from './../Nav';
+import Nav2 from '../Nav2';
 import MyInsuranceContentComponent from './TableComponent/MyInsuranceContentComponent';
 
 const StyleInsuranceContent = styled.div`
   width: 100vw;
+  margin-bottom: 20vh;
 `;
 
 const StyleInsuranceContentContainer = styled.div`
   width: 100vw;
   height: 80vh;
-  border: 1px solid black;
 
   display: flex;
   flex-direction: column;
@@ -34,14 +34,14 @@ const StyleInsuranceContentTitleDiv = styled.div`
 `;
 
 const InsuranceContent = () => {
-
   return (
     <StyleInsuranceContent>
-      <Nav />
+      <Nav2 />
       <StyleInsuranceContentContainer>
         <StyleInsuranceContentTitleDiv>
           <p>손상 내역</p>
         </StyleInsuranceContentTitleDiv>
+        <br/>
         <MyInsuranceContentComponent />
       </StyleInsuranceContentContainer>
     </StyleInsuranceContent>

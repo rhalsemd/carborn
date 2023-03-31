@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { userModifyPasswordRequest } from "../../modules/modifyPasswordModule";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Nav2 from "../Nav2";
 
 const StyleUserPasswordModifyForm = styled.form`
   width: 100vw;
@@ -141,36 +142,39 @@ const UserPasswordModify = () => {
   }, [isSuccess, navigate]);
 
   return (
-    <StyleUserPasswordModifyForm onSubmit={(e) => handleSendNewPassword(e)}>
-      <StyleUserPasswordModifyContainerDiv>
-        {/* 타이틀 */}
-        <StyleUserPasswordModifyTitleDiv>
-          <span>비밀번호 재설정</span>
-        </StyleUserPasswordModifyTitleDiv>
-        {/* 기존 비밀번호 */}
-        <StyleUserPasswordModifyInputDiv>
-          <span>기존비밀번호</span>
-          <input type="passwword" onChange={(e) => handleOldPassword(e)} />
-        </StyleUserPasswordModifyInputDiv>
-        {/* 새로운 비밀번호 */}
-        <StyleUserPasswordModifyInputDiv>
-          <span>새로운 비밀번호</span>
-          <input type="password" onChange={(e) => handleNewPassword(e)} />
-        </StyleUserPasswordModifyInputDiv>
-        {/* 비밀번호 확인 */}
-        <StyleUserPasswordModifyInputDiv>
-          <span>비밀번호 확인</span>
-          <input type="password" onChange={(e) => handleNewPasswordCheck(e)} />
-        </StyleUserPasswordModifyInputDiv>
-        {/* 버튼 나누기 */}
-        <StyleUserPasswordModifyButtonDiv>
-          <StyleCancelBtn onClick={handleMyPageMove}>취소</StyleCancelBtn>
-          <StylePasswordModifyBtn type="submit" disabled={!isNewPassword}>
-            비밀번호 변경
-          </StylePasswordModifyBtn>
-        </StyleUserPasswordModifyButtonDiv>
-      </StyleUserPasswordModifyContainerDiv>
-    </StyleUserPasswordModifyForm>
+    <div>
+      <Nav2/>
+      <StyleUserPasswordModifyForm onSubmit={(e) => handleSendNewPassword(e)}>
+        <StyleUserPasswordModifyContainerDiv>
+          {/* 타이틀 */}
+          <StyleUserPasswordModifyTitleDiv>
+            <span>비밀번호 재설정</span>
+          </StyleUserPasswordModifyTitleDiv>
+          {/* 기존 비밀번호 */}
+          <StyleUserPasswordModifyInputDiv>
+            <span>기존비밀번호</span>
+            <input type="passwword" onChange={(e) => handleOldPassword(e)} />
+          </StyleUserPasswordModifyInputDiv>
+          {/* 새로운 비밀번호 */}
+          <StyleUserPasswordModifyInputDiv>
+            <span>새로운 비밀번호</span>
+            <input type="password" onChange={(e) => handleNewPassword(e)} />
+          </StyleUserPasswordModifyInputDiv>
+          {/* 비밀번호 확인 */}
+          <StyleUserPasswordModifyInputDiv>
+            <span>비밀번호 확인</span>
+            <input type="password" onChange={(e) => handleNewPasswordCheck(e)} />
+          </StyleUserPasswordModifyInputDiv>
+          {/* 버튼 나누기 */}
+          <StyleUserPasswordModifyButtonDiv>
+            <StyleCancelBtn onClick={handleMyPageMove}>취소</StyleCancelBtn>
+            <StylePasswordModifyBtn type="submit" disabled={!isNewPassword}>
+              비밀번호 변경
+            </StylePasswordModifyBtn>
+          </StyleUserPasswordModifyButtonDiv>
+        </StyleUserPasswordModifyContainerDiv>
+      </StyleUserPasswordModifyForm>
+    </div>
   );
 };
 

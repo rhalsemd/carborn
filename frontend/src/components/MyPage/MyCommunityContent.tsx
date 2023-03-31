@@ -1,4 +1,5 @@
 import styled from "@emotion/styled"
+import Nav2 from "../Nav2";
 import Nav from './../Nav';
 import MyCommunityContentComponent from './TableComponent/MyCommunityContentComponent';
 
@@ -37,7 +38,7 @@ const MyCommunityContent = () => {
 
   return (
     <StyleMyCommunityContent>
-      <Nav />
+      <Nav2 />
       <StyleMyCommunityContentContainer>
         <StyleMyCommunityContentTitleDIv>
           <p>내가 쓴 게시글 리스트 내역</p>

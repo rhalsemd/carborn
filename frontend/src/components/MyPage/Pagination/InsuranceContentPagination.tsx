@@ -1,29 +1,33 @@
-//MUI 컴포넌트
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL, CARBORN_SITE } from "./../../../lib/api";
-import { useEffect } from "react";
+import { CARBORN_SITE } from "./../../../lib/api";
+
+//MUI 컴포넌트
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+
+import { Table, TableCell, TableRow } from "@mui/material";
+import {
+  StyledTableContainer,
+  StyledTableHead,
+  StyleMainTableHead,
+} from "../DetailComponent/MyCarInfoDetail";
+import { StyledButton } from "./MyCarInfoPagination";
 
 export interface InsuranceContentPaginationProps {
   itemsPerPage: number;
 }
-
 export interface InsuranceType {
   id: number;
-  carModel: string;
-  manufacturer: string;
-  mileage: number;
-  plateNumber: string;
-  year: number;
-  insuranceType: number;
-  insuranceProcessedDate: string;
-  registrationDate: string;
-  insuranceCompany: string;
+  carMaker: string;
+  carModelNm: string;
+  carRegNm: string;
+  carModelYear: number;
+  category: number;
+  insuranceDt: string;
+  insuranceCompanyAccountId: string;
 }
 
 const StyleInsurancePaginationDiv = styled.div`
@@ -32,6 +36,20 @@ const StyleInsurancePaginationDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  .MuiStack-root {
+    position: absolute;
+    top: 135vh;
+  }
+
+  .MuiButtonBase-root {
+    background-color: white;
+  }
+
+  .Mui-selected {
+    background-color: #d23131 !important;
+    color: white;
+  }
 `;
 
 const InsuranceContentPagination = ({
@@ -45,42 +63,10 @@ const InsuranceContentPagination = ({
   const handleRequestInsuranceData = async (page: number, count: number) => {
     try {
       const response = await axios.get(
-        `${CARBORN_SITE}/api/user/insurance/result/list/${page}`
+        `${CARBORN_SITE}/api/user/insurance/list/${page}/${count}`
       );
-      // setTotalPageCnt(response.data.message.totalPages);
-        
-      const modifiedContent = response.data.message.content.map(
-        (content: any) => {
-          let modifiedBookStatus = "";
-          let modifiedBookStatusNum = 0;
-          switch (content.insuranceBookBookStatus) {
-            case 0:
-              modifiedBookStatus = "예약 중";
-              modifiedBookStatusNum = 0;
-              break;
-            case 1:
-              modifiedBookStatus = "정비 완료";
-              modifiedBookStatusNum = 1;
-              break;
-            case 2:
-              modifiedBookStatus = "예약 취소";
-              modifiedBookStatusNum = 2;
-              break;
-            default:
-              modifiedBookStatus = content.insuranceBookBookStatus;
-              modifiedBookStatusNum = 0;
-              break;
-          }
-
-          return {
-            ...content,
-            insuranceBookBookStatus: modifiedBookStatus,
-            modifiedBookStatusNum,
-          };
-        }
-      );
-    
-      setInsuranceData(modifiedContent);
+      setTotalPageCnt(response.data.message.totalPages);
+      setInsuranceData(response.data.message.content)
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
@@ -94,11 +80,6 @@ const InsuranceContentPagination = ({
   useEffect(() => {
     handleRequestInsuranceData(currentPage, itemsPerPage);
   }, [currentPage, itemsPerPage]);
-
-  // 페이지 네이션 유효성 검사
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = insuranceData.slice(startIndex, endIndex);
 
   if (insuranceData.length === 0) {
     return <div>No data Found!</div>;
@@ -114,103 +95,68 @@ const InsuranceContentPagination = ({
 
   return (
     <StyleInsurancePaginationDiv>
-      <table>
-        <thead>
-          <tr>
-            <th>차량모델</th>
-            <th>제조사</th>
-            <th>{`주행거리(km)`}</th>
-            <th>차량번호</th>
-            <th>{`연식(년)`}</th>
-            <th>보험종류</th>
-            <th>보험처리일자</th>
-            <th>내역등록일자</th>
-            <th>보험사명</th>
-            <th>완료상세조회</th>
-          </tr>
-        </thead>
-        <tbody>
-          {insuranceData.map((insurance: InsuranceType, index: number) => (
-            <tr key={index}>
-              <td>{insurance.carModel}</td>
-              <td>{insurance.manufacturer}</td>
-              <td>{insurance.mileage}</td>
-              <td>{insurance.plateNumber}</td>
-              <td>{insurance.year}</td>
-              <td>{insurance.insuranceType}</td>
-              <td>
-                {insurance.insuranceProcessedDate === null
-                  ? "-"
-                  : insurance.insuranceProcessedDate}
-              </td>
-              <td>
-                {insurance.registrationDate === null
-                  ? "-"
-                  : insurance.registrationDate}
-              </td>
-              <td>{insurance.insuranceCompany}</td>
-              <td>
-                <button onClick={() => getInsuranceDetail(insurance.id)}>
-                  상세조회
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <button
-          disabled={currentPage === 1}
-          onClick={() =>
-            handleRequestInsuranceData(currentPage - 1, itemsPerPage)
+      <StyledTableContainer>
+        <Table>
+          <StyledTableHead>
+            <TableRow>
+              <TableCell>차량모델</TableCell>
+              <TableCell>제조사</TableCell>
+              <TableCell>차량번호</TableCell>
+              <TableCell>{`연식(년)`}</TableCell>
+              <TableCell>보험종류</TableCell>
+              <TableCell>보험처리일자</TableCell>
+              <TableCell>보험사명</TableCell>
+              <TableCell>완료상세조회</TableCell>
+            </TableRow>
+          </StyledTableHead>
+          <StyleMainTableHead>
+            {insuranceData.map((insurance: InsuranceType, index: number) => (
+              <TableRow key={index}>
+                <TableCell>{insurance.carModelNm}</TableCell>
+                <TableCell>{insurance.carMaker}</TableCell>
+                <TableCell>{insurance.carRegNm}</TableCell>
+                <TableCell>{insurance.carModelYear}</TableCell>
+                <TableCell>{insurance.category}</TableCell>
+                <TableCell>
+                  {insurance.insuranceDt === null
+                    ? "-"
+                    : insurance.insuranceDt}
+                </TableCell>
+                <TableCell>{insurance.insuranceCompanyAccountId}</TableCell>
+                <TableCell>
+                  <StyledButton onClick={() => getInsuranceDetail(insurance.id)}>
+                    상세조회
+                  </StyledButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </StyleMainTableHead>
+        </Table>
+      </StyledTableContainer>
+      <br/>
+      <Stack spacing={2}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, value) =>
+            handleRequestInsuranceData(value, itemsPerPage)
           }
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => {
-          if (i >= currentPage + 2 || i <= currentPage - 2) return null;
-          return (
-            <button
-              key={i}
-              disabled={currentPage === i + 1}
-              onClick={() => handleRequestInsuranceData(i + 1, itemsPerPage)}
-            >
-              {i + 1}
-            </button>
-          );
-        })}
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() =>
-            handleRequestInsuranceData(currentPage + 1, itemsPerPage)
-          }
-        >
-          Next
-        </button>
-      </div>
-      <div>
-        <Stack direction="row" spacing={2}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            color="primary"
-            onChange={(event, page) =>
-              handleRequestInsuranceData(page, itemsPerPage)
-            }
-          />
-        </Stack>
-      </div>
+          sx={{ backgroundColor: "white" }}
+          size="large"
+          disabled={totalPages === 0}
+        />
+      </Stack>
     </StyleInsurancePaginationDiv>
   );
 };
 
 export default InsuranceContentPagination;
 
-// 페이지네이션 컴포넌트 
+// 페이지네이션 컴포넌트
 export const BasicPagination = () => {
   return (
     <Stack spacing={2}>
       <Pagination count={10} color="primary" />
     </Stack>
   );
-}
+};

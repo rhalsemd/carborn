@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Nav2 from "../Nav2";
 import Nav from "./../Nav";
 import MyBuyContentComponent from "./TableComponent/MyBuyContentComponent";
 
@@ -36,7 +37,7 @@ const StyleBuyContentTitleDiv = styled.div`
 const BuyContent = () => {
   return (
     <StyleBuyContent>
-      <Nav />
+      <Nav2 />
       <StyleBuyContentContainer>
         <StyleBuyContentTitleDiv>
           <p>구매 내역</p>
