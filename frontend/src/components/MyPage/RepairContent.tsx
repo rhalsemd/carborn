@@ -1,15 +1,16 @@
 import styled from '@emotion/styled';
+import Nav2 from '../Nav2';
 import Nav from './../Nav';
 import MyRepairContentComponent from './TableComponent/MyRepairContentComponent';
 
 const StyleRepairContent = styled.div`
   width: 100vw;
+  margin-bottom: 20vh;
 `;
 
 const StyleRepairContentContainer = styled.div`
   width: 100vw;
   height: 80vh;
-  border: 1px solid black;
 
   display: flex;
   flex-direction: column;
@@ -36,11 +37,12 @@ const StyleRepairContentTitleDiv = styled.div`
 const RepairContent = () => {
   return (
     <StyleRepairContent>
-      <Nav />
+      <Nav2 />
       <StyleRepairContentContainer>
         <StyleRepairContentTitleDiv>
           <p>정비 내역</p>
         </StyleRepairContentTitleDiv>
+        <br/>
         <MyRepairContentComponent />
       </StyleRepairContentContainer>
     </StyleRepairContent>

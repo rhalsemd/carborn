@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Nav2 from '../Nav2';
 import Nav from './../Nav';
 import MySellContentComponent from './TableComponent/MySellContentComponent';
 
@@ -36,7 +37,7 @@ const StyleSellContentTitleDIv = styled.div`
 const SellContent = () => {
   return (
     <StyleSellContent>
-      <Nav />
+      <Nav2 />
       <StyleSellContentContainer>
         <StyleSellContentTitleDIv>
           <p>판매 내역</p>
