@@ -13,23 +13,32 @@ const leftContent = css`
   text-align: center;
 `;
 
-function SaleCarImg() {
+function SaleCarImg({ imgs }: { imgs: Array<string> }) {
   return (
     <div css={leftContent}>
-      <Carousel>
-        <div>
-          <img src={car} alt="qwe" />
-          <p className="legend">Legend 1</p>
-        </div>
-        <div>
-          <img src={car} />
-          <p className="legend">Legend 2</p>
-        </div>
-        <div>
-          <img src={car} />
-          <p className="legend">Legend 3</p>
-        </div>
-      </Carousel>
+      {imgs.length ? (
+        <Carousel>
+          {imgs?.map((IMG: string) => {
+            return (
+              <div>
+                <img src={car} alt="qwe" />
+                <p className="legend">Legend 1</p>
+              </div>
+            );
+          })}
+        </Carousel>
+      ) : (
+        <Carousel>
+          <div>
+            <img src={car} alt="qwe" />
+            <p className="legend">Legend 1</p>
+          </div>
+          <div>
+            <img src={car} alt="qwe" />
+            <p className="legend">Legend 1</p>
+          </div>
+        </Carousel>
+      )}
     </div>
   );
 }

@@ -1,11 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+
 import { useInfiniteQuery } from "react-query";
-import carImg from "../../../assets/car.png";
-import { useEffect, useRef } from "react";
-import { Page } from "../VehiclePurchaseType";
-import { infinityFnc } from "../VehiclePurchaseAPI";
+import { useEffect, useRef, useState } from "react";
+import { SearchType } from "../VehiclePurchaseType";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import ErrorComponent from "../../ErrorComponent";
+import Loading from "../../Loading";
+import SpeedDialComponent from "../SpeedDialComponent";
 
 const rightContent = css`
   width: 75vw;
@@ -58,22 +61,39 @@ let intersectionOptions = {
   threshold: 0.3,
 };
 
-function CarList() {
+const SIZE: number = 5;
+const CAR_URL = process.env.REACT_APP_IMG_URL;
+
+function CarList({ searchInfo }: { searchInfo: SearchType }) {
   const divRef = useRef<HTMLDivElement | any>({});
   const navigation = useNavigate();
+  const [error, setError] = useState<Error | null>(null);
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    "infinity-scroll",
-    infinityFnc,
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        return allPages.length + 1;
+  const { data, fetchNextPage, hasNextPage, isError, isLoading } =
+    useInfiniteQuery(
+      "infinity-scroll",
+      ({ pageParam = 1 }) => {
+        return axios({
+          method: "get",
+          url: `https://carborn.site/api/user/car/sale/list/${pageParam}/${SIZE}/${searchInfo.sortType}`,
+        });
       },
-      onSuccess: (data) => {
-        return data;
-      },
-    }
-  );
+      {
+        retry: false,
+        keepPreviousData: true,
+        getNextPageParam: (lastPage, allPages) => {
+          if (lastPage.data.message.totalPages > allPages.length) {
+            return allPages.length + 1;
+          }
+        },
+        onSuccess: (data) => {
+          return data;
+        },
+        onError: (error: Error) => {
+          setError(error);
+        },
+      }
+    );
 
   const intersection = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
@@ -88,7 +108,10 @@ function CarList() {
 
   useEffect(() => {
     if (divRef?.current && data) {
-      let lastPage = data.pages[0].data.length - 1;
+      let lastPage =
+        (data.pages.length - 1) * SIZE +
+        data.pages[data.pages.length - 1].data.message.content.length -
+        1;
       intersection.observe(divRef?.current[lastPage]);
     }
   }, [data]);
@@ -97,33 +120,72 @@ function CarList() {
     navigation(`/user/car/${id}`);
   };
 
+  if (isError) {
+    return (
+      <div css={rightContent}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <ErrorComponent error={error} queryKey={"infinity-scroll"} />
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div css={rightContent}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div css={rightContent}>
       {data?.pages.map((item) => {
-        return item.data.map((page: Page, index: number) => {
+        let cnt = 0;
+
+        return item?.data?.message.content.map((car: any, index: number) => {
           return (
             <div
               css={infoBox}
               key={index}
-              ref={(ref) => (divRef.current[index] = ref)}
+              ref={(ref) => {
+                divRef.current[cnt] = ref;
+                cnt++;
+              }}
             >
-              <button className="btn" onClick={() => goToDetil(page.id)}>
+              <button className="btn" onClick={() => goToDetil(car.carId)}>
                 Detail
               </button>
-              <img src={carImg} alt="carImg" css={imgStyle} />
+              <img src={`${CAR_URL}${car.imgNm}`} alt="carImg" css={imgStyle} />
               <div css={textStyle}>
                 <div>
-                  <div>{page.name}</div>
+                  <div>{`${car.modelYear} ${car.modelNm} | ${parseInt(
+                    car.mileage
+                  ).toLocaleString("ko-KR")}km`}</div>
                   <div style={{ border: "2px solid red", width: "3vw" }}></div>
                 </div>
 
-                <div>{page.name}</div>
-                <div>{`${page.name}￦`}</div>
+                <div>{car.content}</div>
+                <div>{`${parseInt(car.price).toLocaleString("ko-KR")}￦`}</div>
               </div>
             </div>
           );
         });
       })}
+      {/* 스피드 다이얼 */}
+      <SpeedDialComponent />
     </div>
   );
 }
