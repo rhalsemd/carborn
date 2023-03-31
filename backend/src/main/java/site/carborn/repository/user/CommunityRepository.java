@@ -13,6 +13,7 @@ import site.carborn.mapping.user.UserCommunityListMapping;
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Integer> {
     Page<UserCommunityListMapping> findByStatus(@Param("status") boolean status, Pageable page);
+    Page<UserCommunityListMapping> findByStatusAndTitleContainingOrContentContaining(@Param("status") boolean status, @Param("title") String title,@Param("content") String content, Pageable page);
 
 
     UserCommunityListMapping findAllByIdAndStatus(int communityId, boolean status);
