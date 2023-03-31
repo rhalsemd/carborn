@@ -43,10 +43,11 @@ public class UserInspectService {
         Page<UserInspectBookListMapping> inspectBookList = inspectBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
-                , BoardUtils.pageRequestInit(
+                ,BoardUtils.pageRequestInit(
                         page
-                        , size
-                        , "id", BoardUtils.ORDER_BY_DESC
+                        ,size
+                        ,"id"
+                        ,BoardUtils.ORDER_BY_DESC
                 )
         );
         if (inspectBookList.isEmpty()) {
@@ -142,10 +143,11 @@ public class UserInspectService {
         Page<UserInspectResultListMapping> inspectResultList = inspectResultRepository.findByInspectBook_StatusAndInspectBook_Account_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
-                , BoardUtils.pageRequestInit(
+                ,BoardUtils.pageRequestInit(
                         page
-                        , size
-                        , "inspectDt", BoardUtils.ORDER_BY_DESC
+                        ,size
+                        ,"inspectDt"
+                        ,BoardUtils.ORDER_BY_DESC
                 )
         );
         if (inspectResultList.isEmpty()) {
