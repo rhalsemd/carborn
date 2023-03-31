@@ -1,6 +1,5 @@
 package site.carborn.mapping.user;
 
-import jakarta.persistence.Column;
 
 import java.time.LocalDateTime;
 

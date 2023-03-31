@@ -17,7 +17,7 @@ public interface InspectResultRepository extends JpaRepository<InspectResult, In
 
     Page<InspectResultGetListMapping> findByInspectBook_Inspector_Id(@Param("inspectorBookInspectorId") int inspectorBookInspectorId, Pageable page);
 
-    InspectResultGetDetailMapping findAllById(@Param("id")int id);
+    InspectResultGetDetailMapping findAllById(@Param("id") int id);
 
     Page<UserInspectResultListMapping> findByInspectBook_StatusAndInspectBook_Account_Id(@Param("InspectBookStatus") boolean InspectBookStatus, @Param("InspectBookAccountId") String InspectBookAccountId, Pageable page);
 

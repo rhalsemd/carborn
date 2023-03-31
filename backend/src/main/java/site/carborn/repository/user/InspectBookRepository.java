@@ -17,6 +17,7 @@ public interface InspectBookRepository extends JpaRepository<InspectBook, Intege
 
     InspectBookGetDetailMapping findAllById(@Param("id") int id);
 
-    Page<UserInspectBookListMapping> findByStatusAndAccount_Id(@Param("status") boolean status, @Param("accountId") String accountId,Pageable page);
+    Page<UserInspectBookListMapping> findByStatusAndAccount_Id(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
+
     UserInspectBookDetailMapping findAllByIdAndStatus(@Param("id") int id, @Param("status") boolean status);
 }
