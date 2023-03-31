@@ -38,38 +38,38 @@ public class UserRepairController {
             @Parameter(name = "size", description = "페이지내 게시글 수")
     })
     public ResponseEntity<?> getRepairBookList(@PathVariable("page") int page,
-                                               @PathVariable("size") int size){
+                                               @PathVariable("size") int size) {
         String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
-        Page<UserRepairBookListMapping> result = userRepairService.repairBookList(accountId,page,size);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+        Page<UserRepairBookListMapping> result = userRepairService.repairBookList(accountId, page, size);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
     @GetMapping("/book/{repairBookId}")
     @Operation(description = "정비소 예약 단일 조회")
     @Parameter(name = "repairBookId", description = "예약 게시글 id")
-    public ResponseEntity<?> getRepairBook(@PathVariable("repairBookId") Integer repairBookId){
+    public ResponseEntity<?> getRepairBook(@PathVariable("repairBookId") Integer repairBookId) {
         UserRepairBookDetailMapping repairBook = userRepairService.repairBook(repairBookId);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,repairBook);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, repairBook);
     }
 
     @PostMapping("/book")
     @Operation(description = "사용자 정비소 예약")
-    public ResponseEntity<?> createRepairBook(@RequestBody RepairBook repairBook){
+    public ResponseEntity<?> createRepairBook(@RequestBody RepairBook repairBook) {
         userRepairService.createRepairBook(repairBook);
         return NormalResponse.toResponseEntity(HttpStatus.OK, userRepairService.createRepairBook(repairBook));
     }
 
-    @DeleteMapping ("/book/{repairBookId}")
+    @DeleteMapping("/book/{repairBookId}")
     @Operation(description = "사용자 정비소 예약 삭제")
     @Parameter(name = "repairBookId", description = "예약 게시글 id")
-    public ResponseEntity<?> deleteRepairBook(@PathVariable("repairBookId") Integer repairBookId){
+    public ResponseEntity<?> deleteRepairBook(@PathVariable("repairBookId") Integer repairBookId) {
         userRepairService.deleteRepairBook(repairBookId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
     @PutMapping("/book")
     @Operation(description = "사용자 정비소 예약 내역 수정")
-    public ResponseEntity<?> updateRepairBook(@RequestBody RepairBook repairBook){
+    public ResponseEntity<?> updateRepairBook(@RequestBody RepairBook repairBook) {
         return NormalResponse.toResponseEntity(HttpStatus.OK, userRepairService.updateRepairBook(repairBook));
     }
 
@@ -80,18 +80,18 @@ public class UserRepairController {
     @Parameters({
             @Parameter(name = "page", description = "페이지 번호")
     })
-    public ResponseEntity<?> getRepairResultList(@PathVariable("page") int page){
+    public ResponseEntity<?> getRepairResultList(@PathVariable("page") int page) {
         String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
-        Page<UserRepairResultListMapping> result = userRepairService.repairResultList(accountId,page);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+        Page<UserRepairResultListMapping> result = userRepairService.repairResultList(accountId, page);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
     @GetMapping("/result/{repairResultId}")
     @Operation(description = "사용자의 정비 완료 단일 조회")
     @Parameter(name = "repairResultId", description = "정비 결과 게시글 id")
-    public ResponseEntity<?> getRepairResultDetail(@PathVariable("repairResultId") int repairResultId){
+    public ResponseEntity<?> getRepairResultDetail(@PathVariable("repairResultId") int repairResultId) {
         RepairResultGetDetailMapping result = userRepairService.repairResultDetail(repairResultId);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,result);
+        return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
 
@@ -99,7 +99,7 @@ public class UserRepairController {
     @GetMapping("result/review/{repairResultId}")
     @Operation(description = "사용자의 정비완료에 대한 리뷰 조회")
     @Parameter(name = "repairResultId", description = "정비 결과 게시글 id")
-    public ResponseEntity<?> getRepairReviewDetail(@PathVariable int repairResultId){
+    public ResponseEntity<?> getRepairReviewDetail(@PathVariable int repairResultId) {
         RepairShopReviewMapping detail = userRepairService.getRepairReviewDetail(repairResultId);
         return NormalResponse.toResponseEntity(HttpStatus.OK, detail);
     }
@@ -108,8 +108,8 @@ public class UserRepairController {
     @Operation(description = "사용자의 검수완료 리뷰 작성")
     @Parameter(name = "inspectResultId", description = "검수 결과 게시글 id")
     public ResponseEntity<?> getInspectReviewList(@PathVariable int repairResultId,
-                                                  @RequestBody RepairShopReview repairShopReview){
-        int result = userRepairService.createInspectReview(repairResultId,repairShopReview);
+                                                  @RequestBody RepairShopReview repairShopReview) {
+        int result = userRepairService.createInspectReview(repairResultId, repairShopReview);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 
