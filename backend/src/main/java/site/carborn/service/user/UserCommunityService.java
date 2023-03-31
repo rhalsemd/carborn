@@ -124,9 +124,10 @@ public class UserCommunityService {
         if (community.getId() != communityId) {
             throw new RuntimeException("잘못된 경로입니다");
         }
+
         Community update = communityRepository.findById(communityId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-//
+
         if (!community.getAccount().getId().equals(update.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
@@ -204,7 +205,9 @@ public class UserCommunityService {
         }
         CommunityReview update = communityReviewRepository.findById(commentId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-//
+        if (update.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
+            throw new RuntimeException("삭제된 게시글입니다");
+        }
         if (!communityReview.getAccount().getId().equals(update.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
