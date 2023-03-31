@@ -63,9 +63,9 @@ let intersectionOptions = {
 
 const SIZE: number = 5;
 const CAR_URL = process.env.REACT_APP_IMG_URL;
-let cnt = 0;
 
 function CarList({ searchInfo }: { searchInfo: SearchType }) {
+  let cnt = 0;
   const divRef = useRef<HTMLDivElement | any>({});
   const navigation = useNavigate();
   const [error, setError] = useState<Error | null>(null);
