@@ -63,13 +63,13 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           colSpan={6}
         >
           <Collapse in={open} timeout="auto" unmountOnExit>
-            {/* <Box sx={{ margin: 1 }}> */}
-            <Typography variant="h6" gutterBottom component="div">
-              서류 이미지
-            </Typography>
+            <Box component="div" sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                서류 이미지
+              </Typography>
 
-            <img src={car} alt="car" style={{ width: "100%" }} />
-            {/* </Box> */}
+              <img src={car} alt="car" style={{ width: "100%" }} />
+            </Box>
           </Collapse>
         </TableCell>
       </TableRow>
