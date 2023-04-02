@@ -3,12 +3,14 @@ import { css } from "@emotion/react";
 
 import { useInfiniteQuery } from "react-query";
 import { useEffect, useRef, useState } from "react";
-import { SearchType } from "../VehiclePurchaseType";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ErrorComponent from "../../ErrorComponent";
 import Loading from "../../Loading";
 import SpeedDialComponent from "../SpeedDialComponent";
+import NoCarList from "./NoCarList";
+import { useSelector } from "react-redux";
+import { StateType } from "../../../modules/carListModule";
 
 const rightContent = css`
   width: 75vw;
@@ -64,11 +66,21 @@ let intersectionOptions = {
 const SIZE: number = 5;
 const CAR_URL = process.env.REACT_APP_IMG_URL;
 
-function CarList({ searchInfo }: { searchInfo: SearchType }) {
+function CarList() {
   let cnt = 0;
   const divRef = useRef<HTMLDivElement | any>({});
   const navigation = useNavigate();
   const [error, setError] = useState<Error | null>(null);
+  const { sortType, keyword, keywordType } = useSelector(
+    ({ carListReducer }: { carListReducer: StateType }) => carListReducer
+  );
+
+  const SORT_API = (pageParam: number) => {
+    return `https://carborn.site/api/user/car/sale/list/${pageParam}/${SIZE}/${sortType}`;
+  };
+  const SEARCH_API = (pageParam: number) => {
+    return `https://carborn.site/api/user/car/sale/list/${pageParam}/${SIZE}/${sortType}/${keywordType}/${keyword}`;
+  };
 
   const { data, fetchNextPage, hasNextPage, isError, isLoading } =
     useInfiniteQuery(
@@ -76,7 +88,10 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
       ({ pageParam = 1 }) => {
         return axios({
           method: "get",
-          url: `https://carborn.site/api/user/car/sale/list/${pageParam}/${SIZE}/${searchInfo.sortType}`,
+          url:
+            keyword && keywordType
+              ? SEARCH_API(pageParam)
+              : SORT_API(pageParam),
         });
       },
       {
@@ -84,8 +99,6 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
         keepPreviousData: true,
         useErrorBoundary: true,
         getNextPageParam: (lastPage, allPages) => {
-          console.log(lastPage.data.message.totalPages, "토탈");
-          console.log(allPages.length, "페이지");
           if (lastPage.data.message.totalPages > allPages.length) {
             return allPages.length + 1;
           }
@@ -110,14 +123,16 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
     });
   }, intersectionOptions);
 
+  // 데이터가 비었는지 확인하는 변수
+  const isData = !!data?.pages[0].data.message.content.length;
+
   useEffect(() => {
-    if (divRef?.current && data) {
+    if (divRef?.current && isData && data) {
       let lastPage =
         (data.pages.length - 1) * SIZE +
         data.pages[data.pages.length - 1].data.message.content.length -
         1;
       intersection.observe(divRef?.current[lastPage]);
-      console.log(data);
     }
   }, [data]);
 
@@ -125,6 +140,7 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
     navigation(`/user/car/${id}`);
   };
 
+  // 에러가 발생했을 시
   if (isError) {
     return (
       <div css={rightContent}>
@@ -140,6 +156,7 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
     );
   }
 
+  // 로딩중일 때
   if (isLoading) {
     return (
       <div css={rightContent}>
@@ -157,38 +174,52 @@ function CarList({ searchInfo }: { searchInfo: SearchType }) {
 
   return (
     <div css={rightContent}>
-      {data?.pages.map((item) => {
-        return item?.data?.message.content.map((car: any, index: number) => {
-          return (
-            <div
-              css={infoBox}
-              key={index}
-              ref={(ref) => {
-                if (ref) {
-                  divRef.current[cnt] = ref;
-                  cnt++;
-                }
-              }}
-            >
-              <button className="btn" onClick={() => goToDetil(car.carId)}>
-                Detail
-              </button>
-              <img src={`${CAR_URL}${car.imgNm}`} alt="carImg" css={imgStyle} />
-              <div css={textStyle}>
-                <div>
-                  <div>{`${car.modelYear} ${car.modelNm} | ${parseInt(
-                    car.mileage
-                  ).toLocaleString("ko-KR")}km`}</div>
-                  <div style={{ border: "2px solid red", width: "3vw" }}></div>
-                </div>
+      {isData ? (
+        data?.pages.map((item) => {
+          return item?.data?.message.content.map((car: any, index: number) => {
+            return (
+              // 검색 결과
+              <div
+                css={infoBox}
+                key={index}
+                ref={(ref) => {
+                  if (ref) {
+                    divRef.current[cnt] = ref;
+                    cnt++;
+                  }
+                }}
+              >
+                <button className="btn" onClick={() => goToDetil(car.carId)}>
+                  Detail
+                </button>
+                <img
+                  src={`${CAR_URL}${car.imgNm}`}
+                  alt="carImg"
+                  css={imgStyle}
+                />
+                <div css={textStyle}>
+                  <div>
+                    <div>{`${car.modelYear} ${car.modelNm} | ${parseInt(
+                      car.mileage
+                    ).toLocaleString("ko-KR")}km`}</div>
+                    <div
+                      style={{ border: "2px solid red", width: "3vw" }}
+                    ></div>
+                  </div>
 
-                <div>{car.content}</div>
-                <div>{`${parseInt(car.price).toLocaleString("ko-KR")}￦`}</div>
+                  <div>{car.content}</div>
+                  <div>{`${parseInt(car.price).toLocaleString(
+                    "ko-KR"
+                  )}￦`}</div>
+                </div>
               </div>
-            </div>
-          );
-        });
-      })}
+            );
+          });
+        })
+      ) : (
+        // 검색 결과가 없음
+        <NoCarList />
+      )}
       {/* 스피드 다이얼 */}
       <SpeedDialComponent />
     </div>
