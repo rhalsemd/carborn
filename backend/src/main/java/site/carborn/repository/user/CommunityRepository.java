@@ -22,5 +22,7 @@ public interface CommunityRepository extends JpaRepository<Community, Integer> {
     @Query("update Community c set c.views = c.views+1 where c.id = :communityId")
     int updateView(int communityId);
 
+    Page<UserCommunityListMapping> findByStatusAndAccount_Id(boolean status, String accountId, Pageable page);
+
 
 }

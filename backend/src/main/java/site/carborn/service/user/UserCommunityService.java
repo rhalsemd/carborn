@@ -9,6 +9,7 @@ import site.carborn.entity.user.Community;
 import site.carborn.entity.user.CommunityReview;
 import site.carborn.mapping.user.UserCommunityCommentListMapping;
 import site.carborn.mapping.user.UserCommunityListMapping;
+import site.carborn.mapping.user.UserInspectBookListMapping;
 import site.carborn.repository.account.AccountRepository;
 import site.carborn.repository.user.CommunityRepository;
 import site.carborn.repository.user.CommunityReviewRepository;
@@ -229,4 +230,22 @@ public class UserCommunityService {
         delete.setUptDt(LocalDateTime.now());
         communityReviewRepository.save(delete);
     }
+
+    public Page<UserCommunityListMapping> getMyBoardList(String accountId, int page, int size) {
+        Page<UserCommunityListMapping> mylist = communityRepository.findByStatusAndAccount_Id(
+                BoardUtils.BOARD_DELETE_STATUS_FALSE,
+                accountId
+                ,BoardUtils.pageRequestInit(
+                        page
+                        ,size
+                        ,"id"
+                        ,BoardUtils.ORDER_BY_DESC
+                )
+        );
+        if (mylist.isEmpty()) {
+            throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
+        }
+        return mylist;
+    }
+
 }
