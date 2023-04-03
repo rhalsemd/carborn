@@ -235,9 +235,9 @@ public class UserCommunityService {
     }
 
     public Page<UserCommunityListMapping> getMyBoardList(String accountId, int page, int size) {
-        Page<UserCommunityListMapping> mylist = communityRepository.findByStatusAndAccount_Id(
-                BoardUtils.BOARD_DELETE_STATUS_FALSE,
-                accountId
+        Page<UserCommunityListMapping> myList = communityRepository.findByStatusAndAccount_Id(
+                BoardUtils.BOARD_DELETE_STATUS_FALSE
+                ,accountId
                 ,BoardUtils.pageRequestInit(
                         page
                         ,size
@@ -245,10 +245,10 @@ public class UserCommunityService {
                         ,BoardUtils.ORDER_BY_DESC
                 )
         );
-        if (mylist.isEmpty()) {
+        if (myList == null || myList.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
-        return mylist;
+        return myList;
     }
 
 }
