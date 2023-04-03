@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import Nav from "../../components/Nav";
 import SaleInfoArea from "../../components/SaleRegistrationComponents/rightContents/SaleInfoArea";
 import SaleCarImg from "./../../components/SaleRegistrationComponents/leftContents/SaleCarImg";
 import { useState } from "react";
+import { RegistrationInfo } from "./MyVehicleRegistration";
+import Nav2 from "./../../components/Nav2";
 
 const outer = css`
   border: 1px solid black;
@@ -24,7 +25,7 @@ function SaleRegistration() {
 
   return (
     <>
-      <Nav />
+      <Nav2 />
       <div css={outer}>
         <div css={content}>
           {/* 왼쪽 컨텐츠 */}

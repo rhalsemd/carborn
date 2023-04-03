@@ -6,18 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.carborn.dto.request.CarSaleRequestDTO;
-import site.carborn.dto.request.TradeRequestDTO;
 import site.carborn.entity.account.Account;
 import site.carborn.entity.car.Car;
+import site.carborn.entity.car.CarTrade;
 import site.carborn.entity.user.CarSale;
 import site.carborn.entity.user.CarSaleBook;
+import site.carborn.mapping.car.CarTradeGetListMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.repository.car.CarInsuranceHistoryRepository;
 import site.carborn.repository.car.CarRepository;
-import site.carborn.repository.user.CarSaleBookRepository;
-import site.carborn.repository.user.CarSaleRepository;
-import site.carborn.repository.user.InspectResultRepository;
-import site.carborn.repository.user.RepairResultRepository;
+import site.carborn.repository.user.*;
 import site.carborn.service.common.KlaytnService;
 import site.carborn.util.common.SearchTypeEnum;
 import site.carborn.util.common.BuyUtils;
@@ -49,6 +47,9 @@ public class UserService {
 
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    private CarTradeRepository carTradeRepository;
 
     @Autowired
     private KlaytnService klaytnService;
@@ -116,6 +117,11 @@ public class UserService {
     }
 
     @Transactional
+    public Page<CarTradeGetListMapping> getCarTradeList(int carId, Pageable page){
+        return carTradeRepository.findAllByCar_Id(carId, page);
+    }
+
+    @Transactional
     public Page<UserInspectResultListMapping> getSaleInspectList(int carId, Pageable page){
         return inspectResultRepository.findByInspectBook_Car_Id(carId, page);
     }
@@ -157,7 +163,7 @@ public class UserService {
     }
 
     @Transactional
-    public void salesReservation(int carSaleId){
+    public int salesReservation(int carSaleId){
         //현재는 임시아이디 시큐리티에서 받는 부분
         String userid = "testuser2";
 
@@ -172,6 +178,8 @@ public class UserService {
         carSalebook.setBookStatus(BuyUtils.BUY_STATUS_STAY);
 
         carSaleBookRepository.save(carSalebook);
+
+        return carSalebook.getBookStatus();
     }
 
     @Transactional
@@ -238,26 +246,34 @@ public class UserService {
 
         CarSaleGetSaleStatusMapping csgsm = carSaleRepository.findByStatusAndId(false,carSaleId);
 
-
         //carId를 통해 carHash를 가져오는 부분
         String carHash = carRepository.findAllByStatusAndId(false, csgsm.getCarId()).getWalletHash();
 
-        TradeRequestDTO trd = new TradeRequestDTO();
-        trd.setBuyId(userid);
-        trd.setSellId(csgsm.getAccountId());
-        trd.setCarId(csgsm.getCarId());
-        trd.setPrice(csgsm.getPrice());
+        CarTrade carTrade = new CarTrade();
+        carTrade.setBuyerAccount(new Account());
+        carTrade.getBuyerAccount().setId(userid);
+        carTrade.setSellerAccount(new Account());
+        carTrade.getSellerAccount().setId(csgsm.getAccountId());
+        carTrade.setPrice(csgsm.getPrice());
+        carTrade.setCar(new Car());
+        carTrade.getCar().setId(csgsm.getCarId());
+        carTrade.setRegDt(uptDt);
 
         //caver 입력 부분
         //kas api 호출
         //metaData 등록
-        String metaDataUri = klaytnService.getUri(trd).get("uri").toString();
+        String metaDataUri = klaytnService.getUri(carTrade).get("uri").toString();
+        carTrade.setMetadataUri(metaDataUri);
 
         //데이터 저장 및 alias 규칙에 따라 alias 생성
         LocalDateTime aliastime = uptDt;
-        String alias = "buy-"+trd.getCarId()+"-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
+        String alias = "buy-"+carTrade.getCar().getId()+"-"+aliastime.format(DateTimeFormatter.ISO_LOCAL_DATE)+aliastime.getHour()+aliastime.getMinute()+aliastime.getSecond();
         //contract 배포
         klaytnService.requestContract(metaDataUri, carHash, alias);
+        carTrade.setContractHash(alias);
+
+        //거래 정보 저장
+        carTradeRepository.save(carTrade);
 
         //차 권한 이양
         carRepository.updateCar(uptDt,userid,csgsm.getCarId(),false);

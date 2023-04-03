@@ -27,7 +27,7 @@ const dialog = css`
 function SpeedDialComponent() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [page, setPage] = useState<number>(1);
-  const API = `https://carborn.site/api/user/car/list/${page}/5`;
+  const API = `https://carborn.site/api/user/car/list/${page}/15`;
 
   const getCarListFnc = useAPI("get", API);
 
@@ -50,7 +50,10 @@ function SpeedDialComponent() {
 
   return (
     <>
-      <Box sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}>
+      <Box
+        component="div"
+        sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}
+      >
         <SpeedDial
           ariaLabel="SpeedDial openIcon example"
           sx={{ position: "fixed", bottom: "10%", right: 50 }}

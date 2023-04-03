@@ -89,12 +89,39 @@ export default function HistoryTable() {
         <Table sx={{ minWidth: "60vw", minHeight: "60vh" }}>
           <TableHead>
             <TableRow>
-              <TableCell>No</TableCell>
-              <TableCell align="center">요청 날짜</TableCell>
-              <TableCell align="center">완료 날짜</TableCell>
-              <TableCell align="center">주행 거리</TableCell>
-              <TableCell align="center">자세히 보기</TableCell>
-              <TableCell align="center">리뷰 보기</TableCell>
+              <TableCell sx={{ fontSize: "18px", fontWeight: "bold" }}>
+                No
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                요청 날짜
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                완료 날짜
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                주행 거리
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                자세히 보기
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                리뷰 보기
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

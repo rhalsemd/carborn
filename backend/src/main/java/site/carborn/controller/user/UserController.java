@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import site.carborn.dto.request.CarSaleRequestDTO;
 import site.carborn.entity.user.CarSale;
 import site.carborn.mapping.car.CarImageGetDataMapping;
+import site.carborn.mapping.car.CarTradeGetListMapping;
 import site.carborn.mapping.car.CarVrcGetDataMapping;
 import site.carborn.mapping.user.*;
 import site.carborn.service.user.*;
@@ -84,6 +85,7 @@ public class UserController {
         Page<UserInsuranceListMapping> uirlm = userService.getSaleInsuranceList(csgdm.getCarId(),pageRequest);
         Page<UserRepairResultListMapping> urrlm = userService.getSaleRepairList(csgdm.getCarId(),pageRequest);
         Page<UserInspectResultListMapping> uiprlm = userService.getSaleInspectList(csgdm.getCarId(),pageRequest);
+        Page<CarTradeGetListMapping> ctglm = userService.getCarTradeList(csgdm.getCarId(),pageRequest);
 
         HashMap<String, Object> returnData = new HashMap<>();
         returnData.put("detail", csgdm);
@@ -93,6 +95,7 @@ public class UserController {
         returnData.put("insurance", uirlm);
         returnData.put("repair", urrlm);
         returnData.put("inspect", uiprlm);
+        returnData.put("trade", ctglm);
         return NormalResponse.toResponseEntity(HttpStatus.OK,returnData);
     }
 
@@ -110,8 +113,7 @@ public class UserController {
         if(!userService.checkSalesReservation(carSaleId)){
             throw new NullPointerException("이미 구매 신청을 한 글입니다.");
         }
-        userService.salesReservation(carSaleId);
-        return NormalResponse.toResponseEntity(HttpStatus.OK,BoardUtils.BOARD_CRUD_SUCCESS);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,userService.salesReservation(carSaleId));
     }
 
     @GetMapping("/sale/sell/{carSaleId}/{page}/{size}")

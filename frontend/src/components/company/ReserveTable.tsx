@@ -8,13 +8,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { TablePagination, TableFooter } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DetailModal from "./DetailModal";
 import { useQuery } from "react-query";
 import { useAPI } from "../../hooks/useAPI";
 import { useLocation } from "react-router-dom";
-import ReviewModal from "./ReviewModal";
-import { useEffect } from "react";
 
 interface MapType {
   id: string;
@@ -81,15 +79,57 @@ export default function ReserveTable() {
         <Table sx={{ minWidth: "60vw", minHeight: "60vh" }}>
           <TableHead>
             <TableRow>
-              <TableCell>No</TableCell>
-              <TableCell align="center">유저 아이디</TableCell>
-              <TableCell align="center">요청 시간</TableCell>
-              <TableCell align="center">희망 시간</TableCell>
-              <TableCell align="center">차 종</TableCell>
-              <TableCell align="center">차 번호</TableCell>
-              <TableCell align="center">차대 번호</TableCell>
-              <TableCell align="center">전화 번호</TableCell>
-              <TableCell align="center">자세히 보기</TableCell>
+              <TableCell sx={{ fontSize: "18px", fontWeight: "bold" }}>
+                No
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                유저 아이디
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                요청 시간
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                희망 시간
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                차 종
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                차 번호
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                차대 번호
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                전화 번호
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontSize: "18px", fontWeight: "bold" }}
+              >
+                자세히 보기
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

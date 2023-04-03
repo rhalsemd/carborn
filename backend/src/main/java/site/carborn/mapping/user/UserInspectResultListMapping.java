@@ -1,6 +1,5 @@
 package site.carborn.mapping.user;
 
-import jakarta.persistence.Column;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +8,9 @@ public interface UserInspectResultListMapping {
     int getInspectBookId();
     String getContent();
     int getMileage();
+
+    String getInspectBookInspectorAccountName();
+
     String getBeforeImgNm();
 
     String getAfterImgNm();
@@ -16,6 +18,8 @@ public interface UserInspectResultListMapping {
     String getReceiptImgNm();
 
     LocalDateTime getInspectDt();
+
+    String getMetadataUri();
 
     LocalDateTime getRegDt();
 }
