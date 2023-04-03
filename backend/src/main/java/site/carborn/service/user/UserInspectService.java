@@ -119,10 +119,6 @@ public class UserInspectService {
 
         InspectBook update = inspectBookRepository.findById(inspectBook.getId()).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-//
-        if (!inspectBook.getAccount().getId().equals(update.getAccount().getId())) {
-            throw new RuntimeException("권한이 없습니다");
-        }
 
         update.setCar(inspectBook.getCar());
         update.setContent(inspectBook.getContent());
