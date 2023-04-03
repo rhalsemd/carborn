@@ -130,4 +130,16 @@ public class UserCommunityController {
         return NormalResponse.toResponseEntity(HttpStatus.OK, BoardUtils.BOARD_CRUD_SUCCESS);
     }
 
+    //마이페이지(내가쓴글)
+    @GetMapping("/my-list/{page}/{size}")
+    @Operation(description = "내가 쓴 글 목록 조회")
+    @Parameters({@Parameter(name = "page", description = "페이지 번호"),
+            @Parameter(name = "size", description = "페이지 당 게시물 수")
+    })
+    public ResponseEntity<?> getMyBoardList(@PathVariable("page") int page,
+                                          @PathVariable("size") int size){
+        String accountId = "usertest"; //스프링시큐리티 구현시 변경예정
+        Page<UserCommunityListMapping> myboardList = userCommunityService.getMyBoardList(accountId, page,size);
+        return NormalResponse.toResponseEntity(HttpStatus.OK,myboardList);
+    }
 }
