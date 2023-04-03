@@ -55,11 +55,11 @@ public class UserCommunityService {
         if (keyword == null) {
             boardList = communityRepository.findByStatus(
                     BoardUtils.BOARD_DELETE_STATUS_FALSE
-                    , BoardUtils.pageRequestInit(
+                    ,BoardUtils.pageRequestInit(
                             page
-                            , size
-                            , sortBy
-                            , orderBy
+                            ,size
+                            ,sortBy
+                            ,orderBy
                     )
             );
 
@@ -67,13 +67,13 @@ public class UserCommunityService {
         } else {
             boardList = communityRepository.findByStatusAndTitleContainingOrContentContaining(
                     BoardUtils.BOARD_DELETE_STATUS_FALSE
-                    , keyword
-                    , keyword
-                    , BoardUtils.pageRequestInit(
+                    ,keyword
+                    ,keyword
+                    ,BoardUtils.pageRequestInit(
                             page
-                            , size
-                            , sortBy
-                            , orderBy
+                            ,size
+                            ,sortBy
+                            ,orderBy
                     )
             );
         }
@@ -179,10 +179,10 @@ public class UserCommunityService {
         Page<UserCommunityCommentListMapping> getcommentList = communityReviewRepository.findByCommunity_IdAndStatus(
                 communityId,
                 BoardUtils.BOARD_DELETE_STATUS_FALSE
-                , BoardUtils.pageRequestInit(
+                ,BoardUtils.pageRequestInit(
                         page
-                        , size
-                        , "id", BoardUtils.ORDER_BY_DESC
+                        ,size
+                        ,"id", BoardUtils.ORDER_BY_DESC
                 )
         );
         if (getcommentList.isEmpty()) {
