@@ -18,9 +18,10 @@ public interface RepairBookRepository extends JpaRepository<RepairBook, Integer>
 //    @Query(value = "SELECT b.ID,b.CAR_ID, b.BOOK_STATUS, b.BOOK_DT, b.REPAIR_SHOP_ID" +
 //            "FROM S08P22D209.MWS_REPAIR_BOOK AS b " +
 //            "WHERE b.STATUS = 0" ,nativeQuery = true)
-//    @Query("select b.id, b.account.id, b.car.id, b.bookStatus, b.bookDt, b.repairShop.id from RepairBook b where b.status = :status and b.account.id = :accountId")
-    @Query(value = "SELECT b.ID, b.ACCOUNT_ID, b.CAR_ID, b.BOOK_STATUS, b.BOOK_DT, b.REPAIR_SHOP_ID FROM S08P22D209.MWS_REPAIR_BOOK AS b WHERE b.STATUS = :status AND b.ACCOUNT_ID = :accountId",nativeQuery = true)
-    Page<UserRepairBookListMapping> findByStatusAndAccount_Id(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
+    @Query(value = "SELECT b.ID as id, b.BOOK_STATUS as bookStatus, b.BOOK_DT as bookDt, b.REPAIR_SHOP_ID as repairShopId FROM S08P22D209.MWS_REPAIR_BOOK AS b WHERE b.STATUS = :status AND b.ACCOUNT_ID = :accountId"
+            ,countQuery = "SELECT b.ID as id, b.BOOK_STATUS as bookStatus, b.BOOK_DT as bookDt, b.REPAIR_SHOP_ID as repairShopId FROM S08P22D209.MWS_REPAIR_BOOK AS b WHERE b.STATUS = :status AND b.ACCOUNT_ID = :accountId",nativeQuery = true)
+//    @Query("select b.id, b.account.id, b.car, b.bookStatus, b.bookDt, b.repairShop from RepairBook b where b.status = :status and b.account.id = :accountId")
+    Page<Object[]> findByStatusAndAccount_Id(@Param("status") boolean status, @Param("accountId") String accountId, Pageable page);
 
     //예약 단일 조회
     UserRepairBookDetailMapping findByStatusAndId(@Param("status") boolean status, @Param("id") int id);
