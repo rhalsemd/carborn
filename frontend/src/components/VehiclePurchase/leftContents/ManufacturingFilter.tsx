@@ -13,7 +13,7 @@ function ManufacturingFilter() {
   };
   return (
     <div>
-      {/* <Box sx={{ width: "90%" }}>
+      <Box component="div" sx={{ width: "90%" }}>
         <FormControl fullWidth size="small">
           <InputLabel id="demo-simple-select-label">제조사</InputLabel>
           <Select
@@ -26,7 +26,7 @@ function ManufacturingFilter() {
             <MenuItem value={10}>Ten</MenuItem>
           </Select>
         </FormControl>
-      </Box> */}
+      </Box>
     </div>
   );
 }
