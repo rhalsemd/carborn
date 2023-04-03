@@ -40,6 +40,8 @@ const insuranceTableRowName: string[] = [
   "등록일시",
 ];
 
+const imgFontStyle = { fontWeight: "bolder", marginLeft: "1.2%" };
+
 export function createData(
   companyAccountId: string,
   conpanyDt: string,
@@ -104,7 +106,7 @@ function Row(props: {
               <Table size="small" aria-label="purchases">
                 <TableHead
                   sx={{
-                    backgroundColor: "#E00000",
+                    backgroundColor: "rgba(224, 0, 0, 0.6)",
                   }}
                 >
                   <TableRow>
@@ -120,7 +122,7 @@ function Row(props: {
                       return (
                         <TableCell
                           sx={{
-                            fontSize: "0.85rem",
+                            fontSize: "0.72rem",
                             fontWeight: "bolder",
                             color: "white",
                           }}
@@ -142,12 +144,23 @@ function Row(props: {
                     <InsuranceTable data={data} />
                   )}
                 </TableBody>
-                {value !== 3 ? (
+              </Table>
+              {value !== 3 ? (
+                <>
                   <div>
+                    <span style={imgFontStyle}>검수전</span>
                     <img src={car} alt="car.img" style={{ width: "100%" }} />
                   </div>
-                ) : null}
-              </Table>
+                  <div>
+                    <span style={imgFontStyle}>검수후</span>
+                    <img src={car} alt="car.img" style={{ width: "100%" }} />
+                  </div>
+                  <div>
+                    <span style={imgFontStyle}>영수증</span>
+                    <img src={car} alt="car.img" style={{ width: "100%" }} />
+                  </div>
+                </>
+              ) : null}
             </Box>
           </Collapse>
         </TableCell>
@@ -191,8 +204,6 @@ export default function FileListStack<T>({
     setPage(value);
   };
 
-  console.log(totalPage);
-
   React.useEffect(() => {
     const pageData = queryClient.getQueryData<any>(["get-car-detail", page])
       .data.message;
@@ -213,7 +224,7 @@ export default function FileListStack<T>({
     >
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow sx={{ backgroundColor: "black" }}>
+          <TableRow sx={{ backgroundColor: "#E00000" }}>
             <TableCell />
             <TableCell
               align="center"

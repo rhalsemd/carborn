@@ -33,6 +33,7 @@ function WatchFileBtn<T>({
 
   const handleClose = () => {
     setModalOpen(false);
+    setPage(1);
   };
 
   return (

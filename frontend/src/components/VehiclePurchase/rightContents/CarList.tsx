@@ -57,6 +57,22 @@ const textStyle = css`
   justify-content: space-around;
 `;
 
+interface CarType {
+  accountId: string;
+  carId: number;
+  content: string;
+  id: number;
+  imgNm: string | null;
+  maker: string;
+  mileage: string;
+  modelNm: string;
+  modelYear: string;
+  price: string;
+  regDt: string;
+  saleStatus: number;
+  uptDt: string;
+}
+
 let intersectionOptions = {
   root: document.querySelector("#scrollArea"),
   rootMargin: "0px",
@@ -136,8 +152,8 @@ function CarList() {
     }
   }, [data]);
 
-  const goToDetil: any = (id: number) => {
-    navigation(`/user/car/${id}`);
+  const goToDetil = (carId: number, id: number) => {
+    navigation(`/user/car/${carId}/${id}`);
   };
 
   // 에러가 발생했을 시
@@ -176,45 +192,52 @@ function CarList() {
     <div css={rightContent}>
       {isData ? (
         data?.pages.map((item) => {
-          return item?.data?.message.content.map((car: any, index: number) => {
-            return (
-              // 검색 결과
-              <div
-                css={infoBox}
-                key={index}
-                ref={(ref) => {
-                  if (ref) {
-                    divRef.current[cnt] = ref;
-                    cnt++;
-                  }
-                }}
-              >
-                <button className="btn" onClick={() => goToDetil(car.carId)}>
-                  Detail
-                </button>
-                <img
-                  src={`${CAR_URL}${car.imgNm}`}
-                  alt="carImg"
-                  css={imgStyle}
-                />
-                <div css={textStyle}>
-                  <div>
-                    <div>{`${car.modelYear} ${car.modelNm} | ${parseInt(
-                      car.mileage
-                    ).toLocaleString("ko-KR")}km`}</div>
-                    <div
-                      style={{ border: "2px solid red", width: "3vw" }}
-                    ></div>
-                  </div>
+          return item?.data?.message.content.map(
+            (car: CarType, index: number) => {
+              if (!car?.saleStatus) {
+                return (
+                  // 검색 결과
+                  <div
+                    css={infoBox}
+                    key={index}
+                    ref={(ref) => {
+                      if (ref) {
+                        divRef.current[cnt] = ref;
+                        cnt++;
+                      }
+                    }}
+                  >
+                    <button
+                      className="btn"
+                      onClick={() => goToDetil(car.carId, car.id)}
+                    >
+                      Detail
+                    </button>
+                    <img
+                      src={`${CAR_URL}${car.imgNm}`}
+                      alt="carImg"
+                      css={imgStyle}
+                    />
+                    <div css={textStyle}>
+                      <div>
+                        <div>{`${car.modelYear} ${car.modelNm} | ${parseInt(
+                          car.mileage
+                        ).toLocaleString("ko-KR")}km`}</div>
+                        <div
+                          style={{ border: "2px solid red", width: "3vw" }}
+                        ></div>
+                      </div>
 
-                  <div>{car.content}</div>
-                  <div>{`${parseInt(car.price).toLocaleString(
-                    "ko-KR"
-                  )}￦`}</div>
-                </div>
-              </div>
-            );
-          });
+                      <div>{car.content}</div>
+                      <div>{`${parseInt(car.price).toLocaleString(
+                        "ko-KR"
+                      )}￦`}</div>
+                    </div>
+                  </div>
+                );
+              }
+            }
+          );
         })
       ) : (
         // 검색 결과가 없음

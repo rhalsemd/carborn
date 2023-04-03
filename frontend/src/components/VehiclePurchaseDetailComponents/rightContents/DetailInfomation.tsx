@@ -36,11 +36,13 @@ const DetailInfomationComponent = ({
   carId,
   page,
   setPage,
+  id,
 }: {
   setError: React.Dispatch<React.SetStateAction<Error | null>>;
-  carId: string | undefined;
+  carId?: string;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  id?: string;
 }) => {
   const API = `https://carborn.site/api/user/car/sale/${carId}/${page}/${SIZE}`;
   const getCarDetail = useAPI("get", API);
@@ -85,12 +87,12 @@ const DetailInfomationComponent = ({
         page={page}
         setPage={setPage}
       />
-      <PurchaseApplicationBtn />
+      <PurchaseApplicationBtn id={id} />
     </div>
   );
 };
 
-function DetailInfomation({ carId }: Readonly<Params<string>>) {
+function DetailInfomation({ carId, id }: Readonly<Params<string>>) {
   const [error, setError] = useState<Error | null>(null);
   const [page, setPage] = useState<number>(1);
 
@@ -106,6 +108,7 @@ function DetailInfomation({ carId }: Readonly<Params<string>>) {
           carId={carId}
           page={page}
           setPage={setPage}
+          id={id}
         />
       </Suspense>
     </ErrorBoundary>

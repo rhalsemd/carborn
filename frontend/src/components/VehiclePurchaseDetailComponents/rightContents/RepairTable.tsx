@@ -2,7 +2,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import { createData } from "./FileListStack";
 
-const contentStyle = { fontSize: "0.7rem" };
+const contentStyle = { fontSize: "0.66rem", fontWeight: "bolder" };
 
 function RepairTable({ data }: { data: ReturnType<typeof createData> }) {
   return (
