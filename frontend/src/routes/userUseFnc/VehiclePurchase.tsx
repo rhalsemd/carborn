@@ -3,8 +3,7 @@ import { css } from "@emotion/react";
 
 import CarList from "../../components/VehiclePurchase/rightContents/CarList";
 import MenuBar from "../../components/VehiclePurchase/leftContents/MenuBar";
-import { SearchType } from "../../components/VehiclePurchase/VehiclePurchaseType";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Nav2 from "./../../components/Nav2";
 import { useQueryClient } from "react-query";
 import { useSelector } from "react-redux";

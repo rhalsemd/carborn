@@ -192,7 +192,9 @@ function NaverMap() {
           '<div style="width:28vw; padding:10px; height: 28vh; margin-left:2.5vw;">',
           `<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">${key.NAME}</p>`,
           '<p style="margin-top: 0; color: #E00000; font-weight: bolder;">',
-          `<span style="font-size: 1.2rem">★</span><span style="color: #242424">${key.avg_point}</span><span style="color: #8F8F8F">/5</span>`,
+          `<span style="font-size: 1.2rem">★</span><span style="color: #242424">${
+            key.avg_point === 0 ? key.avg_point : key.avg_point.toFixed(1)
+          }</span><span style="color: #8F8F8F">/5</span>`,
           `<span style="color: #BBBBBB; font-size: 0.9rem; "> 리뷰 ${key.cntReview}</span>`,
           "</p>",
           `<p style="margin-bottom: 0; color: #606060; font-size: 0.9rem">${key.ADDRESS}</p>`,
