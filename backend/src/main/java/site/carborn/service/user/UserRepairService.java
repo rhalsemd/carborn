@@ -65,15 +65,14 @@ public class UserRepairService {
 
 
     public int createRepairBook(RepairBook repairBook) {
+        String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
 
-        if (repairBook.getAccount().getId().isBlank()) {
-            throw new RuntimeException("세션이 만료되었습니다");
-        }
-        Account account = accountRepository.findById(repairBook.getAccount().getId());
+        Account account = accountRepository.findById(accountId);
         if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
+        repairBook.setAccount(account);
         repairBook.setRegDt(LocalDateTime.now());
         repairBook.setUptDt(LocalDateTime.now());
         repairBook.setBookStatus(BookUtils.BOOK_STATUS_WAIT);
