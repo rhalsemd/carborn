@@ -56,7 +56,7 @@ function SpeedDialComponent() {
       >
         <SpeedDial
           ariaLabel="SpeedDial openIcon example"
-          sx={{ position: "fixed", bottom: "10%", right: 50 }}
+          sx={{ position: "fixed", bottom: "10vh", right: 50 }}
           icon={<SpeedDialIcon openIcon={<EditIcon />} />}
           onClick={showModalFnc}
         ></SpeedDial>

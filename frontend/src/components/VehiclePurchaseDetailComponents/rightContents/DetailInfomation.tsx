@@ -33,18 +33,16 @@ const SIZE: number = 5;
 // 내부 컨텐츠
 const DetailInfomationComponent = ({
   setError,
-  carId,
   page,
   setPage,
   id,
 }: {
   setError: React.Dispatch<React.SetStateAction<Error | null>>;
-  carId?: string;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   id?: string;
 }) => {
-  const API = `https://carborn.site/api/user/car/sale/${carId}/${page}/${SIZE}`;
+  const API = `https://carborn.site/api/user/car/sale/${id}/${page}/${SIZE}`;
   const getCarDetail = useAPI("get", API);
 
   const { data } = useQuery(["get-car-detail", page], () => getCarDetail, {
@@ -92,7 +90,7 @@ const DetailInfomationComponent = ({
   );
 };
 
-function DetailInfomation({ carId, id }: Readonly<Params<string>>) {
+function DetailInfomation({ id }: Readonly<Params<string>>) {
   const [error, setError] = useState<Error | null>(null);
   const [page, setPage] = useState<number>(1);
 
@@ -105,7 +103,6 @@ function DetailInfomation({ carId, id }: Readonly<Params<string>>) {
       <Suspense fallback={<Loading />}>
         <DetailInfomationComponent
           setError={setError}
-          carId={carId}
           page={page}
           setPage={setPage}
           id={id}

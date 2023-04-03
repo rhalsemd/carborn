@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useMutation } from "react-query";
 import {
   Props,
@@ -26,10 +25,10 @@ function RegistrationBtn({
 }: RegistrationBtnType) {
   // mutation 함수
   const fileUpLoadAPI = (data: FormData) => {
-    return axios({
-      method: "post",
-      url: API,
-      data: data,
+    return fetch(API, {
+      method: "POST",
+      body: data,
+      mode: "no-cors",
     });
   };
 
@@ -41,12 +40,20 @@ function RegistrationBtn({
 
     (registrationInfo?.files || []).forEach((file) => {
       // 파일 데이터 저장
-      formData.append("multipartFiles", file);
+      formData.append("carImg", file);
+    });
+    (registrationInfo?.vrc || []).forEach((file) => {
+      // 파일 데이터 저장
+      formData.append("carVrc", file);
     });
 
-    if (newRegistrationInfo) {
-      formData.append("stringFoodDto", JSON.stringify(newRegistrationInfo)); // 직렬화하여 객체 저장
-    }
+    formData.append("modelNm", registrationInfo?.carModel); // 직렬화하여 객체 저장
+    formData.append("modelYear", registrationInfo?.carYear); // 직렬화하여 객체 저장
+    formData.append("vin", registrationInfo?.vehicleIdentificationNumber); // 직렬화하여 객체 저장
+    formData.append("mileage", registrationInfo?.distanceDriven); // 직렬화하여 객체 저장
+    formData.append("regNm", registrationInfo?.carNumber); // 직렬화하여 객체 저장
+    formData.append("maker", registrationInfo?.manufacturingCompany); // 직렬화하여 객체 저장
+
     mutate(formData); // post 요청 실행
   };
 

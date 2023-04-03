@@ -19,12 +19,12 @@ const content = css`
 `;
 
 export interface RegistrationInfo {
-  manufacturingCompany: string;
-  carModel: string;
-  carNumber: string;
-  carYear: string;
-  distanceDriven: string;
-  vehicleIdentificationNumber: string;
+  manufacturingCompany: any;
+  carModel: any;
+  carNumber: any;
+  carYear: any;
+  distanceDriven: any;
+  vehicleIdentificationNumber: any;
   fileList: any[];
   files: File[];
   vrc: File[];
@@ -44,7 +44,7 @@ function MyVehicleRegistration() {
     carModel: "",
     carNumber: "",
     carYear: "",
-    distanceDriven: "",
+    distanceDriven: 0,
     vehicleIdentificationNumber: "",
     fileList: [],
     files: [],

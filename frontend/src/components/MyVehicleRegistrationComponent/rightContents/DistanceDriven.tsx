@@ -9,7 +9,7 @@ function DistanceDriven({
     setRegistrationInfo((registrationInfo) => {
       return {
         ...registrationInfo,
-        distanceDriven: inputValue,
+        distanceDriven: Number(inputValue),
       };
     });
   };

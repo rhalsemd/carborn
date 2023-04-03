@@ -15,8 +15,7 @@ import VehicleIdentificationNumber from "./VehicleIdentificationNumber";
 import VehicleRegistrationCertificate from "./VehicleRegistrationCertificate";
 
 const rightContent = css`
-  border: 1px solid black;
-  width: 40vw;
+  width: 30vw;
   height: 90vh;
 `;
 
@@ -35,8 +34,8 @@ function FormArea({
 
   return (
     <div css={rightContent}>
-      <h2 style={{ textAlign: "center" }}>차량 등록</h2>
-      <hr />
+      <h3 style={{ textAlign: "center" }}>차량 등록</h3>
+      <hr style={{ background: "#D23131", border: "0", height: "2px" }} />
 
       {/* 제조사 */}
       <ManufacturingCompany setRegistrationInfo={setRegistrationInfo} />

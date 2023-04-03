@@ -9,7 +9,6 @@ function SearchBar() {
 
   const setKeywordValue = (e: React.FocusEvent<HTMLInputElement>) => {
     const keyword = e.target.value.split(" ").join("");
-
     dispatch(setKeyword(keyword));
   };
 
