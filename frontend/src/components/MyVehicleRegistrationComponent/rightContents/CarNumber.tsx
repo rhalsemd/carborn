@@ -6,7 +6,7 @@ import {
 function CarNumber({
   setRegistrationInfo,
 }: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
-  const inputTyping = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const inputTyping = (e: React.FocusEvent<HTMLInputElement>): void => {
     const inputValue = e.target.value;
     setRegistrationInfo((registrationInfo) => {
       return {
@@ -20,7 +20,7 @@ function CarNumber({
     <div>
       <span>차량번호</span>
       <div>
-        <input type="text" autoComplete="false" onChange={inputTyping} />
+        <input type="text" autoComplete="false" onBlur={inputTyping} />
       </div>
     </div>
   );

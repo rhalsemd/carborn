@@ -25,15 +25,9 @@ function AdditionalSubmissionFiles({
             reader.result,
           ];
 
-          const newFileNames: string[] = [
-            ...(registrationInfo.fileNames || []),
-            uploadFile.name,
-          ];
-
           return {
             ...registrationInfo,
             fileList: newFileListL,
-            fileNames: newFileNames,
           };
         });
       };
@@ -72,20 +66,23 @@ function AdditionalSubmissionFiles({
 
   return (
     <div>
-      <input
-        type="file"
-        multiple={true} /* 파일 여러개 선택 가능하게 하기 */
-        accept="image/*"
-        onChange={onSaveFiles}
-      />
-      {(registrationInfo?.files || []).map((file, index) => {
-        return (
-          <div key={`${file.name}/${index}`}>
-            <span style={{ padding: "0" }}>{file.name}</span>
-            <button onClick={() => deleteImg(index)}>삭제</button>
-          </div>
-        );
-      })}
+      <span>자동차 사진</span>
+      <div>
+        <input
+          type="file"
+          multiple={true} /* 파일 여러개 선택 가능하게 하기 */
+          accept="image/*"
+          onChange={onSaveFiles}
+        />
+        {(registrationInfo?.files || []).map((file, index) => {
+          return (
+            <div key={`${file.name}/${index}`}>
+              <span style={{ padding: "0" }}>{file.name}</span>
+              <button onClick={() => deleteImg(index)}>삭제</button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
