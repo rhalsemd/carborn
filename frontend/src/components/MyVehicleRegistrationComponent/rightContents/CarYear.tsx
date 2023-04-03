@@ -9,7 +9,10 @@ import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
 import { RegistrationInfo } from "./../../../routes/userUseFnc/MyVehicleRegistration";
 import { titleStyle } from "./ManufacturingCompany";
 
-const now = new Date();
+const pickerStyle = css`
+  width: 100%;
+  margin-bottom: 2%;
+`;
 
 function CarYear({
   setRegistrationInfo,
@@ -25,20 +28,19 @@ function CarYear({
   };
 
   return (
-    <div>
+    <div style={{ width: "30.5vw" }}>
       <span css={titleStyle}>연식</span>
 
-      <div>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]} sx={{ m: 2, margin: "0" }}>
-            <DatePicker
-              label={'"year"'}
-              views={["year"]}
-              onChange={inputTyping}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-      </div>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={["DatePicker"]} sx={{ margin: "1% 0 0 0" }}>
+          <DatePicker
+            css={pickerStyle}
+            label={'"year"'}
+            views={["year"]}
+            onChange={inputTyping}
+          />
+        </DemoContainer>
+      </LocalizationProvider>
     </div>
   );
 }

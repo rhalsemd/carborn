@@ -13,13 +13,12 @@ export const titleStyle = css`
 export const inputBoxStyle = css`
   width: 100%;
   margin-top: 1vh;
-  height: 4vh;
-  border-radius: 4px;
-  border-color: #d9d9d9;
+  height: 5vh;
   margin-bottom: 1vh;
+  border: 1px solid #bebebe;
   &:focus {
     outline: none;
-    border-color: #9b9b9b;
+    border-color: #e00000;
   }
 `;
 

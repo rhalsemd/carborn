@@ -1,5 +1,46 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+
 import { Props } from "../../../routes/userUseFnc/MyVehicleRegistration";
 import { RegistrationInfo } from "./../../../routes/userUseFnc/MyVehicleRegistration";
+import { titleStyle } from "./ManufacturingCompany";
+
+const fileBox = css`
+  .filebox .upload-name {
+    display: inline-block;
+    margin-top: 2%;
+    height: 5vh;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #bebebe;
+    width: 69.2%;
+    color: #bebebe;
+    &:focus {
+      outline: none;
+      border-color: #e00000;
+    }
+  }
+  .filebox label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 2%;
+    color: #ffffff;
+    font-weight: 600;
+    vertical-align: middle;
+    background-color: #e00000;
+    cursor: pointer;
+    height: 2.9vh;
+    margin-left: 10px;
+  }
+  .filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
+`;
 
 function VehicleRegistrationCertificate({
   registrationInfo,
@@ -64,10 +105,17 @@ function VehicleRegistrationCertificate({
   };
 
   return (
-    <div>
-      <span>자동차 등록증</span>
-      <div>
-        <input type="file" accept="image/*" onChange={onSaveFiles} />
+    <div css={fileBox}>
+      <span css={titleStyle}>자동차 등록증</span>
+      <div className="filebox">
+        <input
+          className="upload-name"
+          value="첨부파일"
+          placeholder="첨부파일"
+        />
+
+        <label htmlFor="file">파일찾기</label>
+        <input id="file" type="file" accept="image/*" onChange={onSaveFiles} />
         {(registrationInfo?.vrc || []).map((file, index) => {
           return (
             <div key={`${file.name}/${index}`}>

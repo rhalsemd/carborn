@@ -17,6 +17,7 @@ import VehicleRegistrationCertificate from "./VehicleRegistrationCertificate";
 const rightContent = css`
   width: 30vw;
   height: 90vh;
+  margin-top: 10vh;
 `;
 
 const API = `https://carborn.site/api/user/car`;
