@@ -35,14 +35,14 @@ public class UserRepairService {
     @Autowired
     private RepairShopReviewRepository repairShopReviewRepository;
 
-    public Page<Object[]> repairBookList(String accountId, int page, int size) {
-        Page<Object[]> repairBookList = repairBookRepository.findByStatusAndAccount_Id(
+    public Page<UserRepairBookListMapping> repairBookList(String accountId, int page, int size) {
+        Page<UserRepairBookListMapping> repairBookList = repairBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
                 accountId
-                , BoardUtils.pageRequestInit(
+                ,BoardUtils.pageRequestInit(
                         page
-                        , size
-                        , "id", BoardUtils.ORDER_BY_DESC
+                        ,size
+                        ,"id", BoardUtils.ORDER_BY_DESC
                 )
         );
         if (repairBookList.isEmpty()) {

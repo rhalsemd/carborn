@@ -40,7 +40,7 @@ public class UserRepairController {
     public ResponseEntity<?> getRepairBookList(@PathVariable("page") int page,
                                                @PathVariable("size") int size) {
         String accountId = "testuser2"; //스프링시큐리티 구현시 변경예정
-        Page<Object[]> result = userRepairService.repairBookList(accountId, page, size);
+        Page<UserRepairBookListMapping> result = userRepairService.repairBookList(accountId, page, size);
         return NormalResponse.toResponseEntity(HttpStatus.OK, result);
     }
 

@@ -27,8 +27,6 @@ public interface UserRepairBookListMapping {
     // 정비업체이름
     String getRepairShopAccountName();
 
-    Integer getRepairShopId();
-
     //메이커
     String getCarMaker();
 }
