@@ -386,7 +386,7 @@ public class UserService {
         if (accountId == null || accountId.isBlank()) {
             throw new NullPointerException("로그인 정보가 없습니다");
         }
-        
+
         Page<Object[]> page = null;
         SearchTypeEnum searchTypeEnum = SearchTypeEnum.valueOf(searchType);
         if (orderBy == SortUtils.SORT_STATUS_PRICE_DESC) {
