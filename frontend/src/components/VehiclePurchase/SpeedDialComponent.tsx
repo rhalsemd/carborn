@@ -50,7 +50,10 @@ function SpeedDialComponent() {
 
   return (
     <>
-      <Box sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}>
+      <Box
+        component="div"
+        sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}
+      >
         <SpeedDial
           ariaLabel="SpeedDial openIcon example"
           sx={{ position: "fixed", bottom: "10%", right: 50 }}
