@@ -53,7 +53,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
           fontWeight: "bolder",
         }}
       >
-        {item.avg_point}
+        {item.avg_point === 0 ? item.avg_point : item.avg_point.toFixed(1)}
         <span>★</span>
         <span style={{ color: "#BBBBBB", fontSize: "0.9rem" }}>
           {" "}

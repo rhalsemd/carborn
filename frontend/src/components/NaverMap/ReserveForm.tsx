@@ -52,8 +52,6 @@ function ReserveForm({
     date: "",
   });
 
-  console.log(reserveInfo);
-
   const exit = () => {
     setReserve(false);
     setMarkerNum(-1);
@@ -75,7 +73,11 @@ function ReserveForm({
       />
       <TextBox setReserveInfo={setReserveInfo} />
       <Calendar setReserveInfo={setReserveInfo} />
-      <ApplyBtn markerArr={markerArr} markerNum={markerNum} />
+      <ApplyBtn
+        markerArr={markerArr}
+        markerNum={markerNum}
+        reserveInfo={reserveInfo}
+      />
     </div>
   );
 }
