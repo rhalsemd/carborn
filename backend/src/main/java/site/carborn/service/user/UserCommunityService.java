@@ -27,7 +27,7 @@ public class UserCommunityService {
     @Autowired
     private CommunityReviewRepository communityReviewRepository;
 
-    public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort, String keyword){
+    public Page<UserCommunityListMapping> getBoardList(int page, int size, int sort, String keyword) {
         String orderBy = BoardUtils.ORDER_BY_DESC;
         String sortBy = BoardUtils.SORT_BY_ID;
 
@@ -53,7 +53,7 @@ public class UserCommunityService {
             default -> throw new RuntimeException("올바르지 않은 정렬 입니다");
         }
 
-        if (keyword == null){
+        if (keyword == null) {
             boardList = communityRepository.findByStatus(
                     BoardUtils.BOARD_DELETE_STATUS_FALSE
                     ,BoardUtils.pageRequestInit(
@@ -83,25 +83,25 @@ public class UserCommunityService {
     }
 
     @Transactional
-    public UserCommunityListMapping getBoardDetail(int communityId){
+    public UserCommunityListMapping getBoardDetail(int communityId) {
         communityRepository.updateView(communityId);
-        UserCommunityListMapping boardDetail = communityRepository.findAllByIdAndStatus(communityId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
+        UserCommunityListMapping boardDetail = communityRepository.findAllByIdAndStatus(communityId, BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
-        if (boardDetail == null){
+        if (boardDetail == null) {
             throw new RuntimeException("존재하지 않는 데이터입니다");
         }
 
         return boardDetail;
     }
 
-    public int createBoard(Community community){
+    public int createBoard(Community community) {
 
         if (community.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
         Account account = accountRepository.findById(community.getAccount().getId());
-        if (account == null){
+        if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
@@ -119,16 +119,17 @@ public class UserCommunityService {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
-        if (accountRepository.findById(community.getAccount().getId())==null){
+        if (accountRepository.findById(community.getAccount().getId()) == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (community.getId() != communityId){
+        if (community.getId() != communityId) {
             throw new RuntimeException("잘못된 경로입니다");
         }
-        Community update = communityRepository.findById(communityId).orElseThrow(()->
+
+        Community update = communityRepository.findById(communityId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-//
-        if (!community.getAccount().getId().equals(update.getAccount().getId())){
+
+        if (!community.getAccount().getId().equals(update.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
 
@@ -140,7 +141,7 @@ public class UserCommunityService {
         return update.getId();
     }
 
-    public void deleteBoard(int communityId){
+    public void deleteBoard(int communityId) {
         Community delete = communityRepository.findById(communityId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
@@ -156,14 +157,14 @@ public class UserCommunityService {
 
 
     //리뷰
-    public int createcomment(CommunityReview communityReview){
+    public int createcomment(CommunityReview communityReview) {
 
         if (communityReview.getAccount().getId().isBlank()) {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
         Account account = accountRepository.findById(communityReview.getAccount().getId());
-        if (account == null){
+        if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
 
@@ -175,7 +176,7 @@ public class UserCommunityService {
         return save.getId();
     }
 
-    public Page<UserCommunityCommentListMapping> getcommentList(int page, int size,int communityId){
+    public Page<UserCommunityCommentListMapping> getcommentList(int page, int size, int communityId) {
         Page<UserCommunityCommentListMapping> getcommentList = communityReviewRepository.findByCommunity_IdAndStatus(
                 communityId,
                 BoardUtils.BOARD_DELETE_STATUS_FALSE
@@ -185,7 +186,7 @@ public class UserCommunityService {
                         ,"id", BoardUtils.ORDER_BY_DESC
                 )
         );
-        if(getcommentList.isEmpty()){
+        if (getcommentList.isEmpty()) {
             throw new NullPointerException("해당 페이지의 데이터가 존재하지 않습니다");
         }
         return getcommentList;
@@ -197,16 +198,18 @@ public class UserCommunityService {
             throw new RuntimeException("세션이 만료되었습니다");
         }
 
-        if (accountRepository.findById(communityReview.getAccount().getId())==null){
+        if (accountRepository.findById(communityReview.getAccount().getId()) == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
         }
-        if (communityReview.getId() != commentId){
+        if (communityReview.getId() != commentId) {
             throw new RuntimeException("잘못된 경로입니다");
         }
-        CommunityReview update = communityReviewRepository.findById(commentId).orElseThrow(()->
+        CommunityReview update = communityReviewRepository.findById(commentId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-//
-        if (!communityReview.getAccount().getId().equals(update.getAccount().getId())){
+        if (update.isStatus() == BoardUtils.BOARD_DELETE_STATUS_TRUE) {
+            throw new RuntimeException("삭제된 게시글입니다");
+        }
+        if (!communityReview.getAccount().getId().equals(update.getAccount().getId())) {
             throw new RuntimeException("권한이 없습니다");
         }
 
@@ -217,7 +220,7 @@ public class UserCommunityService {
         return update.getId();
     }
 
-    public void deleteComment(int commentId){
+    public void deleteComment(int commentId) {
         CommunityReview delete = communityReviewRepository.findById(commentId).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
         );
