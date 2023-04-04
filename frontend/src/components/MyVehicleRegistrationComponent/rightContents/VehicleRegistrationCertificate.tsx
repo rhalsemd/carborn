@@ -6,6 +6,11 @@ import { RegistrationInfo } from "./../../../routes/userUseFnc/MyVehicleRegistra
 import { titleStyle } from "./ManufacturingCompany";
 
 const fileBox = css`
+  margin-bottom: 2%;
+
+  .upload-name {
+    width: 100%;
+  }
   .filebox .upload-name {
     display: inline-block;
     margin-top: 2%;
@@ -13,24 +18,21 @@ const fileBox = css`
     padding: 0 10px;
     vertical-align: middle;
     border: 1px solid #bebebe;
-    width: 69.2%;
+    width: 67.6%;
     color: #bebebe;
-    &:focus {
-      outline: none;
-      border-color: #e00000;
-    }
   }
-  .filebox label {
+  .filebox .file {
     display: inline-block;
     padding: 10px 20px;
     margin-top: 2%;
+    line-height: 100%;
     color: #ffffff;
     font-weight: 600;
     vertical-align: middle;
-    background-color: #e00000;
+    background-color: #000000;
     cursor: pointer;
-    height: 2.9vh;
-    margin-left: 10px;
+    height: 2.4vh;
+    margin-left: 2.4%;
   }
   .filebox input[type="file"] {
     position: absolute;
@@ -39,6 +41,23 @@ const fileBox = css`
     padding: 0;
     overflow: hidden;
     border: 0;
+  }
+`;
+
+export const deleteBtnStyle = css`
+  display: flex;
+  justify-content: space-between;
+  .deleteBtn {
+    border: 0;
+    height: 4.8vh;
+    margin-top: 2%;
+    margin-right: 3%;
+    width: 5vw;
+    color: white;
+    background-color: #000000;
+    opacity: 0.3;
+    font-weight: 900;
+    cursor: pointer;
   }
 `;
 
@@ -112,19 +131,32 @@ function VehicleRegistrationCertificate({
           className="upload-name"
           value="첨부파일"
           placeholder="첨부파일"
+          disabled={true}
         />
 
-        <label htmlFor="file">파일찾기</label>
-        <input id="file" type="file" accept="image/*" onChange={onSaveFiles} />
-        {(registrationInfo?.vrc || []).map((file, index) => {
-          return (
-            <div key={`${file.name}/${index}`}>
-              <span style={{ padding: "0" }}>{file.name}</span>
-              <button onClick={() => deleteImg(index)}>삭제</button>
-            </div>
-          );
-        })}
+        <label htmlFor="file" className="file">
+          파일찾기
+        </label>
+        <input
+          id="file"
+          type="file"
+          accept="image/*"
+          multiple={true}
+          onChange={onSaveFiles}
+        />
       </div>
+      {(registrationInfo?.vrc || []).map((file, index) => {
+        return (
+          <div key={`${file.name}/${index}`} css={deleteBtnStyle}>
+            <p style={{ margin: "2% 0 0 0", fontWeight: "900" }}>
+              ㆍ{file.name}
+            </p>
+            <button className="deleteBtn" onClick={() => deleteImg(index)}>
+              삭제
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }

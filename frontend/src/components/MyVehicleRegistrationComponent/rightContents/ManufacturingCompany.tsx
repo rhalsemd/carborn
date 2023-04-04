@@ -11,7 +11,7 @@ export const titleStyle = css`
 `;
 
 export const inputBoxStyle = css`
-  width: 100%;
+  width: 98.8%;
   margin-top: 1vh;
   height: 5vh;
   margin-bottom: 1vh;

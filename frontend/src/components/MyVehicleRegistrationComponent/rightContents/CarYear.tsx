@@ -28,7 +28,7 @@ function CarYear({
   };
 
   return (
-    <div style={{ width: "30.5vw" }}>
+    <div style={{ width: "30.1vw" }}>
       <span css={titleStyle}>연식</span>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>

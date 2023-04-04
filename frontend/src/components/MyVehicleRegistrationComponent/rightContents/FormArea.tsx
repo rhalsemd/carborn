@@ -26,13 +26,6 @@ function FormArea({
   registrationInfo,
   setRegistrationInfo,
 }: Props<React.Dispatch<React.SetStateAction<Partial<RegistrationInfo>>>>) {
-  const newRegistrationInfo = {
-    manufacturingCompany: registrationInfo?.manufacturingCompany,
-    carNumber: registrationInfo?.carNumber,
-    carYear: registrationInfo?.carYear,
-    distanceDriven: registrationInfo?.distanceDriven,
-  };
-
   return (
     <div css={rightContent}>
       <h3 style={{ textAlign: "center" }}>차량 등록</h3>
@@ -64,7 +57,6 @@ function FormArea({
       <RegistrationBtn
         registrationInfo={registrationInfo}
         setRegistrationInfo={setRegistrationInfo}
-        newRegistrationInfo={newRegistrationInfo}
         API={API}
       />
     </div>

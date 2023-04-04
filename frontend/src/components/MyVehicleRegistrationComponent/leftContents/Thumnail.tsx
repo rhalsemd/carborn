@@ -11,10 +11,7 @@ const leftContent = css`
   width: 30vw;
   height: 50%;
   margin-right: 6vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+
   .slider {
     display: flex;
     align-items: center;
@@ -23,7 +20,7 @@ const leftContent = css`
 
   .carousel-slider {
     .slider-wrapper {
-      height: 60vh;
+      height: 80vh;
       width: 30vw;
     }
   }
@@ -32,6 +29,10 @@ const leftContent = css`
       margin: 0;
       padding: 0;
     }
+  }
+  .no-img {
+    text-align: center;
+    margin-top: 50%;
   }
 `;
 
@@ -63,7 +64,7 @@ function Thumnail({
           })}
         </Carousel>
       ) : (
-        <div>
+        <div className="no-img">
           <h2>사진을 올려 주세요.</h2>
         </div>
       )}
