@@ -7,6 +7,7 @@ import {
   Props,
   RegistrationInfo,
 } from "./../../../routes/userUseFnc/MyVehicleRegistration";
+import swal from "sweetalert";
 
 interface APIType {
   API: string;
@@ -94,7 +95,12 @@ function RegistrationBtn({
 
       mutate(formData); // post 요청 실행
     } else {
-      alert("양식을 전부 채워주세요");
+      swal({
+        title: "내용이 부족합니다.",
+        text: "조금 더 채워주세요.",
+        icon: "error",
+        buttons: [false],
+      });
     }
   };
 
