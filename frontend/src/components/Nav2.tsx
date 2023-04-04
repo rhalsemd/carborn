@@ -5,15 +5,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../modules/takeLoginLogoutModule";
+import { gsap, ScrollTrigger } from "gsap/all";
 import Logo from "../assets/Logo.png";
 
 const container = css`
-  width: 100vw;
+  width: 100%;
   height: 50vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: black;
+  position: relative;
+
+  .logoImg {
+    cursor: pointer;
+  }
   .section1 {
     width: 100%;
     height: 4vh;
@@ -32,7 +38,7 @@ const container = css`
       div {
         margin: 0 20px;
       }
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 
@@ -45,7 +51,6 @@ const container = css`
       flex: 4;
       display: flex;
       align-items: center;
-      cursor: pointer;
     }
     .menu {
       font-size: 20px;
@@ -97,6 +102,7 @@ export default function Nav2({ setIsToken, isToken }: any) {
     justify-content: space-between;
     background-color: rgba(0, 0, 0, 0.8);
     background-image: ${!isHome ? `url(${carBackground})` : ""};
+    position: relative;
   `;
 
   useEffect(() => {
@@ -216,35 +222,37 @@ export default function Nav2({ setIsToken, isToken }: any) {
             <div
               className="logo"
               onClick={(): void => navigate("/login")}
-              css={{ cursor: "pointer" }}
-            >
+              css={{ cursor: "pointer" }}>
               LOGIN
             </div>
           )}
         </div>
       </div>
-      <div css={section2}>
+      <div css={section2} className="navSection2">
         <div className="menuBar">
           <div className="logo" onClick={(): void => navigate("/")}>
-            <img src={Logo} alt="logo" width="200px" height="auto" />
+            <img
+              src={Logo}
+              alt="logo"
+              width="200px"
+              height="auto"
+              className="logoImg"
+            />
           </div>
           <div className="menu">
             <div
               className="item"
-              onClick={(): void => navigate("/user/car/list")}
-            >
+              onClick={(): void => navigate("/user/car/list")}>
               구매
             </div>
             <div
               className="item"
-              onClick={(): void => navigate("/user/car/sale/4")}
-            >
+              onClick={(): void => navigate("/user/car/sale/4")}>
               판매
             </div>
             <div
               className="item"
-              onClick={(): void => navigate("/user/community")}
-            >
+              onClick={(): void => navigate("/user/community")}>
               커뮤니티
             </div>
             <div className="item" onClick={(): void => navigate("/user/map")}>
@@ -256,8 +264,7 @@ export default function Nav2({ setIsToken, isToken }: any) {
             {success || localToken ? (
               <div
                 className="item"
-                onClick={(): void => navigate(`/user/mypage`)}
-              >
+                onClick={(): void => navigate(`/user/mypage`)}>
                 MY PAGE
               </div>
             ) : null}

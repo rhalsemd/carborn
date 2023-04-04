@@ -17,8 +17,7 @@ function Model(props) {
       <group rotation={[-Math.PI / 2 - 0.01, 0, -Math.PI]}>
         <mesh
           rotation={[Math.PI / 2 + 0.01, Math.PI / 2 + 0.8, -0.01]}
-          position={[5.5, -1, -0.8]}
-        >
+          position={[5.5, -1, -0.8]}>
           <textGeometry args={["CAR-BORN", { font, size: 1.1, height: 1 }]} />
           <meshLambertMaterial attach="material" color={"red"} />
         </mesh>
@@ -188,17 +187,13 @@ useGLTF.preload("/scene.gltf");
 export default function ThreeModel() {
   const object3d = useRef(null);
   const controlsRef = useRef(null);
-  const rotateDirectionRef = useRef(0.5);
   useFrame(({ delta }) => {
     controlsRef.current.update();
-
-    // if (controlsRef.current.autoRotate) {
-    //   if (controlsRef.current.getAzimuthalAngle() < -0.1) {
-    //     controlsRef.current.autoRotateSpeed *= -1;
-    //   } else if (controlsRef.current.getAzimuthalAngle() < -Math.PI / 3) {
-    //     controlsRef.current.autoRotateSpeed *= -1;
-    //   }
-    // }
+    if (controlsRef.current.getAzimuthalAngle() < -0.97) {
+      controlsRef.current.autoRotateSpeed = -0.2;
+    } else if (controlsRef.current.getAzimuthalAngle() > -0.6) {
+      controlsRef.current.autoRotateSpeed = 0.2;
+    }
   });
   return (
     <>
@@ -211,7 +206,6 @@ export default function ThreeModel() {
           maxPolarAngle={Math.PI - Math.PI / 2}
           enableZoom={false}
           autoRotate
-          autoRotateSpeed={rotateDirectionRef.current}
         />
         <Suspense fallback={null}>
           <Model />

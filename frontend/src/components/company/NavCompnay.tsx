@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.png";
 import { useEffect, useState } from "react";
+import { useAPI } from "../../hooks/useAPI";
 
 const container = css`
   width: 100%;
@@ -57,17 +58,46 @@ export default function NavGarage() {
   const [name, setName] = useState<string>("");
   const navigate = useNavigate();
   const ObjString: any = localStorage.getItem("login-token");
+  const account = JSON.parse(ObjString).accountType;
+  const url: any = useLocation().pathname;
+  const logOutUrl = "https://carborn.site/api/logout";
+  const logOut: any = useAPI("get", logOutUrl, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  });
+
   useEffect(() => {
     if (!ObjString) navigate("/");
     setName(JSON.parse(ObjString).userId);
+    if (
+      !(
+        (account === 1 && url.split("/")[1] === "garage") ||
+        (account === 2 && url.split("/")[1] === "inspector") ||
+        (account == 3 && url.split("/")[1] === "insurance")
+      )
+    ) {
+      alert("잘못된 접근입니다");
+      handleClick();
+    }
   }, [ObjString]);
 
   const handleLogout = () => {
-    localStorage.removeItem("login-token");
-    navigate("/");
+    (async () => console.log(await logOut))();
+    // await logOut().then((res: any) => console.log(res))
+    // localStorage.removeItem("login-token");
+
+    // navigate("/");
   };
   const handleClick = () => {
-    navigate("/garage");
+    if (account === 1) {
+      navigate("/garage");
+    } else if (account === 2) {
+      navigate("/inspector");
+    } else {
+      navigate("/insurance");
+    }
   };
   return (
     <div css={container}>
@@ -75,8 +105,7 @@ export default function NavGarage() {
         <div
           className="logo2"
           onClick={handleClick}
-          css={{ cursor: "pointer" }}
-        >
+          css={{ cursor: "pointer" }}>
           <img
             src={logo}
             alt="logo"
@@ -87,8 +116,7 @@ export default function NavGarage() {
         </div>
         <div
           className="loginInfo"
-          css={{ cursor: "default", marginRight: "20px" }}
-        >
+          css={{ cursor: "default", marginRight: "20px" }}>
           <div>{name}님 환영합니다</div>
           <div css={{ cursor: "pointer" }} onClick={handleLogout}>
             로그아웃

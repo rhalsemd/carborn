@@ -9,6 +9,7 @@ import Carousels from "./Carousels";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { useMutation } from "react-query";
+import { Alert } from "@mui/material";
 
 type ImageType = string[];
 
@@ -123,8 +124,20 @@ export default function RegisterForm() {
     formData.append("mileage", 연비);
     formData.append("inspectDt", selectTime);
 
-    mutate(formData);
-    navigate(isGarage ? "/garage" : "/inspector");
+    if (
+      beforeImageFile &&
+      afterImageFile &&
+      reciptImageFile &&
+      reciptImageFile &&
+      content &&
+      연비 &&
+      selectTime
+    ) {
+      mutate(formData);
+      navigate(isGarage ? "/garage" : "/inspector");
+    } else {
+      alert("모든 항목은 필수 입니다.");
+    }
   };
 
   return (
@@ -212,8 +225,7 @@ export default function RegisterForm() {
             variant="outlined"
             sx={{ maxWidth: "50%" }}
             onClick={() => navigate(-1)}
-            color="error"
-          >
+            color="error">
             취소
           </Button>
           <Button
@@ -221,8 +233,7 @@ export default function RegisterForm() {
             variant="contained"
             sx={{ maxWidth: "50%" }}
             onClick={submit}
-            color="error"
-          >
+            color="error">
             제출
           </Button>
         </div>
