@@ -9,7 +9,7 @@ const leftContent = css`
 `;
 
 const leftOuter = css`
-  height: 16%;
+  height: 37vh;
   width: 20vw;
   position: sticky;
   top: 56%;

@@ -52,8 +52,6 @@ function MyVehicleRegistration() {
     vrcList: [],
   });
 
-  console.log(registrationInfo);
-
   return (
     <>
       <Nav2 />

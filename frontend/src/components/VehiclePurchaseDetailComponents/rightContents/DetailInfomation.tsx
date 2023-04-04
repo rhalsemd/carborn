@@ -23,9 +23,9 @@ import {
 } from "../VehiclePurchaseDetailType";
 
 const rightContent = css`
-  border: 1px solid black;
-  width: 40vw;
-  height: 80vh;
+  width: 30vw;
+  height: 90vh;
+  margin-top: 10vh;
 `;
 
 const SIZE: number = 5;
@@ -36,11 +36,13 @@ const DetailInfomationComponent = ({
   page,
   setPage,
   id,
+  setImg,
 }: {
   setError: React.Dispatch<React.SetStateAction<Error | null>>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   id?: string;
+  setImg: React.Dispatch<React.SetStateAction<any[]>>;
 }) => {
   const API = `https://carborn.site/api/user/car/sale/${id}/${page}/${SIZE}`;
   const getCarDetail = useAPI("get", API);
@@ -55,6 +57,10 @@ const DetailInfomationComponent = ({
     onError: (error: Error) => {
       setError(error);
     },
+    onSuccess: (data) => {
+      setImg(data.img);
+      return data;
+    },
     suspense: true,
     useErrorBoundary: true,
   });
@@ -62,11 +68,13 @@ const DetailInfomationComponent = ({
   return (
     <div css={rightContent}>
       <h2 style={{ textAlign: "center" }}>상세정보</h2>
+      <hr style={{ background: "#D23131", border: "0", height: "2px" }} />
+
       <CarModel data={data.detail} />
       <CarNumber data={data.detail} />
       <CarCost data={data.detail} />
-      <CarContent data={data.detail} />
       <CarDistance data={data.detail} />
+      <CarContent data={data.detail} />
       <WatchFileBtn<RepairDataType>
         data={data.repair.content}
         value={1}
@@ -90,7 +98,13 @@ const DetailInfomationComponent = ({
   );
 };
 
-function DetailInfomation({ id }: Readonly<Params<string>>) {
+function DetailInfomation({
+  id,
+  setImg,
+}: {
+  id?: string;
+  setImg: React.Dispatch<React.SetStateAction<any[]>>;
+}) {
   const [error, setError] = useState<Error | null>(null);
   const [page, setPage] = useState<number>(1);
 
@@ -106,6 +120,7 @@ function DetailInfomation({ id }: Readonly<Params<string>>) {
           page={page}
           setPage={setPage}
           id={id}
+          setImg={setImg}
         />
       </Suspense>
     </ErrorBoundary>
