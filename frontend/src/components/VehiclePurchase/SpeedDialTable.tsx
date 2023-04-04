@@ -37,7 +37,7 @@ function SpeedDialTable({ data }: any) {
 
   return (
     <>
-      <span css={{ fontSize: "1.3rem", fontWeight: "900" }}>내 차량</span>
+      <span css={{ fontSize: "1.3rem", fontWeight: "900" }}>차량 선택</span>
       <div css={container}>
         {data?.map((car: any) => {
           return (

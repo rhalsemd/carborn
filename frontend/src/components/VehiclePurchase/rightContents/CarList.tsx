@@ -69,7 +69,7 @@ const textStyle = css`
   .price {
     color: #d23131;
     font-weight: 900;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 `;
 

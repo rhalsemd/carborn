@@ -18,6 +18,7 @@ const historyBtnStyle = css`
   margin-left: 1.5%;
   font-weight: 900;
   margin-bottom: 5%;
+  margin-top: 3%;
   &:hover {
     background-color: #d23131;
   }

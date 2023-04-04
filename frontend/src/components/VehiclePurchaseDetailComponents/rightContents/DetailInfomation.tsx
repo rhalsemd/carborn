@@ -2,7 +2,6 @@
 import { css } from "@emotion/react";
 
 import { useQuery } from "react-query";
-import { Params } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense, useState } from "react";
 import CarModel from "./CarModel";
@@ -64,11 +63,18 @@ const DetailInfomationComponent = ({
     suspense: true,
     useErrorBoundary: true,
   });
-
+  console.log(data);
   return (
     <div css={rightContent}>
       <h2 style={{ textAlign: "center" }}>상세정보</h2>
-      <hr style={{ background: "#D23131", border: "0", height: "2px" }} />
+      <hr
+        style={{
+          background: "#D23131",
+          border: "0",
+          height: "2px",
+          marginBottom: "5%",
+        }}
+      />
 
       <CarModel data={data.detail} />
       <CarNumber data={data.detail} />

@@ -13,13 +13,14 @@ import { useAPI } from "./../../hooks/useAPI";
 import { useQuery } from "react-query";
 
 const dialog = css`
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 28px rgba(255, 0, 0, 0.25),
+    0 10px 10px rgba(255, 0, 0, 0.22);
   border: 0;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 20px 50px 10px 50px;
   &::backdrop {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.8);
   }
 `;
 const closeBtn = css`
@@ -28,7 +29,9 @@ const closeBtn = css`
   border: 2px solid black;
   background-color: white;
   color: black;
-  border-radius: 20px;
+  border-radius: 10px;
+  font-weight: 900;
+  margin-left: 90%;
   cursor: pointer;
   &:hover {
     background-color: black;
