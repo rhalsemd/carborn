@@ -18,7 +18,7 @@ const container = css`
 export default function UserHome() {
   return (
     <>
-      <Nav2 />
+      <Nav2 home={"home"} />
       <div css={container}>
         <HomeCarModel />
         <HomeIconMenu />

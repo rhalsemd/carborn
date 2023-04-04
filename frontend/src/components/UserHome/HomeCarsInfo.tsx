@@ -92,8 +92,6 @@ export default function HomeCarsInfo() {
       },
     ]);
 
-  console.log(data1, data2, data3);
-
   return (
     <div css={container}>
       <div className="header">

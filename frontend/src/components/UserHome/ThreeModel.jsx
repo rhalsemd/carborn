@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { useEffect, useRef, Suspense } from "react";
-import { extend } from "@react-three/fiber";
-import * as THREE from "three";
+import { useRef, Suspense } from "react";
+import { extend, useFrame } from "@react-three/fiber";
+
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
@@ -188,17 +187,31 @@ useGLTF.preload("/scene.gltf");
 
 export default function ThreeModel() {
   const object3d = useRef(null);
+  const controlsRef = useRef(null);
+  const rotateDirectionRef = useRef(0.5);
+  useFrame(({ delta }) => {
+    controlsRef.current.update();
 
+    // if (controlsRef.current.autoRotate) {
+    //   if (controlsRef.current.getAzimuthalAngle() < -0.1) {
+    //     controlsRef.current.autoRotateSpeed *= -1;
+    //   } else if (controlsRef.current.getAzimuthalAngle() < -Math.PI / 3) {
+    //     controlsRef.current.autoRotateSpeed *= -1;
+    //   }
+    // }
+  });
   return (
     <>
       <object3D ref={object3d}>
         <OrbitControls
+          ref={controlsRef}
           minAzimuthAngle={-Math.PI / 3}
-          maxAzimuthAngle={Math.PI / 5}
-          minPolarAngle={Math.PI / 3}
+          maxAzimuthAngle={0.06}
+          minPolarAngle={Math.PI / 2.2}
           maxPolarAngle={Math.PI - Math.PI / 2}
-          maxZoom={1}
-          minZoo={1}
+          enableZoom={false}
+          autoRotate
+          autoRotateSpeed={rotateDirectionRef.current}
         />
         <Suspense fallback={null}>
           <Model />
