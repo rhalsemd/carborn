@@ -30,7 +30,7 @@ const closeBtn = css`
   background-color: white;
   color: black;
   border-radius: 10px;
-  font-weight: 900;
+  font-weight: 500;
   margin-left: 90%;
   cursor: pointer;
   &:hover {

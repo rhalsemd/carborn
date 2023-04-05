@@ -4,9 +4,14 @@ import { css } from "@emotion/react";
 import axios, { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import swal from "sweetalert";
 import { useAPI } from "../../../hooks/useAPI";
+import { useNavigate } from "react-router-dom";
 
 const buttonStyle = css`
+  padding-bottom: 3vh;
+  display: flex;
+  justify-content: center;
   .back {
     border: 0;
     width: 27.5%;
@@ -26,6 +31,45 @@ const buttonStyle = css`
     cursor: pointer;
     font-weight: 900;
   }
+  .user-delete {
+    border: 0;
+    width: 27.5%;
+    margin-left: 2.5%;
+    height: 5vh;
+    background-color: #000000;
+    color: white;
+    cursor: pointer;
+    font-weight: 900;
+  }
+  .user-complete {
+    border: 0;
+    width: 27.5%;
+    margin-left: 2.5%;
+    height: 5vh;
+    background-color: #d23131;
+    color: white;
+    cursor: pointer;
+    font-weight: 900;
+  }
+  .list {
+    border: 0;
+    width: 27.5%;
+    margin-left: 2.5%;
+    height: 5vh;
+    background-color: #d23131;
+    color: white;
+    cursor: pointer;
+    font-weight: 900;
+  }
+  .complete {
+    border: 0;
+    width: 67.5%;
+    margin-left: 2.5%;
+    height: 5vh;
+    background-color: #00000067;
+    color: white;
+    font-weight: 900;
+  }
 `;
 
 const dialog = css`
@@ -41,18 +85,21 @@ const dialog = css`
   }
   .userInfoBox {
     display: flex;
+    border: 2px solid lightgrey;
+    border-top: transparent;
+    border-left: transparent;
+    border-right: transparent;
     justify-content: space-evenly;
     margin-bottom: 4%;
-    width: 60%;
-    background-color: #000000;
-    color: #ffffff;
-    cursor: pointer;
+    width: auto;
+    color: #000000;
 
     .text {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      height: 10vh;
+      flex-direction: row;
+      align-items: center;
+      height: 3vh;
+      margin-bottom: 1.5vh;
     }
   }
 `;
@@ -64,7 +111,7 @@ const closeBtn = css`
   background-color: white;
   color: black;
   border-radius: 10px;
-  font-weight: 900;
+  font-weight: 500;
   top: 90%;
   margin-left: 85%;
   cursor: pointer;
@@ -83,32 +130,25 @@ interface DataType {
 
 const SIZE: number = 5;
 
-function PurchaseApplicationBtn({ id }: { id?: string }) {
+function PurchaseApplicationBtn({
+  id,
+  DetailData,
+}: {
+  id?: string;
+  DetailData: any;
+}) {
+  // 로컬스토리지 회원 정보 받아오기
+  const ObjString = localStorage.getItem("login-token");
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
+  const userId = Obj ? Obj.userId : null;
+  const token = Obj ? Obj.value : null;
+
   const [page, setPage] = useState<number>(1);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const navigate = useNavigate();
 
+  // 판매자 - 구매 신청자 목록
   const API = `https://carborn.site/api/user/car/buy/${id}`;
-  const USER_LIST_API = `https://carborn.site/api/user/car/sale/sell/${id}/${page}/${SIZE}`;
-  const getApplyUserList = useAPI("get", USER_LIST_API);
-
-  const { data } = useQuery<any, AxiosError>(
-    "get-apply-user-list",
-    () => getApplyUserList,
-    {
-      retry: false,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      cacheTime: 0,
-      staleTime: 0,
-      select: (data) => {
-        return data.data.message.content;
-      },
-    }
-  );
-
-  console.log(data);
-
   const { mutate } = useMutation(
     () => {
       return axios({
@@ -125,50 +165,219 @@ function PurchaseApplicationBtn({ id }: { id?: string }) {
 
   const goToBuy = () => {
     mutate();
+    swal({
+      title: "신청되었습니다.",
+      text: "2초후 자동으로 닫힙니다.",
+      icon: "success",
+      buttons: [true],
+      timer: 2000,
+    });
   };
 
+  // 판매자 - 판매 취소
+  const SALER_DELETE_API = `https://carborn.site/api/user/sell/cancel/${id}`;
+  const { mutate: salerDeleteMutate } = useMutation(() => {
+    return axios({
+      method: "put",
+      url: SALER_DELETE_API,
+    });
+  });
+  const salerDelete = () => {
+    swal({
+      buttons: ["나가기", "판매취소"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        salerDeleteMutate();
+        swal("판매가 취소되었습니다..", {
+          icon: "success",
+        });
+      }
+    });
+  };
+
+  // 구매 신청자 리스트 모달 오픈
+  const USER_LIST_API = `https://carborn.site/api/user/car/sale/sell/${id}/${page}/${SIZE}`;
+  const getApplyUserList = useAPI("get", USER_LIST_API);
+
+  const { data, refetch } = useQuery<any, AxiosError>(
+    "get-apply-user-list",
+    () => getApplyUserList,
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+      cacheTime: 0,
+      staleTime: 0,
+      select: (data) => {
+        return data.data.message.content;
+      },
+      enabled: false,
+    }
+  );
+
   const showModal = () => {
+    refetch();
     modalRef?.current?.showModal();
   };
 
+  // 판매 확정
+  const { mutate: putMutate } = useMutation((userId: string) => {
+    return axios({
+      method: "put",
+      url: `https://carborn.site/api/user/car/sale/sell/confirm/${id}/${userId}`,
+    });
+  });
+
+  const isConfirm = (userId: string) => {
+    modalRef?.current?.close();
+    swal({
+      text: "판매를 확정하겠습니까?",
+      buttons: [true, true],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        putMutate(userId);
+        swal("확정되었습니다.", {
+          icon: "success",
+        });
+      } else {
+        swal("취소되었습니다.");
+      }
+    });
+  };
+
+  // 뒤로가기
+  const back = () => {
+    navigate("/user/car/list");
+  };
+
+  // 사용자 구매 확정 및 취소
+  // 확정
+  const USER_BUY_CONFIRM_API = `https://carborn.site/api/user/car/sale/buy/confirm/${id}`;
+  const { mutate: confirmMutate } = useMutation(() => {
+    return axios({
+      method: "put",
+      url: USER_BUY_CONFIRM_API,
+    });
+  });
+
+  const userConfirmBtn = () => {
+    swal({
+      text: `구매 확정을 원하시면 구매확정을 눌러주세요.`,
+      buttons: ["나가기", "구매확정"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        confirmMutate();
+        swal("확정되었습니다.", {
+          icon: "success",
+        });
+      } else {
+      }
+    });
+  };
+
+  const USER_BUY_CENCEL_API = `https://carborn.site/api/user/buy/cancel/${id}`;
+  const { mutate: cancelMutate } = useMutation(() => {
+    return axios({
+      method: "put",
+      url: USER_BUY_CENCEL_API,
+    });
+  });
+
+  const userCencelBtn = () => {
+    swal({
+      text: `구매취소를 원하시면 구매취소를 눌러주세요`,
+      buttons: ["나가기", "구매취소"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        cancelMutate();
+        swal("취소되었습니다.", {
+          icon: "success",
+        });
+      } else {
+      }
+    });
+  };
+  console.log(DetailData?.bookStatus?.bookStatus);
+
   return (
     <div css={buttonStyle}>
-      <button className="back">뒤로가기</button>
-      <button className="apply" onClick={goToBuy}>
-        구매신청
+      <button className="back" onClick={back}>
+        뒤로가기
       </button>
-      <button className="apply" onClick={showModal}>
-        신청자 목록
-      </button>
-      <dialog ref={modalRef} css={dialog}>
-        <div css={{ display: "flex", justifyContent: "center" }}>
-          {data?.map((userInfo: DataType) => {
-            return (
-              <div className="userInfoBox">
-                <div className="text">
-                  <div css={{ color: "#696465" }}>
-                    {userInfo.accountPhoneNo}
-                  </div>
-                  <div
-                    css={{
-                      fontSize: "1.5rem",
-                      color: "white",
-                      marginBottom: "5%",
-                    }}
-                  >
-                    {userInfo.accountName}
-                  </div>
-                </div>
+      {userId === DetailData?.detail?.accountId ? (
+        DetailData?.detail?.saleStatus === 0 ? (
+          <>
+            <button className="user-delete" onClick={salerDelete}>
+              판매취소
+            </button>
+            <button className="list" onClick={showModal}>
+              목록
+            </button>
+            <dialog ref={modalRef} css={dialog}>
+              <div css={{ display: "flex", justifyContent: "center" }}>
+                {data?.map((userInfo: DataType) => {
+                  return (
+                    <div className="userInfoBox" key={userInfo.id}>
+                      <div className="text">
+                        <div css={{ fontSize: "1rem", fontWeight: "600" }}>
+                          {userInfo.accountName} -
+                        </div>
+                        <div css={{ fontSize: "0.7rem", marginRight: "2vw" }}>
+                          &nbsp; {userInfo.accountPhoneNo}
+                        </div>
+                      </div>
+                      <button
+                        css={{
+                          border: "0",
+                          backgroundColor: "#D23131",
+                          color: "white",
+                          height: "90%",
+                          borderRadius: "10px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => isConfirm(userInfo.accountId)}
+                      >
+                        확정
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-        <form method="dialog">
-          <button value="close" css={closeBtn}>
-            Close
+              <form method="dialog">
+                <button value="close" css={closeBtn}>
+                  Close
+                </button>
+              </form>
+            </dialog>
+          </>
+        ) : DetailData?.detail?.saleStatus === 1 ? (
+          <button className="complete">확정완료</button>
+        ) : (
+          <button className="complete">취소완료</button>
+        )
+      ) : DetailData?.bookStatus?.bookStatus === undefined ? (
+        <button className="apply" onClick={goToBuy}>
+          구매신청
+        </button>
+      ) : DetailData?.bookStatus?.bookStatus === 0 ? (
+        <>
+          <button className="user-delete" onClick={userCencelBtn}>
+            신청취소
           </button>
-        </form>
-      </dialog>
+          <button className="user-complete" onClick={userConfirmBtn}>
+            구매확정
+          </button>
+        </>
+      ) : DetailData?.bookStatus?.bookStatus === 1 ? (
+        <button className="complete">확정완료</button>
+      ) : DetailData?.bookStatus?.bookStatus === 2 ? (
+        <button className="complete">취소완료</button>
+      ) : null}
     </div>
   );
 }

@@ -47,7 +47,7 @@ const DetailInfomationComponent = ({
   const getCarDetail = useAPI("get", API);
 
   const { data } = useQuery(["get-car-detail", page], () => getCarDetail, {
-    staleTime: 1000 * 300,
+    staleTime: 0,
     cacheTime: 1000 * 300,
     retry: false,
     select: (data) => {
@@ -63,7 +63,7 @@ const DetailInfomationComponent = ({
     suspense: true,
     useErrorBoundary: true,
   });
-  console.log(data);
+
   return (
     <div css={rightContent}>
       <h2 style={{ textAlign: "center" }}>상세정보</h2>
@@ -99,7 +99,7 @@ const DetailInfomationComponent = ({
         page={page}
         setPage={setPage}
       />
-      <PurchaseApplicationBtn id={id} />
+      <PurchaseApplicationBtn DetailData={data} id={id} />
     </div>
   );
 };

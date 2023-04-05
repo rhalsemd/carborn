@@ -113,7 +113,6 @@ function CarList() {
   const SEARCH_API = (pageParam: number) => {
     return `https://carborn.site/api/user/car/sale/list/${pageParam}/${SIZE}/${sortType}/${keywordType}/${keyword}`;
   };
-
   const { data, fetchNextPage, hasNextPage, isError, isLoading } =
     useInfiniteQuery(
       "infinity-scroll",
@@ -128,6 +127,8 @@ function CarList() {
       },
       {
         retry: false,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
         keepPreviousData: true,
         useErrorBoundary: true,
         getNextPageParam: (lastPage, allPages) => {
@@ -204,75 +205,75 @@ function CarList() {
     );
   }
 
+  console.log(data?.pages);
+
   return (
     <div css={rightContent}>
       {isData ? (
         data?.pages.map((item) => {
           return item?.data?.message.content.map(
             (car: CarType, index: number) => {
-              if (!car?.saleStatus) {
-                return (
-                  // 검색 결과
-                  <div
-                    css={infoBox}
-                    key={index}
-                    ref={(ref) => {
-                      if (ref) {
-                        divRef.current[cnt] = ref;
-                        cnt++;
-                      }
-                    }}
+              return (
+                // 검색 결과
+                <div
+                  css={infoBox}
+                  key={index}
+                  ref={(ref) => {
+                    if (ref) {
+                      divRef.current[cnt] = ref;
+                      cnt++;
+                    }
+                  }}
+                >
+                  <button
+                    className="btn"
+                    onClick={() => goToDetil(car.carId, car.id)}
                   >
-                    <button
-                      className="btn"
-                      onClick={() => goToDetil(car.carId, car.id)}
-                    >
-                      Detail
-                    </button>
-                    <img
-                      // src={`${CAR_URL}${car.imgNm}`}
-                      src={CAR}
-                      alt="carImg"
-                      css={imgStyle}
-                    />
-                    <div css={textStyle}>
-                      <div className="title">
-                        <div css={{ display: "flex" }}>
-                          {`${car.modelYear} ${car.modelNm}`}{" "}
-                          <hr
-                            css={{
-                              width: "2px",
-                              height: "18px",
-                              color: "black",
-                              backgroundColor: "black",
-                              margin: "2.5px 5px 1px 5px",
-                            }}
-                          />{" "}
-                          {`${parseInt(car.mileage).toLocaleString("ko-KR")}km`}
-                        </div>
-                        <div
-                          style={{
-                            border: "2px solid #FF0000",
-                            width: "7%",
-                            marginTop: "1%",
+                    Detail
+                  </button>
+                  <img
+                    // src={`${CAR_URL}${car.imgNm}`}
+                    src={CAR}
+                    alt="carImg"
+                    css={imgStyle}
+                  />
+                  <div css={textStyle}>
+                    <div className="title">
+                      <div css={{ display: "flex" }}>
+                        {`${car.modelYear} ${car.modelNm}`}{" "}
+                        <hr
+                          css={{
+                            width: "2px",
+                            height: "18px",
+                            color: "black",
+                            backgroundColor: "black",
+                            margin: "2.5px 5px 1px 5px",
                           }}
-                        ></div>
+                        />{" "}
+                        {`${parseInt(car.mileage).toLocaleString("ko-KR")}km`}
                       </div>
-
-                      {/* <div className="content">{car.content}</div> */}
-                      <div className="content">
-                        2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다.
-                        사고난적 한 번 없고 엔진오일, 타이어 제때 갈아줘서
-                        상태가 좋습니다.
-                      </div>
-
-                      <div className="price">{`${parseInt(
-                        car.price
-                      ).toLocaleString("ko-KR")}￦`}</div>
+                      <div
+                        style={{
+                          border: "2px solid #FF0000",
+                          width: "7%",
+                          marginTop: "1%",
+                        }}
+                      ></div>
                     </div>
+
+                    {/* <div className="content">{car.content}</div> */}
+                    <div className="content">
+                      2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다.
+                      사고난적 한 번 없고 엔진오일, 타이어 제때 갈아줘서 상태가
+                      좋습니다.
+                    </div>
+
+                    <div className="price">{`${parseInt(
+                      car.price
+                    ).toLocaleString("ko-KR")}￦`}</div>
                   </div>
-                );
-              }
+                </div>
+              );
             }
           );
         })
