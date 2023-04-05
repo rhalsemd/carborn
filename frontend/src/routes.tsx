@@ -115,4 +115,3 @@ export const PrivateRoutes = [
   { path: "/user/map", element: <NaverMap /> },
   { path: "/user/community", element: <Community /> },
 ];
-
