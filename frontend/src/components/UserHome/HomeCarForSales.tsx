@@ -86,7 +86,6 @@ const imgBox = css`
       justify-content: center;
       align-items: center;
       font-weight: bolder;
-      border: 1px solid #a8a8a8;
       cursor: pointer;
     }
 
@@ -105,18 +104,22 @@ const imgBox = css`
   .Btn {
     color: red;
     border: 1px solid #a8a8a8;
-    background-color: #f6f6f6;
     height: 50px;
     width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
+    font-size: 1.5rem;
     top: 45%;
     position: absolute;
     z-index: 2;
     opacity: 0;
     transition: all 0.3s;
+    border-radius: 5px;
+    background-color: #f6f6f6;
+    &:hover {
+      background-color: #c5c5c5;
+    }
   }
   .rightBtn {
     right: 30px;

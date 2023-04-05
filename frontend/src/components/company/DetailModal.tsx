@@ -106,8 +106,7 @@ export default function DetailModal({ id, status }: Props) {
         variant="contained"
         sx={{ backgroundColor: "#d23131" }}
         onClick={handleClickOpen}
-        size="small"
-      >
+        size="small">
         보기
       </Button>
       <Dialog
@@ -116,7 +115,7 @@ export default function DetailModal({ id, status }: Props) {
         keepMounted
         onClose={handleCancel}
         aria-describedby="alert-dialog-slide-description"
-      >
+        maxWidth={false}>
         <DialogTitle>{isGarage ? "수리 요청" : "검수 요청"}</DialogTitle>
         <DialogContent sx={{ minWidth: "300px" }}>
           <table css={tableStyle}>
@@ -164,8 +163,7 @@ export default function DetailModal({ id, status }: Props) {
               <Button
                 variant="contained"
                 onClick={handleRegister}
-                color="error"
-              >
+                color="error">
                 {isGarage ? "정비 내역 등록" : "검수 내역 등록"}
               </Button>
             </>
