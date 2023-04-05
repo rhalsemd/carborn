@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Canvas, useFrame } from "@react-three/fiber";
+// import { Canvas, useFrame } from "@react-three/fiber";
 import ThreeModel from "./ThreeModel";
 
 const container = css`
@@ -26,7 +26,7 @@ export default function CarModel() {
           height: "100%",
         }}
       >
-        <Canvas
+        {/* <Canvas
           camera={{
             fov: 5,
             near: 10,
@@ -39,7 +39,7 @@ export default function CarModel() {
           <directionalLight color={color} intensity={intensity} />
           <ambientLight color={color} intensity={intensity} />
           <ThreeModel />
-        </Canvas>
+        </Canvas> */}
       </div>
     </div>
   );
