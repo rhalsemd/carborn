@@ -25,11 +25,16 @@ function RegistrationBtn({
   API,
 }: RegistrationBtnType) {
   // mutation 함수
+  const ObjString: any = localStorage.getItem("login-token");
   const fileUpLoadAPI = (data: FormData) => {
     return axios({
       method: "post",
       url: API,
       data: data,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+      },
     });
   };
 

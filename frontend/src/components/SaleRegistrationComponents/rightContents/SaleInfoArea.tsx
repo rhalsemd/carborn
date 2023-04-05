@@ -58,6 +58,8 @@ function SaleInfoContents({
   setError,
   setImg,
 }: Pick<SaleInfoContentsType, "setError" | "setImg">) {
+  const ObjString: any = localStorage.getItem("login-token");
+
   const [saleInfo, setSaleInfo] = useState<SaleInfoType>({
     price: "",
     content: "",
@@ -66,7 +68,12 @@ function SaleInfoContents({
   const navigation = useNavigate();
 
   const GET_API = `https://carborn.site/api/user/car/${carId}`;
-  const getCarInfo = useAPI("get", GET_API);
+  const getCarInfo = useAPI("get", GET_API, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  });
 
   // 자동차 정보를 받아오는 query
   const { data } = useQuery("get-car-info", () => getCarInfo, {
@@ -98,10 +105,10 @@ function SaleInfoContents({
       },
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${JSON.parse(ObjString).value}`,
       },
     })
   );
-  console.log(isSuccess);
 
   const submitInfo = () => {
     mutate();
