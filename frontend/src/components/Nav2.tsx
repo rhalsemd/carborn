@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import carBackground from "../assets/carBackground2.jpg";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -84,6 +84,7 @@ const container = css`
 `;
 
 export default function Nav2(msg: any) {
+  const { carId: CARID, id: ID } = useParams();
   const navigate = useNavigate();
   // Nav 타이틀, 로그인 확인 여부
   const [title, setTitle] = useState<string>("Home");
@@ -188,9 +189,16 @@ export default function Nav2(msg: any) {
       setTitle(`MyPostsHistory`);
     } else if (location.pathname === `/user/mypage/userpasswordmodify`) {
       setTitle("ResetPassword");
+    } else if (location.pathname === `/user/car/list`) {
+      setTitle("CarList");
+    } else if (location.pathname === `/user/car/${CARID}/${ID}`) {
+      setTitle("DetailCarInfo");
+    } else if (location.pathname === `/user/car/sale/${ID}`) {
+      setTitle("CarSaleRegister");
+    } else if (location.pathname === `/user/car`) {
+      setTitle("MyCarRegister");
     }
   }, [location.pathname, setTitle, title]);
-
   // 로그아웃
   const handleLogout = () => {
     dispatch(logoutAction());

@@ -8,9 +8,7 @@ import repairIcon from "../../assets/repairIcon.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
 import ReserveForm from "../../components/NaverMap/ReserveForm";
 import SearchBar from "../../components/NaverMap/SearchBar";
-import { useAPI } from "../../hooks/useAPI";
 import SearchForm from "./../../components/NaverMap/SearchForm";
-import { useQuery } from "react-query";
 import MarkerDetail from "../../components/NaverMap/MarkerDetail";
 import axios from "axios";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -108,7 +106,6 @@ function NaverMap() {
   const [reserve, setReserve] = useState<boolean>(false);
   const [markerNum, setMarkerNum] = useState<number>(-1);
   const [markerArr, setMarkerArr] = useState<any[]>([]);
-  const ObjString: any = localStorage.getItem("login-token");
 
   /**
    * 현재 위치를 받는 함수
@@ -120,10 +117,15 @@ function NaverMap() {
         // const lng = position.coords.longitude;
         const lat = 36.107159;
         const lng = 128.417394;
+        const ObjString: any = localStorage.getItem("login-token");
 
         axios({
           method: "get",
           url: `https://carborn.site/api/user/map/list/${lat}/${lng}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+          },
         })
           .then((res) => res.data)
           .then((data) => {
@@ -183,7 +185,7 @@ function NaverMap() {
 
       var infoWindow = new naver.maps.InfoWindow({
         content: [
-          '<div style="width:20vw; padding:10px; height: 28vh; margin-left:2.5vw; position:relative;">',
+          '<div style="width:20vw; padding:10px; height: 24vh; margin-left:2.5vw; position:relative; margin-top:2vh; ">',
           '<div style="position:absolute; right:40px; top: 10px; cursor:pointer;">✖</div>',
           `<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">${key.NAME}</p>`,
           '<p style="margin-top: 0; color: #E00000; font-weight: bolder;">',

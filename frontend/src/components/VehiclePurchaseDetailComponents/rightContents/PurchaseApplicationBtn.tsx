@@ -2,7 +2,7 @@
 import { css } from "@emotion/react";
 
 import axios, { AxiosError } from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import swal from "sweetalert";
 import { useAPI } from "../../../hooks/useAPI";
@@ -142,7 +142,7 @@ function PurchaseApplicationBtn({
   const Obj = ObjString ? JSON.parse(ObjString) : null;
   const userId = Obj ? Obj.userId : null;
   const token = Obj ? Obj.value : null;
-
+  console.log(DetailData);
   const [page, setPage] = useState<number>(1);
   const modalRef = useRef<HTMLDialogElement>(null);
   const navigate = useNavigate();
@@ -300,6 +300,7 @@ function PurchaseApplicationBtn({
     });
   };
 
+  // 취소
   const USER_BUY_CENCEL_API = `https://carborn.site/api/user/buy/cancel/${id}`;
   const { mutate: cancelMutate } = useMutation(() => {
     return axios({
@@ -327,6 +328,11 @@ function PurchaseApplicationBtn({
       }
     });
   };
+
+  useEffect(() => {}, [
+    DetailData?.detail?.saleStatus,
+    DetailData?.bookStatus?.bookStatus,
+  ]);
 
   return (
     <div css={buttonStyle}>

@@ -106,7 +106,6 @@ function CarList() {
   const { sortType, keyword, keywordType } = useSelector(
     ({ carListReducer }: { carListReducer: StateType }) => carListReducer
   );
-
   const SORT_API = (pageParam: number) => {
     return `https://carborn.site/api/user/car/sale/list/${pageParam}/${SIZE}/${sortType}`;
   };
@@ -211,8 +210,6 @@ function CarList() {
       </div>
     );
   }
-
-  console.log(data?.pages);
 
   return (
     <div css={rightContent}>
