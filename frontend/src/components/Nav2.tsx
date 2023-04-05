@@ -249,7 +249,7 @@ export default function Nav2(msg: any) {
             <img
               src={Logo}
               alt="logo"
-              width="200px"
+              width="32%"
               height="auto"
               className="logoImg"
             />

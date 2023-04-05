@@ -25,7 +25,11 @@ interface MapType {
 
 const tableStyle = css`
   tr {
+    font-size: 15px;
     border-spacing: 10px;
+  }
+  td {
+    font-size: 1rem;
   }
 `;
 
@@ -120,27 +124,27 @@ export default function DetailModal({ id, status }: Props) {
             <tbody>
               <tr>
                 <td>아이디</td>
-                <td> : {data?.accountId}</td>
+                <td>{data?.accountId}</td>
               </tr>
               <tr>
                 <td>이름</td>
-                <td> : {data?.accountName}</td>
+                <td>{data?.accountName}</td>
               </tr>
               <tr>
                 <td>전화번호</td>
-                <td> : {data?.accountPhoneNo}</td>
+                <td>{data?.accountPhoneNo}</td>
               </tr>
               <tr>
                 <td>차종</td>
-                <td> : {data?.carModelNm}</td>
+                <td>{data?.carModelNm}</td>
               </tr>
               <tr>
                 <td>차번호</td>
-                <td> : {data?.carRegNm}</td>
+                <td>{data?.carRegNm}</td>
               </tr>
               <tr>
                 <td>차대 번호</td>
-                <td> : {data?.carVin}</td>
+                <td>{data?.carVin}</td>
               </tr>
               <tr>
                 <td>내용</td>

@@ -24,11 +24,11 @@ export default function UserHome() {
     gsap.registerPlugin(ScrollTrigger);
 
     gsap.from(".carSale", {
-      y: "30vh",
+      y: "20vh",
       scrollTrigger: {
         trigger: ".carSale",
-        start: "top 80%",
-        end: "top 80%",
+        start: "top 50%",
+        end: "top 50%",
         scrub: 1,
       },
     });

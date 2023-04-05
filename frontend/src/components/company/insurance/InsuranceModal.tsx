@@ -25,7 +25,7 @@ const tableStyle = css`
   }
   td {
     width: 1.2vw;
-    font-size: 17px;
+    font-size: 15px;
   }
   width: 30vw;
   border-spacing: 0 15px;

@@ -22,25 +22,6 @@ import { loginFailureReset } from "./../../modules/takeLoginLogoutModule";
 export const StyleLoginContainer = styled.div`
   width: 100vw;
   background-color: white;
-  /* background: linear-gradient(
-    to bottom,
-    #000000,
-    #1e0000e8
-  );
-  background-size: 100% 200%;
-  animation: gradient 10s ease infinite;
-
-  @keyframes gradient {
-    0% {
-      background-position: 0% 0%;
-    }
-    50% {
-      background-position: 0% 100%;
-    }
-    100% {
-      background-position: 0% 0%;
-    }
-  } */
 `;
 
 export const StyleLoginCenterDiv = styled.div`
@@ -71,8 +52,8 @@ export const StyleLoginBoxDiv = styled.div`
   align-items: center;
 
   background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(000, 000, 000, 1);
-  border: 1px solid black;
+  /* box-shadow: 0 0 10px rgba(000, 000, 000, 1); */
+  border: 2px solid #d23131;
   border-radius: 5px;
 `;
 
@@ -93,7 +74,7 @@ export const StyleLoginBtn = styled.button<StyleLoginSignUpBtnProps>`
   border-radius: 5px;
   font-weight: 900;
   font-size: 1rem;
-  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.3); */
 
   &:active {
     box-shadow: none;

@@ -10,7 +10,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router";
 
 const container = css`
-  height: 110vh;
+  height: 120vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -69,7 +69,7 @@ const buttons = css`
       height: 10%;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
+      font-size: 1.3rem;
       font-weight: bolder;
       z-index: 1;
       position: relative;
@@ -81,7 +81,7 @@ const buttons = css`
       align-items: center;
       justify-content: center;
       padding: 0 20px 0 20px;
-      font-size: 20px;
+      font-size: 1rem;
       text-align: center;
       font-weight: 500;
       color: #a8a8a8;
@@ -173,12 +173,12 @@ const buttons = css`
     font-weight: bold;
     color: white;
     transition: all 0.8s;
-    font-size: 28px;
+    font-size: 1.5rem;
     cursor: pointer;
 
     &:hover {
       .name {
-        font-size: 30px;
+        font-size: 1.6rem;
         transition: all 0.3s;
       }
     }
