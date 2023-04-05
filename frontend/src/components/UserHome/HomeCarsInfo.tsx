@@ -107,9 +107,9 @@ export default function HomeCarsInfo() {
       width: "80%",
       scrollTrigger: {
         trigger: ".infoHr",
-        start: "top 80%",
-        end: "top 80%",
-        scrub: 1,
+        start: "top 75%",
+        end: "top 75%",
+        scrub: 2,
       },
     });
 

@@ -39,7 +39,7 @@ export default function UserHome() {
         trigger: ".homeInfo",
         start: "top 80%",
         end: "top 80%",
-        scrub: 1,
+        scrub: 2,
       },
     });
     gsap.to(".homeChoose", {

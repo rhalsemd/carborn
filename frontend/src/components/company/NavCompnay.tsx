@@ -61,12 +61,14 @@ export default function NavGarage() {
   const account = JSON.parse(ObjString).accountType;
   const url: any = useLocation().pathname;
   const logOutUrl = "https://carborn.site/api/logout";
-  const logOut: any = useAPI("get", logOutUrl, {
+
+  const option = {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${JSON.parse(ObjString).value}`,
     },
-  });
+  };
+  const logOut: any = useAPI("get", logOutUrl, option);
 
   useEffect(() => {
     if (!ObjString) navigate("/");
@@ -84,11 +86,11 @@ export default function NavGarage() {
   }, [ObjString]);
 
   const handleLogout = () => {
-    (async () => console.log(await logOut))();
-    // await logOut().then((res: any) => console.log(res))
-    // localStorage.removeItem("login-token");
-
-    // navigate("/");
+    (async () => {
+      await logOut.then((res: any) => console.log(res));
+      localStorage.removeItem("login-token");
+      navigate("/");
+    })();
   };
   const handleClick = () => {
     if (account === 1) {
@@ -105,7 +107,8 @@ export default function NavGarage() {
         <div
           className="logo2"
           onClick={handleClick}
-          css={{ cursor: "pointer" }}>
+          css={{ cursor: "pointer" }}
+        >
           <img
             src={logo}
             alt="logo"
@@ -116,9 +119,10 @@ export default function NavGarage() {
         </div>
         <div
           className="loginInfo"
-          css={{ cursor: "default", marginRight: "20px" }}>
+          css={{ cursor: "default", marginRight: "20px" }}
+        >
           <div>{name}님 환영합니다</div>
-          <div css={{ cursor: "pointer" }} onClick={handleLogout}>
+          <div css={{ cursor: "pointer" }} onClick={() => handleLogout}>
             로그아웃
           </div>
         </div>

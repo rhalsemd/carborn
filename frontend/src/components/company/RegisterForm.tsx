@@ -9,7 +9,7 @@ import Carousels from "./Carousels";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { useMutation } from "react-query";
-import { Alert } from "@mui/material";
+import Swal from "sweetalert2";
 
 type ImageType = string[];
 
@@ -87,17 +87,35 @@ export default function RegisterForm() {
   const [연비, set연비] = useState<string>("");
   const [content, setContent] = useState<string>("123123");
 
-  const URL = "http://192.168.100.176/api/repair-shop/book";
-
   const handleTextInput = (e: any) => {
     setContent(e.target.value);
+  };
+
+  const ObjString: any = localStorage.getItem("login-token");
+  const account = JSON.parse(ObjString).accountType;
+  let URL: string;
+
+  if (account == 1) {
+    URL = "https://carborn.site/api/repair-shop/book";
+  } else {
+    URL = "https://carborn.site/api/inspect/book";
+  }
+
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
   };
 
   const fileUpLoadAPI = async (data: FormData) => {
     return fetch(URL, {
       method: "PUT",
       body: data,
-    });
+      headers: {
+        Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+      },
+    }).then((res) => console.log(res));
   };
 
   const { mutate } = useMutation(fileUpLoadAPI);
@@ -114,6 +132,13 @@ export default function RegisterForm() {
     }
   };
 
+  const Toast = Swal.mixin({
+    toast: true,
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+  });
+
   const submit = () => {
     const formData = new FormData();
     formData.append("beforeImg", beforeImageFile);
@@ -124,6 +149,7 @@ export default function RegisterForm() {
     formData.append("mileage", 연비);
     formData.append("inspectDt", selectTime);
 
+    console.log(JSON.parse(ObjString).value);
     if (
       beforeImageFile &&
       afterImageFile &&
@@ -134,9 +160,16 @@ export default function RegisterForm() {
       selectTime
     ) {
       mutate(formData);
-      navigate(isGarage ? "/garage" : "/inspector");
+      Toast.fire({
+        icon: "success",
+        title: "등록이 성공적으로 완료됐습니다.",
+        // didClose: () => navigate(isGarage ? "/garage" : "/inspector"),
+      });
     } else {
-      alert("모든 항목은 필수 입니다.");
+      Toast.fire({
+        icon: "error",
+        title: "모든 항목은 필수입니다.",
+      });
     }
   };
 
@@ -225,7 +258,8 @@ export default function RegisterForm() {
             variant="outlined"
             sx={{ maxWidth: "50%" }}
             onClick={() => navigate(-1)}
-            color="error">
+            color="error"
+          >
             취소
           </Button>
           <Button
@@ -233,7 +267,8 @@ export default function RegisterForm() {
             variant="contained"
             sx={{ maxWidth: "50%" }}
             onClick={submit}
-            color="error">
+            color="error"
+          >
             제출
           </Button>
         </div>
