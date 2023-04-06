@@ -153,7 +153,7 @@ export default function Nav2(msg: any) {
   }, [location.pathname, setIsFAQ]);
 
   const handleClickOpen = () => {
-    navigate('user/self-repair');
+    navigate("user/self-repair");
   };
 
   // 제목 얘기하기
@@ -237,7 +237,7 @@ export default function Nav2(msg: any) {
     } else if (location.pathname === `/user/community/write`) {
       setTitle("NewArticleWrite");
     } else if (location.pathname === `/user/self-repair`) {
-      setTitle("CheckList")
+      setTitle("CheckList");
     }
   }, [location.pathname, setTitle, title]);
 
@@ -266,10 +266,14 @@ export default function Nav2(msg: any) {
     let Obj = null;
     if (ObjString) {
       Obj = JSON.parse(ObjString);
-      console.log(Date.now(), Obj.expire)
+      console.log(Date.now(), Obj.expire);
       if (Date.now() > Obj.expire) {
-        dispatch(logoutAction())
-        swal("로그인 시간 만료", "로그아웃 되었습니다. 다시 로그인 해주세요.", "error");
+        dispatch(logoutAction());
+        swal(
+          "로그인 시간 만료",
+          "로그아웃 되었습니다. 다시 로그인 해주세요.",
+          "error"
+        );
         if (isLoggedIn === undefined) {
           dispatch(loginFailureReset());
           navigate("/login");
@@ -317,13 +321,7 @@ export default function Nav2(msg: any) {
               className="item"
               onClick={(): void => navigate("/user/car/list")}
             >
-              구매
-            </div>
-            <div
-              className="item"
-              onClick={(): void => navigate("/user/car/sale/4")}
-            >
-              판매
+              거래
             </div>
             <div
               className="item"
@@ -335,14 +333,14 @@ export default function Nav2(msg: any) {
               예약
             </div>
             <div className="item" onClick={(): void => navigate("/user/car")}>
-              MY CAR
+              내 차 등록
             </div>
             {success || localToken ? (
               <div
                 className="item"
                 onClick={(): void => navigate(`/user/mypage`)}
               >
-                MY PAGE
+                마이페이지
               </div>
             ) : null}
           </div>
