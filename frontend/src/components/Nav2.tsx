@@ -247,6 +247,7 @@ export default function Nav2(msg: any) {
   };
 
   const isLoggedIn = useSelector((state: any) => state.LoginOutReducer.success);
+
   useEffect(() => {
     if (isLoggedIn === undefined) {
       dispatch(loginFailureReset());
@@ -260,13 +261,18 @@ export default function Nav2(msg: any) {
   const { success } = useSelector((state: any) => state.LoginOutReducer);
   const localToken = Obj?.value;
 
+  useEffect(() => {
+    if (isLoggedIn === true && location.pathname === '/') {
+      window.location.reload();
+    }
+  }, [isLoggedIn])
+
   // 유저아이디랑 토큰 가져오기
   useEffect(() => {
     const ObjString = localStorage.getItem("login-token");
     let Obj = null;
     if (ObjString) {
       Obj = JSON.parse(ObjString);
-      console.log(Date.now(), Obj.expire)
       if (Date.now() > Obj.expire) {
         dispatch(logoutAction())
         swal("로그인 시간 만료", "로그아웃 되었습니다. 다시 로그인 해주세요.", "error");
