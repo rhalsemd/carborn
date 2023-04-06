@@ -53,6 +53,7 @@ function VehiclePurchase() {
             bottom: "0",
             height: "100px",
             width: "100px",
+            zIndex: "3",
           }}
         >
           {/* 스피드 다이얼 */}
