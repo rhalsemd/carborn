@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Button } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
@@ -15,14 +14,14 @@ const buttonStyle = css`
   display: flex;
   justify-content: center;
   .back {
+    border: 0;
     margin-left: 1.5%;
     width: 30.1%;
     margin-right: 2.2%;
     height: 5vh;
+    background-color: lightgray;
     cursor: pointer;
     font-weight: 900;
-    color: #d23131;
-    border-color: #d23131;
   }
   .apply {
     border: 0;
@@ -37,17 +36,14 @@ const buttonStyle = css`
     font-weight: 900;
   }
   .user-delete {
-    /* border: 0; */
+    border: 0;
     width: 27.5%;
     margin-left: 2.5%;
     height: 5vh;
-    background-color: #d23131;
+    background-color: #000000;
     color: white;
     cursor: pointer;
     font-weight: 900;
-    &:hover {
-      background-color: #000000;
-    }
   }
   .user-complete {
     border: 0;
@@ -68,9 +64,6 @@ const buttonStyle = css`
     color: white;
     cursor: pointer;
     font-weight: 900;
-    &:hover {
-      background-color: #000000;
-    }s
   }
   .complete {
     border: 0;
@@ -391,18 +384,18 @@ function PurchaseApplicationBtn({
 
   return (
     <div css={buttonStyle}>
-      <Button variant="outlined" className="back" onClick={back}>
+      <button className="back" onClick={back}>
         뒤로가기
-      </Button>
+      </button>
       {userId === DetailData?.detail?.accountId ? (
         DetailData?.detail?.saleStatus === 0 ? (
           <>
-            <Button className="user-delete" onClick={salerDelete}>
+            <button className="user-delete" onClick={salerDelete}>
               판매취소
-            </Button>
-            <Button className="list" onClick={showModal}>
+            </button>
+            <button className="list" onClick={showModal}>
               신청자 목록
-            </Button>
+            </button>
             <dialog ref={modalRef} css={dialog}>
               <div css={{ display: "flex", justifyContent: "center" }}>
                 {data?.map((userInfo: DataType) => {

@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Button } from "@mui/material";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router";
 import {
@@ -31,17 +30,14 @@ const registerBtnStyle = css`
     color: white;
     font-weight: 900;
     cursor: pointer;
-    &:hover {
-      background-color: #761c1cea;
-    }
   }
   .backBtn {
-    border-color: #d23131;
+    border: 0;
     width: 30%;
     height: 5.5vh;
     font-weight: 900;
-    /* background-color: black; */
-    color: #d23131;
+    background-color: black;
+    color: white;
     cursor: pointer;
   }
 `;
@@ -118,16 +114,12 @@ function RegistrationBtn({
   return (
     <div css={registerBtnStyle}>
       {/* 등록하기 버튼 */}
-      <Button variant="outlined" className="backBtn" onClick={back}>
+      <button className="backBtn" onClick={back}>
         뒤로가기
-      </Button>
-      <Button
-        className="regBtn"
-        sx={{ backgroundColor: "#d23131" }}
-        onClick={onFileUpload}
-      >
+      </button>
+      <button className="regBtn" onClick={onFileUpload}>
         등록하기
-      </Button>
+      </button>
     </div>
   );
 }

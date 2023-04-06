@@ -228,7 +228,6 @@ export default function HomeCarForSales() {
       },
     });
   }, []);
-  console.log(data);
   return (
     <div css={container}>
       <div css={header}>
