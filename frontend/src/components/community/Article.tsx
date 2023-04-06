@@ -2,6 +2,9 @@ import * as React from "react";
 import { Box, Container, Typography, Divider, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useAPI } from "./../../hooks/useAPI";
+import dayjs from "dayjs";
 
 const theme = createTheme({
   palette: {
@@ -45,7 +48,21 @@ export default function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const post = posts.find((p: any) => p.id === id);
   const navigate = useNavigate();
+  const URL = `https://carborn.site/api/user/community/${id}`;
+  const ObjString: any = localStorage.getItem("login-token");
 
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  };
+  const getArticle = useAPI("get", URL, option);
+
+  const { data } = useQuery("getArticle", () => getArticle, {
+    select: (res) => res.data.message,
+  });
+  console.log(data);
   const handleBackClick = () => {
     navigate(-1);
   };
@@ -59,7 +76,8 @@ export default function ArticleDetail() {
           </Typography>
           <Box
             component="div"
-            sx={{ display: "flex", justifyContent: "center" }}>
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <Button variant="contained" onClick={handleBackClick}>
               목록으로 돌아가기
             </Button>
@@ -67,18 +85,18 @@ export default function ArticleDetail() {
         </Box>
         <Box component="div" sx={{ mb: "40px" }}>
           <Typography variant="h6" component="h2" gutterBottom>
-            {post.title}
+            {data?.title}
           </Typography>
           <Typography variant="subtitle1" component="p" gutterBottom>
-            작성자: {post.author}
+            작성자: {data?.accountName}
           </Typography>
           <Typography variant="subtitle2" component="p">
-            작성일: {new Date(parseInt(post.created_at)).toLocaleString()}
+            작성일: {dayjs(data?.regDt).format("YYYY년 MM월 DD일")}
           </Typography>
         </Box>
         <Divider sx={{ mb: "40px" }} />
         <Typography variant="body1" component="p">
-          {post.content}
+          {data?.content}
         </Typography>
       </Container>
     </ThemeProvider>

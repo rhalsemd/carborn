@@ -3,6 +3,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Article from "../../components/community/Article";
 import Nav2 from "../../components/Nav2";
+import Footer from "../../components/Footer";
 
 interface Post {
   title: string;
@@ -38,22 +39,23 @@ const posts: Post[] = [
 
 export default function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
-  const post = posts.find((p) => p.id === id);
+  // const post = posts.find((p) => p.id === id);
 
-  if (!post) {
-    return (
-      <Box component="div" sx={{ mt: "50px", textAlign: "center" }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          글을 찾을 수 없습니다.
-        </Typography>
-      </Box>
-    );
-  }
+  // if (!post) {
+  //   return (
+  //     <Box component="div" sx={{ mt: "50px", textAlign: "center" }}>
+  //       <Typography variant="h4" component="h1" gutterBottom>
+  //         글을 찾을 수 없습니다.
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <>
       <Nav2 />
       <Article />
+      <Footer />
     </>
   );
 }

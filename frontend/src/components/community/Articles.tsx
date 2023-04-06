@@ -17,6 +17,10 @@ import { Link } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import { useAPI } from "./../../hooks/useAPI";
+import dayjs from "dayjs";
 
 const theme = createTheme({
   palette: {
@@ -32,62 +36,67 @@ const theme = createTheme({
   },
 });
 
-const posts: any = [
-  {
-    title: "첫 번째 글",
-    author: "작성자1",
-    content: "내용1",
-    id: "1",
-    created_at: "1632622657000",
-  },
-  {
-    title: "두 번째 글",
-    author: "작성자2",
-    content: "내용2",
-    id: "2",
-    created_at: "1632562467000",
-  },
-  {
-    title: "세 번째 글",
-    author: "작성자3",
-    content: "내용3",
-    id: "3",
-    created_at: "1632429545000",
-  },
-];
-export default function Articles() {
-  //   const [posts, setPosts] = React.useState<any>([]);
+interface MapType {
+  id: string;
+  accountName: string;
+  regDt: string;
+  title: string;
+}
 
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [filteredPosts, setFilteredPosts] = React.useState(posts);
+export default function Articles() {
+  const [page, setPage] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  // const [filteredPosts, setFilteredPosts] = useState(posts);
+  const [totalPage, setTotalPage] = useState<number>(1);
+
   const navigate = useNavigate();
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchTerm(value);
   };
 
-  React.useEffect(() => {
-    const filtered = posts.filter((post: any) =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-  }, [searchTerm]);
+  const URL = `https://carborn.site/api/user/community/list/${page + 1}/10/1`;
+  const ObjString: any = localStorage.getItem("login-token");
+
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  };
+
+  const getArticles = useAPI("get", URL, option);
+
+  const { data } = useQuery("getArticles", () => getArticles, {
+    select: (res) => res.data?.message?.content,
+    onSuccess: (res) => setTotalPage(res.data?.message?.totalPages),
+  });
+  console.log(data);
+  // useEffect(() => {
+  //   const filtered = posts.filter((post: any) =>
+  //     post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  //   setFilteredPosts(filtered);
+  // }, [searchTerm]);
 
   return (
     <ThemeProvider theme={theme}>
-      <Container sx={{ marginTop: "50px" }}>
+      <Container sx={{ marginTop: "50px", width: "70vw" }}>
         <Box component="div" sx={{ mb: "40px" }}>
-          <Typography variant="h4" component="h1" align="center" gutterBottom>
+          {/* <Typography variant="h4" component="h1" align="center" gutterBottom>
             Community Board
-          </Typography>
+          </Typography> */}
           <Box
             component="div"
-            sx={{ display: "flex", justifyContent: "center" }}>
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <Button
               component={Link}
               to="/new"
               variant="contained"
-              color="primary">
+              color="primary"
+            >
               새 글 쓰기
             </Button>
           </Box>
@@ -96,75 +105,90 @@ export default function Articles() {
           <TableHead sx={{ backgroundColor: "#f7f7f7" }}>
             <TableRow>
               <TableCell
+                align="center"
                 sx={{
                   fontWeight: "bold",
-                  width: "5%",
+                  width: "6%",
                   color: "#23131",
                   border: "none",
-                }}>
+                }}
+              >
                 번호
               </TableCell>
               <TableCell
+                align="center"
                 sx={{
                   fontWeight: "bold",
                   width: "50%",
                   color: "#23131",
                   border: "none",
-                }}>
+                }}
+              >
                 제목
               </TableCell>
               <TableCell
+                align="center"
                 sx={{
                   fontWeight: "bold",
-                  width: "20%",
+                  width: "10%",
                   color: "#23131",
                   border: "none",
-                }}>
+                }}
+              >
                 작성자
               </TableCell>
               <TableCell
+                align="center"
                 sx={{
                   fontWeight: "bold",
-                  width: "20%",
+                  width: "15%",
                   color: "#23131",
                   border: "none",
-                }}>
+                }}
+              >
                 작성일자
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {posts.map((post: any) => (
-              <TableRow
-                key={post.id}
-                hover
-                sx={{
-                  "&:hover": {
-                    backgroundColor: theme.palette.secondary.main,
-                  },
-                  textDecoration: "none",
-                }}
-                component={Link}
-                to={`/user/community/${post.id}`}>
-                <TableCell sx={{ color: "gray" }}>{post.id}</TableCell>
-                <TableCell
+            {data?.map(
+              ({ id, accountName, regDt, title }: MapType, idx: number) => (
+                <TableRow
+                  key={id}
+                  hover
                   sx={{
-                    maxWidth: "400px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    color: "black",
-                  }}>
-                  {post.title}
-                </TableCell>
-                <TableCell sx={{ color: "gray" }}>{post.author}</TableCell>
-                <TableCell sx={{ color: "gray" }}>{post.created_at}</TableCell>
-              </TableRow>
-            ))}
+                    "&:hover": {
+                      backgroundColor: theme.palette.secondary.main,
+                    },
+                    textDecoration: "none",
+                  }}
+                >
+                  <TableCell sx={{ color: "gray" }}>{id}</TableCell>
+                  <TableCell
+                    sx={{
+                      maxWidth: "400px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      color: "black",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => navigate(`/user/community/${id}`)}
+                  >
+                    {title}
+                  </TableCell>
+                  <TableCell sx={{ color: "gray" }}>{accountName}</TableCell>
+                  <TableCell sx={{ color: "gray" }}>
+                    {dayjs(regDt).format("YYYY년 MM월 DD일")}
+                  </TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
         </Table>
         <Box
           component="div"
-          sx={{ mb: "20px", textAlign: "center", width: "300px" }}>
+          sx={{ mb: "20px", textAlign: "center", width: "300px" }}
+        >
           <TextField
             id="search"
             label="검색"

@@ -32,6 +32,15 @@ export default function UserHome() {
         scrub: 1,
       },
     });
+    gsap.to(".homeMenu", {
+      opacity: 0.2,
+      scrollTrigger: {
+        trigger: ".carSale",
+        start: "top 50%",
+        end: "top 50%",
+        scrub: 1,
+      },
+    });
 
     gsap.to(".homeInfo", {
       yPercent: -50,
@@ -58,7 +67,9 @@ export default function UserHome() {
       <div css={container}>
         <HomeCarModel />
         <HomeIconMenu />
-        <HomeMainMenu />
+        <div className="homeMenu">
+          <HomeMainMenu />
+        </div>
         <div className="carSale">
           <HomeCarForSales />
         </div>

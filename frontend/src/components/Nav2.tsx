@@ -188,6 +188,8 @@ export default function Nav2(msg: any) {
       setTitle(`MyPostsHistory`);
     } else if (location.pathname === `/user/mypage/userpasswordmodify`) {
       setTitle("ResetPassword");
+    } else if (location.pathname === "/user/community") {
+      setTitle("Community");
     }
   }, [location.pathname, setTitle, title]);
 
