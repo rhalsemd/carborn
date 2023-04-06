@@ -36,6 +36,7 @@ import MyInspectorBookDetail from "./components/MyPage/DetailComponent/MyInspect
 import MyRepairBookDetail from "./components/MyPage/DetailComponent/MyRepairBookDetail";
 import Community from "./routes/userUseFnc/Community";
 import ArticleDetail from "./routes/userUseFnc/ArticleDetail";
+import SelfRepairHelper from "./components/SelfRepairHelper";
 
 export const JustRoutes = [
   { path: "/", element: <UserHome /> },
@@ -53,6 +54,7 @@ export const JustRoutes = [
   { path: "/garage", element: <GarageHome /> },
   { path: "/inspector", element: <InspectorHome /> },
   { path: "/insurance", element: <InsuranceHome /> },
+  { path: "/user/self-repair", element: <SelfRepairHelper /> },
 ];
 
 // 로그인 필수 경로 지정
