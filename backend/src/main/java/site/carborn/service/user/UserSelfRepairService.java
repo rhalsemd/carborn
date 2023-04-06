@@ -9,6 +9,7 @@ import site.carborn.mapping.user.UserInspectBookDetailMapping;
 import site.carborn.mapping.user.UserInspectBookListMapping;
 import site.carborn.repository.user.SelfRepairRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.AccountUtils;
 
 @Service
 public class UserSelfRepairService {
@@ -16,11 +17,6 @@ public class UserSelfRepairService {
     private SelfRepairRepository selfRepairRepository;
 
     public Page<SelfRepair> selfRepairsList(int page, int size) {
-        String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
-
         Page<SelfRepair> selfRepairsList = selfRepairRepository.findAllByStatus(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE
                 ,BoardUtils.pageRequestInit(
@@ -37,11 +33,6 @@ public class UserSelfRepairService {
     }
 
     public SelfRepair selfRepairDetail(int selfRepairId) {
-        String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
-
         SelfRepair SelfRepair = selfRepairRepository.findByIdAndStatus(selfRepairId,BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
         if (SelfRepair == null){

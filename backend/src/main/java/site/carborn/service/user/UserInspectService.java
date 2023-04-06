@@ -20,6 +20,7 @@ import site.carborn.repository.company.InspectorReviewRepository;
 import site.carborn.repository.user.InspectBookRepository;
 import site.carborn.repository.user.InspectResultRepository;
 import site.carborn.util.board.BoardUtils;
+import site.carborn.util.common.AccountUtils;
 import site.carborn.util.common.BookUtils;
 
 import java.time.LocalDateTime;
@@ -44,9 +45,7 @@ public class UserInspectService {
 
     public Page<UserInspectBookListMapping> inspectBookList(int page, int size) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         Page<UserInspectBookListMapping> inspectBookList = inspectBookRepository.findByStatusAndAccount_Id(
                 BoardUtils.BOARD_DELETE_STATUS_FALSE,
@@ -67,9 +66,7 @@ public class UserInspectService {
 
     public UserInspectBookDetailMapping inspectBookDetail(int id) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         UserInspectBookDetailMapping inspectBook = inspectBookRepository.findAllByIdAndStatus(id, BoardUtils.BOARD_DELETE_STATUS_FALSE);
 
@@ -83,9 +80,7 @@ public class UserInspectService {
 
     public int createInspectBook(InspectBook inspectBook) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         Account account = accountRepository.findById(accountId);
         if (account == null) {
@@ -110,9 +105,7 @@ public class UserInspectService {
 
     public void deleteInspectBook(int id) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         InspectBook delete = inspectBookRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다")
@@ -136,9 +129,7 @@ public class UserInspectService {
 
     public int updateInspectBook(InspectBook inspectBook) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         InspectBook update = inspectBookRepository.findById(inspectBook.getId()).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
@@ -166,9 +157,7 @@ public class UserInspectService {
     //검수완료
     public InspectResultGetDetailMapping inspectResultDetail(int inspectBookId) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         int bookStatus = inspectBookRepository.findById(inspectBookId).get().getBookStatus();
         if (bookStatus == 0) {
@@ -185,9 +174,7 @@ public class UserInspectService {
 
     public InspectorReviewMapping getInspectReviewDetail(int inspectResultId) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
 
         InspectorReviewMapping result = inspectorReviewRepository.findByStatusAndInspectResult_Id(BoardUtils.BOARD_DELETE_STATUS_FALSE, inspectResultId);
         return result;
@@ -195,9 +182,7 @@ public class UserInspectService {
 
     public int createInspectReview(int inspectResultId, InspectorReview inspectorReview) {
         String accountId = SecurityUtil.getCurrentUserId();
-        if (accountId == null || accountId.isBlank()) {
-            throw new NullPointerException("로그인 정보가 없습니다");
-        }
+        AccountUtils.checkJWTAccount(accountId);
         Account account = accountRepository.findById(accountId);
         if (account == null) {
             throw new RuntimeException("존재하지 않는 아이디입니다");
@@ -205,6 +190,7 @@ public class UserInspectService {
 
         InspectResult result = inspectResultRepository.findById(inspectResultId).orElseThrow(() ->
                 new RuntimeException("수리결과가 없습니다"));
+
         //이미 리뷰가 있는경우
         if (inspectorReviewRepository.findByInspectResult_Id(inspectResultId) != null){
             throw new RuntimeException("리뷰가 이미 존재합니다");
