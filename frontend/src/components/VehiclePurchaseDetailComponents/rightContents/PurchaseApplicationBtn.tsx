@@ -14,8 +14,9 @@ const buttonStyle = css`
   justify-content: center;
   .back {
     border: 0;
-    width: 27.5%;
-    margin-right: 2.5%;
+    margin-left: 1.5%;
+    width: 30.1%;
+    margin-right: 2.2%;
     height: 5vh;
     background-color: lightgray;
     cursor: pointer;
@@ -23,8 +24,10 @@ const buttonStyle = css`
   }
   .apply {
     border: 0;
-    width: 67.5%;
-    margin-left: 2.5%;
+    width: 63.3%;
+    margin-left: 1%;
+    margin-right: 1.5%;
+
     height: 5vh;
     background-color: #d23131;
     color: white;
