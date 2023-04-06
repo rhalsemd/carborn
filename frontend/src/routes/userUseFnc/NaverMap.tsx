@@ -3,8 +3,8 @@ import { css } from "@emotion/react";
 
 import { useEffect, useRef, useState } from "react";
 
-import hand from "../../assets/hand.png";
-import gumsu from "../../assets/gumsu.png";
+import inspectIcon from "../../assets/inspectIcon.png";
+import repairIcon from "../../assets/repairIcon.png";
 import CurrentLocationBtn from "../../components/NaverMap/CurrentLocationBtn";
 import ReserveForm from "../../components/NaverMap/ReserveForm";
 import SearchBar from "../../components/NaverMap/SearchBar";
@@ -13,6 +13,8 @@ import SearchForm from "./../../components/NaverMap/SearchForm";
 import { useQuery } from "react-query";
 import MarkerDetail from "../../components/NaverMap/MarkerDetail";
 import axios from "axios";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
 const container = css`
   display: flex;
@@ -96,9 +98,9 @@ var markers: any[] = [],
   infoWindows: any[] = [];
 
 const naver = window.naver;
-const API_USER_INFO = `https://jsonplaceholder.typicode.com/todos/1`;
 
 function NaverMap() {
+  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
   const [searchMarkers, setSearchMarkers] = useState<any[]>([]);
   const [searchInfoWindows, setSearchInfoWindows] = useState<any[]>([]);
@@ -106,16 +108,8 @@ function NaverMap() {
   const [reserve, setReserve] = useState<boolean>(false);
   const [markerNum, setMarkerNum] = useState<number>(-1);
   const [markerArr, setMarkerArr] = useState<any[]>([]);
+  const ObjString: any = localStorage.getItem("login-token");
 
-  const getUserCarInfo = useAPI("get", API_USER_INFO);
-
-  const { data } = useQuery("get-user-car-info", () => getUserCarInfo, {
-    cacheTime: 1000 * 300,
-    staleTime: 1000 * 300,
-    refetchOnMount: false,
-    retry: false,
-    keepPreviousData: true,
-  });
   /**
    * 현재 위치를 받는 함수
    */
@@ -178,18 +172,19 @@ function NaverMap() {
         map: map,
         position,
         icon: {
-          url: key.AUTH === 2 ? gumsu : hand,
-          size: new naver.maps.Size(50, 52),
-          scaledSize: new naver.maps.Size(50, 52),
+          url: key.AUTH === 2 ? inspectIcon : repairIcon,
+          size: new naver.maps.Size(40, 42),
+          scaledSize: new naver.maps.Size(40, 42),
           origin: new naver.maps.Point(0, 0),
-          anchor: new naver.maps.Point(25, 26),
+          anchor: new naver.maps.Point(20, 26),
         },
         zIndex: 100,
       });
 
       var infoWindow = new naver.maps.InfoWindow({
         content: [
-          '<div style="width:28vw; padding:10px; height: 28vh; margin-left:2.5vw;">',
+          '<div style="width:20vw; padding:10px; height: 28vh; margin-left:2.5vw; position:relative;">',
+          '<div style="position:absolute; right:40px; top: 10px; cursor:pointer;">✖</div>',
           `<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">${key.NAME}</p>`,
           '<p style="margin-top: 0; color: #E00000; font-weight: bolder;">',
           `<span style="font-size: 1.2rem">★</span><span style="color: #242424">${
@@ -211,9 +206,15 @@ function NaverMap() {
       });
 
       // 예약하기 버튼 클릭
-      const button = infoWindow.getContentElement().childNodes[6];
+      const button = infoWindow.getContentElement().childNodes[7];
       button.addEventListener("click", () => {
         setReserve((reserve) => !reserve);
+      });
+
+      // x버튼
+      const XButton = infoWindow.getContentElement().childNodes[0];
+      XButton.addEventListener("click", () => {
+        infoWindow.close();
       });
 
       markers.push(marker);
@@ -318,9 +319,18 @@ function NaverMap() {
     }
   };
 
+  const goToHome = () => {
+    navigate("/");
+  };
+
   return (
     <>
       <div css={container}>
+        <div
+          css={{ position: "fixed", top: "10px", left: "28%", zIndex: "100" }}
+        >
+          <ArrowBackIcon style={{ cursor: "pointer" }} onClick={goToHome} />
+        </div>
         <div css={searchBar}>
           <div style={{ height: "15%" }}>
             {/* 검색창 */}
@@ -332,7 +342,6 @@ function NaverMap() {
             searchMarkers.length ? (
               reserve ? (
                 <ReserveForm
-                  data={data}
                   setReserve={setReserve}
                   setMarkerNum={setMarkerNum}
                   searchInfoWindows={searchInfoWindows}

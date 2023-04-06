@@ -6,9 +6,60 @@ import { useSelector } from "react-redux";
 import PasswordResetVerify from "../../components/auth/passwordreset/PasswordResetVerify";
 import PasswordResetID from "../../components/auth/passwordreset/PasswordResetID";
 import { passwordResetCheck } from "../../modules/PasswordCheckModule";
-import Nav from "./../../components/Nav";
-import { StyleHeightDiv, StyleSearchIdDiv } from "./SearchID";
+import { StyleHeightDiv } from "./SearchID";
 import Nav2 from "../../components/Nav2";
+
+export const StylePasswordResetCheckContainer = styled.div`
+  width: 100vw;
+  background-color: white;
+  /* background: linear-gradient(
+    to bottom,
+    #000000,
+    #1e0000e8
+  );
+  background-size: 100% 200%;
+  animation: gradient 10s ease infinite;
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  } */
+`
+
+export const StylePasswordResetCheckCenterDiv = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+`
+
+export const StylePasswordResetCheckBoxDiv = styled.div`
+  width: 30vw;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #ffffff;
+  border: 2px solid #6e6e6e;
+  border-radius: 5px;
+`
+
+export const StylePasswordResetCheckForm = styled.form`
+  margin-top: 3rem;
+  width: 15vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 export const StyleLoginSignUpDiv = styled.div`
   width: 100%;
@@ -50,14 +101,18 @@ export const StyleLoginAnotherLink = styled.div`
   text-decoration: none;
 `;
 
-export const StylePasswordResetCheckBtn = styled.button`
-  width: 88%;
-  height: 75%;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+interface StylePasswordResetCheckBtnProps {
+  backgroundColor: string
+}
+
+export const StylePasswordResetCheckBtn = styled.input<StylePasswordResetCheckBtnProps>`
+  width: 16.8vw;
+  height: 5.7vh;
+  margin-top: 0.5rem;
+  margin-bottom: 3rem;
+  margin-left: 0.1rem;
   text-align: center;
-  margin-right: 0.2rem;
-  background-color: #d23131;
+  background-color: ${(props) => props.backgroundColor};
   color: white;
   border: 5px solid transparent;
   border-radius: 5px;
@@ -65,14 +120,14 @@ export const StylePasswordResetCheckBtn = styled.button`
   font-size: 1rem;
 
   &:active {
-    background-color: white;
-    color: black;
-    border: 5px solid #d23131;
+    box-shadow: none;
   }
 
   &:hover {
     opacity: 0.8;
   }
+
+  cursor: pointer;
 `
 
 // 타입 설정
@@ -106,24 +161,28 @@ const PasswordResetCheck = () => {
   }, [navigate, isverify]);
 
   return (
-    <div>
+    <StylePasswordResetCheckContainer>
       <Nav2 />
-      <StyleHeightDiv></StyleHeightDiv>
-      <StyleSearchIdDiv>
-        <StyleLoginSignUpBoxDiv>
-          <StylePasswordResetCheckTitle>
-            <h2>비밀번호 재설정</h2>
-          </StylePasswordResetCheckTitle>
-          <PasswordResetID setinputObj={setinputObj} inputObj={inputObj} />
-          <PasswordResetVerify setinputObj={setinputObj} inputObj={inputObj} />
-          <StylePasswordResetCheckBtn onClick={handlePasswordReset}>
-            비밀번호 재설정
-          </StylePasswordResetCheckBtn>
-        <StyleHeightDiv></StyleHeightDiv>
-        <StyleHeightDiv></StyleHeightDiv>
-        </StyleLoginSignUpBoxDiv>
-      </StyleSearchIdDiv>
-    </div>
+      <StylePasswordResetCheckCenterDiv>
+        <StylePasswordResetCheckBoxDiv>
+          <StylePasswordResetCheckForm onSubmit={handlePasswordReset}>
+            <PasswordResetID 
+              setinputObj={setinputObj} 
+              inputObj={inputObj} 
+            />
+            <PasswordResetVerify 
+              setinputObj={setinputObj} 
+              inputObj={inputObj} 
+            />
+            <StylePasswordResetCheckBtn
+              backgroundColor={inputObj.isVerify? '#D23131' : '#6e6e6e'}
+              type='submit'
+              value={`비밀번호 재설정`}
+            />
+          </StylePasswordResetCheckForm>
+        </StylePasswordResetCheckBoxDiv>
+      </StylePasswordResetCheckCenterDiv>
+    </StylePasswordResetCheckContainer>
   );
 };
 

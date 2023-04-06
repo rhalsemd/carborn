@@ -2,18 +2,51 @@ import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
 import LoginID from "../../components/auth/login/LoginID";
 import LoginPassword from "../../components/auth/login/LoginPassword";
-import React, { useState, useEffect, ButtonHTMLAttributes } from "react";
+import React, {
+  useState,
+  useEffect,
+  ButtonHTMLAttributes,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../../modules/takeLoginLogoutModule";
-import { userInfoDeleteReset } from "../../modules/userInfoDeleteModule";
-import { companyInfoDeleteReset } from "../../modules/companyInfoDeleteModule";
 import {
   companyModifyPasswordReset,
   userModifyPasswordReset,
 } from "../../modules/modifyPasswordModule";
 import { IsCanSignUpReset } from "../../modules/signUpModule";
-import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 import Nav2 from "./../../components/Nav2";
+import swal from "sweetalert";
+import { loginFailureReset } from "./../../modules/takeLoginLogoutModule";
+
+export const StyleLoginContainer = styled.div`
+  width: 100vw;
+  background-color: white;
+  /* background: linear-gradient(
+    to bottom,
+    #000000,
+    #1e0000e8
+  );
+  background-size: 100% 200%;
+  animation: gradient 10s ease infinite;
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  } */
+`;
+
+export const StyleLoginCenterDiv = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+`;
 
 export const StyleLink = styled(Link)`
   color: #d23131;
@@ -27,53 +60,45 @@ export const StyleLink = styled(Link)`
   }
 `;
 
-export const StyleLoginSignUpDiv = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 1rem;
-`;
+interface IStyleLoginBoxDivProps {
+  border: string;
+}
 
-export const StyleLoginSignUpBoxDiv = styled.div`
-  width: 35%;
-  margin: 5rem 0;
-  padding: 0rem, 0.5rem;
+export const StyleLoginBoxDiv = styled.div<IStyleLoginBoxDivProps>`
+  width: 30vw;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid transparent;
-  background-color: #fdfdfde9;
+
+  background-color: #ffffff;
+  border: 2px solid ${(props) => props.border};
+  border-radius: 5px;
 `;
 
-export const StyleLoginSignUpTitle = styled.div`
-  width: 100%;
-  height: 20%;
-  border-bottom: 1px solid red;
-  text-align: center;
-
-  p {
-    font-size: 1.5rem;
-    font-weight: 900;
-  }
+export const StyleLoginForm = styled.form`
+  margin-top: 3rem;
+  width: 17vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-export const StyleLoginSignUpBtn = styled.button<StyleLoginSignUpBtnProps>`
-  width: 50%;
+export const StyleLoginBtn = styled.button<StyleLoginSignUpBtnProps>`
+  width: 15.5vw;
   height: 2.5rem;
-  margin-left: 1%;
   margin-bottom: 1rem;
+  margin-left: 0.1rem;
   color: white;
-  border: 5px solid transparent;
   border-radius: 5px;
   font-weight: 900;
   font-size: 1rem;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.3);
 
   &:active {
-    background-color: white;
-    color: black;
-    border: 5px solid #d23131;
+    box-shadow: none;
   }
 
   &:hover {
@@ -81,12 +106,12 @@ export const StyleLoginSignUpBtn = styled.button<StyleLoginSignUpBtnProps>`
   }
 
   background-color: ${(props) => props.backgroundColor};
-  border: none;
   cursor: pointer;
 `;
 
 export const StyleLoginAnotherLink = styled.div`
   text-decoration: none;
+  margin-bottom: 5rem;
 `;
 
 // 로그인 인풋 데이터 타입
@@ -110,6 +135,10 @@ export interface LoginInputProps {
 }
 
 const LoginPages = () => {
+  const ObjString = localStorage.getItem('login-token');
+  const Obj = ObjString ? JSON.parse(ObjString) : null;
+  const Token = Obj ? Obj.value : null;
+
   // 상수화
   const USER = 0;
   const REPAIR = 1;
@@ -121,10 +150,6 @@ const LoginPages = () => {
   const navigate = useNavigate();
   // 리듀서 가져오기
   const { accountType } = useSelector((state: any) => state.LoginOutReducer);
-  const { success } = useSelector((state: any) => state.LoginOutReducer);
-  // 메세지
-  const [isAlert, setIsAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<String>("");
 
   // 로그인 데이터 컨테이너
   const initialState = {
@@ -135,105 +160,90 @@ const LoginPages = () => {
   // 로그인 인풋, 리캡챠 적용여부 useState
   const [loginInput, setLoginInput] = useState<loginInputType>(initialState);
   const [captchaValue, setCaptchaValue] = useState<boolean>(false);
-  const [isAccountType, setIsAccountType] = useState<number>(0);
-  const [isToken, setIsToken] = useState<boolean>(false);
+  const { error, success } = useSelector((state: any) => state.LoginOutReducer);
+  // console.log(error)
 
   // 로그인 하기(최종)
-  const handleLogin = () => {
-    try {
-      dispatch(loginAction(loginInput));
-    } catch (error: any) {
-      setIsAlert(true);
-      setTimeout(() => {
-        setIsAlert(false);
-      }, 2000);
-      setMessage(error);
-    }
+  const handleLogin = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(loginAction(loginInput));
   };
 
   useEffect(() => {
-    setIsAccountType(accountType);
+    dispatch(userModifyPasswordReset());
+    dispatch(companyModifyPasswordReset());
+    dispatch(IsCanSignUpReset());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (loginInput.loginid && loginInput.loginpassword) {
       setCaptchaValue(true);
     } else {
       setCaptchaValue(false);
     }
   }, [accountType, loginInput.loginid, loginInput.loginpassword]);
-
   useEffect(() => {
+    // 실패하면 이거
     if (!success) {
+      if (success === false) {
+        if (Token) {
+          swal("로그인 문제", "아이디 또는 비밀번호가 맞지 않습니다.", "error");
+        }
+        dispatch(loginFailureReset());
+      }
       navigate("/login");
-      return;
+      // 성공하면 이거
     } else {
-      setIsAlert(true);
-      setTimeout(() => {
-        setIsAlert(false);
-      }, 2000);
-      setMessage("아이디나 비밀번호가 맞지 않습니다.");
+      swal("로그인 완료", "CAR-BORN에 오신 걸 환영합니다.", "success");
+      switch (accountType) {
+        case USER:
+          navigate("/");
+          break;
+        case REPAIR:
+          navigate("/garage");
+          break;
+        case INSPECTOR:
+          navigate("/inspector");
+          break;
+        case INSURANCE:
+          navigate("/insurance");
+          break;
+        default:
+          navigate("/login");
+          break;
+      }
     }
-
-    switch (isAccountType) {
-      case USER:
-        navigate("/");
-        break;
-      case REPAIR:
-        navigate("/garage");
-        break;
-      case INSPECTOR:
-        navigate("/inspector");
-        break;
-      case INSURANCE:
-        navigate("/insurance");
-        break;
-      default:
-        navigate("/login");
-        break;
-    }
-  }, [success, isAccountType, navigate]);
-
-  useEffect(() => {
-    dispatch(userInfoDeleteReset());
-    dispatch(companyInfoDeleteReset());
-    dispatch(userModifyPasswordReset());
-    dispatch(companyModifyPasswordReset());
-    dispatch(IsCanSignUpReset());
-  }, [dispatch]);
+  }, [success, navigate, error]);
 
   return (
-    <div>
-      <Nav2 isToken={isToken} setIsToken={setIsToken} />
-      <StyleLoginSignUpDiv>
-        <StyleLoginSignUpBoxDiv>
-          <StyleLoginSignUpTitle>
-            <h2>로그인</h2>
-          </StyleLoginSignUpTitle>
-          <form onSubmit={handleLogin}>
+    <StyleLoginContainer>
+      <Nav2 />
+      <StyleLoginCenterDiv>
+        <StyleLoginBoxDiv
+          border={captchaValue ? "#d23131" : "grey"}
+        >
+          <StyleLoginForm onSubmit={(e) => handleLogin(e)}>
             <LoginID setLoginInput={setLoginInput} loginInput={loginInput} />
             <LoginPassword
               setLoginInput={setLoginInput}
               loginInput={loginInput}
             />
-            <StyleLoginSignUpBtn
+            <StyleLoginBtn
               backgroundColor={captchaValue ? "#d23131" : "grey"}
               disabled={!captchaValue}
               type="submit"
             >
               로그인 하기
-            </StyleLoginSignUpBtn>
-          </form>
+            </StyleLoginBtn>
+          </StyleLoginForm>
           <StyleLoginAnotherLink>
             <StyleLink to="/getagreement">회원가입</StyleLink> /
             <StyleLink to="/searchid"> 아이디 찾기</StyleLink> /
             <StyleLink to="/passwordresetcheck"> 비밀번호 재설정</StyleLink>
           </StyleLoginAnotherLink>
-        </StyleLoginSignUpBoxDiv>
-        {isAlert ? (
-          <div>
-            <CustomAlert message={message} />
-          </div>
-        ) : null}
-      </StyleLoginSignUpDiv>
-    </div>
+        </StyleLoginBoxDiv>
+      </StyleLoginCenterDiv>
+    </StyleLoginContainer>
   );
 };
 

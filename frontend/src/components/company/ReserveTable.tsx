@@ -13,6 +13,7 @@ import DetailModal from "./DetailModal";
 import { useQuery } from "react-query";
 import { useAPI } from "../../hooks/useAPI";
 import { useLocation } from "react-router-dom";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
 interface MapType {
   id: string;
@@ -38,40 +39,42 @@ export default function ReserveTable() {
   let queryKey;
   // 컴포넌트 재사용을 위해 url로 분기 만들기
   if (isGarage) {
-    URL = `http://carborn.site/api/repair-shop/book/list/${page + 1}/7`;
+    URL = `https://carborn.site/api/repair-shop/book/list/${page + 1}/7`;
     queryKey = "getRepairReserveData";
   } else {
-    URL = `http://carborn.site/api/inspector/book/list/${page + 1}/7`;
+    URL = `https://carborn.site/api/inspector/book/list/${page + 1}/7`;
     queryKey = "getInspectorData";
-    //URL = `http://192.168.100.176:80/api/inspector/book/${page}/7`;
   }
 
-  const getReserveData = useAPI("get", URL);
+  const ObjString: any = localStorage.getItem("login-token");
+
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  };
+
+  const getReserveData = useAPI("get", URL, option);
   const { data, refetch } = useQuery(queryKey, () => getReserveData, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
     refetchOnWindowFocus: false,
     select: (data) => {
+      console.log(data);
       return data.data.message;
     },
     onError: (error: Error) => {
       console.log(error);
     },
-    onSuccess: (res) => {
-      // console.log(res);
-    },
     suspense: true,
-    // useErrorBoundary: true,
   });
-  // console.log(data);
   useEffect(() => {
     refetch();
   }, [page]);
 
   const handleChangePage = (e: any, newPage: any) => {
     setPage(() => newPage);
-    // refetch();
-    console.log(newPage);
   };
   return (
     <div css={container}>
@@ -80,7 +83,7 @@ export default function ReserveTable() {
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontSize: "18px", fontWeight: "bold" }}>
-                No
+                완료 여부
               </TableCell>
               <TableCell
                 align="center"
@@ -158,8 +161,15 @@ export default function ReserveTable() {
                       : null
                   }
                 >
-                  <TableCell component="th" scope="row">
-                    {id}
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    align="center"
+                    sx={{ fontSize: "18px", fontWeight: "bold" }}
+                  >
+                    {bookStatus ? (
+                      <CheckOutlinedIcon color="error" fontSize="large" />
+                    ) : null}
                   </TableCell>
                   <TableCell>{accountId}</TableCell>
                   <TableCell>{regDt}</TableCell>

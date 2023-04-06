@@ -6,11 +6,10 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import FileUpload from "../FileUpload";
 import Carousels from "./Carousels";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { useMutation } from "react-query";
-import { useAPI } from "./../../hooks/useAPI";
-import axios from "axios";
+import Swal from "sweetalert2";
 
 type ImageType = string[];
 
@@ -63,9 +62,21 @@ const container = css`
     flex-direction: row;
     align-items: center;
   }
+  .btnSection {
+    display: flex;
+    justify-content: end;
+    .btn:nth-of-type(1) {
+      width: 100px;
+    }
+    .btn:nth-of-type(2) {
+      margin: 0 10px;
+      width: 150px;
+    }
+  }
 `;
 
 export default function RegisterForm() {
+  const navigate = useNavigate();
   const [selectTime, setSelectTime] = useState<any>("");
   const [beforeImage, setbeforeImage] = useState<string>("");
   const [beforeImageFile, setbeforeImageFile] = useState<string>("");
@@ -76,21 +87,33 @@ export default function RegisterForm() {
   const [연비, set연비] = useState<string>("");
   const [content, setContent] = useState<string>("123123");
 
-  const URL = "http://192.168.100.176/api/repair-shop/book";
-
   const handleTextInput = (e: any) => {
     setContent(e.target.value);
+  };
+
+  const ObjString: any = localStorage.getItem("login-token");
+  const account = JSON.parse(ObjString).accountType;
+  let URL: string;
+
+  if (account == 1) {
+    URL = "https://carborn.site/api/repair-shop/book";
+  } else {
+    URL = "https://carborn.site/api/inspect/book";
+  }
+
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
   };
 
   const fileUpLoadAPI = async (data: FormData) => {
     return fetch(URL, {
       method: "PUT",
       body: data,
-      // url: "http://192.168.100.176/api/repair-shop/book",
-      //   data: data,
-      //   headers: { "Content-Type": "multipart/form-data" },
-      /// axios 코드
-    });
+      ...option,
+    }).then((res) => console.log(res));
   };
 
   const { mutate } = useMutation(fileUpLoadAPI);
@@ -107,17 +130,45 @@ export default function RegisterForm() {
     }
   };
 
+  const Toast = Swal.mixin({
+    toast: true,
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+  });
+
   const submit = () => {
     const formData = new FormData();
-
     formData.append("beforeImg", beforeImageFile);
     formData.append("afterImg", afterImageFile);
     formData.append("receiptImg", reciptImageFile);
-    formData.append("repairBook.id", id); // 직렬화하여 객체 저장
-    formData.append("content", content); // 직렬화하여 객체 저장
-    formData.append("mileage", 연비); // 직렬화하여 객체 저장
-    formData.append("inspectDt", selectTime); // 직렬화하여 객체 저장 // 하면 안됨
-    mutate(formData);
+    formData.append("repairBook.id", id);
+    formData.append("content", content);
+    formData.append("mileage", 연비);
+    formData.append("inspectDt", selectTime);
+
+    console.log(JSON.parse(ObjString).value);
+    if (
+      beforeImageFile &&
+      afterImageFile &&
+      reciptImageFile &&
+      reciptImageFile &&
+      content &&
+      연비 &&
+      selectTime
+    ) {
+      mutate(formData);
+      Toast.fire({
+        icon: "success",
+        title: "등록이 성공적으로 완료됐습니다.",
+        didClose: () => navigate(isGarage ? "/garage" : "/inspector"),
+      });
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "모든 항목은 필수입니다.",
+      });
+    }
   };
 
   return (
@@ -191,7 +242,7 @@ export default function RegisterForm() {
           />
         </div>
         <div className="formDetail upload">
-          영수증 등록
+          영수증 사진 등록
           <FileUpload
             size={20}
             row={1}
@@ -199,9 +250,26 @@ export default function RegisterForm() {
             setFile={setReciptImageFile}
           />
         </div>
-        <Button variant="contained" sx={{ maxWidth: "50%" }} onClick={submit}>
-          제출
-        </Button>
+        <div className="btnSection">
+          <Button
+            className="btn"
+            variant="outlined"
+            sx={{ maxWidth: "50%" }}
+            onClick={() => navigate(-1)}
+            color="error"
+          >
+            취소
+          </Button>
+          <Button
+            className="btn"
+            variant="contained"
+            sx={{ maxWidth: "50%" }}
+            onClick={submit}
+            color="error"
+          >
+            제출
+          </Button>
+        </div>
       </div>
     </div>
   );

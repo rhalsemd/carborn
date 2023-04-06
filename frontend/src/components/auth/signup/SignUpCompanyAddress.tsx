@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { SignupFormData } from "./SignUpButton";
 import DaumPostcode, { Address } from "react-daum-postcode";
-import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
+import { StyleSignUpInputBtnDiv, StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { StyleNameLabel } from "./SignUpUserName";
 import {
   CloseButton,
@@ -9,19 +9,15 @@ import {
   ModalContainer,
   ModalTitle,
 } from "./SignUpUserAddress";
-import { StyleCheckBtn } from "./SignUpUserId";
+import { StyleCheckBtn, StyleIdCheckDiv, StyleIdCheckInput } from "./SignUpUserId";
 import styled from "@emotion/styled";
+import swal from "sweetalert";
+import IsValidComponent from './../../isValid/IsValidComponent';
 
 export type SignUpCompanyAddressProps = {
   setSignupCompanyFormData: Dispatch<SetStateAction<SignupFormData>>;
   signupCompanyFormData: SignupFormData;
 };
-
-export const StyleAddressValueDiv = styled.div`  
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
 
 export const StyleAddressBtn = styled.input`
   width: 30%;
@@ -64,18 +60,18 @@ const SignUpCompanyAddress = ({
       ...signupCompanyFormData,
       address: data.address,
     });
+    swal("유효성 검사", `주소(${signupCompanyFormData.address})가 입력되었습니다.`, "success");
     setIsOpen(false);
     setAddressData(data.address);
   };
 
   return (
-    <StyleSignUpInputDiv>
-      <StyleNameLabel>주소</StyleNameLabel>
-      <br />
-      <StyleAddressValueDiv>
-        <StyleAddressInput autoComplete="off" type="text" value={`  `+addressData} />
-        <StyleAddressBtn type="button" className="addressCheckBtn" tabIndex={7} onClick={() => setIsOpen(true)} value={`주소 검색하기`}/>
-      </StyleAddressValueDiv>
+    <StyleSignUpInputBtnDiv>
+      <StyleNameLabel>주소<IsValidComponent isValid={signupCompanyFormData.address ? true : false} /></StyleNameLabel>
+      <StyleIdCheckDiv>
+        <StyleIdCheckInput autoComplete="off" placeholder="주소를 입력해주세요" type="text" value={`  `+addressData} />
+        <StyleCheckBtn type="button" className="addressCheckBtn" tabIndex={7} onClick={() => setIsOpen(true)} value={`검색하기`}/>
+      </StyleIdCheckDiv>
       {isOpen && (
         <ModalContainer>
           <ModalBox>
@@ -85,7 +81,7 @@ const SignUpCompanyAddress = ({
           </ModalBox>
         </ModalContainer>
       )}
-    </StyleSignUpInputDiv>
+    </StyleSignUpInputBtnDiv>
   );
 };
 

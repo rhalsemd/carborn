@@ -9,8 +9,15 @@ interface SearchBarType {
 }
 
 function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
+  const ObjString: any = localStorage.getItem("login-token");
+
   const API = `https://carborn.site/api/address/convert-geo/jibun/${item.ADDRESS}`;
-  const getJibunAddressAPI = useAPI("get", API);
+  const getJibunAddressAPI = useAPI("get", API, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  });
   const hipenPhoneNum = usePhoneNum(item?.PHONE_NO);
   const { data } = useQuery(
     ["get-jibun-address", index],
@@ -101,7 +108,7 @@ function SearchBar({ index, item, searchBarItemClick }: SearchBarType) {
         style={{
           border: "0.8px solid #C1C1C1",
           opacity: "0.3",
-          width: "80%",
+          width: "100%",
         }}
       ></div>
     </div>

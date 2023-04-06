@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import NewPassword from "../../components/auth/newpassword/NewPassword";
 import NewPasswordCheck from "../../components/auth/newpassword/NewPasswordCheck";
-import Nav from "../../components/Nav";
-import { StyleLoginSignUpBoxDiv } from "./LoginPage";
-import { StyleLoginSignUpDiv } from "./PasswordResetCheck";
 import { passwordResetCheckReset } from "../../modules/PasswordCheckModule";
 import {
   newPasswordAction,
@@ -34,15 +31,59 @@ export const StylePasswordResetTitle = styled.div`
   text-align: center;
 `
 
-export const StyleNewPasswordResetBtn = styled.button<StyleNewPasswordResetBtnProps>`
+export const StyleNewPasswordResetForm = styled.form`
+  width: 100vw;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background-color: white;
+  /* background: linear-gradient(
+    to bottom,
+    #000000,
+    #1e0000e8
+  );
+  background-size: 100% 200%;
+  animation: gradient 10s ease infinite;
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  } */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const StyleNewPasswordResetContainerDiv = styled.div`
+  padding-top: 2vh;
+  width: 25vw;
+  height: 45vh;
+  background-color: #ffffff;
+  border: 1px solid black;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyleNewPasswordResetBtn = styled.input<StyleNewPasswordResetBtnProps>`
   color: white;
   background-color: ${(props) => props.backgroundColor};
   border: none;
   margin: 0.5rem 0;
   cursor: pointer;
 
-  width: 50%;
-  height: 75%;
+  width: 15.8vw;
+  height: 5.6vh;
   margin-bottom: 2rem;
   margin-top: -0.2rem;
   margin-left: 0.5rem;
@@ -68,9 +109,6 @@ const NewPasswordReset = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
-
-  console.log(state.userid)
-  console.log(state.phonenumber)
 
   const dispatch = useDispatch();
 
@@ -111,37 +149,33 @@ const NewPasswordReset = () => {
   return (
     <div>
       <Nav2 />
-      <StyleLoginSignUpDiv>
-        <StyleLoginSignUpBoxDiv>
-          <StylePasswordResetTitle>
-            <h2>비밀번호 재설정</h2>
-          </StylePasswordResetTitle>
-          <NewPassword
-            setInputObj={setInputObj}
-            inputObj={inputObj}
-            newSecondPassword={newSecondPassword}
-            setIsNewPassword={setIsNewPassword}
-            setNewpassword={setNewpassword}
-            newpassword={newpassword}
-          />
-          <NewPasswordCheck
-            setInputObj={setInputObj}
-            inputObj={inputObj}
-            setNewSecondPassword={setNewSecondPassword}
-            newSecondPassword={newSecondPassword}
-            setIsNewPassword={setIsNewPassword}
-            isNewPassword={isNewPassword}
-            newpassword={newpassword}
-          />
-          <StyleNewPasswordResetBtn
-            backgroundColor={inputObj.newpasswordcheck ? "#d23131" : "grey"}
-            disabled={!inputObj.newpasswordcheck}
-            onClick={handlePasswordReset}
-          >
-            비밀번호 재설정
-          </StyleNewPasswordResetBtn>
-        </StyleLoginSignUpBoxDiv>
-      </StyleLoginSignUpDiv>
+        <StyleNewPasswordResetForm onSubmit={handlePasswordReset}>
+          <StyleNewPasswordResetContainerDiv>
+            <NewPassword
+              setInputObj={setInputObj}
+              inputObj={inputObj}
+              newSecondPassword={newSecondPassword}
+              setIsNewPassword={setIsNewPassword}
+              setNewpassword={setNewpassword}
+              newpassword={newpassword}
+            />
+            <NewPasswordCheck
+              setInputObj={setInputObj}
+              inputObj={inputObj}
+              setNewSecondPassword={setNewSecondPassword}
+              newSecondPassword={newSecondPassword}
+              setIsNewPassword={setIsNewPassword}
+              isNewPassword={isNewPassword}
+              newpassword={newpassword}
+              />
+            <StyleNewPasswordResetBtn
+              type='submit'
+              backgroundColor={inputObj.newpasswordcheck ? "#d23131" : "grey"}
+              disabled={!inputObj.newpasswordcheck}
+              value={`변경하기`}
+            />
+          </StyleNewPasswordResetContainerDiv>
+      </StyleNewPasswordResetForm>
     </div>
   );
 };

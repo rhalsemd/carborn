@@ -4,6 +4,10 @@ import car1 from "../../assets/car1.jpg";
 import squareCar0 from "../../assets/squareCar1.jpg";
 import squareCar1 from "../../assets/squareCar2.png";
 import squareCar2 from "../../assets/squareCar3.png";
+import { ScrollTrigger, gsap } from "gsap/all";
+import { useEffect } from "react";
+import { useRef } from "react";
+import { useNavigate } from "react-router";
 
 const container = css`
   height: 110vh;
@@ -14,11 +18,10 @@ const container = css`
     display: flex;
     align-items: center;
     flex-direction: column;
-    /* margin-bottom: 10px; */
   }
 
   .menu > hr {
-    width: 30%;
+    width: 10px;
     background-color: #d23131;
     height: 2px;
     margin-bottom: 30px;
@@ -41,7 +44,7 @@ const buttons = css`
     padding: 0;
   }
 
-  .rectangleBtn {
+  .mainRectangleBtn {
     height: 50vh;
     width: 20vw;
     margin: 0 20px 0 20px;
@@ -105,6 +108,7 @@ const buttons = css`
       transition: all 0.3s;
     }
     &:hover {
+      cursor: pointer;
       transition: all 0.3s;
 
       .btnImg {
@@ -204,6 +208,9 @@ interface btns {
 type btnType = btns[];
 
 export default function HomeMainMenu() {
+  const navigate = useNavigate();
+  const containerRef = useRef(null);
+
   const icon1 = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -297,21 +304,21 @@ export default function HomeMainMenu() {
   const rectangles: btnType = [
     {
       icon: icon1,
-      name: "사기",
+      name: "구매",
       description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
-      url: "/",
+      url: "/user/car/list",
     },
     {
       icon: icon2,
-      name: "팔기",
+      name: "판매",
       description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
       url: "/",
     },
     {
       icon: icon3,
       name: "커뮤니티",
-      description: "다양한 사람들과 함께 내 차를 공유해 보asdfasdf세요",
-      url: "/",
+      description: "다양한 사람들과 함께 내 차를 공유해 보세요!",
+      url: "/user/community",
     },
   ];
 
@@ -320,24 +327,56 @@ export default function HomeMainMenu() {
       icon: icon4,
       name: "내 차 등록하기",
       description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
-      url: "/",
+      url: "/user/car",
     },
     {
       icon: icon4,
       name: "검수 및 정비 예약 신청",
       description: "블록체인으로 기록되는 안전한 거래를 이용해 보세요!",
-      url: "/",
+      url: "/user/map",
     },
     {
       icon: icon4,
       name: "마이페이지",
       description: "다양한 사람들과 함께 내 차를 공유해 보asdfasdf세요",
-      url: "/",
+      url: "/user/mypage",
     },
   ];
 
+  useEffect(() => {
+    if (!containerRef) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const tl = gsap.timeline().from(".mainRectangleBtn", {
+      duration: 1,
+      opacity: 0,
+      y: -200,
+      ease: "ease",
+    });
+    ScrollTrigger.create({
+      target: ".mainRectangleBtn",
+      scrub: 2,
+      start: "bottom top",
+      end: "bottom 50%",
+      animation: tl,
+    });
+
+    gsap.to(".mainMenuHr", {
+      width: "50%",
+      duration: 1,
+      ease: "circ",
+      scrollTrigger: {
+        trigger: ".mainMenuHr",
+        scrub: 3,
+        start: "-180 20%",
+        end: "-180 20%",
+        id: "hrTag",
+      },
+    });
+  }, [containerRef]);
   return (
-    <div css={container}>
+    <div css={container} ref={containerRef}>
       <div className="menu">
         <p
           css={{
@@ -349,12 +388,16 @@ export default function HomeMainMenu() {
         >
           Menu
         </p>
-        <hr />
+        <hr className="mainMenuHr" />
       </div>
       <div css={buttons}>
         <div className="rectangleBtns">
           {rectangles.map((rect: btns, idx: number): any => (
-            <div className="rectangleBtn" key={idx}>
+            <div
+              className={`mainRectangleBtn mainRectangleBtn${idx}`}
+              key={idx}
+              onClick={() => navigate(`${rect.url}`)}
+            >
               <div className="icon">{rect.icon}</div>
               <div className="name">{rect.name}</div>
               <div className="description">{rect.description}</div>
@@ -366,7 +409,11 @@ export default function HomeMainMenu() {
         </div>
         <div className="squareBtns">
           {squares.map((rect: btns, idx: number): any => (
-            <div className={`squareBtn${idx} squareBtn`} key={idx}>
+            <div
+              className={`squareBtn${idx} squareBtn`}
+              key={idx}
+              onClick={() => navigate(`${rect.url}`)}
+            >
               <div className="name">{rect.name}</div>
             </div>
           ))}

@@ -99,13 +99,12 @@ const container = css`
 `;
 
 export default function GarageHome() {
+  console.log("render");
   const navigate = useNavigate();
-  const bookList = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const bookList = () => {
     navigate("/garage/reserve");
   };
-  const historyList = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const historyList = () => {
     navigate("/garage/history");
   };
 
@@ -114,7 +113,7 @@ export default function GarageHome() {
       <NavGarage />
       <div css={container}>
         <img src={car} className="backImg" />
-        <div className="topTxt">
+        <div className="topTxt" css={{ cursor: "default" }}>
           <p>Repair</p>
         </div>
         <div className="btnSection">
@@ -123,7 +122,7 @@ export default function GarageHome() {
               <img src={dotBogi} />
             </div>
             <div>Check</div>
-            <div>
+            <div css={{ cursor: "default" }}>
               예약자 리스트를
               <br />
               조회해보세요
@@ -134,14 +133,14 @@ export default function GarageHome() {
               <img src={register} />
             </div>
             <div>Check</div>
-            <div>
+            <div css={{ cursor: "default" }}>
               정비내역을
               <br />
               조회해보세요
             </div>
           </button>
         </div>
-        <div className="bottomTxt">
+        <div className="bottomTxt" css={{ cursor: "default" }}>
           <p>with</p>
           <p>Car-born</p>
         </div>

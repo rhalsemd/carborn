@@ -3,11 +3,74 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SearchIDName from "../../components/auth/searchID/SearchIDName";
 import SearchIDPhoneNumberVerify from "../../components/auth/searchID/SearchIDPhoneNumberVerify";
-import Nav from "./../../components/Nav";
 import { useNavigate } from "react-router-dom";
 import { SearchIDCheckAction } from "../../modules/searchidModule";
-import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 import Nav2 from "../../components/Nav2";
+
+// input DIV
+export const StylePasswordInputBtnDiv = styled.div`
+  width: 100%;
+  margin-left: -0.8rem;
+`;
+
+export const StyleSearchIDContainer = styled.div`
+  width: 100vw;
+  background-color: white;
+  /* background: linear-gradient(
+    to bottom,
+    #000000,
+    #1e0000e8
+  );
+  background-size: 100% 200%;
+  animation: gradient 10s ease infinite;
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  } */
+`
+
+export const StyleSearchIDForm = styled.form`
+  margin-top: 3rem;
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+interface StyleSearchIDBtnProps {
+  backgroundColor:string
+}
+
+export const StyleSearchIDBtn = styled.input<StyleSearchIDBtnProps>`
+  width: 15.5vw;
+  height: 2.5rem;
+  margin-left: -0.4rem;
+  margin-bottom: 5rem;
+  color: white;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 1rem;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.3);
+
+  &:active {
+    box-shadow: none;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  background-color: ${(props) => props.backgroundColor};
+  cursor: pointer;
+`
 
 export const StyleHeightDiv = styled.div`
   height: 6rem;
@@ -17,34 +80,30 @@ export const StyleHeight2Div = styled.div`
   height: 3rem;
 `;
 
-export const StyleSearchIdDiv = styled.div`
+export const StyleSearchIDCenterDiv = styled.div`
+  width: 100vw;
   display: flex;
   justify-content: center;
-  align-items: center;
 `;
 
-export const StyleLoginSignUpBoxDiv = styled.div`
-  width: 35%;
-  padding: 0rem, 0.5rem;
+export const StyleSearchIDBoxDiv = styled.div`
+  width: 30vw;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid transparent;
-  background-color: #fdfdfde9;
-`;
 
-export const StyleLoginSignUpTitle = styled.div`
-  width: 115%;
-  height: 20%;
-  border-bottom: 1px solid red;
-  text-align: center;
+  background-color: #ffffff;
+  border: 2px solid black;
+  border-radius: 5px;
 `;
 
 export const StyleLoginSignUpBtn = styled.button`
-  width: 63%;
+  width: 60%;
   height: 75%;
-  margin-right: 1%;
+  margin-left: 0.5%;
   margin-top: 1rem;
   margin-bottom: 2rem;
   text-align: center;
@@ -95,17 +154,9 @@ const SearchID = () => {
     isVerify: false,
   });
 
-  // 메세지
-  const [isAlert, setIsAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<String>("");
-
   const handleSearchID = () => {
     if (searchInput.isVerify === false) {
-      setIsAlert(true);
-      setTimeout(() => {
-        setIsAlert(false);
-      }, 2000);
-      setMessage(
+      alert(
         "이름과 전화번호를 모두 입력해주시고, 인증을 완료하고 눌러주세요."
       );
     }
@@ -121,41 +172,30 @@ const SearchID = () => {
     }
   }, [isComplete]);
 
-  useEffect(() => {});
-
   return (
-    <div>
+    <StyleSearchIDContainer>
       <Nav2 />
-      <StyleHeightDiv></StyleHeightDiv>
-      <StyleSearchIdDiv>
-        <StyleLoginSignUpBoxDiv>
-          <StyleLoginSignUpTitle>
-            <h2>아이디 찾기</h2>
-          </StyleLoginSignUpTitle>
-          <SearchIDName
-            setSearchInput={setSearchInput}
-            searchInput={searchInput}
-          />
-          <SearchIDPhoneNumberVerify
-            setSearchInput={setSearchInput}
-            searchInput={searchInput}
-          />
-          <StyleLoginSignUpBtn
-            onClick={handleSearchID}
-            disabled={!searchInput.isVerify}
-          >
-            아이디 찾기
-          </StyleLoginSignUpBtn>
-          <StyleHeightDiv></StyleHeightDiv>
-          <StyleHeightDiv></StyleHeightDiv>
-        </StyleLoginSignUpBoxDiv>
-        {isAlert ? (
-          <div>
-            <CustomAlert message={message} />
-          </div>
-        ) : null}
-      </StyleSearchIdDiv>
-    </div>
+      <StyleSearchIDCenterDiv>
+        <StyleSearchIDBoxDiv>
+          <StyleSearchIDForm onSubmit={handleSearchID}>
+            <SearchIDName
+              setSearchInput={setSearchInput}
+              searchInput={searchInput}
+            />
+            <SearchIDPhoneNumberVerify
+              setSearchInput={setSearchInput}
+              searchInput={searchInput}
+            />
+            <StyleSearchIDBtn
+              type='submit'
+              disabled={!searchInput.isVerify}
+              backgroundColor={searchInput.isVerify ? "#d23131" : "grey"}
+              value={`아이디 찾기`}
+            />
+          </StyleSearchIDForm>
+        </StyleSearchIDBoxDiv>
+      </StyleSearchIDCenterDiv>
+    </StyleSearchIDContainer>
   );
 };
 

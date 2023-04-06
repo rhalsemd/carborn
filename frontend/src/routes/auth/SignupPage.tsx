@@ -8,11 +8,6 @@ import SignUpCompanyName from "../../components/auth/signup/SignUpCompanyName";
 import SignUpCompanyTypeButton from "../../components/auth/signup/SignUpCompanyTypeButton";
 import SignUpUserId from "../../components/auth/signup/SignUpUserId";
 import SignUpUserName from "../../components/auth/signup/SignUpUserName";
-import {
-  StyleLoginSignUpBoxDiv,
-  StyleLoginSignUpDiv,
-  StyleLoginSignUpTitle,
-} from "./LoginPage";
 import SignUpUserPassword from "../../components/auth/signup/SignUpUserPassword";
 import SignUpCompanyPassword from "../../components/auth/signup/SignUpCompanyPassword";
 import SignUpUserPasswordCheck from "../../components/auth/signup/SignUpUserPasswordCheck";
@@ -23,7 +18,6 @@ import SignUpCompanyAddress from "../../components/auth/signup/SignUpCompanyAddr
 import SignUpUserPhoneNumber from "../../components/auth/signup/SignUpUserPhoneNumber";
 import SignUpCompanyPhoneNumber from "../../components/auth/signup/SignUpCompanyPhoneNumber";
 import SignUpCompanyDocument from "../../components/auth/signup/SignUpCompanyDocument";
-import Nav from "../../components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { SetIsSignupAction } from "../../modules/signUpModule";
 import { CARBORN_SITE } from "./../../lib/api";
@@ -31,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import CustomAlert from "../../components/auth/signup/modal/CustomAlert";
 import ReCAPTCHA from "react-google-recaptcha";
 import Nav2 from "../../components/Nav2";
+import { StyleLoginBoxDiv } from "./LoginPage";
 
 // CSS 타입
 export interface StyleGoRegisterProps
@@ -38,22 +33,54 @@ export interface StyleGoRegisterProps
   backgroundColor: string;
 }
 
-// CSS
+export const StyleSignUpContainer = styled.div`
+  width: 100vw;
+  background-color: white;
+  /* background: linear-gradient(
+    to bottom,
+    #000000,
+    #1e0000e8
+  );
+  background-size: 100% 200%;
+  animation: gradient 10s ease infinite;
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  } */
+`;
+
+export const StyleSignUpCenterDiv = styled.div`
+  margin-top: 2.5rem;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+`;
+
 export const StyleSignUpInputDiv = styled.div`
-  width: 100%;
+  width: 90%;
+`;
+
+export const StyleSignUpInputBtnDiv = styled.div`
+  width: 90%;
 `;
 
 export const StyleGoRegister = styled.button<StyleGoRegisterProps>`
-  width: 102%;
+  width: 100%;
   height: 3.5rem;
   text-align: center;
   font-weight: 900;
   font-size: 1.2rem;
   color: white;
   background-color: ${(props) => props.backgroundColor};
-  border: none;
   border-radius: 5px;
-  margin: 0.5rem 0;
   cursor: pointer;
 
   &:hover {
@@ -71,6 +98,15 @@ export const StyleSignUpBigContainer = styled.div`
   & > div {
     width: 100%;
   }
+`;
+
+export const StyleSignUpBoxDiv = styled.div`
+  padding-top: 2rem;
+  width: 23vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SignupPages: React.FC = () => {
@@ -100,17 +136,15 @@ const SignupPages: React.FC = () => {
     (state: any) => state.SignUpReducer.isSignPossible
   );
 
-
   // 리캡챠 해시 데이터 받아오기
-  const [isRecaptcha, setIsRecaptcha] = useState(false); 
+  const [isRecaptcha, setIsRecaptcha] = useState(false);
   const handleCaptchaChange = (value: string | null) => {
     if (value) {
-      setIsRecaptcha(true)
+      setIsRecaptcha(true);
     } else {
-      setIsRecaptcha(false)
+      setIsRecaptcha(false);
     }
   };
-
 
   // 회원가입 초기값
   const initialSignupFormData = {
@@ -176,6 +210,7 @@ const SignupPages: React.FC = () => {
           body: formData,
         })
           .then((res) => {
+            console.log(res);
             if (!res.ok) {
               setIsAlert(true);
               setTimeout(() => {
@@ -203,6 +238,7 @@ const SignupPages: React.FC = () => {
           body: formData,
         })
           .then((res) => {
+            console.log(res);
             if (!res.ok) {
               setIsAlert(true);
               setTimeout(() => {
@@ -270,134 +306,132 @@ const SignupPages: React.FC = () => {
 
   useEffect(() => {
     updateIsValid();
-    console.log("회원가입 조건 확인하기", SignUpisValid);
-    console.log(Boolean(signupUserFormData.name));
-    console.log(Boolean(signupUserFormData.userid));
-    console.log(Boolean(signupUserFormData.idcheck));
-    console.log(Boolean(signupUserFormData.password));
-    console.log(Boolean(signupUserFormData.passwordcheck));
-    console.log(Boolean(signupUserFormData.phonenumber));
-    console.log(Boolean(signupUserFormData.identifynumber));
-    console.log(selectedFiles.length);
+    // console.log("회원가입 조건 확인하기", SignUpisValid);
+    // console.log(Boolean(signupUserFormData.name));
+    // console.log(Boolean(signupUserFormData.userid));
+    // console.log(Boolean(signupUserFormData.idcheck));
+    // console.log(Boolean(signupUserFormData.password));
+    // console.log(Boolean(signupUserFormData.passwordcheck));
+    // console.log(Boolean(signupUserFormData.phonenumber));
+    // console.log(Boolean(signupUserFormData.identifynumber));
+    // console.log(selectedFiles.length);
   }, [updateIsValid, SignUpisValid, signupCompanyFormData]);
 
   // 휴대전화 인증번호
   const [isValid, setIsValid] = useState(true);
 
   return (
-    <div>
+    <StyleSignUpContainer>
       <Nav2 />
-      <StyleLoginSignUpDiv>
-        <StyleLoginSignUpBoxDiv>
-          <StyleLoginSignUpTitle>
-            <h2>회원가입</h2>
-          </StyleLoginSignUpTitle>
-          <SignUpButton
-            setSelectedButton={setSelectedButton}
-            selectedButton={selectedButton}
-            setSignupUserFormData={setSignupUserFormData}
-            signupUserFormData={signupUserFormData}
-            setSignupCompanyFormData={setSignupCompanyFormData}
-            signupCompanyFormData={signupCompanyFormData}
-            isUser={isUser}
-            setIsUser={setIsUser}
-            setIddupliCheck={setIddupliCheck}
-            iddupliCheck={iddupliCheck}
-            setIsValid={setIsValid}
-            isValid={isValid}
-          />
-          <StyleSignUpBigContainer>
-            {selectedButton === USER ? (
-              <div>
-                <br />
-                <SignUpUserName
-                  setSignupUserFormData={setSignupUserFormData}
-                  signupUserFormData={signupUserFormData}
-                />
-                <SignUpUserId
-                  setSignupUserFormData={setSignupUserFormData}
-                  signupUserFormData={signupUserFormData}
-                />
-                <SignUpUserPassword
-                  setSignupUserFormData={setSignupUserFormData}
-                  signupUserFormData={signupUserFormData}
-                  secondPassword={secondPassword}
-                  setIsPasswordValid={setIsPasswordValid}
-                />
-                <SignUpUserPasswordCheck
-                  signupUserFormData={signupUserFormData}
-                  setSignupUserFormData={setSignupUserFormData}
-                  secondPassword={secondPassword}
-                  setSecondPassword={setSecondPassword}
-                  setIsPasswordValid={setIsPasswordValid}
-                  isPasswordValid={isPasswordValid}
-                />
-                <SignUpUserBirth
-                  setSignupUserFormData={setSignupUserFormData}
-                  signupUserFormData={signupUserFormData}
-                />
-                <SignUpUserPhoneNumber
-                  setSignupUserFormData={setSignupUserFormData}
-                  signupUserFormData={signupUserFormData}
-                  setIsValid={setIsValid}
-                  isValid={isValid}
-                />
-              </div>
-            ) : (
-              <div>
-                <SignUpCompanyTypeButton
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  signupCompanyFormData={signupCompanyFormData}
-                  setIsValid={setIsValid}
-                  isValid={isValid}
-                />
-                <SignUpCompanyName
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  signupCompanyFormData={signupCompanyFormData}
-                />
-                <SignUpCompanyId
-                  signupCompanyFormData={signupCompanyFormData}
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                />
-                <SignUpCompanyPassword
-                  signupCompanyFormData={signupCompanyFormData}
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  secondPassword={secondPassword}
-                  setIsPasswordValid={setIsPasswordValid}
-                />
-                <SignUpCompanyPasswordCheck
-                  signupCompanyFormData={signupCompanyFormData}
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  secondPassword={secondPassword}
-                  setSecondPassword={setSecondPassword}
-                  isPasswordValid={isPasswordValid}
-                  setIsPasswordValid={setIsPasswordValid}
-                />
-                <SignUpCompanyBusinessNumber
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  signupCompanyFormData={signupCompanyFormData}
-                />
-                <SignUpCompanyAddress
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  signupCompanyFormData={signupCompanyFormData}
-                />
-                <SignUpCompanyPhoneNumber
-                  setSignupCompanyFormData={setSignupCompanyFormData}
-                  signupCompanyFormData={signupCompanyFormData}
-                  setIsValid={setIsValid}
-                  isValid={isValid}
-                />
-                <SignUpCompanyDocument handleFileChange={handleFileChange} />
-              </div>
-            )}
-          </StyleSignUpBigContainer>
-          <br />
-          {isSignUpBtn ? <ReCAPTCHA
-            sitekey="6LdijBMlAAAAACu0OtiHgCtKlGE58nkcRFXPxSLk"
-            style={{ marginBottom: "1rem" }}
-            size="normal"
-            onChange={handleCaptchaChange}
-          /> : null}
+      <SignUpButton
+        setSelectedButton={setSelectedButton}
+        selectedButton={selectedButton}
+        setSignupUserFormData={setSignupUserFormData}
+        signupUserFormData={signupUserFormData}
+        setSignupCompanyFormData={setSignupCompanyFormData}
+        signupCompanyFormData={signupCompanyFormData}
+        isUser={isUser}
+        setIsUser={setIsUser}
+        setIddupliCheck={setIddupliCheck}
+        iddupliCheck={iddupliCheck}
+        setIsValid={setIsValid}
+        isValid={isValid}
+      />
+      <StyleSignUpCenterDiv>
+        <StyleLoginBoxDiv border={isRecaptcha ? "#d23131" : "grey"}>
+          {selectedButton === USER ? (
+            <StyleSignUpBoxDiv>
+              <SignUpUserName
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserId
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserPassword
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+                secondPassword={secondPassword}
+                setIsPasswordValid={setIsPasswordValid}
+              />
+              <SignUpUserPasswordCheck
+                signupUserFormData={signupUserFormData}
+                setSignupUserFormData={setSignupUserFormData}
+                secondPassword={secondPassword}
+                setSecondPassword={setSecondPassword}
+                setIsPasswordValid={setIsPasswordValid}
+                isPasswordValid={isPasswordValid}
+              />
+              <SignUpUserBirth
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+              />
+              <SignUpUserPhoneNumber
+                setSignupUserFormData={setSignupUserFormData}
+                signupUserFormData={signupUserFormData}
+                setIsValid={setIsValid}
+                isValid={isValid}
+              />
+            </StyleSignUpBoxDiv>
+          ) : (
+            <StyleSignUpBoxDiv>
+              <SignUpCompanyTypeButton
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                signupCompanyFormData={signupCompanyFormData}
+                setIsValid={setIsValid}
+                isValid={isValid}
+              />
+              <SignUpCompanyName
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                signupCompanyFormData={signupCompanyFormData}
+              />
+              <SignUpCompanyId
+                signupCompanyFormData={signupCompanyFormData}
+                setSignupCompanyFormData={setSignupCompanyFormData}
+              />
+              <SignUpCompanyPassword
+                signupCompanyFormData={signupCompanyFormData}
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                secondPassword={secondPassword}
+                setIsPasswordValid={setIsPasswordValid}
+              />
+              <SignUpCompanyPasswordCheck
+                signupCompanyFormData={signupCompanyFormData}
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                secondPassword={secondPassword}
+                setSecondPassword={setSecondPassword}
+                isPasswordValid={isPasswordValid}
+                setIsPasswordValid={setIsPasswordValid}
+              />
+              <SignUpCompanyBusinessNumber
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                signupCompanyFormData={signupCompanyFormData}
+              />
+              <SignUpCompanyAddress
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                signupCompanyFormData={signupCompanyFormData}
+              />
+              <SignUpCompanyPhoneNumber
+                setSignupCompanyFormData={setSignupCompanyFormData}
+                signupCompanyFormData={signupCompanyFormData}
+                setIsValid={setIsValid}
+                isValid={isValid}
+              />
+              <SignUpCompanyDocument
+                handleFileChange={handleFileChange}
+                isSelectedFiles={selectedFiles ? true : false} // IsSelectedFiles -> isSelectedFiles 로 수정
+              />
+            </StyleSignUpBoxDiv>
+          )}
+          {isSignUpBtn ? (
+            <ReCAPTCHA
+              sitekey="6LdijBMlAAAAACu0OtiHgCtKlGE58nkcRFXPxSLk"
+              style={{ marginBottom: "1rem" }}
+              size="normal"
+              onChange={handleCaptchaChange}
+            />
+          ) : null}
           <StyleGoRegister
             type="button"
             tabIndex={13}
@@ -407,14 +441,14 @@ const SignupPages: React.FC = () => {
           >
             회원가입 하기
           </StyleGoRegister>
-        </StyleLoginSignUpBoxDiv>
-        {isAlert ? (
-          <div>
-            <CustomAlert message={message} />
-          </div>
-        ) : null}
-      </StyleLoginSignUpDiv>
-    </div>
+        </StyleLoginBoxDiv>
+      </StyleSignUpCenterDiv>
+      {isAlert ? (
+        <div>
+          <CustomAlert message={message} />
+        </div>
+      ) : null}
+    </StyleSignUpContainer>
   );
 };
 

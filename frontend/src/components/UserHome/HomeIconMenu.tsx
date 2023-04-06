@@ -1,5 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { gsap, ScrollTrigger } from "gsap/all";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const container = css`
   height: 13vh;
@@ -7,11 +10,13 @@ const container = css`
   display: flex;
   justify-content: center;
   background-color: #ececec;
+  overflow: hidden;
   .icons {
     justify-content: center;
     width: 70%;
     height: 100%;
     display: flex;
+    opacity: 1;
     .icon {
       margin: 0 30px 0 30px;
       flex: 1;
@@ -26,16 +31,46 @@ const container = css`
       background-color: red;
       svg {
         fill: white;
+        transition: all 0.2s;
       }
+      cursor: pointer;
+      transition: all 0.4s;
     }
   }
 `;
 
 export default function HomeIconMenu() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(".icons", {
+      y: 100,
+      duration: 1,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: ".icons",
+        scrub: 1,
+        start: "top 70%",
+        end: "top 60%",
+      },
+    });
+    gsap.to(".iconContainer", {
+      y: -100,
+      duration: 1,
+      opacity: 0,
+      Animation: "ease",
+      scrollTrigger: {
+        trigger: ".icons",
+        scrub: 1,
+        start: "top 40%",
+        end: "top 40%",
+      },
+    });
+  }, []);
   return (
-    <div css={container}>
+    <div css={container} className="iconContainer">
       <div className="icons">
-        <div className="icon">
+        <div className="icon" onClick={() => navigate("/user/car/list")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#000000"
@@ -48,7 +83,7 @@ export default function HomeIconMenu() {
             </g>
           </svg>
         </div>
-        <div className="icon">
+        <div className="icon" onClick={() => navigate("/user/car/list")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#000000"
@@ -80,7 +115,7 @@ export default function HomeIconMenu() {
             </g>
           </svg>
         </div>
-        <div className="icon">
+        <div className="icon" onClick={() => navigate("/user/community")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#000000"
@@ -106,7 +141,7 @@ export default function HomeIconMenu() {
             </g>
           </svg>
         </div>
-        <div className="icon">
+        <div className="icon" onClick={() => navigate("/user/map")}>
           <svg
             version="1.1"
             id="REPAIR"
@@ -124,7 +159,7 @@ export default function HomeIconMenu() {
             </g>
           </svg>
         </div>
-        <div className="icon">
+        <div className="icon" onClick={() => navigate("/user/mypage")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="#000000"

@@ -6,6 +6,7 @@ import { LoginApi, LogoutApi } from "../lib/api";
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
+export const LOGIN_FAILURE_RESET = "LOGIN_FAILURE_RESET";
 export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
@@ -24,6 +25,10 @@ export const loginSuccessAction = (payload: any) => ({
 export const loginFailureAction = (error: string) => ({
   type: LOGIN_FAILURE,
   payload: error,
+});
+
+export const loginFailureReset = () => ({
+  type: LOGIN_FAILURE_RESET,
 });
 
 export const logoutAction = () => ({ type: LOGOUT_REQUEST });
@@ -56,8 +61,8 @@ export function* takeLoginSaga(
       localStorage.setItem("login-token", ObjString);
     }
     yield put(loginSuccessAction(response.data.message));
-    
   } catch (error: any) {
+    console.log(error);
     yield put(loginFailureAction(error.message));
   }
 }
@@ -72,7 +77,7 @@ export function* takeLogoutSaga() {
     yield put(logoutSuccessAction());
 
     // 세션스토리지에 있는 정보 삭제
-    localStorage.removeItem("login-token");
+    yield localStorage.removeItem("login-token");
   } catch (error: any) {
     yield put(logoutFailureAction(error));
   }
@@ -83,6 +88,7 @@ const initialState = {
   error: null,
   user: null,
   accountType: null,
+  success: null,
 };
 
 // 로그인, 로그아웃 리듀서
@@ -112,6 +118,7 @@ export function LoginOutReducer(state = initialState, action: any) {
       return {
         ...state,
         loading: false,
+        success: false,
         error: action.payload,
       };
     case LOGOUT_SUCCESS:
@@ -119,6 +126,12 @@ export function LoginOutReducer(state = initialState, action: any) {
         ...state,
         user: null,
         success: false,
+      };
+    case LOGIN_FAILURE_RESET:
+      console.log(1);
+      return {
+        ...state,
+        success: null,
       };
     default:
       return state;

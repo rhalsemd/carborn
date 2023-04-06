@@ -1,5 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
+import IsValidComponent from "../../isValid/IsValidComponent";
 import { SignupFormData } from "./SignUpButton";
 import { StyledInput, StyleNameLabel } from "./SignUpUserName";
 
@@ -23,21 +24,18 @@ const SignUpCompanyName = ({
   };
 
   return (
-    <div>
-      <StyleSignUpInputDiv>
-        <StyleNameLabel htmlFor="companyname">회사명</StyleNameLabel>
-        <br />
-        <StyledInput
-          tabIndex={1}
-          type="text"
-          id="companyname"
-          autoComplete="off"
-          placeholder="회사명을 입력해주세요(ex. (주)싸피)"
-          value={signupCompanyFormData.name}
-          onChange={(e) => handleUserName(e)}
-        />
-      </StyleSignUpInputDiv>
-    </div>
+    <StyleSignUpInputDiv>
+      <StyleNameLabel htmlFor="companyname">회사명<IsValidComponent isValid={signupCompanyFormData.name}/></StyleNameLabel>
+      <StyledInput
+        tabIndex={1}
+        type="text"
+        id="companyname"
+        autoComplete="off"
+        placeholder="CompanyName"
+        value={signupCompanyFormData.name}
+        onChange={(e) => handleUserName(e)}
+      />
+    </StyleSignUpInputDiv>
   );
 };
 

@@ -23,6 +23,12 @@ const tableStyle = css`
   tr {
     border-spacing: 10px;
   }
+  td {
+    width: 1.2vw;
+    font-size: 17px;
+  }
+  width: 30vw;
+  border-spacing: 0 15px;
 `;
 
 const Transition = React.forwardRef(function Transition(
@@ -42,6 +48,16 @@ export default function InsuranceModal({ id }: Props) {
   const queryKey: string = `getGarageHistoryDetail${id}`;
   const URL = `http://carborn.site/api/insurance/list/${id}`;
 
+  const ObjString: any = localStorage.getItem("login-token");
+
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  };
+
+  const getDetailData = useAPI("get", URL, option);
   const { data }: any = useQuery(queryKey, () => getDetailData, {
     cacheTime: 1000 * 300,
     staleTime: 1000 * 300,
@@ -63,7 +79,6 @@ export default function InsuranceModal({ id }: Props) {
     setOpen(false);
   };
 
-  const getDetailData = useAPI("get", URL);
   console.log(data);
   return (
     <div>

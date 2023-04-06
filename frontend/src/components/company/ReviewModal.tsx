@@ -51,9 +51,17 @@ export default function ReviewModal({ id }: Props) {
   } else {
     URL = `http://carborn.site/api/inspector/result/review/${id}`;
     queryKey = `getInspectorReview${id}`;
-    //URL = `http://192.168.100.176:80/api/inspector/book/${id}`;
   }
-  const getRepairDetail = useAPI("get", URL);
+
+  const ObjString: any = localStorage.getItem("login-token");
+
+  const option = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${JSON.parse(ObjString).value}`,
+    },
+  };
+  const getRepairDetail = useAPI("get", URL, option);
 
   const { data } = useQuery(queryKey, () => getRepairDetail, {
     cacheTime: 1000 * 300,
@@ -105,7 +113,7 @@ export default function ReviewModal({ id }: Props) {
     <div>
       <Button
         variant="outlined"
-        color="inherit"
+        color="error"
         onClick={handleClickOpen}
         size="small"
       >
@@ -135,7 +143,7 @@ export default function ReviewModal({ id }: Props) {
           </table>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleCancel}>
+          <Button variant="outlined" onClick={handleCancel} color="error">
             닫기
           </Button>
         </DialogActions>

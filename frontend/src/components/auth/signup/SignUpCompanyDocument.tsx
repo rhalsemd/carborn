@@ -1,6 +1,9 @@
  import styled from "@emotion/styled";
 import { StyleSignUpInputDiv } from "../../../routes/auth/SignupPage";
 import { StyleNameLabel } from "./SignUpUserName";
+import IsValidComponent from './../../isValid/IsValidComponent';
+import { useEffect } from 'react';
+import swal from "sweetalert";
 
 export interface Props {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -12,6 +15,8 @@ export const StyleDocumentSpan = styled.span`
 `
 
 export const StyleDocumentInput = styled.input`
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
   width: 98%;
   height: 2rem;
   background-color: #d23131;
@@ -32,11 +37,16 @@ export const StyleDocumentInput = styled.input`
   }
 `;
 
-const SignUpCompanyDocument: React.FC<Props> = ({ handleFileChange }) => {
+type SignUpCompanyDocumentProps = {
+  handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isSelectedFiles: boolean;
+}
+
+const SignUpCompanyDocument: React.FC<SignUpCompanyDocumentProps> = ({ handleFileChange, isSelectedFiles}) => {
+
   return (
     <StyleSignUpInputDiv>
       <StyleNameLabel htmlFor="document">가입관련 첨부서류</StyleNameLabel>
-      <StyleDocumentSpan></StyleDocumentSpan>
       {/* 이전에 설명한 파일 input */}
       <StyleDocumentInput type="file" name="document" id="document" onChange={handleFileChange} />
     </StyleSignUpInputDiv>

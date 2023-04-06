@@ -1,41 +1,24 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { API_URL } from "./../../../lib/api";
 import styled from "@emotion/styled";
 import MyCarInfoPagination from "../Pagination/MyCarInfoPagination";
 
-const ITEMS_PER_PAGE = 3;
-
 const StyleMyCarInfoTableDiv = styled.div`
-  width: 50%;
+  width: 72%;
+  height: 60vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-`;
-
-const StyleMyCarInfoTitleDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  p {
-    font-size: 2rem;
-    font-weight: 900;
-  }
-
-  border-bottom: 3px solid red;
-  margin-bottom: 2rem;
-
-  width: 50%;
-`;
+  margin-top: 15vh;
+  margin-bottom: 15vh;
+  /* background-color: #fffffff6; */
+  border: 2px solid #6e6e6e4c;
+  border-radius: 5px;
+  `;
 
 const MyCarDataComponent = () => {
+  const ITEMS_PER_PAGE = 10;
+
   return (
     <StyleMyCarInfoTableDiv>
-      <StyleMyCarInfoTitleDiv>
-        <p>내 차량 정보</p>
-      </StyleMyCarInfoTitleDiv>
       <MyCarInfoPagination itemsPerPage={ITEMS_PER_PAGE} />
     </StyleMyCarInfoTableDiv>
   );

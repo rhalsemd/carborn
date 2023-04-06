@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useAPI } from "./../../hooks/useAPI";
 import carForSaleImg from "../../assets/carForSaleImg.jpg";
+import { useNavigate } from "react-router-dom";
+import { ScrollTrigger, gsap } from "gsap/all";
 
 interface Maptype {
   IMG_NM: string;
@@ -11,6 +13,7 @@ interface Maptype {
   MODEL_YEAR: string;
   MAKER: string;
   PRICE: string;
+  ID: string;
 }
 
 const container = css`
@@ -25,16 +28,17 @@ const container = css`
   background-position: 0 60%;
   hr {
     background-color: #d23131;
+    border: #d23131;
     height: 2px;
   }
   hr:nth-of-type(1) {
-    width: 10vw;
+    width: 5vw;
     margin-bottom: 2px;
     margin-top: 0px;
   }
 
   hr:nth-of-type(2) {
-    width: 5vw;
+    width: 2.5vw;
   }
 `;
 
@@ -53,6 +57,15 @@ const header = css`
     font-size: 30px;
     font-weight: bold;
   }
+
+  &:hover {
+    cursor: default;
+  }
+
+  hr {
+    color: red;
+    border: none;
+  }
 `;
 
 const imgBox = css`
@@ -60,7 +73,7 @@ const imgBox = css`
   height: 55vh;
   position: relative;
   overflow: hidden;
-  padding: 0 10px 0 10px;
+  /* padding: 0 10px 0 10px; */
 
   &:hover {
     transition: all 0.3s;
@@ -74,6 +87,7 @@ const imgBox = css`
       align-items: center;
       font-weight: bolder;
       border: 1px solid #a8a8a8;
+      cursor: pointer;
     }
 
     .leftBtn {
@@ -83,6 +97,9 @@ const imgBox = css`
     .rightBtn {
       right: 0;
       transition: all 0.3s;
+    }
+    .img {
+      cursor: pointer;
     }
   }
   .Btn {
@@ -102,7 +119,7 @@ const imgBox = css`
     transition: all 0.3s;
   }
   .leftBtn {
-    transform: translateX(30px);
+    transform: translateX(0px);
   }
   .rightBtn {
     right: 30px;
@@ -112,10 +129,12 @@ const imgBox = css`
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
-    margin: 0 10px 0 10px;
+    margin: 0 20px 0 0;
     height: 80%;
     width: 30%;
     border: none;
+    position: relative;
+    z-index: 2;
 
     .imgUrl {
       flex: 3;
@@ -132,13 +151,10 @@ const imgBox = css`
       hr {
         background-color: #d23131;
         border: none;
-        border: none;
         height: 1px;
       }
       hr:nth-last-of-type(2) {
         margin-top: 15px;
-      }
-      hr:nth-last-of-type(1) {
       }
     }
     .car {
@@ -159,6 +175,7 @@ export default function HomeCarForSales() {
   const getCarForSale = useAPI("get", URL);
   const imgWidth = window.innerWidth * 0.15125;
   const [x, setX] = useState<number>(0);
+  const navigate = useNavigate();
 
   const { data } = useQuery("getCarForSale", () => getCarForSale, {
     select: (data) => {
@@ -188,14 +205,33 @@ export default function HomeCarForSales() {
     } else setX(0);
   };
   const carsRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = (id: string): any => {
+    navigate(`/user/car/sale/${id}`);
+  };
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(".saleHr", {
+      width: "30%",
+      scrollTrigger: {
+        trigger: ".saleHr",
+        scrub: 2,
+        start: "top 60%",
+        end: "top 60%",
+        id: "hrTag",
+        ease: "bounce",
+      },
+    });
+  }, []);
   return (
     <div css={container}>
       <div css={header}>
         <p>안전한 거래를 하세요</p>
-        <p>최산 판매 등록 차량</p>
+        <p>최신 판매 등록 차량</p>
       </div>
-      <hr />
-      <hr />
+      <hr className="saleHr" />
+      <hr className="saleHr" />
       <div css={imgBox}>
         <div className="Btn rightBtn" onClick={moveRight}>
           <p>&#10095;</p>
@@ -205,7 +241,7 @@ export default function HomeCarForSales() {
         </div>
         <div css={cars} ref={carsRef}>
           {data?.map((data: Maptype, idx: number): any => (
-            <div className="img" key={idx}>
+            <div className="img" key={idx} onClick={() => handleClick(data.ID)}>
               <div className="imgUrl">
                 <img
                   src={`${data.IMG_NM}`}
@@ -216,8 +252,14 @@ export default function HomeCarForSales() {
               </div>
               <div className="year">
                 {`${data.MODEL_YEAR} ${data.MAKER} ${data.MODEL_NM}`}
-                <hr />
-                <hr />
+                <hr
+                  css={{
+                    border: "2px solid #d23131",
+                    color: "#d23131ed",
+                    height: "2px",
+                  }}
+                />
+                <hr css={{ height: "2px" }} />
               </div>
               <div className="car">{data.PRICE}</div>
             </div>
