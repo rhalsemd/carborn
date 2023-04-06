@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
+import { Button } from "@mui/material";
 import { useInfiniteQuery } from "react-query";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +11,6 @@ import Loading from "../../Loading";
 import NoCarList from "./NoCarList";
 import { useSelector } from "react-redux";
 import { StateType } from "../../../modules/carListModule";
-import CAR from "../../../assets/car.png";
 
 const rightContent = css`
   width: 50%;
@@ -25,11 +25,12 @@ const rightContent = css`
     top: 15px;
     width: 70px;
     height: 25px;
-    background-color: red;
     color: white;
-    border-color: red;
     font-size: 0.7rem;
     cursor: pointer;
+    &:hover {
+      background-color: #761c1cea;
+    }
   }
 `;
 
@@ -229,12 +230,13 @@ function CarList() {
                     }
                   }}
                 >
-                  <button
+                  <Button
                     className="btn"
+                    sx={{ backgroundColor: "#d23131" }}
                     onClick={() => goToDetil(car.carId, car.id)}
                   >
                     Detail
-                  </button>
+                  </Button>
                   <img
                     src={`https://carborn.site/images/${car.imgNm}`}
                     alt="carImg"
