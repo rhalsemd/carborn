@@ -133,8 +133,7 @@ public class UserInspectService {
 
         InspectBook update = inspectBookRepository.findById(inspectBook.getId()).orElseThrow(() ->
                 new RuntimeException("존재하지 않는 데이터입니다"));
-        log.debug("update.getAccount().getId(): {}",update.getAccount().getId());
-        log.debug("accountId : {}",accountId);
+
         if (update.getAccount().getId().equals(accountId) == false) {
             throw new RuntimeException("작성자가 아닙니다");
         }
