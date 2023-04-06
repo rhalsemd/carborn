@@ -94,8 +94,9 @@ export default function Nav2(msg: any) {
   const dispatch = useDispatch();
   // 유저아이디랑 토큰 가져오기
   const isHome = location.pathname == "/";
+  const isMap = location.pathname == "/user/map";
   const section2 = css`
-    width: ${isHome ? "100%" : "80%"};
+    width: ${isHome || isMap ? "100%" : "80%"};
     height: 45vh;
     background-size: cover;
     background-repeat: no-repeat;
@@ -104,7 +105,7 @@ export default function Nav2(msg: any) {
     align-items: center;
     justify-content: space-between;
     background-color: rgba(0, 0, 0, 0.8);
-    background-image: ${!isHome ? `url(${carBackground})` : ""};
+    background-image: ${!isHome && !isMap ? `url(${carBackground})` : ""};
     position: relative;
   `;
 

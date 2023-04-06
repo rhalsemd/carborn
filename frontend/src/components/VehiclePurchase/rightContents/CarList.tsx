@@ -236,8 +236,7 @@ function CarList() {
                     Detail
                   </button>
                   <img
-                    // src={`${CAR_URL}${car.imgNm}`}
-                    src={CAR}
+                    src={`${CAR_URL}${car.imgNm}`}
                     alt="carImg"
                     css={imgStyle}
                   />
@@ -265,12 +264,7 @@ function CarList() {
                       ></div>
                     </div>
 
-                    {/* <div className="content">{car.content}</div> */}
-                    <div className="content">
-                      2019년에 구입하여 정말 애지중지 해서 관리한 차 입니다.
-                      사고난적 한 번 없고 엔진오일, 타이어 제때 갈아줘서 상태가
-                      좋습니다.
-                    </div>
+                    <div className="content">{car.content}</div>
 
                     <div className="price">{`${parseInt(
                       car.price

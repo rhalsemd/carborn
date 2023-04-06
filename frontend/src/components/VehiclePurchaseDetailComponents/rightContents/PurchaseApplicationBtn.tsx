@@ -192,6 +192,7 @@ function PurchaseApplicationBtn({
   });
   const salerDelete = () => {
     swal({
+      text: "판매를 취소하겠습니까?",
       buttons: ["나가기", "판매취소"],
       dangerMode: true,
     }).then((willDelete) => {

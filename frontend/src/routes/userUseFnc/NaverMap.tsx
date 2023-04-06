@@ -13,15 +13,26 @@ import MarkerDetail from "../../components/NaverMap/MarkerDetail";
 import axios from "axios";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import Nav2 from "../../components/Nav2";
 
 const container = css`
   display: flex;
+  position: absolute;
+  top: 15.65vh;
 `;
 
+const papaer = css`
+  width: 100%;
+  height: 82.3vh;
+  background-color: white;
+  top: 15.5vh;
+  position: absolute;
+  /* z-index: 1; */
+`;
 const searchBar = css`
   background-color: white;
   width: 27vw;
-  height: 100vh;
+  height: 82.3vh;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -185,7 +196,7 @@ function NaverMap() {
 
       var infoWindow = new naver.maps.InfoWindow({
         content: [
-          '<div style="width:20vw; padding:10px; height: 24vh; margin-left:2.5vw; position:relative; margin-top:2vh; ">',
+          '<div style="width:19vw; padding:10px; height: auto; margin-left:2.5vw; position:relative; margin-top:1vh; ">',
           '<div style="position:absolute; right:40px; top: 10px; cursor:pointer;">✖</div>',
           `<p style="font-size: 1.5rem; margin-bottom: 0; margin-top: 0; font-weight: bolder;">${key.NAME}</p>`,
           '<p style="margin-top: 0; color: #E00000; font-weight: bolder;">',
@@ -202,7 +213,7 @@ function NaverMap() {
           )}</p>`,
           `<button class="fix-shop" style="background-color: ${
             key.AUTH === 2 ? "#9C27B0" : "#E00000"
-          }; width: 90%; height: 22%; border-radius: 10px; border: 0; font-size: 1.1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
+          }; width: 90%; height: 5vh; border-radius: 10px; border: 0; font-size: 1.1rem; font-weight: bolder; color: white; cursor: pointer;">예약하기</button>`,
           "</div>",
         ].join(""),
       });
@@ -327,11 +338,17 @@ function NaverMap() {
 
   return (
     <>
+      <Nav2 />
+      <div css={papaer} />
       <div css={container}>
         <div
-          css={{ position: "fixed", top: "10px", left: "28%", zIndex: "100" }}
+          css={{ position: "fixed", top: "17vh", left: "28%", zIndex: "100" }}
         >
-          <ArrowBackIcon style={{ cursor: "pointer" }} onClick={goToHome} />
+          <ArrowBackIcon
+            style={{ cursor: "pointer" }}
+            onClick={goToHome}
+            fontSize="large"
+          />
         </div>
         <div css={searchBar}>
           <div style={{ height: "15%" }}>
