@@ -2,11 +2,7 @@ import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
 import LoginID from "../../components/auth/login/LoginID";
 import LoginPassword from "../../components/auth/login/LoginPassword";
-import React, {
-  useState,
-  useEffect,
-  ButtonHTMLAttributes,
-} from "react";
+import React, { useState, useEffect, ButtonHTMLAttributes } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../../modules/takeLoginLogoutModule";
 import {
@@ -135,7 +131,7 @@ export interface LoginInputProps {
 }
 
 const LoginPages = () => {
-  const ObjString = localStorage.getItem('login-token');
+  const ObjString = localStorage.getItem("login-token");
   const Obj = ObjString ? JSON.parse(ObjString) : null;
   const Token = Obj ? Obj.value : null;
 
@@ -184,17 +180,19 @@ const LoginPages = () => {
   }, [accountType, loginInput.loginid, loginInput.loginpassword]);
   useEffect(() => {
     // 실패하면 이거
-    if (!success) {
+    if (success !== true) {
       if (success === false) {
-        if (Token) {
-          swal("로그인 문제", "아이디 또는 비밀번호가 맞지 않습니다.", "error");
-        }
-        dispatch(loginFailureReset());
+        swal(
+          "로그인 문제",
+          "아이디 또는 비밀번호가 맞지 않습니다.",
+          "error"
+        ).then(() => {
+          dispatch(loginFailureReset());
+          navigate("/login");
+        });
       }
-      navigate("/login");
       // 성공하면 이거
     } else {
-      swal("로그인 완료", "CAR-BORN에 오신 걸 환영합니다.", "success");
       switch (accountType) {
         case USER:
           navigate("/");
@@ -219,9 +217,7 @@ const LoginPages = () => {
     <StyleLoginContainer>
       <Nav2 />
       <StyleLoginCenterDiv>
-        <StyleLoginBoxDiv
-          border={captchaValue ? "#d23131" : "grey"}
-        >
+        <StyleLoginBoxDiv border={captchaValue ? "#d23131" : "grey"}>
           <StyleLoginForm onSubmit={(e) => handleLogin(e)}>
             <LoginID setLoginInput={setLoginInput} loginInput={loginInput} />
             <LoginPassword
