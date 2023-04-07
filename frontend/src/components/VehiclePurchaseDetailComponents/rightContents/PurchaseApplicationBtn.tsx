@@ -23,6 +23,9 @@ const buttonStyle = css`
     font-weight: 900;
     color: #d23131;
     border-color: #d23131;
+    &:hover {
+      background-color: #d4d4d4;
+    }
   }
   .apply {
     border: 0;
@@ -58,6 +61,9 @@ const buttonStyle = css`
     color: white;
     cursor: pointer;
     font-weight: 900;
+    &:hover {
+      background-color: #000000;
+    }
   }
   .list {
     border: 0;
