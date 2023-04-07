@@ -85,9 +85,7 @@ const buttonStyle = css`
     height: 5vh;
     color: white;
     font-weight: 900;
-    &:hover {
-      background-color: #000000;
-    }
+    background-color: #9e9e9e;
   }
 `;
 
@@ -402,7 +400,10 @@ function PurchaseApplicationBtn({
       <Button variant="outlined" className="back" onClick={back}>
         뒤로가기
       </Button>
-      {userId === DetailData?.detail?.accountId ? (
+      {DetailData?.detail?.saleStatus === 1 &&
+      DetailData?.bookStatus === null ? (
+        <button className="complete">판매완료</button>
+      ) : userId === DetailData?.detail?.accountId ? (
         DetailData?.detail?.saleStatus === 0 ? (
           <>
             <Button className="user-delete" onClick={salerDelete}>
@@ -456,9 +457,13 @@ function PurchaseApplicationBtn({
           <Button className="complete">취소완료</Button>
         )
       ) : DetailData?.bookStatus?.bookStatus === undefined ? (
-        <button className="apply" onClick={goToBuy}>
+        <Button
+          sx={{ backgroundColor: "#d23131" }}
+          className="apply"
+          onClick={goToBuy}
+        >
           구매신청
-        </button>
+        </Button>
       ) : DetailData?.bookStatus?.bookStatus === 0 ? (
         <>
           <button className="user-delete" onClick={userCencelBtn}>
