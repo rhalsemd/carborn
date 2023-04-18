@@ -45,8 +45,8 @@
 
 ### 한재용
 - @ControllerAdvice를 통해 GlobalExceptionHandler를 만들어 예외처리를 해줌으로써, 클라이언트와 통신시 오류에 대응하여 안정성을 높인 것이 이번 프로젝트에 있어 가장 큰 성과라고 생각됩니다. 
-- 보완점
-- 느낀점
+- JPA에 대한 메소드 이해가 완벽히 되지 않았고, Optional을 제대로 활용하지 못했습니다. 또한, Entity 설계 수준이 부족하여 중복된 코드가 있었던 점 등을 차후에 더 보완할 것을 다짐하는 계기가 되었습니다.
+- 기대한 만큼 완벽한 프로젝트는 아니었지만, 추후에 있을 프로젝트를 더 완성도 있게 만들 수 있게 한 그런 프로젝트가 아니였나 싶습니다. CI/CD의 기술수준을 높이고, API 자체의 설계를 조금 더 Restful 하게 만들어 더 향상된 코드 품질을 보여주었습니다.
 
 ### 정명관
 - Back-End로서 잘한 부분은 구체적으로 이번 프로젝트에서 Mapping Interface나 Lazy가 아닌 Eager를 쓰는 등 많은 시도를 하게 되어서 JPA를 사용하는 것이 많이 익숙해졌으며, Multipart File도 처음 사용하다보니 DTO를 통해 데이터를 받을 때 @ModelAttribute를 사용해서 받는 방식을 시도하거나, 패키지 구조를 세부적으로 나누어서 효율적인 파일 구조 처리 등 전체적으로 Back-end 실력이 향상되었습니다.
@@ -94,11 +94,25 @@
 ## 기능구현
 
 - Back-end
-    - 
+    - 고객, 정비소, 검수원, 보험사에 따른 사용자 구분
+    - 이용자별 로그인시 로그 기록 및 조회
+    - 회원가입시 네이버 클라우드 플랫폼의 SMS 인증 API를 통해 본인인증
+    - 사업자등록증 및 차량등록증 문서 OCR 인식
+    - JPA 및 Pageable 이용한 페이징 구현
+    - Swagger/OpenAPI를 이용하여 API 명세서 구현
 - Front-end
-    - 
+    - React.js 프레임워크 활용 및 Typescript 반영
+    - React-Query를 이용한 데이터 캐싱
+    - WebGL 및 Three.js 사용한 3D 모델 렌더링
+    - Back-end에서 제공한 JWT 토큰을 이용해서 로그인 구현
+    - 오류 발생시 커스텀 Alert 제공
+    - 네이버맵을 이용하여 정비소, 검수소, 보험사 위치 제공
 - Blockchain
-    - 
+    - Kakao Klaytn을 활용한 자동차 히스토리 내역을 블록체인화 하여 기록 및 정보제공
+- Infra
+    - Jenkins(Java 17), Docker, Docker-Compose를 활용하여 Merge Request WebHook 발생시 빌드 및 배포
+    - Jenkins Pipeline 활용 및 SSH 원격서버 제어, CURL 이용한 배포완료 메세지 전송
+    - Spring Boot 및 React.js 동시빌드
 
 <br/>
 
