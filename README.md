@@ -123,27 +123,15 @@
 <br/>
 
 ## 스크린샷
-
-- <h5>주기능 1</h5>
-
-| 기능 1 | 기능 2 | 기능 3 |
-|:----:|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|![image](./image/image_name.png)|
-
-<br/>
-<hr>
-
-- <h5>주기능 2</h5>
-
-| 기능 4 | 기능 5 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
-
-| 기능 6 | 기능 7 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
-
-<br/>
-<hr>
+- [홈](screenshot/home.md)
+- [회원가입 및 로그인](screenshot/login.md)
+- [아이디 및 비밀번호 찾기](screenshot/account.md)
+- [마이페이지](screenshot/mypage.md)
+- [차량 거래](screenshot/car_sale.md)
+- [셀프 정비](screenshot/self_repair.md)
+- [커뮤니티](screenshot/community.md)
+- [정비소](screenshot/repairshop.md)
+- [검수소](screenshot/inspector.md)
+- [보험사](screenshot/insurance_company.md)
 
 <br/>
