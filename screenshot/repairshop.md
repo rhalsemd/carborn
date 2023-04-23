@@ -4,9 +4,9 @@
 
 - <h5>정비소</h5>
 
-| 정비 완료 |
-|:----:|
-|![image](/screenshot/image/repairshop/UserRepairProcedure2.gif)|
+| 정비 등록 및 완료 | 정비 내역 |
+|:----:|:----:|
+|![image](/screenshot/image/repairshop/UserRepairProcedure2.gif)|![image](/screenshot/image/repairshop/RepairCompleteList.gif)|
 
 <br/>
 <hr>

@@ -2,26 +2,10 @@
 
 ## 홈
 
-- <h5>주기능 1</h5>
+- <h5>홈</h5>
 
-| 기능 1 | 기능 2 | 기능 3 |
-|:----:|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|![image](./image/image_name.png)|
-
-<br/>
-<hr>
-
-- <h5>주기능 2</h5>
-
-| 기능 4 | 기능 5 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
-
-| 기능 6 | 기능 7 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
-
-<br/>
-<hr>
+| 홈 |
+|:----:|
+|![image](/screenshot/image/home/유저 홈화면.gif)|
 
 <br/>

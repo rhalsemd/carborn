@@ -2,24 +2,24 @@
 
 ## 검수소
 
-- <h5>주기능 1</h5>
+- <h5>검수소</h5>
 
-| 기능 1 | 기능 2 | 기능 3 |
-|:----:|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 검수 등록 및 완료 | 검수 내역 |
+|:----:|:----:|
+|![image](/screenshot/image/inspector/UserInspectorProcedure2.gif)|![image](/screenshot/image/inspector/InspectorCompleteList.gif)|
 
 <br/>
 <hr>
 
-- <h5>주기능 2</h5>
+- <h5>고객</h5>
 
-| 기능 4 | 기능 5 |
+| 검수 신청 | 검수 취소 |
 |:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+|![image](/screenshot/image/inspector/UserInspectorProcedure1.gif)|![image](/screenshot/image/inspector/UserInspectorDelete.gif)|
 
-| 기능 6 | 기능 7 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 검수 내역 |
+|:----:|
+|![image](/screenshot/image/inspector/UserInspectorProcedure3.gif)|
 
 <br/>
 <hr>
