@@ -2,24 +2,28 @@
 
 ## 회원가입 및 로그인
 
-- <h5>주기능 1</h5>
+- <h5>회원가입</h5>
 
-| 기능 1 | 기능 2 | 기능 3 |
-|:----:|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 이용약관 |
+|:----:|
+|![image](./screenshot/image/login/TermsOfUse(이용약관).gif))|
+
+| 회원가입 |
+|:----:|
+|![image](./screenshot/image/login/UserSignUp.gif)|
 
 <br/>
 <hr>
 
-- <h5>주기능 2</h5>
+- <h5>로그인</h5>
 
-| 기능 4 | 기능 5 |
+| 고객 로그인 | 기업 로그인 |
 |:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+|![image](./screenshot/image/login/CompanyLoginSuccess.gif)|![image](./screenshot/image/login/UserLoginSuccess.gif)|
 
-| 기능 6 | 기능 7 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 로그인 실패 |
+|:----:|
+|![image](./screenshot/image/login/LoginFailture.gif)|
 
 <br/>
 <hr>

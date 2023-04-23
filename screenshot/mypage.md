@@ -2,24 +2,33 @@
 
 ## 마이페이지
 
-- <h5>주기능 1</h5>
+- <h5>차량관련</h5>
 
-| 기능 1 | 기능 2 | 기능 3 |
-|:----:|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 차량 목록 | 차량 등록 |
+|:----:|:----:|
+|![image](./screenshot/image/mypage/마이페이지_차량목록(상세조회).gif)|![image](./screenshot/image/mypage/차량 등록.gif)|
+
+| 거래 내역 | 보험 내역 |
+|:----:|:----:|
+|![image](./screenshot/image/mypage/차량 구매 내역 목록 및 취소.gif)|![image](./screenshot/image/mypage/마이페이지 보험 이력 조회gif)|
 
 <br/>
 <hr>
 
-- <h5>주기능 2</h5>
+- <h5>계정관리</h5>
 
-| 기능 4 | 기능 5 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 비밀번호 변경 |
+|:----:|
+|![image](./screenshot/image/mypage/MyPagePasswordReset.gif)|
 
-| 기능 6 | 기능 7 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+<br/>
+<hr>
+
+- <h5>커뮤니티</h5>
+
+| 내가 쓴 글 |
+|:----:|
+|![image](./screenshot/image/mypage/마이페이지 내가 쓴 글 확인.gif)|
 
 <br/>
 <hr>
