@@ -2,24 +2,24 @@
 
 ## 정비소
 
-- <h5>주기능 1</h5>
+- <h5>정비소</h5>
 
-| 기능 1 | 기능 2 | 기능 3 |
-|:----:|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 정비 완료 |
+|:----:|
+|![image](/screenshot/image/repairshop/UserRepairProcedure2.gif)|
 
 <br/>
 <hr>
 
-- <h5>주기능 2</h5>
+- <h5>고객</h5>
 
-| 기능 4 | 기능 5 |
+| 정비 신청 | 정비 취소 |
 |:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+|![image](/screenshot/image/repairshop/UserRepairProcedure1.gif)|![image](/screenshot/image/repairshop/UserRepairDelete.gif)|
 
-| 기능 6 | 기능 7 |
-|:----:|:----:|
-|![image](./image/image_name.png)|![image](./image/image_name.png)|
+| 정비 내역 |
+|:----:|
+|![image](/screenshot/image/repairshop/UserRepairProcedure3.gif)|
 
 <br/>
 <hr>

@@ -6,10 +6,10 @@
 
 | 아이디 찾기 |
 |:----:|
-|![image](./screenshot/image/account/SearchID.gif)|
+|![image](/screenshot/image/account/SearchID.gif)|
 
 | 비밀번호 찾기 |
 |:----:|
-|![image](./screenshot/image/account/SearchPassword.gif)|
+|![image](/screenshot/image/account/SearchPassword.gif)|
 
 <br/>
