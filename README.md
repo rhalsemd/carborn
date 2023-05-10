@@ -10,7 +10,7 @@
 크게 웹 Front-end, Back-end, Blockchain 파트로 나누어, 7주동안 프로젝트를 진행했습니다.
 
 - 2023.04.07. 삼성청년소프트웨어아카데미(SSAFY) 8기 2학기 특화프로젝트 구미캠퍼스 1반 3등
-![awards](https://github.com/rhalsemd/carborn/assets/48270821/954ee70e-623f-45bf-b626-ca1193edadef)
+<img width="300" src="image/carborn-certificate.jpg">
 
 <br/>
 
